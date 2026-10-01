@@ -2626,7 +2626,15 @@ class Model:
         self.ensure_initialized()
         try:
             if isinstance(self.clipboard, Clipboard):
-                self.clipboard.copy_and_paste(text)
+                if rustSinkEnabled("clipboard"):
+                    # The host focuses the game, copies and pastes; the app
+                    # name stays here because it comes from OpenVR.
+                    emitInternalMessage(
+                        "/internal/clipboard/copy_paste",
+                        {"text": text, "window": self.clipboard.app_name},
+                    )
+                else:
+                    self.clipboard.copy_and_paste(text)
                 return True
             else:
                 return False

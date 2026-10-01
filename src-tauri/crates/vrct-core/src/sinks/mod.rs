@@ -6,6 +6,7 @@
 //! stops doing an output itself when Rust says it has taken it over, so a
 //! standalone Python run (and any sink not ported yet) is unchanged.
 
+pub mod clipboard;
 pub mod logger;
 pub mod osc;
 pub mod websocket;
@@ -17,13 +18,19 @@ use serde_json::Value;
 use crate::config::ConfigReplica;
 use crate::protocol::Response;
 
+use clipboard::ClipboardSink;
 use logger::LoggerSink;
 use osc::OscSink;
 use websocket::WebSocketSink;
 
 /// Env var telling the sidecar which sinks Rust performs (comma separated).
 pub const SINKS_ENV_NAME: &str = "VRCT_RUST_SINKS";
-/// Sinks this build implements; keep in step with `Sinks::ingest`.
+/// Sinks this build implements; keep in step with `Sinks::ingest`. The
+/// clipboard sink (focus the game, paste) is Windows-only; elsewhere Python
+/// keeps its own clipboard code.
+#[cfg(windows)]
+pub const IMPLEMENTED: &[&str] = &["osc", "websocket", "logger", "clipboard"];
+#[cfg(not(windows))]
 pub const IMPLEMENTED: &[&str] = &["osc", "websocket", "logger"];
 
 const OSC_TYPING: &str = "/internal/osc/typing";
@@ -34,6 +41,7 @@ const WS_BROADCAST: &str = "/internal/websocket/broadcast";
 const LOG_START: &str = "/internal/logger/start";
 const LOG_STOP: &str = "/internal/logger/stop";
 const LOG_LINE: &str = "/internal/logger/line";
+const CLIPBOARD_COPY_PASTE: &str = "/internal/clipboard/copy_paste";
 
 pub fn sinks_env_value() -> String {
     IMPLEMENTED.join(",")
@@ -43,6 +51,7 @@ pub struct Sinks {
     osc: OscSink,
     websocket: WebSocketSink,
     logger: LoggerSink,
+    clipboard: ClipboardSink,
 }
 
 impl Sinks {
@@ -51,6 +60,7 @@ impl Sinks {
             osc: OscSink::new(Arc::clone(&replica)),
             websocket: WebSocketSink::new(replica),
             logger: LoggerSink::new(),
+            clipboard: ClipboardSink::new(),
         }
     }
 
@@ -100,6 +110,12 @@ impl Sinks {
             LOG_LINE => match response.result.get("text").and_then(Value::as_str) {
                 Some(text) => self.logger.info(text),
                 None => Err("malformed /internal/logger/line".to_string()),
+            },
+            CLIPBOARD_COPY_PASTE => match response.result.get("text").and_then(Value::as_str) {
+                Some(text) => self
+                    .clipboard
+                    .copy_and_paste(text, response.result.get("window").and_then(Value::as_str)),
+                None => Err("malformed /internal/clipboard/copy_paste".to_string()),
             },
             _ => return false,
         };
