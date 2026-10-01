@@ -6,6 +6,7 @@
 //! stops doing an output itself when Rust says it has taken it over, so a
 //! standalone Python run (and any sink not ported yet) is unchanged.
 
+pub mod logger;
 pub mod osc;
 pub mod websocket;
 
@@ -16,19 +17,23 @@ use serde_json::Value;
 use crate::config::ConfigReplica;
 use crate::protocol::Response;
 
+use logger::LoggerSink;
 use osc::OscSink;
 use websocket::WebSocketSink;
 
 /// Env var telling the sidecar which sinks Rust performs (comma separated).
 pub const SINKS_ENV_NAME: &str = "VRCT_RUST_SINKS";
 /// Sinks this build implements; keep in step with `Sinks::ingest`.
-pub const IMPLEMENTED: &[&str] = &["osc", "websocket"];
+pub const IMPLEMENTED: &[&str] = &["osc", "websocket", "logger"];
 
 const OSC_TYPING: &str = "/internal/osc/typing";
 const OSC_MESSAGE: &str = "/internal/osc/message";
 const WS_START: &str = "/internal/websocket/start";
 const WS_STOP: &str = "/internal/websocket/stop";
 const WS_BROADCAST: &str = "/internal/websocket/broadcast";
+const LOG_START: &str = "/internal/logger/start";
+const LOG_STOP: &str = "/internal/logger/stop";
+const LOG_LINE: &str = "/internal/logger/line";
 
 pub fn sinks_env_value() -> String {
     IMPLEMENTED.join(",")
@@ -37,6 +42,7 @@ pub fn sinks_env_value() -> String {
 pub struct Sinks {
     osc: OscSink,
     websocket: WebSocketSink,
+    logger: LoggerSink,
 }
 
 impl Sinks {
@@ -44,6 +50,7 @@ impl Sinks {
         Self {
             osc: OscSink::new(Arc::clone(&replica)),
             websocket: WebSocketSink::new(replica),
+            logger: LoggerSink::new(),
         }
     }
 
@@ -81,6 +88,18 @@ impl Sinks {
                     Ok(())
                 }
                 None => Err("malformed /internal/websocket/broadcast".to_string()),
+            },
+            LOG_START => match response.result.get("path").and_then(Value::as_str) {
+                Some(path) => self.logger.start(path),
+                None => Err("malformed /internal/logger/start".to_string()),
+            },
+            LOG_STOP => {
+                self.logger.stop();
+                Ok(())
+            }
+            LOG_LINE => match response.result.get("text").and_then(Value::as_str) {
+                Some(text) => self.logger.info(text),
+                None => Err("malformed /internal/logger/line".to_string()),
             },
             _ => return false,
         };

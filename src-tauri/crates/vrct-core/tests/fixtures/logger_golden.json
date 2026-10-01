@@ -1,0 +1,10 @@
+{
+ "messages": [
+  "[SENT] hello",
+  "[RECEIVED] こんにちは (hello/你好)",
+  "[CHAT] line one\nline two",
+  "",
+  "[SENT] 🙂 emoji and 100% done {braces} %s"
+ ],
+ "file": "<TS> - log - INFO - [SENT] hello\n<TS> - log - INFO - [RECEIVED] こんにちは (hello/你好)\n<TS> - log - INFO - [CHAT] line one\nline two\n<TS> - log - INFO - \n<TS> - log - INFO - [SENT] 🙂 emoji and 100% done {braces} %s\n"
+}

@@ -880,6 +880,13 @@ class SpeakerSession(_AudioDeviceSession):
         )
 
 
+class _HostLogger:
+    """Stand-in for the file logger when the Rust host owns the log file."""
+
+    def info(self, message: str) -> None:
+        emitInternalMessage("/internal/logger/line", {"text": message})
+
+
 class Model:
     _instance = None
 
@@ -1215,11 +1222,21 @@ class Model:
         self.ensure_initialized()
         os_makedirs(config.PATH_LOGS, exist_ok=True)
         file_name = os_path.join(config.PATH_LOGS, f"{datetime.now().strftime('%Y-%m-%d_%H-%M-%S')}.log")
+        if rustSinkEnabled("logger"):
+            # The host writes the file; this object only forwards the lines
+            # so the pipeline's `model.logger.info(...)` is unchanged.
+            self.logger = _HostLogger()
+            emitInternalMessage("/internal/logger/start", {"path": file_name})
+            return
         self.logger = setupLogger("log", file_name)
         self.logger.disabled = False
 
     def stopLogger(self):
         self.ensure_initialized()
+        if isinstance(self.logger, _HostLogger):
+            emitInternalMessage("/internal/logger/stop", {})
+            self.logger = None
+            return
         self.logger.disabled = True
         self.logger = None
 
