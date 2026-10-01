@@ -7,6 +7,9 @@ edition = "2021"
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
+[workspace]
+members = ["crates/vrct-core"]
+
 [lib]
 # The `_lib` suffix may seem redundant but it is necessary
 # to make the lib name unique and wouldn't conflict with the bin name.
@@ -26,8 +29,11 @@ tauri-plugin-fs = "=2.2.1"
 tauri-plugin-http = "=2.4.3"
 tauri-plugin-shell = "2.2.1"
 font-kit = "=0.14.2"
-reqwest = "=0.12.15"
+# rustls (not native-tls) so Linux builds need no system OpenSSL; matches vrct-core.
+reqwest = { version = "=0.12.15", default-features = false, features = ["rustls-tls"] }
 base64 = "=0.22.1"
+vrct-core = { path = "crates/vrct-core" }
+tokio = { version = "1", features = ["fs", "rt"] }
 
 [target.'cfg(not(any(target_os = "android", target_os = "ios")))'.dependencies]
 tauri-plugin-global-shortcut = "=2.2.0"

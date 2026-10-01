@@ -1,3 +1,5 @@
+mod backend;
+
 use tauri::Manager;
 use std::fs::{create_dir_all, OpenOptions};
 use std::io::{Error, Write};
@@ -46,6 +48,8 @@ pub fn run() {
             }
             startup_log("Main window is ready");
 
+            app.manage(backend::Backend::new(app.handle()).map_err(Error::other)?);
+
             #[cfg(debug_assertions)]
             { main_window.open_devtools(); }
 
@@ -56,7 +60,12 @@ pub fn run() {
         .plugin(tauri_plugin_fs::init())
         .plugin(tauri_plugin_global_shortcut::Builder::new().build())
         .plugin(tauri_plugin_opener::init())
-        .invoke_handler(tauri::generate_handler![get_font_list, download_zip_asset])
+        .invoke_handler(tauri::generate_handler![
+            get_font_list,
+            download_zip_asset,
+            backend_start,
+            backend_request
+        ])
         .run(tauri::generate_context!());
     match result {
         Ok(()) => startup_log("VRCT event loop ended"),
@@ -67,6 +76,28 @@ pub fn run() {
     }
 }
 
+
+/// Start the backend. Call once the UI is listening for `backend-response`.
+#[tauri::command]
+async fn backend_start(
+    app: tauri::AppHandle,
+    backend: tauri::State<'_, backend::Backend>,
+) -> Result<(), String> {
+    backend.start(&app)
+}
+
+/// Same contract as writing `{endpoint, data}` to the sidecar's stdin: returns
+/// immediately and the response arrives as a `backend-response` event. `data`
+/// is the UI's base64-encoded JSON payload.
+#[tauri::command]
+async fn backend_request(
+    backend: tauri::State<'_, backend::Backend>,
+    endpoint: String,
+    data: Option<String>,
+) -> Result<(), String> {
+    backend.request(endpoint, data);
+    Ok(())
+}
 
 use font_kit::{source::SystemSource};
 use std::collections::HashSet;

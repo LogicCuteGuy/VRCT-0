@@ -13,7 +13,6 @@ import {
 } from "@ui_configs";
 
 export const store = {
-    backend_subprocess: null,
     setting_box_scroll_container: null,
     log_box_ref: null,
     text_area_ref: null,

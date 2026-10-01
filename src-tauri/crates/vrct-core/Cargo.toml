@@ -1,0 +1,22 @@
+[package]
+name = "vrct-core"
+version = "0.0.0"
+description = "VRCT backend core (endpoint router, updater). No Tauri dependency so it can be unit-tested and reused."
+edition = "2021"
+license = "MIT"
+
+[dependencies]
+serde = { version = "1", features = ["derive"] }
+serde_json = "1"
+base64 = "0.22"
+semver = "1"
+sha2 = "0.10"
+hex = "0.4"
+thiserror = "2"
+tokio = { version = "1", features = ["rt", "sync", "time", "fs", "io-util", "macros"] }
+futures-util = "0.3"
+# rustls so Linux builds need no system OpenSSL.
+reqwest = { version = "0.12", default-features = false, features = ["json", "stream", "rustls-tls"] }
+
+[dev-dependencies]
+tokio = { version = "1", features = ["rt", "macros", "time", "test-util"] }

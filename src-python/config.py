@@ -1,6 +1,6 @@
 import sys
 import copy
-from os import path as os_path, makedirs as os_makedirs, replace as os_replace, fsync as os_fsync, remove as os_remove
+from os import path as os_path, makedirs as os_makedirs, replace as os_replace, fsync as os_fsync, remove as os_remove, environ as os_environ
 from json import load as json_load
 from json import dump as json_dump
 from secrets import token_urlsafe as secrets_token_urlsafe
@@ -41,7 +41,7 @@ try:
 except Exception:  # pragma: no cover - optional runtime
     ocr_selectable_languages = ()  # type: ignore
 
-from utils import errorLogging, printLog, validateDictStructure, getComputeDeviceList, isValidIpAddress, isWildcardBindAddress
+from utils import errorLogging, printLog, validateDictStructure, getComputeDeviceList, isValidIpAddress, isWildcardBindAddress, emitInternalMessage
 
 # NOTE: MIC_VAD_FILTER/SPEAKER_VAD_FILTER/MIC_VAD_PARAMETERS/SPEAKER_VAD_PARAMETERS と
 # 対応する migration ヘルパは ADR-0004 でストリーミング/VAD 独自実装を撤退した際に
@@ -728,14 +728,46 @@ class Config:
                 errorLogging()
         return cls._instance
 
-    def saveConfigToFile(self) -> None:
+    def _serializableSnapshot(self) -> Dict[str, Any]:
         # 永続化対象を descriptor 情報 (json_serializable_vars) から再構成
-        filtered = {}
+        snapshot = {}
         for var_name, var_func in json_serializable_vars.items():
             try:
-                filtered[var_name] = var_func(self)
+                snapshot[var_name] = var_func(self)
             except Exception:
                 pass
+        return snapshot
+
+    # Rust ホスト (src-tauri) が起動したときだけ有効になる、設定の読み取り専用
+    # レプリカへの一方向の通知。config.json の書き込みと検証は引き続きこの
+    # クラスが唯一の所有者で、ホストは変更を受け取って写しを持つだけ。
+    # 永続化対象 (serialize=True) の値は必ず saveConfig() を通るため、ここ
+    # 1箇所で漏れなく拾える。
+    _BRIDGE_ENV = "VRCT_CONFIG_BRIDGE"
+    _BRIDGE_SNAPSHOT_ENDPOINT = "/internal/config/snapshot"
+    _BRIDGE_CHANGED_ENDPOINT = "/internal/config/changed"
+
+    @classmethod
+    def _bridgeEnabled(cls) -> bool:
+        return os_environ.get(cls._BRIDGE_ENV) == "1"
+
+    def _bridgeSnapshot(self) -> None:
+        if self._bridgeEnabled():
+            emitInternalMessage(self._BRIDGE_SNAPSHOT_ENDPOINT, self._serializableSnapshot())
+
+    def _bridgeChanged(self, key: str) -> None:
+        if not self._bridgeEnabled():
+            return
+        # 引数の value ではなく保存済みの現在値を送る。呼び出しは _file_lock の
+        # 中なので、キュー順 = 確定順になり、競合しても最後の通知が最新値になる。
+        try:
+            value = getattr(self, f"_{key}")
+        except AttributeError:
+            return
+        emitInternalMessage(self._BRIDGE_CHANGED_ENDPOINT, {"key": key, "value": value})
+
+    def saveConfigToFile(self) -> None:
+        filtered = self._serializableSnapshot()
         with self._file_lock:
             self._config_data = filtered
             # クラッシュ/強制終了時にconfig.jsonが破損しないよう、一時ファイルに書いてから
@@ -754,6 +786,7 @@ class Config:
         # される (以前あった self._config_data[key] = value は
         # 何も読まれない dead code だったため削除)。
         with self._file_lock:
+            self._bridgeChanged(key)
             if isinstance(self._timer, threading.Timer) and self._timer.is_alive():
                 self._timer.cancel()
 
@@ -1389,6 +1422,7 @@ class Config:
                     errorLogging()
 
         self.saveConfigToFile()
+        self._bridgeSnapshot()
 
     def revalidate_selected_models(self):
         pairs = [

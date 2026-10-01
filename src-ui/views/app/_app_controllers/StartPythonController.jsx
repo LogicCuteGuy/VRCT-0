@@ -1,10 +1,10 @@
 import { invoke } from "@tauri-apps/api/core";
-import { Command } from "@tauri-apps/plugin-shell";
+import { listen } from "@tauri-apps/api/event";
 import { useEffect, useRef } from "react";
 
 import { useStdoutToPython } from "@useStdoutToPython";
 import { useReceiveRoutes } from "@useReceiveRoutes";
-import { store, useStore_SelectableFontFamilyList } from "@store";
+import { useStore_SelectableFontFamilyList } from "@store";
 import { arrayToObject } from "@utils";
 
 import {
@@ -61,26 +61,17 @@ const useStartPython = () => {
     const { showNotification_Success, showNotification_Error } = useNotificationStatus();
 
     const asyncStartPython = async () => {
-        const command = Command.sidecar("bin/VRCT-sidecar");
-        command.on("error", error => console.error(`error: "${error}"`));
-        command.stdout.on("data", (line) => {
-            // Windows上のPython(CRLF)とTauriのread_line(\rまたは\nで区切る仕様)により、
-            // バッファ境界等で改行単体('\n')が空行として渡ることがある。
-            // JSON内の改行はエスケープされるためデータ欠落ではなく、パースエラーを防ぐため空行はスキップする。
-            if (typeof line === "string" && line.trim() === "") {
-                console.debug("Empty line received from sidecar stdout:", JSON.stringify(line));
-                return;
-            }
-
-            let parsed_data = "";
+        // Responses (already parsed by the Rust backend) arrive as events.
+        // Subscribe before starting the backend so no early response is lost.
+        await listen("backend-response", (event) => {
             try {
-                parsed_data = JSON.parse(line);
-                receiveRoutes(parsed_data);
+                receiveRoutes(event.payload);
             } catch (error) {
-                console.log(error, line);
+                console.log(error, event.payload);
             }
         });
-        command.stderr.on("data", line => {
+        await listen("backend-stderr", (event) => {
+            const line = event.payload;
             // Python の warnings.warn() は既定で stderr に書き出される。良性の警告
             // (FutureWarning 等: 依存ライブラリの将来非互換の予告など) まで致命的な
             // エラー通知に昇格させると、実際にはクラッシュしていないのに
@@ -94,8 +85,7 @@ const useStartPython = () => {
             );
             console.error("stderr", line);
         });
-        const backend_subprocess = await command.spawn();
-        store.backend_subprocess = backend_subprocess;
+        await invoke("backend_start");
     };
 
     return { asyncStartPython };

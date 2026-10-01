@@ -1,0 +1,11 @@
+//! VRCT backend core.
+//!
+//! The UI talks to the backend with `{endpoint, data}` requests and receives
+//! `{status, endpoint, result}` responses. This crate keeps that contract:
+//! endpoints implemented in Rust are served in-process, everything else is
+//! forwarded to the legacy Python sidecar until it is removed.
+
+pub mod config;
+pub mod protocol;
+pub mod router;
+pub mod updater;

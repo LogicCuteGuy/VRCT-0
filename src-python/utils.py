@@ -230,6 +230,18 @@ def _enqueueResponseLine(line: str) -> None:
     _stdout_response_queue.put(line)
 
 
+def emitInternalMessage(endpoint: str, result: Any) -> None:
+    """Send a sidecar -> host message that is not a UI response.
+
+    Deliberately skips `printResponse`'s process.log: these messages carry the
+    whole config, including API keys and the WebSocket token.
+    """
+    try:
+        _enqueueResponseLine(json.dumps({"status": 200, "endpoint": endpoint, "result": result}))
+    except Exception:
+        errorLogging()
+
+
 def putDroppingOldestOnFull(q: "queue.Queue", item: Any) -> bool:
     """非ブロッキングでqに積む。満杯なら最も古い項目を1つ捨てて積み直す。
 
