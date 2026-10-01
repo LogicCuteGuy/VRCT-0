@@ -163,29 +163,11 @@ npm run release
 - インストーラー: `src-tauri/target/release/bundle/nsis/`
 - ZIPファイル: `VRCT.zip` (releaseコマンド使用時)
 
-### CUDA版のリリースビルド
+### CUDA版について
 
-```bash
-npm run build-cuda
-```
-
-または、ZIP形式でパッケージング:
-
-```bash
-npm run release-cuda
-```
-
-生成されるファイル:
-- インストーラー: `src-tauri/target/release/bundle/nsis/`
-- ZIPファイル: `VRCT_cuda.zip` (release-cudaコマンド使用時)
-
-### 両バージョンの同時ビルド
-
-CPU版とCUDA版の両方をビルドする場合:
-
-```bash
-npm run release-all
-```
+このフォークはCUDA版を配布しません。CUDA版パッケージは約3.4GBあり、GitHub
+Releasesのアセット上限(1ファイル2GiB未満)を超えるためです。`npm run build-cuda`
+はローカル開発用としてのみ残してあり、`release-cuda` / `release-all` は削除しました。
 
 ## ビルドプロセスの詳細
 
@@ -500,41 +482,35 @@ git push origin v3.5.0-beta.1
 | 項目 | 本番版 (`v3.5.0`) | β版 (`v3.5.0-beta.1`) |
 |---|---|---|
 | GitHub Release | `prerelease: false` | `prerelease: true` |
-| Hugging Face公開先 | `ms-software/VRCT` | `ms-software/VRCT-beta` |
-| インストーラー(setup.exe)の既定ダウンロード元 | `ms-software/VRCT` | `ms-software/VRCT-beta`(バージョン文字列の `-beta`/`-rc` から自動判定、または `/CHANNEL=` 指定) |
 
-> **事前準備**: β用のHugging Faceリポジトリ `ms-software/VRCT-beta` は
-> CIでは自動作成されないため、初回は手動で作成しておく必要があります。
+> 本体パッケージ(`VRCT.zip`)・インストーラー・各 `.sha256` はすべて同じ
+> GitHub Release(タグ `v<version>`)のアセットとして公開されます。
+> Hugging Faceは使用しません(`HF_TOKEN` は不要)。
 
 ### チャンネル切り替え・旧バージョンへのロールバック
 
-GitHub Releasesで配布されるsetup.exeは、実行時にHugging Faceから本体一式を
-ダウンロードするダウンローダー形式です。そのため、通常はGitHub Releasesの
-古いバージョンのsetup.exeを取得しても、その時点の最新版がインストールされてしまいます。
+GitHub Releasesで配布されるsetup.exeは、実行時に同じリリース(タグ
+`v<そのsetup.exeのバージョン>`)から `VRCT.zip` をダウンロードして展開する
+ダウンローダー形式です。したがって、古いバージョンのsetup.exeを実行すれば
+そのバージョンがインストールされます。
 
-チャンネル・バージョンの指定はGUI画面ではなく `/CHANNEL=` `/VERSION=` の
-CLI引数でのみ行えます(setup.exe自体はどのバージョン・チャンネルのものでも
-構いません)。setup.exeを単体でダブルクリックした場合はこれらの引数が付かない
-ため、CPU/GPU選択のみでビルド元チャンネルの最新版がインストールされます
-(GUI上に選択肢を増やさないための意図的な設計です)。VRCT本体のUpdaterタブ
-からの更新はこれらの引数を自動的に付与して起動します。
+バージョンの指定はGUI画面ではなく `/VERSION=` のCLI引数でのみ行えます
+(VRCT本体のUpdaterタブからの更新はこの引数を自動的に付与して起動します)。
+`/CHANNEL=` `/EDITION=` は互換のため受け付けますが無視されます(パッケージは
+バージョンで決まり、CPU版のみです)。
 
 ```bash
-VRCT_setup.exe /CHANNEL=beta
 VRCT_setup.exe /VERSION=3.4.2
 ```
 
-`/VERSION=` を指定した場合は、そのバージョン文字列に `-beta` または `-rc` が
-含まれるかどうかで自動的にダウンロード元リポジトリ(`ms-software/VRCT` /
-`ms-software/VRCT-beta`)を判定します(`/CHANNEL=` の指定より優先されます)。
-`/VERSION=` を指定しない場合は `/CHANNEL=`(省略時はこのsetup.exe自身が
-ビルドされたチャンネル)の最新版をダウンロードします。指定したバージョンが
-Hugging Face上に存在しない場合はダウンロードに失敗し、インストールが
-中断されます。
+指定したバージョンのリリースに `VRCT.zip` が存在しない場合はダウンロードに
+失敗し、インストールが中断されます。
 
 ### リリースパッケージの内容
 
-ZIPファイルには以下が含まれます:
+ZIPファイルには以下が含まれます(上流の検出モデル `chatbox_yolox_tiny.onnx` は
+ライセンス上フォークのリリースに同梱できないため含まれません。CIの
+`utils/check_release_package.py` が混入を検出して失敗させます):
 - `VRCT.exe` - メインアプリケーション
 - `VRCT-sidecar.exe` - Pythonバックエンド
 - `_internal/` - 必要な依存ファイル

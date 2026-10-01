@@ -196,50 +196,16 @@ Function PageLeaveChooseLanguage
     ${EndIf}
 FunctionEnd
 
-; 4-2. Choose CPU/GPU edition page
-Var RadioCpuEdition
-Var RadioGpuEdition
-Var DialogChooseEdition
-Var SelectedEdition
-Page custom PageChooseEdition PageLeaveChooseEdition
-Function PageChooseEdition
-    !insertmacro MUI_HEADER_TEXT "Initial Settings" "Choose the version of VRCT to install (can be changed later by reinstalling)."
-    nsDialogs::Create 1018
-    Pop $DialogChooseEdition
+; There is a single edition: the fork publishes only the CPU package
+; (VRCT.zip). A GPU package would exceed GitHub's 2 GiB release-asset limit,
+; so there is no edition page and /EDITION= is ignored.
 
-    ${If} $DialogChooseEdition == error
-        Abort
-    ${EndIf}
-
-    ${NSD_CreateRadioButton} 0 20u 100% 12u "CPU version (smaller download, works on any PC)"
-    Pop $RadioCpuEdition
-    ${NSD_CreateRadioButton} 0 40u 100% 12u "GPU version (requires an NVIDIA GPU, larger download, faster recognition)"
-    Pop $RadioGpuEdition
-
-    ${If} $SelectedEdition == "gpu"
-        SendMessage $RadioGpuEdition ${BM_SETCHECK} ${BST_CHECKED} 0
-    ${Else}
-        SendMessage $RadioCpuEdition ${BM_SETCHECK} ${BST_CHECKED} 0
-    ${EndIf}
-
-    nsDialogs::Show
-FunctionEnd
-
-Function PageLeaveChooseEdition
-    ${NSD_GetState} $RadioGpuEdition $0
-    ${If} $0 == ${BST_CHECKED}
-        StrCpy $SelectedEdition "gpu"
-    ${Else}
-        StrCpy $SelectedEdition "cpu"
-    ${EndIf}
-FunctionEnd
-
-; Release channel (stable/beta) and specific-version pinning are controlled
-; only via the /CHANNEL= and /VERSION= CLI flags (set by VRCT's own Updater
-; tab -- see .onInit below and Section Install). Deliberately no GUI page
-; for these: a user who double-clicks setup.exe standalone just gets the
-; latest release of the channel this installer itself was published for,
-; with no extra decisions to make.
+; Specific-version pinning is controlled only via the /VERSION= CLI flag (set
+; by VRCT's own Updater tab -- see .onInit below and Section Install).
+; Deliberately no GUI page for it: a user who double-clicks setup.exe
+; standalone gets the app package that was published together with this
+; installer, with no extra decisions to make. /CHANNEL= is accepted and
+; ignored (the package is chosen by version, not by channel).
 
 !insertmacro MUI_PAGE_COMPONENTS
 
@@ -500,46 +466,17 @@ FunctionEnd
 Var PassiveMode
 Var TargetVersion
 Var UILang
-Var SelectedChannel
 Function .onInit
   ${GetOptions} $CMDLINE "/P" $PassiveMode
   IfErrors +2 0
     StrCpy $PassiveMode 1
 
-  ; Preselect the CPU/GPU edition page when launched from within the app
-  ; (e.g. "/EDITION=gpu" from the in-app CPU/GPU switch button). The page
-  ; is still shown so the user can change their mind before installing.
-  ${GetOptions} $CMDLINE "/EDITION=" $0
-  IfErrors +2 0
-    StrCpy $SelectedEdition $0
-
   ; Pin the downloaded app package to a specific released version instead of
-  ; always fetching the latest from the HF "main" revision (e.g.
-  ; "/VERSION=3.4.2" for rollback). Falls back to latest when omitted.
+  ; the one published with this installer (e.g. "/VERSION=3.4.2" for
+  ; rollback). Falls back to this installer's own version when omitted.
   ${GetOptions} $CMDLINE "/VERSION=" $0
   IfErrors +2 0
     StrCpy $TargetVersion $0
-
-  ; Default the release channel page to whatever channel this very
-  ; installer was itself built/published for (a setup.exe downloaded from
-  ; the beta GitHub release has "-beta"/"-rc" baked into ${VERSION}), so a
-  ; standalone run without any flags still lands on a sensible default.
-  ${StrLoc} $0 "${VERSION}" "-beta" ">"
-  ${If} $0 == ""
-    ${StrLoc} $0 "${VERSION}" "-rc" ">"
-  ${EndIf}
-  ${If} $0 == ""
-    StrCpy $SelectedChannel "stable"
-  ${Else}
-    StrCpy $SelectedChannel "beta"
-  ${EndIf}
-
-  ; Launched from within the app (e.g. the user is on the beta channel and
-  ; clicks "reinstall"/"switch edition"): use VRCT's current channel setting
-  ; instead of the baked-in default above.
-  ${GetOptions} $CMDLINE "/CHANNEL=" $0
-  IfErrors +2 0
-    StrCpy $SelectedChannel $0
 
   ; Preselect the UI language when launched from within the app (e.g.
   ; "/UILANG=ja" from the in-app updater). Both the installer chrome
@@ -732,35 +669,27 @@ Section Install
 
   !addplugindir "..\..\..\..\nsis\plugins\x86-unicode"
   ; 指定のURLからファイルをダウンロード
-  !define SOFTWARE_RELEASE_REPO "ms-software/VRCT"
-  !define SOFTWARE_RELEASE_REPO_BETA "ms-software/VRCT-beta"
+  ; The app package is a GitHub release asset of the tag "v<version>".
+  !define SOFTWARE_RELEASE_REPO "LogicCuteGuy/0-VRCT"
   !define SOFTWARE_DOWNLOAD_FILENAME "VRCT.zip"
-  !define SOFTWARE_DOWNLOAD_FILENAME_GPU "VRCT_cuda.zip"
 
   ; Free-space budget (MiB) per edition. The compressed archive is written to
   ; %TEMP%, the extracted tree to $INSTDIR, and both exist at once during
   ; extraction, so a same-drive install needs DOWNLOAD + EXTRACT together.
-  ; Measured 2026-08: VRCT.zip ~485MB / ~1.5GB unpacked; VRCT_cuda.zip
-  ; ~3461MB / ~5757MB unpacked. Values below add headroom -- re-measure and
-  ; bump them when the packages grow.
-  !define REQ_DOWNLOAD_MB_CPU 1024
-  !define REQ_EXTRACT_MB_CPU 3072
-  !define REQ_DOWNLOAD_MB_GPU 4096
-  !define REQ_EXTRACT_MB_GPU 7168
+  ; Measured 2026-08: VRCT.zip ~485MB / ~1.5GB unpacked. Values below add
+  ; headroom -- re-measure and bump them when the package grows.
+  !define REQ_DOWNLOAD_MB 1024
+  !define REQ_EXTRACT_MB 3072
 
   Var /GLOBAL i
   Var /GLOBAL cmder_dl
-  Var /GLOBAL cmder_version
   Var /GLOBAL file_name
   Var /GLOBAL dl_retries
   Var /GLOBAL dl_transfer_id
   Var /GLOBAL dl_tick
   Var /GLOBAL dl_percent
   Var /GLOBAL dl_xfersize
-  Var /GLOBAL release_revision
-  Var /GLOBAL release_repo
-  Var /GLOBAL effective_version
-  Var /GLOBAL beta_marker_pos
+  Var /GLOBAL release_tag
   Var /GLOBAL req_dl_mb
   Var /GLOBAL req_extract_mb
   Var /GLOBAL dl_total
@@ -774,15 +703,9 @@ Section Install
   Var /GLOBAL package_hash_available
   Var /GLOBAL expected_package_hash
   Var /GLOBAL actual_package_hash
-  ${If} $SelectedEdition == "gpu"
-    StrCpy $file_name "${SOFTWARE_DOWNLOAD_FILENAME_GPU}"
-    StrCpy $req_dl_mb ${REQ_DOWNLOAD_MB_GPU}
-    StrCpy $req_extract_mb ${REQ_EXTRACT_MB_GPU}
-  ${Else}
-    StrCpy $file_name "${SOFTWARE_DOWNLOAD_FILENAME}"
-    StrCpy $req_dl_mb ${REQ_DOWNLOAD_MB_CPU}
-    StrCpy $req_extract_mb ${REQ_EXTRACT_MB_CPU}
-  ${EndIf}
+  StrCpy $file_name "${SOFTWARE_DOWNLOAD_FILENAME}"
+  StrCpy $req_dl_mb ${REQ_DOWNLOAD_MB}
+  StrCpy $req_extract_mb ${REQ_EXTRACT_MB}
 
   ; --- Pre-flight: refuse to start if either target volume is too small ---
   ; $TEMP holds the download, $INSTDIR holds the extracted app. When they are
@@ -800,56 +723,34 @@ Section Install
     ${If} $R2 >= 0
     ${AndIf} $R2 < $R4
       DetailPrint "Aborted: need $R4 MB free on $R0, only $R2 MB available"
-      MessageBox MB_OK|MB_ICONSTOP "Not enough free disk space on drive $R0 to install the $SelectedEdition version.$\r$\n$\r$\nRequired: about $R4 MB$\r$\nAvailable: $R2 MB$\r$\n$\r$\nFree up space (or pick an install folder on another drive) and run the installer again." /SD IDOK
+      MessageBox MB_OK|MB_ICONSTOP "Not enough free disk space on drive $R0 to install VRCT.$\r$\n$\r$\nRequired: about $R4 MB$\r$\nAvailable: $R2 MB$\r$\n$\r$\nFree up space (or pick an install folder on another drive) and run the installer again." /SD IDOK
       Abort
     ${EndIf}
   ${Else}
     ${If} $R2 >= 0
     ${AndIf} $R2 < $req_dl_mb
       DetailPrint "Aborted: need $req_dl_mb MB free on TEMP drive $R0, only $R2 MB available"
-      MessageBox MB_OK|MB_ICONSTOP "Not enough free space on the temporary-files drive $R0 to download the $SelectedEdition package.$\r$\n$\r$\nRequired: about $req_dl_mb MB$\r$\nAvailable: $R2 MB$\r$\n$\r$\nFree up space on $R0 and run the installer again." /SD IDOK
+      MessageBox MB_OK|MB_ICONSTOP "Not enough free space on the temporary-files drive $R0 to download the VRCT package.$\r$\n$\r$\nRequired: about $req_dl_mb MB$\r$\nAvailable: $R2 MB$\r$\n$\r$\nFree up space on $R0 and run the installer again." /SD IDOK
       Abort
     ${EndIf}
     ${If} $R3 >= 0
     ${AndIf} $R3 < $req_extract_mb
       DetailPrint "Aborted: need $req_extract_mb MB free on install drive $R1, only $R3 MB available"
-      MessageBox MB_OK|MB_ICONSTOP "Not enough free space on the install drive $R1 for the $SelectedEdition version.$\r$\n$\r$\nRequired: about $req_extract_mb MB$\r$\nAvailable: $R3 MB$\r$\n$\r$\nFree up space (or choose another drive) and run the installer again." /SD IDOK
+      MessageBox MB_OK|MB_ICONSTOP "Not enough free space on the install drive $R1 for VRCT.$\r$\n$\r$\nRequired: about $req_extract_mb MB$\r$\nAvailable: $R3 MB$\r$\n$\r$\nFree up space (or choose another drive) and run the installer again." /SD IDOK
       Abort
     ${EndIf}
   ${EndIf}
 
-  ; Pin to a specific released version's HF tag (e.g. "/VERSION=3.4.2" -> tag
-  ; "v3.4.2", or typed into the release-channel page) when requested for
-  ; rollback; otherwise fetch the latest from the selected channel's "main".
+  ; Pin to a specific released version's tag (e.g. "/VERSION=3.4.2" -> tag
+  ; "v3.4.2") when requested for rollback; otherwise use the package that was
+  ; published together with this installer.
   ${If} $TargetVersion != ""
-    StrCpy $release_revision "v$TargetVersion"
-    StrCpy $effective_version $TargetVersion
-
-    ; Beta versions (e.g. "3.5.0-beta.1") are published to a separate HF repo,
-    ; not the production one -- an explicit pinned version routes by its own
-    ; string, regardless of which channel radio button is selected, since a
-    ; given tag only ever exists in one of the two repos.
-    ${StrLoc} $beta_marker_pos $effective_version "-beta" ">"
-    ${If} $beta_marker_pos == ""
-      ${StrLoc} $beta_marker_pos $effective_version "-rc" ">"
-    ${EndIf}
-    ${If} $beta_marker_pos == ""
-      StrCpy $release_repo "${SOFTWARE_RELEASE_REPO}"
-    ${Else}
-      StrCpy $release_repo "${SOFTWARE_RELEASE_REPO_BETA}"
-    ${EndIf}
+    StrCpy $release_tag "v$TargetVersion"
   ${Else}
-    ; No specific version pinned -- fetch the latest from whichever channel
-    ; the user picked on the release-channel page.
-    StrCpy $release_revision "main"
-    ${If} $SelectedChannel == "beta"
-      StrCpy $release_repo "${SOFTWARE_RELEASE_REPO_BETA}"
-    ${Else}
-      StrCpy $release_repo "${SOFTWARE_RELEASE_REPO}"
-    ${EndIf}
+    StrCpy $release_tag "v${VERSION}"
   ${EndIf}
 
-  StrCpy $cmder_dl "https://huggingface.co/$release_repo/resolve/$release_revision/$file_name"
+  StrCpy $cmder_dl "https://github.com/${SOFTWARE_RELEASE_REPO}/releases/download/$release_tag/$file_name"
   DetailPrint "Got URL : $cmder_dl"
 
   ; New releases publish a SHA-256 sidecar next to each package. Download it
@@ -966,8 +867,7 @@ Section Install
   ${EndIf}
 
   ; Download + extract is retried as a single unit: a transfer the downloader
-  ; reports as OK can still be truncated (the HuggingFace CDN does this on
-  ; multi-GB files), which only surfaces when the unpack fails. So on ANY
+  ; reports as OK can still be truncated (seen with multi-GB files on CDNs), which only surfaces when the unpack fails. So on ANY
   ; failure (download error, or an unpack that yields no ${MAINBINARYNAME}.exe)
   ; we wipe the archive and pull a completely fresh copy.
   StrCpy $dl_retries 0

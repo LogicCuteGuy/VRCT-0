@@ -29,10 +29,8 @@ jobs:
         run: |
           if ("${{ github.ref_name }}" -match "-(beta|rc)") {
             echo "is_beta=true" | Out-File -FilePath $env:GITHUB_OUTPUT -Encoding utf8 -Append
-            echo "hf_repo=ms-software/VRCT-beta" | Out-File -FilePath $env:GITHUB_OUTPUT -Encoding utf8 -Append
           } else {
             echo "is_beta=false" | Out-File -FilePath $env:GITHUB_OUTPUT -Encoding utf8 -Append
-            echo "hf_repo=ms-software/VRCT" | Out-File -FilePath $env:GITHUB_OUTPUT -Encoding utf8 -Append
           }
 
       - name: Verify version numbers match the tag
@@ -112,74 +110,54 @@ jobs:
         run: pip install tqdm
 
       - name: Build and package
-        run: npm run release-all
+        run: npm run release
 
-      - name: Compute SHA-256 of the installer
-        id: sha256
+      - name: Check the package contains no non-redistributable model
+        run: python utils/check_release_package.py ./VRCT.zip
+
+      - name: Check the package fits in a GitHub release asset
         shell: pwsh
         run: |
-          $exePath = "./src-tauri/target/release/bundle/nsis/VRCT_${{ env.VERSION }}_x64-setup.exe"
-          $shaPath = "./src-tauri/target/release/bundle/nsis/VRCT_${{ env.VERSION }}_x64-setup.exe.sha256"
-          $hash = (Get-FileHash -Path $exePath -Algorithm SHA256).Hash.ToLower()
-          Set-Content -Path $shaPath -Value $hash -NoNewline -Encoding ascii
-          $cpuZipShaPath = "./VRCT.zip.sha256"
-          $gpuZipShaPath = "./VRCT_cuda.zip.sha256"
-          $cpuZipHash = (Get-FileHash -Path "./VRCT.zip" -Algorithm SHA256).Hash.ToLower()
-          $gpuZipHash = (Get-FileHash -Path "./VRCT_cuda.zip" -Algorithm SHA256).Hash.ToLower()
-          Set-Content -Path $cpuZipShaPath -Value $cpuZipHash -NoNewline -Encoding ascii
-          Set-Content -Path $gpuZipShaPath -Value $gpuZipHash -NoNewline -Encoding ascii
-          echo "sha_path=$shaPath" | Out-File -FilePath $env:GITHUB_OUTPUT -Encoding utf8 -Append
-          echo "cpu_zip_sha_path=$cpuZipShaPath" | Out-File -FilePath $env:GITHUB_OUTPUT -Encoding utf8 -Append
-          echo "gpu_zip_sha_path=$gpuZipShaPath" | Out-File -FilePath $env:GITHUB_OUTPUT -Encoding utf8 -Append
+          # GitHub rejects release assets of 2 GiB or more; fail here with a
+          # clear message instead of after the whole build.
+          $limit = 2GB - 1
+          foreach ($file in @("./VRCT.zip", "./src-tauri/target/release/bundle/nsis/VRCT_${{ env.VERSION }}_x64-setup.exe")) {
+            $size = (Get-Item $file).Length
+            Write-Host "$file = $([math]::Round($size / 1MB)) MB"
+            if ($size -ge $limit) {
+              Write-Host "::error::$file is $size bytes, over GitHub's 2 GiB release-asset limit"
+              exit 1
+            }
+          }
 
-      - name: Upload to Hugging Face Hub
-        env:
-          HF_TOKEN: ${{ secrets.HF_TOKEN }}
+      - name: Compute SHA-256 checksums
         shell: pwsh
         run: |
-          pip install huggingface_hub==0.34.4
+          # The installer's own updater and the NSIS bootstrapper both look for
+          # "<asset>.sha256" next to each asset and refuse a mismatch.
+          $assets = @(
+            "./src-tauri/target/release/bundle/nsis/VRCT_${{ env.VERSION }}_x64-setup.exe",
+            "./VRCT.zip"
+          )
+          foreach ($asset in $assets) {
+            $hash = (Get-FileHash -Path $asset -Algorithm SHA256).Hash.ToLower()
+            Set-Content -Path "$asset.sha256" -Value $hash -NoNewline -Encoding ascii
+          }
 
-          $UPLOAD_DIR = "./hf_upload_temp"
-          New-Item -ItemType Directory -Force -Path $UPLOAD_DIR
-          Copy-Item -Path ./VRCT.zip -Destination "$UPLOAD_DIR/VRCT.zip"
-          Copy-Item -Path ./VRCT_cuda.zip -Destination "$UPLOAD_DIR/VRCT_cuda.zip"
-          Copy-Item -Path ${{ steps.sha256.outputs.cpu_zip_sha_path }} -Destination "$UPLOAD_DIR/VRCT.zip.sha256"
-          Copy-Item -Path ${{ steps.sha256.outputs.gpu_zip_sha_path }} -Destination "$UPLOAD_DIR/VRCT_cuda.zip.sha256"
-          Copy-Item -Path "./src-tauri/target/release/bundle/nsis/VRCT_${{ env.VERSION }}_x64-setup.exe" -Destination "$UPLOAD_DIR/VRCT_setup.exe"
-
-          hf upload --repo-type model --commit-message "👍️[Update] ${{ env.VERSION }} Release" ${{ steps.channel.outputs.hf_repo }} $UPLOAD_DIR
-
-          hf repo tag create ${{ steps.channel.outputs.hf_repo }} ${{ github.ref_name }} --repo-type model --message "Release ${{ github.ref_name }}"
-
-          Remove-Item -Recurse -Force $UPLOAD_DIR
-
-      - name: Create GitHub Release
-        id: create_release
-        uses: actions/create-release@v1
+      - name: Create GitHub Release with assets
+        shell: pwsh
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          tag_name: ${{ github.ref }}
-          release_name: ${{ env.VERSION }}
-          draft: false
-          prerelease: ${{ steps.channel.outputs.is_beta }}
-
-      - name: Upload Release Asset (NSIS Installer)
-        uses: actions/upload-release-asset@v1
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: ./src-tauri/target/release/bundle/nsis/VRCT_${{ env.VERSION }}_x64-setup.exe
-          asset_name: VRCT_${{ env.VERSION }}_x64-setup.exe
-          asset_content_type: application/octet-stream
-
-      - name: Upload Release Asset (SHA-256 checksum)
-        uses: actions/upload-release-asset@v1
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: ${{ steps.sha256.outputs.sha_path }}
-          asset_name: VRCT_${{ env.VERSION }}_x64-setup.exe.sha256
-          asset_content_type: text/plain
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          $dir = "./src-tauri/target/release/bundle/nsis"
+          $setup = "$dir/VRCT_${{ env.VERSION }}_x64-setup.exe"
+          $args = @(
+            "release", "create", "${{ github.ref_name }}",
+            "--repo", "${{ github.repository }}",
+            "--title", "${{ env.VERSION }}",
+            "--verify-tag",
+            $setup, "$setup.sha256",
+            "./VRCT.zip", "./VRCT.zip.sha256"
+          )
+          if ("${{ steps.channel.outputs.is_beta }}" -eq "true") { $args += "--prerelease" }
+          gh @args

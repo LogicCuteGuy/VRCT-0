@@ -94,9 +94,10 @@ export const Updater = () => {
         { id: "stable", label: t("update_modal.channel_stable") },
         { id: "beta", label: t("update_modal.channel_beta") },
     ];
+    // This fork publishes only the CPU package (a CUDA package would exceed
+    // GitHub's 2 GiB release-asset limit), so there is nothing to switch to.
     const compute_mode_options = [
         { id: "cpu", label: t("update_modal.compute_mode_cpu") },
-        { id: "cuda", label: t("update_modal.compute_mode_cuda") },
     ];
 
     const version_variable = { state: currentAvailableReleases.state, data: target_version };
