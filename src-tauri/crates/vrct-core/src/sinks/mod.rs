@@ -8,6 +8,8 @@
 
 pub mod clipboard;
 pub mod logger;
+pub mod net;
+pub mod obs;
 pub mod osc;
 pub mod websocket;
 
@@ -20,6 +22,7 @@ use crate::protocol::Response;
 
 use clipboard::ClipboardSink;
 use logger::LoggerSink;
+use obs::ObsSink;
 use osc::OscSink;
 use websocket::WebSocketSink;
 
@@ -29,9 +32,9 @@ pub const SINKS_ENV_NAME: &str = "VRCT_RUST_SINKS";
 /// clipboard sink (focus the game, paste) is Windows-only; elsewhere Python
 /// keeps its own clipboard code.
 #[cfg(windows)]
-pub const IMPLEMENTED: &[&str] = &["osc", "websocket", "logger", "clipboard"];
+pub const IMPLEMENTED: &[&str] = &["osc", "websocket", "logger", "obs", "clipboard"];
 #[cfg(not(windows))]
-pub const IMPLEMENTED: &[&str] = &["osc", "websocket", "logger"];
+pub const IMPLEMENTED: &[&str] = &["osc", "websocket", "logger", "obs"];
 
 const OSC_TYPING: &str = "/internal/osc/typing";
 const OSC_MESSAGE: &str = "/internal/osc/message";
@@ -41,6 +44,8 @@ const WS_BROADCAST: &str = "/internal/websocket/broadcast";
 const LOG_START: &str = "/internal/logger/start";
 const LOG_STOP: &str = "/internal/logger/stop";
 const LOG_LINE: &str = "/internal/logger/line";
+const OBS_START: &str = "/internal/obs/start";
+const OBS_STOP: &str = "/internal/obs/stop";
 const CLIPBOARD_COPY_PASTE: &str = "/internal/clipboard/copy_paste";
 
 pub fn sinks_env_value() -> String {
@@ -51,6 +56,7 @@ pub struct Sinks {
     osc: OscSink,
     websocket: WebSocketSink,
     logger: LoggerSink,
+    obs: ObsSink,
     clipboard: ClipboardSink,
 }
 
@@ -58,7 +64,8 @@ impl Sinks {
     pub fn new(replica: Arc<ConfigReplica>) -> Self {
         Self {
             osc: OscSink::new(Arc::clone(&replica)),
-            websocket: WebSocketSink::new(replica),
+            websocket: WebSocketSink::new(Arc::clone(&replica)),
+            obs: ObsSink::new(replica),
             logger: LoggerSink::new(),
             clipboard: ClipboardSink::new(),
         }
@@ -111,6 +118,22 @@ impl Sinks {
                 Some(text) => self.logger.info(text),
                 None => Err("malformed /internal/logger/line".to_string()),
             },
+            OBS_START => {
+                let host = response.result.get("host").and_then(Value::as_str);
+                let port = response
+                    .result
+                    .get("port")
+                    .and_then(Value::as_u64)
+                    .and_then(|port| u16::try_from(port).ok());
+                match (host, port) {
+                    (Some(host), Some(port)) => self.obs.start(host, port),
+                    _ => Err("malformed /internal/obs/start".to_string()),
+                }
+            }
+            OBS_STOP => {
+                self.obs.stop();
+                Ok(())
+            }
             CLIPBOARD_COPY_PASTE => match response.result.get("text").and_then(Value::as_str) {
                 Some(text) => self
                     .clipboard

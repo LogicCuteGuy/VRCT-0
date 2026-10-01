@@ -887,6 +887,19 @@ class _HostLogger:
         emitInternalMessage("/internal/logger/line", {"text": message})
 
 
+class _HostObsServer:
+    """Stand-in for ObsBrowserSourceServer when the Rust host owns the socket."""
+
+    is_running = True
+
+    def __init__(self, host: str, port: int) -> None:
+        self.host = host
+        self.port = port
+
+
+_OBS_SERVER_TYPES = (ObsBrowserSourceServer, _HostObsServer)
+
+
 class Model:
     _instance = None
 
@@ -2556,7 +2569,7 @@ class Model:
 
         try:
             if (
-                isinstance(self.obs_browser_source_server, ObsBrowserSourceServer)
+                isinstance(self.obs_browser_source_server, _OBS_SERVER_TYPES)
                 and self.obs_browser_source_server.is_running
                 and self.obs_browser_source_server.host == host
                 and self.obs_browser_source_server.port == port
@@ -2568,6 +2581,13 @@ class Model:
 
         self.stopObsBrowserSourceServer()
 
+        if rustSinkEnabled("obs"):
+            # The host owns the socket and builds the page from its config
+            # replica. Callers already probed the port before getting here.
+            emitInternalMessage("/internal/obs/start", {"host": host, "port": port})
+            self.obs_browser_source_server = _HostObsServer(host, port)
+            return
+
         try:
             self.obs_browser_source_server = ObsBrowserSourceServer(host=host, port=port, ws_token=config.WEBSOCKET_AUTH_TOKEN)
             self.obs_browser_source_server.start()
@@ -2578,7 +2598,9 @@ class Model:
     def stopObsBrowserSourceServer(self) -> None:
         self.ensure_initialized()
         try:
-            if isinstance(self.obs_browser_source_server, ObsBrowserSourceServer):
+            if isinstance(self.obs_browser_source_server, _HostObsServer):
+                emitInternalMessage("/internal/obs/stop", None)
+            elif isinstance(self.obs_browser_source_server, ObsBrowserSourceServer):
                 self.obs_browser_source_server.stop()
         except Exception:
             errorLogging()
@@ -2589,7 +2611,7 @@ class Model:
         self.ensure_initialized()
         try:
             return (
-                isinstance(self.obs_browser_source_server, ObsBrowserSourceServer)
+                isinstance(self.obs_browser_source_server, _OBS_SERVER_TYPES)
                 and self.obs_browser_source_server.is_running
             )
         except Exception:

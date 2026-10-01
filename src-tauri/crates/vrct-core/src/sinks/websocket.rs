@@ -7,23 +7,19 @@
 //! WebSocket is exempt from the same-origin policy, so without it any web page
 //! on this PC could read the user's speech.
 
-use std::net::{IpAddr, TcpListener as StdTcpListener};
 use std::sync::{Arc, Mutex};
-use std::time::Duration;
 
 use futures_util::{SinkExt, StreamExt};
-use tokio::net::{TcpListener, TcpStream};
+use tokio::net::TcpStream;
 use tokio::sync::{broadcast, watch};
 use tokio_tungstenite::tungstenite::handshake::server::{ErrorResponse, Request, Response};
 use tokio_tungstenite::tungstenite::http::StatusCode;
 use tokio_tungstenite::tungstenite::Message;
 
+use super::net::{bind, is_wildcard};
 use crate::config::ConfigReplica;
 
 const TOKEN_KEY: &str = "WEBSOCKET_AUTH_TOKEN";
-/// A just-stopped server may still hold the port for a moment.
-const BIND_ATTEMPTS: u32 = 25;
-const BIND_RETRY: Duration = Duration::from_millis(40);
 /// A client this far behind is skipped rather than slowing the others.
 const BACKLOG: usize = 256;
 
@@ -64,11 +60,6 @@ fn forbidden() -> ErrorResponse {
     let mut response = ErrorResponse::new(Some("Forbidden: invalid or missing token\n".into()));
     *response.status_mut() = StatusCode::FORBIDDEN;
     response
-}
-
-/// Never listen on every interface: the token is the only other protection.
-fn is_wildcard(host: &str) -> bool {
-    host.parse::<IpAddr>().is_ok_and(|ip| ip.is_unspecified())
 }
 
 struct Running {
@@ -130,24 +121,6 @@ impl WebSocketSink {
             let _ = running.messages.send(Arc::from(text));
         }
     }
-}
-
-async fn bind(host: &str, port: u16, shutdown: &mut watch::Receiver<bool>) -> Result<TcpListener, String> {
-    let mut last = String::new();
-    for _ in 0..BIND_ATTEMPTS {
-        match StdTcpListener::bind((host, port)) {
-            Ok(listener) => {
-                listener.set_nonblocking(true).map_err(|e| e.to_string())?;
-                return TcpListener::from_std(listener).map_err(|e| e.to_string());
-            }
-            Err(error) => last = error.to_string(),
-        }
-        tokio::select! {
-            _ = shutdown.changed() => return Err("stopped before it could bind".into()),
-            _ = tokio::time::sleep(BIND_RETRY) => {}
-        }
-    }
-    Err(format!("cannot listen on {host}:{port}: {last}"))
 }
 
 async fn serve(
@@ -259,14 +232,5 @@ mod tests {
             let error = sink.start(host, 8765).unwrap_err();
             assert!(error.contains("wildcard"), "{error}");
         }
-    }
-
-    #[test]
-    fn wildcard_addresses_are_recognised() {
-        assert!(is_wildcard("0.0.0.0"));
-        assert!(is_wildcard("::"));
-        assert!(!is_wildcard("127.0.0.1"));
-        assert!(!is_wildcard("192.168.1.10"));
-        assert!(!is_wildcard("localhost"));
     }
 }
