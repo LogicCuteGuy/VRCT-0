@@ -6,6 +6,7 @@ use tauri_plugin_shell::ShellExt;
 use vrct_core::config::{ConfigReplica, BRIDGE_ENV};
 use vrct_core::protocol::{parse_sidecar_line, sidecar_line};
 use vrct_core::router::{Fallback, Router};
+use vrct_core::sinks::{sinks_env_value, Sinks, SINKS_ENV_NAME};
 
 /// The legacy Python process. Endpoints Rust has not taken over are written to
 /// its stdin and its stdout lines come back through the router.
@@ -30,11 +31,16 @@ impl Sidecar {
         app: &AppHandle,
         router: Arc<Router>,
         replica: Arc<ConfigReplica>,
+        sinks: Arc<Sinks>,
     ) -> Result<(), String> {
         let (mut events, child) = app
             .shell()
             .sidecar("VRCT-sidecar")
-            .map(|command| command.env(BRIDGE_ENV.0, BRIDGE_ENV.1))
+            .map(|command| {
+                command
+                    .env(BRIDGE_ENV.0, BRIDGE_ENV.1)
+                    .env(SINKS_ENV_NAME, sinks_env_value())
+            })
             .and_then(|command| command.spawn())
             .map_err(|error| error.to_string())?;
         *self.child.lock().unwrap() = Some(child);
@@ -49,8 +55,10 @@ impl Sidecar {
                         let Some(response) = parse_sidecar_line(&line) else {
                             continue;
                         };
-                        // Config bridge traffic is for Rust only (and carries secrets).
-                        if replica.ingest(&response) {
+                        // Bridge traffic is for Rust only (config carries secrets,
+                        // sink lines carry the user's chat). Sinks go first because
+                        // the replica swallows every other /internal/ line.
+                        if sinks.ingest(&response) || replica.ingest(&response) {
                             continue;
                         }
                         let initialized = response.endpoint == "/run/initialization_complete";

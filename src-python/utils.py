@@ -242,6 +242,18 @@ def emitInternalMessage(endpoint: str, result: Any) -> None:
         errorLogging()
 
 
+_SINKS_ENV = "VRCT_RUST_SINKS"
+
+
+def rustSinkEnabled(name: str) -> bool:
+    """True when the Rust host says it performs the `name` output itself.
+
+    The host lists the sinks it implements in VRCT_RUST_SINKS. Anything not
+    listed (and every standalone Python run) keeps doing the output here.
+    """
+    return name in os.environ.get(_SINKS_ENV, "").split(",")
+
+
 def putDroppingOldestOnFull(q: "queue.Queue", item: Any) -> bool:
     """非ブロッキングでqに積む。満杯なら最も古い項目を1つ捨てて積み直す。
 

@@ -57,7 +57,7 @@ from models.clipboard.clipboard import Clipboard
 from models.ocr import OcrPipeline
 from models.ocr.ocr_languages import isSupported as isSupportedOcrLanguage
 from models.telemetry import Telemetry
-from utils import errorLogging, setupLogger, printLog
+from utils import errorLogging, setupLogger, printLog, emitInternalMessage, rustSinkEnabled
 from errors import AudioPipelineError, AudioPipelineFailure, ERROR_METADATA, ErrorCode, OcrStartError
 
 TRANSCRIPT_STOP_JOIN_TIMEOUT = 15
@@ -1585,15 +1585,25 @@ class Model:
 
     def oscStartSendTyping(self):
         self.ensure_initialized()
-        self.osc_handler.sendTyping(flag=True)
+        self._oscSendTyping(True)
 
     def oscStopSendTyping(self):
         self.ensure_initialized()
-        self.osc_handler.sendTyping(flag=False)
+        self._oscSendTyping(False)
 
     def oscSendMessage(self, message:str):
         self.ensure_initialized()
+        if rustSinkEnabled("osc"):
+            # The Rust host sends the packet to OSC_IP_ADDRESS:OSC_PORT itself.
+            emitInternalMessage("/internal/osc/message", {"message": message, "notification": config.NOTIFICATION_VRC_SFX})
+            return
         self.osc_handler.sendMessage(message=message, notification=config.NOTIFICATION_VRC_SFX)
+
+    def _oscSendTyping(self, flag:bool):
+        if rustSinkEnabled("osc"):
+            emitInternalMessage("/internal/osc/typing", {"flag": flag})
+            return
+        self.osc_handler.sendTyping(flag=flag)
 
     def setMuteSelfStatus(self):
         self.ensure_initialized()
