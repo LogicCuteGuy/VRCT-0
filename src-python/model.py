@@ -2455,6 +2455,13 @@ class Model:
                 # サーバーが既に起動している場合は何もしない
                 return
 
+            if rustSinkEnabled("websocket"):
+                # Rust ホストがソケットを持つ。起動可否の判断 (ポート確認等) は
+                # 従来通り呼び出し側で済んでいるので、ここは依頼を出すだけ。
+                emitInternalMessage("/internal/websocket/start", {"host": host, "port": port})
+                self.websocket_server_alive = True
+                return
+
             self.websocket_server_loop = True
             self.websocket_server_alive = False  # 初期状態を明示
 
@@ -2492,6 +2499,11 @@ class Model:
         """WebSocketサーバーを停止する"""
         self.ensure_initialized()
         with self._websocket_lifecycle_lock:
+            if rustSinkEnabled("websocket"):
+                if self.websocket_server_alive is True:
+                    emitInternalMessage("/internal/websocket/stop", None)
+                    self.websocket_server_alive = False
+                return
             if not hasattr(self, 'th_websocket_server') or self.th_websocket_server is None:
                 return
 
@@ -2574,6 +2586,16 @@ class Model:
         :return: 送信成功したかどうか
         """
         self.ensure_initialized()
+        if rustSinkEnabled("websocket"):
+            if not self.websocket_server_alive:
+                return False
+            try:
+                # The Rust host broadcasts this exact string to every client.
+                emitInternalMessage("/internal/websocket/broadcast", {"text": json.dumps(message_dict)})
+                return True
+            except Exception:
+                errorLogging()
+                return False
         if not self.websocket_server_alive or not self.websocket_server:
             return False
         try:

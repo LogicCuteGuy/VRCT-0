@@ -13,10 +13,12 @@ semver = "1"
 sha2 = "0.10"
 hex = "0.4"
 thiserror = "2"
-tokio = { version = "1", features = ["rt", "sync", "time", "fs", "io-util", "macros"] }
+tokio = { version = "1", features = ["rt", "sync", "time", "fs", "io-util", "macros", "net"] }
+tokio-tungstenite = { version = "0.26", default-features = false, features = ["handshake"] }
 futures-util = "0.3"
 # rustls so Linux builds need no system OpenSSL.
 reqwest = { version = "0.12", default-features = false, features = ["json", "stream", "rustls-tls"] }
 
 [dev-dependencies]
+tokio-tungstenite = { version = "0.26", default-features = false, features = ["connect"] }
 tokio = { version = "1", features = ["rt", "macros", "time", "test-util"] }
