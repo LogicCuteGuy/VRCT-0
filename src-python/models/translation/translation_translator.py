@@ -12,7 +12,7 @@ except Exception:
     from translation_utils import ctranslate2_weights
     from translation_providers import TRANSLATION_PROVIDER_REGISTRY
 
-from utils import errorLogging, getBestComputeType, rustRpcEnabled, callRust
+from utils import errorLogging, getBestComputeType, rustRpcEnabled, callRust, printLog
 
 try:
     # Bing の認証情報パース (parse_bing_credentials) は monkey-patch を
@@ -138,6 +138,11 @@ _DEEPL_RPC_TIMEOUT_SECONDS = 150
 _TEXT_RPC_TIMEOUT_SECONDS = 150
 _NOT_HOSTED = object()
 
+# ローカルモデル (CTranslate2) の読み込みと翻訳もホストが行える ("ct2.load" /
+# "ct2.translate")。読み込みは数百MBの重みを読むので長めに待つ。
+_CT2_LOAD_RPC_TIMEOUT_SECONDS = 300
+_CT2_TRANSLATE_RPC_TIMEOUT_SECONDS = 150
+
 
 def _llmClientState(engine_name: str, client: Any) -> dict:
     """ホストに渡す、認証済みクライアントの状態。履歴は `setContextHistory` で入れた最新の値。"""
@@ -204,6 +209,8 @@ class Translator:
         self.ctranslate2_translator: Any = None
         self.ctranslate2_tokenizer: Any = None
         self.is_loaded_ctranslate2_model: bool = False
+        # True の間、モデルはホスト (Rust) が持っていて、translator/tokenizer は使わない。
+        self.ctranslate2_in_host: bool = False
         self.is_changed_translator_parameters: bool = False
         # ctranslate2_translator/ctranslate2_tokenizer は mic/speaker の
         # _print_transcript スレッドと mainloop ワーカー (チャット送信) から
@@ -575,6 +582,16 @@ class Translator:
         This sets internal translator/tokenizer objects and flips
         ``is_loaded_ctranslate2_model`` on success.
         """
+        if rustRpcEnabled("ct2.load"):
+            with self._ctranslate2_lock:
+                self.is_loaded_ctranslate2_model = False
+                self.ctranslate2_in_host = False
+                if self._loadCTranslate2InHost(path, model_type, device, device_index, compute_type):
+                    self.ctranslate2_in_host = True
+                    self.is_loaded_ctranslate2_model = True
+                    return
+            # ホストが扱えない (CUDA、NLLB など) か読み込みに失敗した: 従来どおり Python で読む。
+
         if ctranslate2 is None or transformers is None:
             return
 
@@ -603,6 +620,28 @@ class Translator:
                 self.ctranslate2_tokenizer = transformers.AutoTokenizer.from_pretrained(tokenizer, cache_dir=tokenizer_path)
             self.is_loaded_ctranslate2_model = True
 
+    def _loadCTranslate2InHost(self, path: str, model_type: str, device: str, device_index: int, compute_type: str) -> bool:
+        """モデルをホストに読み込ませる。ホストが断った・失敗した場合は False (Python が読む)。"""
+        if compute_type == "auto":
+            compute_type = getBestComputeType(device, device_index)
+        try:
+            loaded = callRust(
+                "ct2.load",
+                {
+                    "path": path,
+                    "weight_type": model_type,
+                    "device": device,
+                    "device_index": device_index,
+                    "compute_type": compute_type,
+                },
+                timeout=_CT2_LOAD_RPC_TIMEOUT_SECONDS,
+            )
+        except Exception as error:
+            # 想定内の拒否 (CUDA や NLLB) もここに来るので、障害としては記録しない。
+            printLog(f"CTranslate2: the host did not load {model_type}, loading in Python: {error}")
+            return False
+        return loaded is True
+
     def isLoadedCTranslate2Model(self) -> bool:
         return self.is_loaded_ctranslate2_model
 
@@ -621,6 +660,17 @@ class Translator:
         with self._ctranslate2_lock:
             if self.is_loaded_ctranslate2_model is True:
                 try:
+                    if self.ctranslate2_in_host:
+                        return callRust(
+                            "ct2.translate",
+                            {
+                                "message": message,
+                                "source_language": source_language,
+                                "target_language": target_language,
+                                "weight_type": weight_type,
+                            },
+                            timeout=_CT2_TRANSLATE_RPC_TIMEOUT_SECONDS,
+                        )
                     self.ctranslate2_tokenizer.src_lang = source_language
                     source = self.ctranslate2_tokenizer.convert_ids_to_tokens(self.ctranslate2_tokenizer.encode(message))
                     match weight_type:

@@ -21,6 +21,8 @@ use futures_util::future::BoxFuture;
 use serde_json::{json, Value};
 
 use crate::protocol::{sidecar_line, Response};
+#[cfg(feature = "ct2")]
+use crate::translation::ct2;
 use crate::translation::{catalog, deepl, llm, text};
 
 /// Env var telling the sidecar which methods Rust implements (comma separated).
@@ -33,6 +35,10 @@ pub const IMPLEMENTED: &[&str] = &[
     "llm.auth_check",
     "llm.models",
     "translate.text",
+    #[cfg(feature = "ct2")]
+    "ct2.load",
+    #[cfg(feature = "ct2")]
+    "ct2.translate",
 ];
 
 const REQUEST: &str = "/internal/rpc/request";
@@ -57,7 +63,7 @@ pub struct Rpc {
 impl Rpc {
     pub fn new(writer: Arc<dyn LineWriter>) -> Self {
         let rpc = Self { handlers: HashMap::new(), writer };
-        rpc.method("translate.llm", |params| async move {
+        let rpc = rpc.method("translate.llm", |params| async move {
             let request: llm::Request = serde_json::from_value(params).map_err(|e| format!("bad params: {e}"))?;
             llm::translate(request).await.map(Value::String)
         })
@@ -80,6 +86,38 @@ impl Rpc {
         .method("llm.models", |params| async move {
             let target: catalog::Target = serde_json::from_value(params).map_err(|e| format!("bad params: {e}"))?;
             catalog::models(target).await.map(|ids| json!(ids))
+        });
+        #[cfg(feature = "ct2")]
+        let rpc = rpc.ct2_methods();
+        rpc
+    }
+
+    /// The local model is loaded and run on blocking threads: loading reads
+    /// hundreds of MB and a translation keeps the CPU busy for a while.
+    #[cfg(feature = "ct2")]
+    fn ct2_methods(self) -> Self {
+        let engine = Arc::new(ct2::Engine::default());
+        let loader = Arc::clone(&engine);
+        self.method("ct2.load", move |params| {
+            let engine = Arc::clone(&loader);
+            async move {
+                let request: ct2::LoadRequest = serde_json::from_value(params).map_err(|e| format!("bad params: {e}"))?;
+                tokio::task::spawn_blocking(move || engine.load(&request))
+                    .await
+                    .map_err(|_| "internal error".to_string())?
+                    .map(|()| Value::Bool(true))
+            }
+        })
+        .method("ct2.translate", move |params| {
+            let engine = Arc::clone(&engine);
+            async move {
+                let request: ct2::TranslateRequest =
+                    serde_json::from_value(params).map_err(|e| format!("bad params: {e}"))?;
+                tokio::task::spawn_blocking(move || engine.translate(&request))
+                    .await
+                    .map_err(|_| "internal error".to_string())?
+                    .map(Value::String)
+            }
         })
     }
 

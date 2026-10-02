@@ -73,3 +73,6 @@ src-python/telemetry_state.json
 # and tools/gemini_bbox_labeler.py (large binary screenshots, dev-machine only).
 /dataset_collected/
 /yolo_labels/
+
+# CTranslate2 model config of the tiny test fixture (the rule above would hide it).
+!src-tauri/crates/vrct-core/tests/fixtures/ct2_tiny/model/config.json

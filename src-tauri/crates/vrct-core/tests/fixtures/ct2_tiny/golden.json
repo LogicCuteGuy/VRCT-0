@@ -1,0 +1,1863 @@
+{
+ "max_decoding_length": 24,
+ "languages": [
+  "af",
+  "am",
+  "ar",
+  "ast",
+  "az",
+  "ba",
+  "be",
+  "bg",
+  "bn",
+  "br",
+  "bs",
+  "ca",
+  "ceb",
+  "cs",
+  "cy",
+  "da",
+  "de",
+  "el",
+  "en",
+  "es",
+  "et",
+  "fa",
+  "ff",
+  "fi",
+  "fr",
+  "fy",
+  "ga",
+  "gd",
+  "gl",
+  "gu",
+  "ha",
+  "he",
+  "hi",
+  "hr",
+  "ht",
+  "hu",
+  "hy",
+  "id",
+  "ig",
+  "ilo",
+  "is",
+  "it",
+  "ja",
+  "jv",
+  "ka",
+  "kk",
+  "km",
+  "kn",
+  "ko",
+  "lb",
+  "lg",
+  "ln",
+  "lo",
+  "lt",
+  "lv",
+  "mg",
+  "mk",
+  "ml",
+  "mn",
+  "mr",
+  "ms",
+  "my",
+  "ne",
+  "nl",
+  "no",
+  "ns",
+  "oc",
+  "or",
+  "pa",
+  "pl",
+  "ps",
+  "pt",
+  "ro",
+  "ru",
+  "sd",
+  "si",
+  "sk",
+  "sl",
+  "so",
+  "sq",
+  "sr",
+  "ss",
+  "su",
+  "sv",
+  "sw",
+  "ta",
+  "th",
+  "tl",
+  "tn",
+  "tr",
+  "uk",
+  "ur",
+  "uz",
+  "vi",
+  "wo",
+  "xh",
+  "yi",
+  "yo",
+  "zh",
+  "zu"
+ ],
+ "cases": [
+  {
+   "text": "こんにちは、元気ですか？",
+   "source": "ja",
+   "target": "en",
+   "source_tokens": [
+    "__ja__",
+    "▁こ",
+    "んに",
+    "ちは",
+    "、",
+    "元",
+    "気です",
+    "か",
+    "?",
+    "</s>"
+   ],
+   "hypothesis": [
+    "__en__",
+    "ci",
+    "ci",
+    "ci",
+    "ci",
+    "ci",
+    "ci",
+    "ci",
+    "ci",
+    "ci",
+    "ci",
+    "ci",
+    "ci",
+    "ci",
+    "ci",
+    "ci",
+    "ci",
+    "ci",
+    "ci",
+    "ci",
+    "ci",
+    "ci",
+    "ci",
+    "ci"
+   ],
+   "output": "cicicicicicicicicicicicicicicicicicicicicicici"
+  },
+  {
+   "text": "今日はいい天気ですね。",
+   "source": "ja",
+   "target": "en",
+   "source_tokens": [
+    "__ja__",
+    "▁今",
+    "日は",
+    "いい",
+    "天",
+    "気です",
+    "ね",
+    "。",
+    "</s>"
+   ],
+   "hypothesis": [
+    "__en__",
+    "ci",
+    "ci",
+    "ci",
+    "ci",
+    "ci",
+    "ci",
+    "ci",
+    "ci",
+    "ci",
+    "ci",
+    "ci",
+    "ci",
+    "ci",
+    "ci",
+    "ci",
+    "ci",
+    "__madeupword0001__",
+    "ci",
+    "ci",
+    "ci",
+    "ci",
+    "ci",
+    "▁es"
+   ],
+   "output": "cicicicicicicicicicicicicicicici__madeupword0001__cicicicici es"
+  },
+  {
+   "text": "ありがとうございます。",
+   "source": "ja",
+   "target": "ko",
+   "source_tokens": [
+    "__ja__",
+    "▁あ",
+    "り",
+    "がと",
+    "うご",
+    "ざ",
+    "います",
+    "。",
+    "</s>"
+   ],
+   "hypothesis": [
+    "__ko__",
+    "__madeupword0006__",
+    "▁es",
+    ".",
+    ".",
+    ".",
+    ".",
+    ".",
+    ".",
+    ".",
+    ".",
+    ".",
+    ".",
+    ".",
+    ".",
+    ".",
+    ".",
+    ".",
+    ".",
+    ".",
+    ".",
+    ".",
+    ".",
+    "."
+   ],
+   "output": "__madeupword0006__ es....................."
+  },
+  {
+   "text": "Hello, how are you today?",
+   "source": "en",
+   "target": "ja",
+   "source_tokens": [
+    "__en__",
+    "▁H",
+    "e",
+    "llo",
+    ",",
+    "▁h",
+    "ow",
+    "▁a",
+    "re",
+    "▁you",
+    "▁t",
+    "od",
+    "ay",
+    "?",
+    "</s>"
+   ],
+   "hypothesis": [
+    "__ja__",
+    "ね",
+    "ね",
+    "ね",
+    "ね",
+    "ね",
+    "ね",
+    "ね",
+    "ね",
+    "ね",
+    "ね",
+    "ね",
+    "ね",
+    "ね",
+    "ね",
+    "ね",
+    "ね",
+    "ね",
+    "ね",
+    "ね",
+    "ね",
+    "ね",
+    "ね",
+    "ね"
+   ],
+   "output": "ねねねねねねねねねねねねねねねねねねねねねねね"
+  },
+  {
+   "text": "Thank you very much.",
+   "source": "en",
+   "target": "fr",
+   "source_tokens": [
+    "__en__",
+    "▁T",
+    "ha",
+    "nk",
+    "▁you",
+    "▁v",
+    "ery",
+    "▁m",
+    "uc",
+    "h",
+    ".",
+    "</s>"
+   ],
+   "hypothesis": [
+    "__fr__",
+    "có",
+    "-",
+    "ci",
+    ".",
+    "__madeupword0006__",
+    "__bs__",
+    "-",
+    "ci",
+    "ci",
+    "ci",
+    "ci",
+    "ci",
+    "ci",
+    "ci",
+    "ci",
+    "ci",
+    "ci",
+    "ci",
+    "ci",
+    "ci",
+    "ci",
+    "ci",
+    "ci"
+   ],
+   "output": "có-ci.__madeupword0006____bs__-cicicicicicicicicicicicicicicici"
+  },
+  {
+   "text": "I'm looking for a world in VRChat.",
+   "source": "en",
+   "target": "de",
+   "source_tokens": [
+    "__en__",
+    "▁I",
+    "'",
+    "m",
+    "▁",
+    "lo",
+    "ok",
+    "ing",
+    "▁f",
+    "or",
+    "▁a",
+    "▁w",
+    "or",
+    "ld",
+    "▁i",
+    "n",
+    "▁VRChat",
+    ".",
+    "</s>"
+   ],
+   "hypothesis": [
+    "__de__",
+    "ci",
+    "__bs__",
+    "__madeupword0006__",
+    "▁es",
+    "ci",
+    "ci",
+    "ci",
+    "ci",
+    "ci",
+    "ci",
+    "ci",
+    "ci",
+    "ci",
+    "ci",
+    "ci",
+    "ci",
+    "ci",
+    "▁.",
+    "내",
+    "내",
+    "내",
+    "내",
+    "내"
+   ],
+   "output": "ci__bs____madeupword0006__ escicicicicicicicicicicicici.내내내내내"
+  },
+  {
+   "text": "你好，今天过得怎么样？",
+   "source": "zh",
+   "target": "en",
+   "source_tokens": [
+    "__zh__",
+    "▁你",
+    "好",
+    ",",
+    "今天",
+    "过",
+    "得怎",
+    "么样",
+    "?",
+    "</s>"
+   ],
+   "hypothesis": [
+    "__en__",
+    "ci",
+    "ci",
+    "ci",
+    "ci",
+    "ci",
+    "ci",
+    "ci",
+    "ci",
+    "ci",
+    "ci",
+    "ci",
+    "ci",
+    "ci",
+    "ci",
+    "ci",
+    "ci",
+    "ci",
+    "ci",
+    "ci",
+    "ci",
+    "ci",
+    "ci",
+    "ci"
+   ],
+   "output": "cicicicicicicicicicicicicicicicicicicicicicici"
+  },
+  {
+   "text": "안녕하세요, 오늘 기분이 어떠세요?",
+   "source": "ko",
+   "target": "ja",
+   "source_tokens": [
+    "__ko__",
+    "▁안",
+    "녕하",
+    "세요",
+    ",",
+    "▁오",
+    "늘",
+    "▁기",
+    "분이",
+    "▁어",
+    "떠",
+    "세요",
+    "?",
+    "</s>"
+   ],
+   "hypothesis": [
+    "__ja__",
+    "__madeupword0006__",
+    "▁.",
+    "ci",
+    "ci",
+    "ci",
+    "ci",
+    "ci",
+    "ci",
+    "ci",
+    "ci",
+    "ci",
+    "ci",
+    "ci",
+    "ci",
+    "ci",
+    "ci",
+    "ci",
+    "ci",
+    "ci",
+    "ci",
+    "ci",
+    "ci",
+    "ci"
+   ],
+   "output": "__madeupword0006__.cicicicicicicicicicicicicicicicicicicicici"
+  },
+  {
+   "text": "Bonjour, comment allez-vous aujourd'hui ?",
+   "source": "fr",
+   "target": "en",
+   "source_tokens": [
+    "__fr__",
+    "▁",
+    "Bon",
+    "jour",
+    ",",
+    "▁c",
+    "omm",
+    "ent",
+    "▁a",
+    "ll",
+    "ez",
+    "-",
+    "v",
+    "ou",
+    "s",
+    "▁a",
+    "u",
+    "jour",
+    "d",
+    "'",
+    "hui",
+    "▁?",
+    "</s>"
+   ],
+   "hypothesis": [
+    "__en__",
+    "ci",
+    "ci",
+    "ci",
+    "ci",
+    "ci",
+    "ci",
+    "ci",
+    "ci",
+    "ci",
+    "ci",
+    "ci",
+    "ci",
+    "ci",
+    "ci",
+    "ci",
+    "ci",
+    "__madeupword0001__",
+    "▁あ",
+    "ci",
+    "ci",
+    "ci",
+    "ci",
+    "ci"
+   ],
+   "output": "cicicicicicicicicicicicicicicici__madeupword0001__ あcicicicici"
+  },
+  {
+   "text": "Hallo, wie geht es dir heute?",
+   "source": "de",
+   "target": "es",
+   "source_tokens": [
+    "__de__",
+    "▁H",
+    "a",
+    "llo",
+    ",",
+    "▁w",
+    "ie",
+    "▁g",
+    "eht",
+    "▁es",
+    "▁d",
+    "ir",
+    "▁h",
+    "eu",
+    "te",
+    "?",
+    "</s>"
+   ],
+   "hypothesis": [
+    "__es__",
+    "__madeupword0006__",
+    "▁es",
+    ".",
+    ".",
+    ".",
+    ".",
+    ".",
+    ".",
+    ".",
+    ".",
+    ".",
+    ".",
+    ".",
+    ".",
+    ".",
+    ".",
+    ".",
+    ".",
+    ".",
+    ".",
+    ".",
+    ".",
+    "."
+   ],
+   "output": "__madeupword0006__ es....................."
+  },
+  {
+   "text": "Hola, ¿cómo estás hoy?",
+   "source": "es",
+   "target": "ja",
+   "source_tokens": [
+    "__es__",
+    "▁H",
+    "ola",
+    ",",
+    "▁¿",
+    "có",
+    "mo",
+    "▁es",
+    "tá",
+    "s",
+    "▁h",
+    "oy",
+    "?",
+    "</s>"
+   ],
+   "hypothesis": [
+    "__ja__",
+    "__madeupword0006__",
+    "谢你",
+    "__madeupword0006__",
+    "谢你",
+    "__madeupword0006__",
+    "谢你",
+    "__madeupword0006__",
+    "谢你",
+    "__madeupword0006__",
+    "谢你",
+    "__madeupword0006__",
+    "谢你",
+    "__madeupword0006__",
+    "谢你",
+    "__madeupword0006__",
+    "谢你",
+    "__madeupword0006__",
+    "谢你",
+    "__madeupword0006__",
+    "谢你",
+    "__madeupword0006__",
+    "谢你",
+    "__madeupword0006__"
+   ],
+   "output": "__madeupword0006__谢你__madeupword0006__谢你__madeupword0006__谢你__madeupword0006__谢你__madeupword0006__谢你__madeupword0006__谢你__madeupword0006__谢你__madeupword0006__谢你__madeupword0006__谢你__madeupword0006__谢你__madeupword0006__谢你__madeupword0006__"
+  },
+  {
+   "text": "VRChatでワールドを探しています。",
+   "source": "ja",
+   "target": "zh",
+   "source_tokens": [
+    "__ja__",
+    "▁VRChat",
+    "でワ",
+    "ー",
+    "ルド",
+    "を探",
+    "して",
+    "います",
+    "。",
+    "</s>"
+   ],
+   "hypothesis": [
+    "__zh__",
+    "▁あ",
+    "ci",
+    "ci",
+    "ci",
+    "ci",
+    "ci",
+    "ci",
+    "ci",
+    "ci",
+    "ci",
+    "ci",
+    "ci",
+    "ci",
+    "ci",
+    "ci",
+    "ci",
+    "ci",
+    "ci",
+    "ci",
+    "ci",
+    "ci",
+    "ci",
+    "ci"
+   ],
+   "output": "あcicicicicicicicicicicicicicicicicicicicicici"
+  },
+  {
+   "text": "Ωmega ☃ 🙂",
+   "source": "en",
+   "target": "ja",
+   "source_tokens": [
+    "__en__",
+    "▁",
+    "<unk>",
+    "m",
+    "e",
+    "g",
+    "a",
+    "▁",
+    "<unk>",
+    "▁",
+    "<unk>",
+    "</s>"
+   ],
+   "hypothesis": [
+    "__ja__",
+    "__madeupword0006__",
+    "감",
+    "감",
+    "ci",
+    "ola",
+    "__pl__",
+    "내",
+    "내",
+    "내",
+    "감",
+    "ci",
+    "__bs__",
+    "▁こ",
+    "내",
+    "내",
+    "감",
+    "ci",
+    "ci",
+    "ci",
+    "ci",
+    "ci",
+    "ci",
+    "ci"
+   ],
+   "output": "__madeupword0006__감감ciola__pl__내내내감ci__bs__ こ내내감cicicicicicici"
+  },
+  {
+   "text": "  spaced   out  ",
+   "source": "en",
+   "target": "ja",
+   "source_tokens": [
+    "__en__",
+    "▁",
+    "s",
+    "p",
+    "a",
+    "ce",
+    "d",
+    "▁",
+    "ou",
+    "t",
+    "</s>"
+   ],
+   "hypothesis": [
+    "__ja__",
+    "__ast__",
+    "madeupword1",
+    "谢你",
+    "내",
+    "__ast__",
+    "ci",
+    "ci",
+    "ci",
+    "ci",
+    "ci",
+    "ci",
+    "ci",
+    "ci",
+    "ci",
+    "ci",
+    "ci",
+    "ci",
+    "ci",
+    "ci",
+    "ci",
+    "ci",
+    "ci",
+    "ci"
+   ],
+   "output": "__ast__<unk>谢你내__ast__cicicicicicicicicicicicicicicicicici"
+  },
+  {
+   "text": "Hi !",
+   "source": "en",
+   "target": "ja",
+   "source_tokens": [
+    "__en__",
+    "▁H",
+    "i",
+    "▁!",
+    "</s>"
+   ],
+   "hypothesis": [
+    "__ja__",
+    "__madeupword0006__",
+    "谢你",
+    "__madeupword0006__",
+    "谢你",
+    "__madeupword0006__",
+    "谢你",
+    "__madeupword0006__",
+    "谢你",
+    "__madeupword0006__",
+    "谢你",
+    "__madeupword0006__",
+    "谢你",
+    "__madeupword0006__",
+    "谢你",
+    "__madeupword0006__",
+    "谢你",
+    "__madeupword0006__",
+    "谢你",
+    "__madeupword0006__",
+    "谢你",
+    "__madeupword0006__",
+    "谢你",
+    "__madeupword0006__"
+   ],
+   "output": "__madeupword0006__谢你__madeupword0006__谢你__madeupword0006__谢你__madeupword0006__谢你__madeupword0006__谢你__madeupword0006__谢你__madeupword0006__谢你__madeupword0006__谢你__madeupword0006__谢你__madeupword0006__谢你__madeupword0006__谢你__madeupword0006__"
+  },
+  {
+   "text": "a",
+   "source": "en",
+   "target": "ja",
+   "source_tokens": [
+    "__en__",
+    "▁a",
+    "</s>"
+   ],
+   "hypothesis": [
+    "__ja__",
+    "__madeupword0006__",
+    "▁.",
+    "ci",
+    "ci",
+    "ci",
+    "ci",
+    "ci",
+    "ci",
+    "ci",
+    "ci",
+    "ci",
+    "ci",
+    "ci",
+    "ci",
+    "ci",
+    "ci",
+    "ci",
+    "ci",
+    "ci",
+    "ci",
+    "ci",
+    "ci",
+    "ci"
+   ],
+   "output": "__madeupword0006__.cicicicicicicicicicicicicicicicicicicicici"
+  }
+ ],
+ "decode_cases": [
+  {
+   "tokens": [
+    "▁H",
+    "i",
+    "__en__",
+    "▁H",
+    "i"
+   ],
+   "output": "Hi__en__ Hi"
+  },
+  {
+   "tokens": [
+    "__en__"
+   ],
+   "output": "__en__"
+  },
+  {
+   "tokens": [
+    "▁H",
+    "i",
+    "<unk>",
+    "▁H",
+    "i"
+   ],
+   "output": "Hi<unk>Hi"
+  },
+  {
+   "tokens": [
+    "▁H",
+    "i",
+    "</s>",
+    "▁H",
+    "i"
+   ],
+   "output": "Hi</s>Hi"
+  },
+  {
+   "tokens": [
+    "▁H",
+    "i",
+    "<pad>",
+    "▁H",
+    "i"
+   ],
+   "output": "Hi<pad>Hi"
+  },
+  {
+   "tokens": [
+    "▁H",
+    "i",
+    "<s>"
+   ],
+   "output": "Hi<s>"
+  },
+  {
+   "tokens": [
+    "__madeupword0001__",
+    "▁H"
+   ],
+   "output": "__madeupword0001__ H"
+  },
+  {
+   "tokens": [
+    "▁H",
+    "i",
+    "▁!",
+    "▁,",
+    "▁."
+   ],
+   "output": "Hi!,."
+  },
+  {
+   "tokens": [
+    "▁I",
+    "▁'m",
+    "▁a",
+    "▁,",
+    "▁we",
+    "▁'ve",
+    "▁it",
+    "▁.",
+    "▁they",
+    "▁'re",
+    "▁do",
+    "▁n't",
+    "▁it",
+    "▁'s",
+    "▁?",
+    "▁!"
+   ],
+   "output": "I'm a,<unk>'ve<unk>.<unk>'re<unk>n't<unk>'s?!"
+  },
+  {
+   "tokens": [
+    "▁a",
+    "▁'",
+    "▁b",
+    "▁'",
+    "▁c"
+   ],
+   "output": "a'b'c"
+  },
+  {
+   "tokens": [
+    "▁H",
+    "i",
+    "▁"
+   ],
+   "output": "Hi"
+  },
+  {
+   "tokens": [
+    "▁H",
+    "i",
+    "▁",
+    "▁"
+   ],
+   "output": "Hi"
+  },
+  {
+   "tokens": [
+    "▁",
+    "▁H",
+    "i"
+   ],
+   "output": "Hi"
+  },
+  {
+   "tokens": [
+    "▁I",
+    "'",
+    "m",
+    "▁s",
+    "ure",
+    "▁",
+    "?"
+   ],
+   "output": "I'm<unk><unk>?"
+  },
+  {
+   "tokens": [
+    "▁H",
+    "i",
+    " "
+   ],
+   "output": "Hi<unk>"
+  },
+  {
+   "tokens": [
+    "",
+    "▁H"
+   ],
+   "output": "<unk>H"
+  },
+  {
+   "tokens": [
+    "▁",
+    "▁",
+    "▁H"
+   ],
+   "output": "H"
+  },
+  {
+   "tokens": [],
+   "output": ""
+  },
+  {
+   "tokens": [
+    "▁he",
+    "llo",
+    "▁?",
+    "▁!",
+    "▁Th",
+    "ank",
+    "▁you",
+    "▁,",
+    "▁ok",
+    "▁."
+   ],
+   "output": "<unk>llo?!<unk>ank you,<unk>."
+  },
+  {
+   "tokens": [
+    "▁d",
+    "on",
+    "'t",
+    "▁d",
+    "o",
+    "▁i",
+    "t",
+    "'s"
+   ],
+   "output": "d<unk><unk>do it<unk>"
+  },
+  {
+   "tokens": [
+    "▁Y",
+    "ou",
+    "'re",
+    "▁g",
+    "o",
+    "od",
+    "▁I",
+    "'ve",
+    "▁s",
+    "ee",
+    "▁I",
+    "'m"
+   ],
+   "output": "<unk>ou<unk>good I<unk><unk><unk>I<unk>"
+  },
+  {
+   "tokens": [
+    "こ",
+    "ん",
+    "▁に",
+    "ち",
+    "は",
+    "。"
+   ],
+   "output": "こん<unk>ちは。"
+  },
+  {
+   "tokens": [
+    "▁こ",
+    "んに",
+    "ちは",
+    "、",
+    "元",
+    "気です",
+    "か",
+    "?"
+   ],
+   "output": "こんにちは、元気ですか?"
+  },
+  {
+   "tokens": [
+    "Ωmega"
+   ],
+   "output": "<unk>"
+  },
+  {
+   "tokens": [
+    "em",
+    "▁v",
+    "R",
+    "に",
+    "ま",
+    "ery",
+    "に",
+    "z",
+    "có",
+    "▁!",
+    "▁T"
+   ],
+   "output": "em vRにまeryにzcó! T"
+  },
+  {
+   "tokens": [
+    "得怎",
+    "ce",
+    "ing",
+    "a",
+    "<unk>",
+    "jour",
+    "is"
+   ],
+   "output": "得怎ceinga<unk>jouris"
+  },
+  {
+   "tokens": [
+    "▁감",
+    "I",
+    "▁a",
+    "?",
+    "でワ",
+    "ci",
+    "오",
+    "<pad>",
+    "p",
+    "사",
+    "▁d",
+    "▁d",
+    "oy",
+    "▁es"
+   ],
+   "output": "감I a?でワci오<pad>p사 d doy es"
+  },
+  {
+   "tokens": [
+    ".",
+    "세요",
+    "어",
+    "llo",
+    "안",
+    "▁你",
+    "▁,",
+    "いい",
+    "늘",
+    "ez",
+    "th",
+    "こ"
+   ],
+   "output": ".세요어llo안 你,いい늘ezthこ"
+  },
+  {
+   "tokens": [
+    "<s>",
+    "요",
+    "tá",
+    "ok",
+    "ご",
+    "谢你",
+    "ra",
+    "谢你",
+    "v",
+    "ou",
+    "이"
+   ],
+   "output": "<s>요táokご谢你ra谢你vou이"
+  },
+  {
+   "tokens": [
+    "떠",
+    "▁v"
+   ],
+   "output": "떠 v"
+  },
+  {
+   "tokens": [
+    "▁.",
+    "á",
+    "▁à",
+    "r",
+    "</s>",
+    "▁?",
+    "세요",
+    "분"
+   ],
+   "output": ".á àr</s>?세요분"
+  },
+  {
+   "tokens": [
+    "▁you",
+    "ce",
+    "ご",
+    "今天",
+    "ain"
+   ],
+   "output": "youceご今天ain"
+  },
+  {
+   "tokens": [
+    "có",
+    "今天",
+    "l",
+    "¿",
+    "▁à",
+    "mo",
+    "しょ",
+    "일",
+    "います",
+    "ain"
+   ],
+   "output": "có今天l¿ àmoしょ일いますain"
+  },
+  {
+   "tokens": [
+    "감",
+    "▁D",
+    "나",
+    "ing",
+    "oy",
+    "ra",
+    "です"
+   ],
+   "output": "감 D나ingoyraです"
+  },
+  {
+   "tokens": [
+    ".",
+    "今",
+    "ok"
+   ],
+   "output": ".今ok"
+  },
+  {
+   "tokens": [
+    "▁b",
+    "▁?",
+    "합",
+    "gen",
+    "▁안",
+    "ay",
+    "n",
+    "た",
+    "ルド"
+   ],
+   "output": "b?합gen 안aynたルド"
+  },
+  {
+   "tokens": [
+    "om",
+    "일",
+    "。",
+    "、",
+    "th",
+    "います",
+    "하",
+    "e"
+   ],
+   "output": "om일。、thいます하e"
+  },
+  {
+   "tokens": [
+    "d",
+    "á",
+    "▁w",
+    "た明"
+   ],
+   "output": "dá wた明"
+  },
+  {
+   "tokens": [
+    "ha",
+    "うご",
+    "in",
+    "기"
+   ],
+   "output": "haうごin기"
+  },
+  {
+   "tokens": [
+    "り",
+    "이",
+    "ルド",
+    "녕하",
+    "日",
+    "日会",
+    "lo",
+    "▁안",
+    "om",
+    "▁今",
+    "합"
+   ],
+   "output": "り이ルド녕하日日会lo 안om 今합"
+  },
+  {
+   "tokens": [
+    ".",
+    "사합",
+    "▁D",
+    "uc"
+   ],
+   "output": ".사합 Duc"
+  },
+  {
+   "tokens": [
+    "ana",
+    "lly",
+    "Bon",
+    "ll",
+    "ó",
+    "▁r"
+   ],
+   "output": "anallyBonlló r"
+  },
+  {
+   "tokens": [
+    "V",
+    "D",
+    "▁¿",
+    "v",
+    "is",
+    "나요",
+    "f",
+    "R",
+    "mo",
+    "다",
+    "す"
+   ],
+   "output": "VD ¿vis나요fRmo다す"
+  },
+  {
+   "tokens": [
+    "り",
+    "日は",
+    "p",
+    "ta",
+    "hu",
+    "ld",
+    "사합",
+    "天",
+    "▁r",
+    "ir",
+    "▁I"
+   ],
+   "output": "り日はptahuld사합天 rir I"
+  },
+  {
+   "tokens": [
+    "▁f",
+    "に",
+    "ル",
+    "R",
+    "이",
+    "분",
+    "ank",
+    "ery"
+   ],
+   "output": "fにルR이분ankery"
+  },
+  {
+   "tokens": [
+    "▁es",
+    "▁¿",
+    "り",
+    "la"
+   ],
+   "output": "es ¿りla"
+  },
+  {
+   "tokens": [
+    "今",
+    "明",
+    "▁t"
+   ],
+   "output": "今明 t"
+  },
+  {
+   "tokens": [
+    "늘",
+    "ana",
+    "늘",
+    "nk",
+    "ola",
+    "ル",
+    "hu",
+    "▁ ",
+    "llo",
+    "u",
+    ".",
+    "세요",
+    "D",
+    "세요"
+   ],
+   "output": "늘ana늘nkolaルhu<unk>llou.세요D세요"
+  },
+  {
+   "tokens": [
+    "▁'re",
+    "日は",
+    "Bo",
+    "ou",
+    "es",
+    "ra",
+    "세요",
+    "jou",
+    "▁'s",
+    "天见",
+    "▁你",
+    "m",
+    "l"
+   ],
+   "output": "'re日はBoouesra세요jou's天见 你ml"
+  },
+  {
+   "tokens": [
+    "は",
+    "▁こ",
+    "▁f",
+    "만",
+    "を"
+   ],
+   "output": "は こ f만を"
+  },
+  {
+   "tokens": [
+    "R",
+    "ing",
+    "안"
+   ],
+   "output": "Ring안"
+  },
+  {
+   "tokens": [
+    "c",
+    "▁H",
+    "ing",
+    "▁D",
+    "r",
+    "사",
+    "ご",
+    "うご",
+    "が",
+    "い"
+   ],
+   "output": "c Hing Dr사ごうごがい"
+  },
+  {
+   "tokens": [
+    "天见",
+    "▁T",
+    "▁你",
+    "日会",
+    "▁es",
+    "ci",
+    "uc"
+   ],
+   "output": "天见 T 你日会 esciuc"
+  },
+  {
+   "tokens": [
+    "<s>",
+    "▁w",
+    "e",
+    "c",
+    "in",
+    "d",
+    "好",
+    "▁こ",
+    "しょ",
+    "Bo",
+    "lo",
+    "오"
+   ],
+   "output": "<s>wecind好 こしょBolo오"
+  },
+  {
+   "tokens": [
+    "▁你",
+    "り",
+    "▁T",
+    "n",
+    "谢",
+    "nk",
+    "eh",
+    "▁,"
+   ],
+   "output": "你り Tn谢nkeh,"
+  },
+  {
+   "tokens": [
+    "니다",
+    "ld",
+    "日会",
+    "RC",
+    "y",
+    "でワ"
+   ],
+   "output": "니다ld日会RCyでワ"
+  },
+  {
+   "tokens": [
+    "▁'ve",
+    "es",
+    "▁기",
+    "谢你",
+    "▁",
+    "ce"
+   ],
+   "output": "'vees 기谢你 ce"
+  },
+  {
+   "tokens": [
+    "¿",
+    "ce",
+    "he",
+    "▁M",
+    "?!",
+    "mo",
+    "s",
+    "日は",
+    "g"
+   ],
+   "output": "¿cehe M<unk>mos日はg"
+  },
+  {
+   "tokens": [
+    "么",
+    "得",
+    "▁.",
+    "an",
+    "la",
+    "う",
+    "c",
+    "明",
+    "▁'",
+    "▁c",
+    "C"
+   ],
+   "output": "么得.anlaうc明'cC"
+  },
+  {
+   "tokens": [
+    "ci",
+    "<s>",
+    "ola",
+    "M",
+    "▁w",
+    "M",
+    "jou",
+    "しょ",
+    "か",
+    "n",
+    "R"
+   ],
+   "output": "ci<s>olaM wMjouしょかnR"
+  },
+  {
+   "tokens": [
+    "す",
+    "を",
+    "に",
+    "日会",
+    "C",
+    "今",
+    "怎",
+    "天见",
+    "D",
+    "nk",
+    "<s>",
+    "z"
+   ],
+   "output": "すをに日会C今怎天见Dnk<s>z"
+  },
+  {
+   "tokens": [
+    "ld",
+    "¿",
+    "见",
+    "in",
+    "日会",
+    "lly",
+    "분이",
+    "te",
+    "▁M",
+    "u",
+    "が"
+   ],
+   "output": "ld¿见in日会lly분이te Muが"
+  },
+  {
+   "tokens": [
+    "明",
+    "he",
+    "er"
+   ],
+   "output": "明heer"
+  },
+  {
+   "tokens": [
+    "V",
+    "▁'",
+    "你"
+   ],
+   "output": "V '你"
+  },
+  {
+   "tokens": [
+    "xxx",
+    "j",
+    "▁?"
+   ],
+   "output": "<unk>j?"
+  },
+  {
+   "tokens": [
+    "▁VRC",
+    "g",
+    "만"
+   ],
+   "output": "VRCg만"
+  },
+  {
+   "tokens": [
+    "得",
+    "▁ ",
+    "v",
+    "ちは",
+    "has",
+    "has",
+    "、",
+    "or",
+    "jour",
+    "omm",
+    "H",
+    "!",
+    "is"
+   ],
+   "output": "得<unk>vちはhashas、orjourommH!is"
+  },
+  {
+   "tokens": [
+    "i",
+    "세",
+    "么",
+    "es",
+    "しょ",
+    "oy",
+    "t",
+    "녕하",
+    "늘",
+    "▁こ",
+    "ou"
+   ],
+   "output": "i세么esしょoyt녕하늘 こou"
+  },
+  {
+   "tokens": [
+    "mo",
+    "o",
+    "요",
+    "lo",
+    "니",
+    "lly",
+    "▁VRChat",
+    "ll",
+    "as",
+    "ち",
+    "la",
+    "이",
+    "か"
+   ],
+   "output": "moo요lo니lly VRChatllasちla이か"
+  },
+  {
+   "tokens": [
+    "ルド",
+    "▁감",
+    "ci",
+    "▁.",
+    "▁D",
+    "a",
+    "▁'s"
+   ],
+   "output": "ルド 감ci. Da's"
+  },
+  {
+   "tokens": [
+    "See",
+    "ルド",
+    "▁감"
+   ],
+   "output": "Seeルド 감"
+  },
+  {
+   "tokens": [
+    "谢你",
+    "ta",
+    "ó",
+    "▁n't",
+    "你",
+    "ou",
+    "ow",
+    "만",
+    "C"
+   ],
+   "output": "谢你taón't你ouow만C"
+  },
+  {
+   "tokens": [
+    "-",
+    "er",
+    "见",
+    "니다",
+    "気です"
+   ],
+   "output": "-er见니다気です"
+  },
+  {
+   "tokens": [
+    ".",
+    "▁r",
+    "as",
+    "th",
+    "c",
+    "▁c",
+    "▁谢",
+    "es",
+    "ち",
+    "す",
+    "あ",
+    "しょ",
+    "ょ"
+   ],
+   "output": ". rasthc c 谢esちすあしょょ"
+  },
+  {
+   "tokens": [
+    "▁'s",
+    "▁ ",
+    "jour",
+    "세요",
+    "ll",
+    "▁'s",
+    "hat",
+    "llo",
+    "녕하",
+    "늘"
+   ],
+   "output": "'s<unk>jour세요ll'shatllo녕하늘"
+  },
+  {
+   "tokens": [
+    "D",
+    "<s>",
+    "得怎",
+    "好",
+    "?",
+    "して",
+    "天见",
+    "▁h",
+    "▁M",
+    "▁T",
+    "▁こ",
+    "▁谢"
+   ],
+   "output": "D<s>得怎好?して天见 h M T こ 谢"
+  },
+  {
+   "tokens": [
+    "▁M",
+    "eh",
+    "ir",
+    "▁b",
+    "ld",
+    "as",
+    "谢你",
+    "▁'m",
+    "나"
+   ],
+   "output": "Mehir bldas谢你'm나"
+  },
+  {
+   "tokens": [
+    "ra",
+    "ha",
+    "▁,",
+    "么样",
+    "ょ",
+    "▁T",
+    "à"
+   ],
+   "output": "raha,么样ょ Tà"
+  },
+  {
+   "tokens": [
+    "lo",
+    "天",
+    "日",
+    "▁b",
+    "▁es",
+    "▁'",
+    "Se"
+   ],
+   "output": "lo天日 b es 'Se"
+  },
+  {
+   "tokens": [
+    "?",
+    "见",
+    "v"
+   ],
+   "output": "?见v"
+  },
+  {
+   "tokens": [
+    "oy",
+    "得怎",
+    "la",
+    "明",
+    "は",
+    "▁b",
+    "añ",
+    "で",
+    "니",
+    "g",
+    "しょ",
+    "이"
+   ],
+   "output": "oy得怎la明は bañで니gしょ이"
+  },
+  {
+   "tokens": [
+    "今天",
+    "ルド"
+   ],
+   "output": "今天ルド"
+  },
+  {
+   "tokens": [
+    "▁어",
+    "▁'re",
+    "lly",
+    "?!",
+    "ank",
+    "▁f",
+    "▁H",
+    "▁a",
+    "怎",
+    "니다",
+    "늘",
+    "ou"
+   ],
+   "output": "어'relly<unk>ank f H a怎니다늘ou"
+  },
+  {
+   "tokens": [
+    "g",
+    "분이",
+    "¿",
+    "▁?",
+    "て"
+   ],
+   "output": "g분이¿?て"
+  }
+ ]
+}

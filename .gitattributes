@@ -1,2 +1,6 @@
 # Force LF line endings for all text files
 * text=auto eol=lf
+
+# Binary test fixtures must never be line-ending normalised.
+src-tauri/crates/vrct-core/tests/fixtures/ct2_tiny/model/model.bin binary
+src-tauri/crates/vrct-core/tests/fixtures/ct2_tiny/tokenizer/*.model binary

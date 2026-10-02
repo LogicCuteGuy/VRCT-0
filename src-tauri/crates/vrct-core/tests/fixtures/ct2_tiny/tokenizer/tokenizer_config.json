@@ -1,0 +1,4 @@
+{
+ "tokenizer_class": "M2M100Tokenizer",
+ "clean_up_tokenization_spaces": true
+}
