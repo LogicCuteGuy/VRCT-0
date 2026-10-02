@@ -13,6 +13,7 @@ use vrct_core::protocol::Response;
 use vrct_core::router::{ResponseSink, Router};
 use vrct_core::rpc::{LineWriter, Rpc};
 use vrct_core::settings::{system::production_env, Settings};
+use vrct_core::setters;
 use vrct_core::sinks::Sinks;
 
 use sidecar::Sidecar;
@@ -71,6 +72,7 @@ impl Backend {
 
         let router = Router::new(Arc::clone(&sink)).with_fallback(sidecar.clone());
         let router = config::register_getters(router, &replica);
+        let router = setters::register(router, &settings);
         let router = updates::register(router, app.clone(), Arc::clone(&replica), sink)?;
 
         Ok(Self {

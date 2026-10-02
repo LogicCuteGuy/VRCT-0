@@ -766,18 +766,7 @@ class Config:
             return
         emitInternalMessage(self._BRIDGE_CHANGED_ENDPOINT, {"key": key, "value": value})
 
-    # Rust ホストが config.json を所有しているとき (VRCT_CONFIG_OWNER=host) は、この
-    # クラスはメモリ上の値と変更通知だけを担当し、ファイルには一切書き込まない。
-    # 書き込みはホスト側の Settings が通知を取り込んで行う。
-    _OWNER_ENV = "VRCT_CONFIG_OWNER"
-
-    @classmethod
-    def _hostOwnsFile(cls) -> bool:
-        return os_environ.get(cls._OWNER_ENV) == "host"
-
     def saveConfigToFile(self) -> None:
-        if self._hostOwnsFile():
-            return
         filtered = self._serializableSnapshot()
         with self._file_lock:
             self._config_data = filtered

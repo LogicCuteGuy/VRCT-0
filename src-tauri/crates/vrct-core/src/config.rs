@@ -1,11 +1,10 @@
 //! How the code that reads settings reaches them while the legacy sidecar still runs.
 //!
 //! A replica is either a plain copy of what the sidecar reports (`default`), or a view over
-//! [`Settings`] (`over`), which is what the app uses: Rust owns config.json and the sidecar, started
-//! with [`BRIDGE_ENV`] and [`OWNER_ENV`] set, no longer writes it. It still runs its own `Config`,
-//! so it sends a full snapshot after loading the file and one message per later change; those are
-//! adopted into the settings so the file stays what the sidecar is really using. Ported features
-//! read their settings here, and ported endpoints that only return a setting are served from it.
+//! [`Settings`] (`over`), which is what the app uses. The sidecar still runs its own `Config` for
+//! the features not ported yet, so it sends a full snapshot after loading the file and one message
+//! per later change; those are adopted into the settings. Ported features read their settings
+//! here, and ported endpoints that only return a setting are served from it.
 
 use std::collections::HashMap;
 use std::sync::{Arc, RwLock};
@@ -18,10 +17,6 @@ use crate::settings::Settings;
 
 /// Environment variable (name, value) that switches the sidecar's bridge on.
 pub const BRIDGE_ENV: (&str, &str) = ("VRCT_CONFIG_BRIDGE", "1");
-
-/// Environment variable (name, value) that tells the sidecar the host owns config.json: its
-/// `Config` keeps working in memory and reports changes, but never writes the file.
-pub const OWNER_ENV: (&str, &str) = ("VRCT_CONFIG_OWNER", "host");
 
 const INTERNAL_PREFIX: &str = "/internal/config/";
 const SNAPSHOT_ENDPOINT: &str = "/internal/config/snapshot";

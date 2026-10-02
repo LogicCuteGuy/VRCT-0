@@ -23,6 +23,11 @@ use super::validators::State;
 /// How long after the last change a non-immediate setting is written.
 pub const DEBOUNCE: Duration = Duration::from_secs(2);
 
+/// Extra wait before a change adopted from the sidecar is written. The sidecar writes config.json
+/// itself, two seconds after its own change and from its own copy of every setting; this write has
+/// to come after it so the file ends up with the values Rust holds. Goes away with the sidecar.
+pub const SIDECAR_SETTLE: Duration = Duration::from_secs(1);
+
 const INSTALLER_LANGUAGE_MARKER: &str = "installer_language.txt";
 
 #[derive(Debug, Clone, PartialEq, Eq)]
@@ -138,7 +143,7 @@ impl Settings {
             }
             state.insert(prop.name.to_string(), value.clone());
         }
-        self.inner.schedule(prop.immediate);
+        self.inner.schedule_at(self.inner.debounce + SIDECAR_SETTLE);
         for listener in self.inner.listeners.read().unwrap().iter() {
             listener(prop.name, &value);
         }
@@ -266,8 +271,12 @@ impl Inner {
 
     /// Schedules the write, replacing any earlier schedule. Immediate means: wake the saver now.
     fn schedule(&self, immediate: bool) {
+        self.schedule_at(if immediate { Duration::ZERO } else { self.debounce });
+    }
+
+    fn schedule_at(&self, delay: Duration) {
         let mut slot = self.slot.lock().unwrap();
-        slot.due = Some(Instant::now() + if immediate { Duration::ZERO } else { self.debounce });
+        slot.due = Some(Instant::now() + delay);
         self.wake.notify_all();
     }
 

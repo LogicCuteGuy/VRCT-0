@@ -13,7 +13,9 @@ ct2 = ["dep:ct2rs", "dep:sentencepiece", "dep:tokenizers"]
 
 [dependencies]
 serde = { version = "1", features = ["derive"] }
-serde_json = "1"
+# float_roundtrip: parse numbers exactly (the default can be an ulp off), which the settings
+# compare and echo back to the UI.
+serde_json = { version = "1", features = ["float_roundtrip"] }
 base64 = "0.22"
 # Random bytes for the WebSocket token.
 getrandom = "0.3"

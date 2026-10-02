@@ -11,6 +11,7 @@ pub mod protocol;
 pub mod router;
 pub mod rpc;
 pub mod settings;
+pub mod setters;
 pub mod sinks;
 pub mod translation;
 pub mod updater;

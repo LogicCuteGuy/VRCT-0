@@ -8,6 +8,7 @@
 
 pub mod defaults;
 pub mod env;
+pub mod pyconv;
 pub mod pyvalue;
 pub mod schema;
 pub mod store;
@@ -17,4 +18,4 @@ pub mod validators;
 
 pub use env::{Devices, Env, Paths};
 pub use schema::{Rejected, PROPS};
-pub use store::{channel_for_version, config_text, SetError, Settings, DEBOUNCE};
+pub use store::{channel_for_version, config_text, SetError, Settings, DEBOUNCE, SIDECAR_SETTLE};

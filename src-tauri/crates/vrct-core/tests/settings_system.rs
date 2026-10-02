@@ -179,12 +179,18 @@ fn adopt_writes_the_file_and_tells_subscribers_only_about_changes() {
 }
 
 #[test]
-fn an_immediate_setting_is_adopted_into_the_file_at_once() {
+fn an_adopted_change_is_written_after_the_sidecars_own_write() {
     let dir = scratch_dir();
-    // A debounce far longer than the wait: only an immediate write can make it in time.
-    let (settings, _) = Settings::open_with(production_env("3.5.1-beta.1", &dir), Duration::from_secs(60));
+    // The sidecar writes config.json two seconds after its own change; an adopted change is written
+    // after that (the debounce plus a settle time), never at once, even for an immediate setting.
+    let debounce = Duration::from_millis(300);
+    let (settings, _) = Settings::open_with(production_env("3.5.1-beta.1", &dir), debounce);
+    let adopted_at = Instant::now();
     settings.adopt("MESSAGE_BOX_RATIO", json!(33.5)).unwrap();
-    wait_until("the immediate write", || config_file(&dir)["MESSAGE_BOX_RATIO"] == json!(33.5));
+    std::thread::sleep(debounce + Duration::from_millis(200));
+    assert_ne!(config_file(&dir)["MESSAGE_BOX_RATIO"], json!(33.5), "written before the sidecar's own write could have happened");
+    wait_until("the write behind the sidecar's", || config_file(&dir)["MESSAGE_BOX_RATIO"] == json!(33.5));
+    assert!(adopted_at.elapsed() >= debounce + vrct_core::settings::SIDECAR_SETTLE);
 }
 
 fn bridge(endpoint: &str, result: Value) -> Response {
