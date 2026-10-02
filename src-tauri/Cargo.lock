@@ -5661,6 +5661,7 @@ dependencies = [
  "cpal",
  "ct2rs",
  "futures-util",
+ "getrandom 0.3.2",
  "hex",
  "ort",
  "reqwest",

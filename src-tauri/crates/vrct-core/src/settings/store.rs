@@ -122,6 +122,29 @@ impl Settings {
         Ok(())
     }
 
+    /// Takes a persisted value as it is, without checking it. Only for the time the sidecar still
+    /// runs: its `Config` has already checked the value against its own device lists, and what
+    /// it holds is what the program is really using, so the file must say the same. Removed with
+    /// the sidecar. An unchanged value is left alone (no write, no notification).
+    pub fn adopt(&self, name: &str, value: Value) -> Result<(), SetError> {
+        let prop = schema::find(name).ok_or(SetError::UnknownProperty)?;
+        if prop.is_read_only() || !prop.persisted {
+            return Err(SetError::ReadOnly);
+        }
+        {
+            let mut state = self.inner.state.write().unwrap();
+            if state.get(prop.name) == Some(&value) {
+                return Ok(());
+            }
+            state.insert(prop.name.to_string(), value.clone());
+        }
+        self.inner.schedule(prop.immediate);
+        for listener in self.inner.listeners.read().unwrap().iter() {
+            listener(prop.name, &value);
+        }
+        Ok(())
+    }
+
     /// Called with `(name, new value)` after each change to a persisted setting, from the thread
     /// that made the change. Replaces the sidecar's `/internal/config/changed` bridge.
     pub fn subscribe(&self, listener: impl Fn(&str, &Value) + Send + Sync + 'static) {

@@ -66,7 +66,17 @@ pub fn run() {
             backend_start,
             backend_request
         ])
-        .run(tauri::generate_context!());
+        .build(tauri::generate_context!())
+        .map(|app| {
+            app.run(|handle, event| {
+                // A setting changed in the last two seconds is still waiting to be written.
+                if let tauri::RunEvent::Exit = event {
+                    if let Some(backend) = handle.try_state::<backend::Backend>() {
+                        backend.shutdown();
+                    }
+                }
+            })
+        });
     match result {
         Ok(()) => startup_log("VRCT event loop ended"),
         Err(error) => {

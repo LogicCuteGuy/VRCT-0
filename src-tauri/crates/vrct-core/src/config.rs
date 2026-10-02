@@ -1,10 +1,11 @@
-//! Read-only mirror of the legacy sidecar's persisted config.
+//! How the code that reads settings reaches them while the legacy sidecar still runs.
 //!
-//! Python's `Config` stays the only owner and writer of `config.json` until it
-//! is removed. When Rust launches the sidecar with [`BRIDGE_ENV`] set, Python
-//! sends a full snapshot after loading the file and one message per later
-//! change, and this replica keeps a copy. Ported features read their settings
-//! here, and ported endpoints that only return a setting are served from it.
+//! A replica is either a plain copy of what the sidecar reports (`default`), or a view over
+//! [`Settings`] (`over`), which is what the app uses: Rust owns config.json and the sidecar, started
+//! with [`BRIDGE_ENV`] and [`OWNER_ENV`] set, no longer writes it. It still runs its own `Config`,
+//! so it sends a full snapshot after loading the file and one message per later change; those are
+//! adopted into the settings so the file stays what the sidecar is really using. Ported features
+//! read their settings here, and ported endpoints that only return a setting are served from it.
 
 use std::collections::HashMap;
 use std::sync::{Arc, RwLock};
@@ -13,9 +14,14 @@ use serde_json::{json, Value};
 
 use crate::protocol::Response;
 use crate::router::Router;
+use crate::settings::Settings;
 
 /// Environment variable (name, value) that switches the sidecar's bridge on.
 pub const BRIDGE_ENV: (&str, &str) = ("VRCT_CONFIG_BRIDGE", "1");
+
+/// Environment variable (name, value) that tells the sidecar the host owns config.json: its
+/// `Config` keeps working in memory and reports changes, but never writes the file.
+pub const OWNER_ENV: (&str, &str) = ("VRCT_CONFIG_OWNER", "host");
 
 const INTERNAL_PREFIX: &str = "/internal/config/";
 const SNAPSHOT_ENDPOINT: &str = "/internal/config/snapshot";
@@ -24,9 +30,15 @@ const CHANGED_ENDPOINT: &str = "/internal/config/changed";
 #[derive(Default)]
 pub struct ConfigReplica {
     values: RwLock<HashMap<String, Value>>,
+    settings: Option<Arc<Settings>>,
 }
 
 impl ConfigReplica {
+    /// A view over the host's settings: reads come from them, sidecar reports are adopted into them.
+    pub fn over(settings: Arc<Settings>) -> Self {
+        Self { values: RwLock::default(), settings: Some(settings) }
+    }
+
     /// Apply a bridge message from the sidecar. Returns true when the line was
     /// one, so the caller keeps it away from the UI; malformed bridge lines are
     /// swallowed too because they may carry secrets.
@@ -40,15 +52,31 @@ impl ConfigReplica {
         match response.endpoint.as_str() {
             SNAPSHOT_ENDPOINT => {
                 if let Value::Object(map) = &response.result {
-                    *self.values.write().unwrap() =
-                        map.iter().map(|(k, v)| (k.clone(), v.clone())).collect();
+                    match &self.settings {
+                        Some(settings) => {
+                            for (key, value) in map {
+                                let _ = settings.adopt(key, value.clone());
+                            }
+                        }
+                        None => {
+                            *self.values.write().unwrap() =
+                                map.iter().map(|(k, v)| (k.clone(), v.clone())).collect();
+                        }
+                    }
                 }
             }
             CHANGED_ENDPOINT => {
                 if let (Some(Value::String(key)), Some(value)) =
                     (response.result.get("key"), response.result.get("value"))
                 {
-                    self.values.write().unwrap().insert(key.clone(), value.clone());
+                    match &self.settings {
+                        Some(settings) => {
+                            let _ = settings.adopt(key, value.clone());
+                        }
+                        None => {
+                            self.values.write().unwrap().insert(key.clone(), value.clone());
+                        }
+                    }
                 }
             }
             _ => {}
@@ -57,18 +85,21 @@ impl ConfigReplica {
     }
 
     pub fn get(&self, key: &str) -> Option<Value> {
-        self.values.read().unwrap().get(key).cloned()
+        match &self.settings {
+            Some(settings) => settings.get(key),
+            None => self.values.read().unwrap().get(key).cloned(),
+        }
     }
 
     pub fn get_str(&self, key: &str) -> Option<String> {
-        match self.values.read().unwrap().get(key) {
-            Some(Value::String(value)) => Some(value.clone()),
+        match self.get(key) {
+            Some(Value::String(value)) => Some(value),
             _ => None,
         }
     }
 
     pub fn contains(&self, key: &str) -> bool {
-        self.values.read().unwrap().contains_key(key)
+        self.get(key).is_some()
     }
 }
 

@@ -12,6 +12,7 @@ use vrct_core::config::{self, ConfigReplica};
 use vrct_core::protocol::Response;
 use vrct_core::router::{ResponseSink, Router};
 use vrct_core::rpc::{LineWriter, Rpc};
+use vrct_core::settings::{system::production_env, Settings};
 use vrct_core::sinks::Sinks;
 
 use sidecar::Sidecar;
@@ -27,9 +28,23 @@ impl ResponseSink for TauriSink {
     }
 }
 
+/// Opens config.json next to the application, the folder the sidecar kept it in. A file that
+/// cannot be read is reported and left alone; the settings then run on their defaults.
+fn open_settings(app: &AppHandle) -> Result<Arc<Settings>, String> {
+    let exe = std::env::current_exe().map_err(|error| format!("cannot find the application folder: {error}"))?;
+    let folder = exe.parent().ok_or("the application has no folder")?;
+    let version = app.package_info().version.to_string();
+    let (settings, report) = Settings::open(production_env(&version, folder));
+    if let Some(report) = report {
+        eprintln!("[settings] config.json was not read: {report}");
+    }
+    Ok(Arc::new(settings))
+}
+
 pub struct Backend {
     router: Arc<Router>,
     sidecar: Arc<Sidecar>,
+    settings: Arc<Settings>,
     replica: Arc<ConfigReplica>,
     sinks: Arc<Sinks>,
     rpc: Arc<Rpc>,
@@ -40,7 +55,8 @@ impl Backend {
     pub fn new(app: &AppHandle) -> Result<Self, String> {
         let sink: Arc<dyn ResponseSink> = Arc::new(TauriSink(app.clone()));
         let sidecar = Arc::new(Sidecar::default());
-        let replica = Arc::new(ConfigReplica::default());
+        let settings = open_settings(app)?;
+        let replica = Arc::new(ConfigReplica::over(Arc::clone(&settings)));
         let sinks = Arc::new(Sinks::new(Arc::clone(&replica)));
         let writer = sidecar.clone() as Arc<dyn LineWriter>;
         let rpc = Rpc::new(Arc::clone(&writer));
@@ -60,6 +76,7 @@ impl Backend {
         Ok(Self {
             router: Arc::new(router),
             sidecar,
+            settings,
             replica,
             sinks,
             rpc,
@@ -82,6 +99,13 @@ impl Backend {
                 Arc::clone(&self.rpc),
             )
             .inspect_err(|_| self.started.store(false, Ordering::SeqCst))
+    }
+
+    /// Writes a setting that is still waiting for its debounce; called when the application exits.
+    pub fn shutdown(&self) {
+        if let Err(error) = self.settings.flush() {
+            eprintln!("[settings] {error}");
+        }
     }
 
     pub fn request(&self, endpoint: String, data: Option<String>) {

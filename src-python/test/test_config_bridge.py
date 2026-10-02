@@ -99,5 +99,55 @@ class ConfigBridgeTests(unittest.TestCase):
         self.assertEqual(self.sent, [])
 
 
+class HostOwnedFileTests(unittest.TestCase):
+    """With VRCT_CONFIG_OWNER=host the host's Settings writes config.json; Config only reports."""
+
+    def setUp(self) -> None:
+        self._tmp = tempfile.TemporaryDirectory()
+        self.addCleanup(self._tmp.cleanup)
+        self.sent: list[tuple[str, object]] = []
+        for target, replacement in (
+            ("emitInternalMessage", lambda endpoint, result: self.sent.append((endpoint, result))),
+        ):
+            patcher = mock.patch.object(config_module, target, replacement)
+            patcher.start()
+            self.addCleanup(patcher.stop)
+        env = mock.patch.dict("os.environ", {Config._BRIDGE_ENV: "1", Config._OWNER_ENV: "host"})
+        env.start()
+        self.addCleanup(env.stop)
+
+    def test_load_and_saves_leave_the_file_alone(self) -> None:
+        cfg = _isolated_config(self._tmp.name)
+        path = Path(cfg.PATH_CONFIG)
+        path.write_text(json.dumps({"UI_LANGUAGE": "ja"}), encoding="utf-8")
+        before = path.read_bytes()
+
+        cfg.load_config()
+        cfg.UI_LANGUAGE = "ko"
+        cfg.saveConfigToFile()
+
+        self.assertEqual(path.read_bytes(), before)
+        self.assertEqual(cfg.UI_LANGUAGE, "ko")
+
+    def test_no_file_is_created(self) -> None:
+        cfg = _isolated_config(self._tmp.name)
+        cfg.load_config()
+        cfg.saveConfigToFile()
+        self.assertFalse(Path(cfg.PATH_CONFIG).exists())
+
+    def test_changes_are_still_reported(self) -> None:
+        cfg = _isolated_config(self._tmp.name)
+        cfg.load_config()
+        self.sent.clear()
+        cfg.UI_LANGUAGE = "ko"
+        self.assertEqual(self.sent, [(CHANGED, {"key": "UI_LANGUAGE", "value": "ko"})])
+
+    def test_any_other_owner_value_keeps_python_writing(self) -> None:
+        with mock.patch.dict("os.environ", {Config._OWNER_ENV: "python"}):
+            cfg = _isolated_config(self._tmp.name)
+            cfg.load_config()
+        self.assertTrue(Path(cfg.PATH_CONFIG).exists())
+
+
 if __name__ == "__main__":
     unittest.main()

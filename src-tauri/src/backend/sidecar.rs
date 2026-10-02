@@ -3,7 +3,7 @@ use std::sync::{Arc, Mutex};
 use tauri::{AppHandle, Emitter};
 use tauri_plugin_shell::process::{CommandChild, CommandEvent};
 use tauri_plugin_shell::ShellExt;
-use vrct_core::config::{ConfigReplica, BRIDGE_ENV};
+use vrct_core::config::{ConfigReplica, BRIDGE_ENV, OWNER_ENV};
 use vrct_core::protocol::{parse_sidecar_line, sidecar_line};
 use vrct_core::router::{Fallback, Router};
 use vrct_core::rpc::{LineWriter, Rpc, RPC_ENV_NAME};
@@ -50,6 +50,7 @@ impl Sidecar {
             .map(|command| {
                 command
                     .env(BRIDGE_ENV.0, BRIDGE_ENV.1)
+                    .env(OWNER_ENV.0, OWNER_ENV.1)
                     .env(SINKS_ENV_NAME, sinks_env_value())
                     .env(RPC_ENV_NAME, rpc.env_value())
             })
