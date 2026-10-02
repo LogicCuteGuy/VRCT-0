@@ -23,8 +23,8 @@
     "dev-cuda-fast": "set \"VRCT_DEV_VENV=.venv_cuda\" && npm run task-kill && npm run sidecar-dev && npm run dev-ui",
     "dev-ui": "npm run task-kill && npm-run-all --parallel vite tauri-dev",
     "analyze-error": "node utils/analyze_ui_error.js",
-    "build": "npm run task-kill && npm run clean && npm run update-version && npm run build-python && npm run vite-build && npm run tauri build",
-    "build-cuda": "npm run task-kill && npm run clean && npm run update-version && npm run build-python-cuda && npm run vite-build && npm run tauri build",
+    "build": "npm run task-kill && npm run clean && npm run update-version && npm run build-python && npm run vite-build && npm run tauri build -- --features ct2",
+    "build-cuda": "npm run task-kill && npm run clean && npm run update-version && npm run build-python-cuda && npm run vite-build && npm run tauri build -- --features ct2",
     "release": "npm run update-version && npm run build && python utils\\zip.py --zip_name VRCT.zip"
   },
   "dependencies": {

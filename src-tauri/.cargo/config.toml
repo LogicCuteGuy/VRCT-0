@@ -1,0 +1,5 @@
+# CTranslate2 (feature `ct2`) is built with the static MSVC runtime; every
+# crate in the build has to match it, or the link fails with LNK2038.
+# An explicit RUSTFLAGS environment variable still overrides this.
+[target.x86_64-pc-windows-msvc]
+rustflags = ["-C", "target-feature=+crt-static"]
