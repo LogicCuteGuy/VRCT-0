@@ -19,7 +19,7 @@ crate-type = ["staticlib", "cdylib", "rlib"]
 
 [features]
 # Run local CTranslate2 models in this process (see vrct-core's `ct2` feature).
-# Windows builds need RUSTFLAGS="-C target-feature=+crt-static".
+# Needs cmake; the static MSVC runtime comes from .cargo/config.toml.
 ct2 = ["vrct-core/ct2"]
 
 [build-dependencies]

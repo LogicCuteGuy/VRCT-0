@@ -5,6 +5,7 @@
 //! endpoints implemented in Rust are served in-process, everything else is
 //! forwarded to the legacy Python sidecar until it is removed.
 
+pub mod audio;
 pub mod config;
 pub mod protocol;
 pub mod router;

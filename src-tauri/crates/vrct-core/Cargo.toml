@@ -7,8 +7,8 @@ license = "MIT"
 
 [features]
 # Local CTranslate2 translation. Off by default: it compiles CTranslate2 and
-# SentencePiece from source (minutes, needs cmake) and, on Windows (MSVC), the
-# build needs RUSTFLAGS="-C target-feature=+crt-static" and a short target dir.
+# SentencePiece from source (minutes, needs cmake) and, on Windows (MSVC), needs
+# the static runtime that src-tauri/.cargo/config.toml sets.
 ct2 = ["dep:ct2rs", "dep:sentencepiece", "dep:tokenizers"]
 
 [dependencies]
