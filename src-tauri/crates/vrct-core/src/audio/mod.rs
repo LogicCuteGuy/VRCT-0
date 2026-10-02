@@ -5,9 +5,12 @@
 //! per-frame speech probability, which `silero` computes. Both follow `models/transcription/audio_vad.py`
 //! and are checked against its output.
 
+pub mod devices;
 pub mod normalize;
 pub mod silero;
 pub mod vad;
+#[cfg(windows)]
+pub mod wasapi;
 
 /// What the speech-segment code consumes: 16 kHz, mono, signed 16-bit little endian.
 pub const TARGET_SAMPLE_RATE: u32 = 16_000;

@@ -39,6 +39,10 @@ ort = { version = "=2.0.0-rc.13", default-features = false, features = ["std", "
 
 # Win32 calls for the clipboard sink (focus a window, copy, Ctrl+V).
 [target.'cfg(windows)'.dependencies]
+# WASAPI capture (microphones, and loopback of a playback device for speaker audio).
+# Windows only: Linux/macOS keep capturing in the Python backend, and this keeps
+# libasound out of their builds.
+cpal = "=0.17.1"
 windows-sys = { version = "0.59", features = [
     "Win32_Foundation",
     "Win32_System_DataExchange",
