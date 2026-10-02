@@ -14,6 +14,8 @@ pub struct Captured {
     pub request_line: String,
     pub headers: Vec<(String, String)>,
     pub body: Value,
+    /// The body as it arrived, for requests that are not JSON.
+    pub raw: Vec<u8>,
 }
 
 impl Captured {
@@ -82,7 +84,7 @@ pub async fn mock(replies: Vec<(u16, String)>) -> Mock {
                 raw.extend_from_slice(&chunk[..n]);
             }
             let body = serde_json::from_slice(&raw[head_end..]).unwrap_or(Value::Null);
-            log.lock().unwrap().push(Captured { request_line, headers, body });
+            log.lock().unwrap().push(Captured { request_line, headers, body, raw: raw[head_end..].to_vec() });
 
             let (status, text) = &replies[served.min(replies.len() - 1)];
             served += 1;
@@ -94,4 +96,23 @@ pub async fn mock(replies: Vec<(u16, String)>) -> Mock {
         }
     });
     Mock { port, captured }
+}
+
+/// A server that takes connections and never answers: a request to it can only time out.
+pub async fn hang() -> u16 {
+    let listener = TcpListener::bind("127.0.0.1:0").await.unwrap();
+    let port = listener.local_addr().unwrap().port();
+    tokio::spawn(async move {
+        let mut held = Vec::new();
+        while let Ok((stream, _)) = listener.accept().await {
+            held.push(stream);
+        }
+    });
+    port
+}
+
+/// A port nothing listens on: a request to it is refused.
+pub fn closed_port() -> u16 {
+    let listener = std::net::TcpListener::bind("127.0.0.1:0").unwrap();
+    listener.local_addr().unwrap().port()
 }

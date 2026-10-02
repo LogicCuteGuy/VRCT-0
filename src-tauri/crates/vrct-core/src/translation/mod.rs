@@ -11,7 +11,7 @@ pub mod catalog;
 #[cfg(feature = "ct2")]
 pub mod ct2;
 pub mod deepl;
-mod http;
+pub(crate) mod http;
 pub mod languages;
 pub mod llm;
 pub mod prompt;

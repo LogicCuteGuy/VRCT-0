@@ -22,6 +22,27 @@ const FIRST_BACKOFF: Duration = Duration::from_millis(500);
 
 pub type Headers<'a> = &'a [(&'static str, String)];
 
+/// A request that did not get an answer.
+#[derive(Debug, Clone, PartialEq, Eq)]
+pub struct SendError {
+    /// The wait ran out (as opposed to a refused or broken connection).
+    pub timed_out: bool,
+    pub message: String,
+}
+
+enum Body<'a> {
+    None,
+    Json(&'a Value),
+    Bytes { content_type: &'a str, data: &'a [u8] },
+}
+
+/// What a server answered, undecoded.
+#[derive(Debug, Clone, PartialEq, Eq)]
+pub struct Reply {
+    pub status: u16,
+    pub body: Vec<u8>,
+}
+
 fn client() -> &'static Client {
     static CLIENT: OnceLock<Client> = OnceLock::new();
     CLIENT.get_or_init(|| {
@@ -55,15 +76,23 @@ async fn send(
     method: Method,
     url: &str,
     headers: Headers<'_>,
-    body: Option<&Value>,
+    query: &[(&str, String)],
+    body: Body<'_>,
     timeout: Option<Duration>,
     attempts: u32,
-) -> Result<Response, String> {
+) -> Result<Response, SendError> {
     let mut backoff = FIRST_BACKOFF;
     for attempt in 1..=attempts {
         let mut builder = client().request(method.clone(), url);
-        if let Some(body) = body {
-            builder = builder.json(body);
+        if !query.is_empty() {
+            builder = builder.query(query);
+        }
+        match &body {
+            Body::None => {}
+            Body::Json(json) => builder = builder.json(json),
+            Body::Bytes { content_type, data } => {
+                builder = builder.header("Content-Type", *content_type).body(data.to_vec());
+            }
         }
         if let Some(timeout) = timeout {
             builder = builder.timeout(timeout);
@@ -80,7 +109,10 @@ async fn send(
             }
             Err(error) => {
                 if last || !error.is_connect() {
-                    return Err(format!("request failed: {}", error.without_url()));
+                    return Err(SendError {
+                        timed_out: error.is_timeout(),
+                        message: format!("request failed: {}", error.without_url()),
+                    });
                 }
             }
         }
@@ -104,22 +136,50 @@ async fn json_of(response: Response) -> Result<Value, String> {
 
 /// POST `body` as JSON and return the JSON reply.
 pub async fn post_json(url: &str, headers: Headers<'_>, body: &Value) -> Result<Value, String> {
-    json_of(send(Method::POST, url, headers, Some(body), None, ATTEMPTS).await?).await
+    json_of(send(Method::POST, url, headers, &[], Body::Json(body), None, ATTEMPTS).await.map_err(|e| e.message)?).await
 }
 
 /// GET with the cloud policy (retries included) and return the JSON reply.
 pub async fn get_json(url: &str, headers: Headers<'_>) -> Result<Value, String> {
-    json_of(send(Method::GET, url, headers, None, None, ATTEMPTS).await?).await
+    json_of(send(Method::GET, url, headers, &[], Body::None, None, ATTEMPTS).await.map_err(|e| e.message)?).await
 }
 
 /// One GET without retries and with its own wait: a local server, where nothing
 /// is worth waiting on, or a key check whose status alone is the answer. An
 /// unreachable server is an error, any answer is returned as its status.
 pub async fn get_status_once(url: &str, headers: Headers<'_>, timeout: Duration) -> Result<u16, String> {
-    Ok(send(Method::GET, url, headers, None, Some(timeout), 1).await?.status().as_u16())
+    Ok(send(Method::GET, url, headers, &[], Body::None, Some(timeout), 1).await.map_err(|e| e.message)?.status().as_u16())
 }
 
 /// Like `get_status_once`, returning the JSON reply of a successful answer.
 pub async fn get_json_once(url: &str, headers: Headers<'_>, timeout: Duration) -> Result<Value, String> {
-    json_of(send(Method::GET, url, headers, None, Some(timeout), 1).await?).await
+    json_of(send(Method::GET, url, headers, &[], Body::None, Some(timeout), 1).await.map_err(|e| e.message)?).await
+}
+
+async fn reply_of(response: Response) -> Result<Reply, SendError> {
+    let status = response.status().as_u16();
+    match response.bytes().await {
+        Ok(body) => Ok(Reply { status, body: body.to_vec() }),
+        Err(error) => Err(SendError { timed_out: error.is_timeout(), message: format!("bad reply: {}", error.without_url()) }),
+    }
+}
+
+/// POST raw bytes (with the cloud policy when `attempts` > 1) and return whatever status and body come
+/// back, for callers that map statuses themselves.
+pub async fn post_bytes(
+    url: &str,
+    headers: Headers<'_>,
+    query: &[(&str, String)],
+    content_type: &str,
+    data: &[u8],
+    timeout: Duration,
+    attempts: u32,
+) -> Result<Reply, SendError> {
+    let body = Body::Bytes { content_type, data };
+    reply_of(send(Method::POST, url, headers, query, body, Some(timeout), attempts).await?).await
+}
+
+/// GET and return the status and body, whatever the status.
+pub async fn get_reply(url: &str, headers: Headers<'_>, timeout: Duration, attempts: u32) -> Result<Reply, SendError> {
+    reply_of(send(Method::GET, url, headers, &[], Body::None, Some(timeout), attempts).await?).await
 }

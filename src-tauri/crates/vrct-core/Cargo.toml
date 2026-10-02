@@ -59,4 +59,4 @@ windows-sys = { version = "0.59", features = [
 
 [dev-dependencies]
 tokio-tungstenite = { version = "0.26", default-features = false, features = ["connect"] }
-tokio = { version = "1", features = ["rt", "macros", "time", "test-util"] }
+tokio = { version = "1", features = ["rt", "rt-multi-thread", "macros", "time", "test-util"] }
