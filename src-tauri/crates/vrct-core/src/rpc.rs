@@ -21,12 +21,12 @@ use futures_util::future::BoxFuture;
 use serde_json::{json, Value};
 
 use crate::protocol::{sidecar_line, Response};
-use crate::translation::llm;
+use crate::translation::{deepl, llm};
 
 /// Env var telling the sidecar which methods Rust implements (comma separated).
 pub const RPC_ENV_NAME: &str = "VRCT_RUST_RPC";
 /// Methods this build implements; every entry needs a handler in `Rpc::new`.
-pub const IMPLEMENTED: &[&str] = &["translate.llm"];
+pub const IMPLEMENTED: &[&str] = &["translate.llm", "translate.deepl", "translate.deepl.check"];
 
 const REQUEST: &str = "/internal/rpc/request";
 const RESPONSE: &str = "/internal/rpc/response";
@@ -53,6 +53,14 @@ impl Rpc {
         rpc.method("translate.llm", |params| async move {
             let request: llm::Request = serde_json::from_value(params).map_err(|e| format!("bad params: {e}"))?;
             llm::translate(request).await.map(Value::String)
+        })
+        .method("translate.deepl", |params| async move {
+            let request: deepl::Request = serde_json::from_value(params).map_err(|e| format!("bad params: {e}"))?;
+            deepl::translate(request).await.map(Value::String)
+        })
+        .method("translate.deepl.check", |params| async move {
+            let request: deepl::Check = serde_json::from_value(params).map_err(|e| format!("bad params: {e}"))?;
+            deepl::check(request).await.map(Value::Bool)
         })
     }
 

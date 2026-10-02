@@ -31,6 +31,7 @@ _WEB_TRANSLATOR_TIMEOUT_SECONDS = 10
 
 import warnings
 from threading import RLock
+from types import SimpleNamespace
 from typing import Any, Dict, Optional, Tuple
 
 warnings.filterwarnings("ignore")
@@ -132,6 +133,37 @@ def _translateWithLLMClient(engine_name: str, client: Any, message: str, input_l
     )
 
 
+# DeepL も同様。ホストの最悪ケース (45秒 x 3回 + バックオフ) より長く待つ。
+_DEEPL_RPC_TIMEOUT_SECONDS = 150
+
+
+class _HostDeepLClient:
+    """`DeepLClient` の代役: 翻訳の HTTP 呼び出しを Rust ホストに任せる。
+
+    `translate_text()` は `.text` を持つ結果を返す点だけを `DeepLClient` に
+    合わせてある (呼び出し側が使うのはそれだけ)。空の鍵は SDK と同じく
+    コンストラクタで ValueError にする。
+    """
+
+    def __init__(self, auth_key: str) -> None:
+        if not auth_key:
+            raise ValueError("auth_key must not be empty")
+        self._auth_key = auth_key
+
+    def translate_text(self, text: str, *, source_lang: Optional[str] = None, target_lang: str) -> Any:
+        translated = callRust(
+            "translate.deepl",
+            {
+                "auth_key": self._auth_key,
+                "text": text,
+                "source_lang": source_lang,
+                "target_lang": target_lang,
+            },
+            timeout=_DEEPL_RPC_TIMEOUT_SECONDS,
+        )
+        return SimpleNamespace(text=translated)
+
+
 class Translator:
     """High-level translator facade.
 
@@ -181,9 +213,12 @@ class Translator:
         """
         result = True
         try:
-            self.deepl_client = DeepLClient(auth_key)
+            self.deepl_client = _HostDeepLClient(auth_key) if rustRpcEnabled("translate.deepl") else DeepLClient(auth_key)
             # quick smoke test
-            self.deepl_client.translate_text(" ", target_lang="EN-US")
+            if rustRpcEnabled("translate.deepl.check"):
+                callRust("translate.deepl.check", {"auth_key": auth_key}, timeout=_DEEPL_RPC_TIMEOUT_SECONDS)
+            else:
+                self.deepl_client.translate_text(" ", target_lang="EN-US")
         except Exception:
             errorLogging()
             self.deepl_client = None

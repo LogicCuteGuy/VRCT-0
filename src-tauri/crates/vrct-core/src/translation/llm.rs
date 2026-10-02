@@ -5,13 +5,10 @@
 //! protocol, Ollama and Gemini have their own. The system prompt comes from
 //! `prompt`, so every engine asks the model exactly what Python asked.
 
-use std::sync::OnceLock;
-use std::time::Duration;
-
-use reqwest::{Client, StatusCode};
 use serde::Deserialize;
 use serde_json::{json, Value};
 
+use super::http::post_json;
 use super::prompt::{py_strip, reply_text, system_prompt};
 
 const OPENAI_BASE: &str = "https://api.openai.com/v1";
@@ -19,15 +16,6 @@ const OLLAMA_BASE: &str = "http://localhost:11434";
 const GEMINI_BASE: &str = "https://generativelanguage.googleapis.com/v1beta";
 /// langchain-google-genai's default `temperature`; the others send none.
 const GEMINI_TEMPERATURE: f64 = 0.7;
-
-/// One attempt, including the model's time to answer. Python's OpenAI client
-/// waited up to ten minutes, which would stall a live conversation. A timed-out
-/// generation is not retried: it would only time out again, doubling the wait.
-const TOTAL_TIMEOUT: Duration = Duration::from_secs(45);
-const CONNECT_TIMEOUT: Duration = Duration::from_secs(10);
-/// First try plus two retries, as the OpenAI SDK does by default.
-const ATTEMPTS: u32 = 3;
-const FIRST_BACKOFF: Duration = Duration::from_millis(500);
 
 #[derive(Debug, Deserialize)]
 pub struct Request {
@@ -163,66 +151,8 @@ fn parse_reply(wire: Wire, reply: &Value) -> Result<String, String> {
     }
 }
 
-fn http() -> &'static Client {
-    static CLIENT: OnceLock<Client> = OnceLock::new();
-    CLIENT.get_or_init(|| {
-        Client::builder()
-            .timeout(TOTAL_TIMEOUT)
-            .connect_timeout(CONNECT_TIMEOUT)
-            .build()
-            .expect("HTTP client builds")
-    })
-}
-
-fn retryable(status: StatusCode) -> bool {
-    matches!(status.as_u16(), 408 | 409 | 429) || status.is_server_error()
-}
-
-/// The provider's own explanation of a failure, if its body has one.
-fn failure_message(body: &str) -> Option<String> {
-    let value: Value = serde_json::from_str(body).ok()?;
-    let message = value
-        .pointer("/error/message")
-        .or_else(|| value.get("error"))
-        .and_then(Value::as_str)?;
-    Some(message.chars().take(200).collect())
-}
-
-async fn send(call: &Call) -> Result<String, String> {
-    let mut backoff = FIRST_BACKOFF;
-    for attempt in 1..=ATTEMPTS {
-        let mut builder = http().post(&call.url).json(&call.body);
-        for (name, value) in &call.headers {
-            builder = builder.header(*name, value);
-        }
-        let last = attempt == ATTEMPTS;
-        match builder.send().await {
-            Ok(response) => {
-                let status = response.status();
-                if status.is_success() {
-                    let reply: Value = response.json().await.map_err(|e| format!("bad reply: {}", e.without_url()))?;
-                    return parse_reply(call.wire, &reply);
-                }
-                if !retryable(status) || last {
-                    let body = response.text().await.unwrap_or_default();
-                    return Err(match failure_message(&body) {
-                        Some(message) => format!("HTTP {}: {message}", status.as_u16()),
-                        None => format!("HTTP {}", status.as_u16()),
-                    });
-                }
-            }
-            Err(error) => {
-                if last || !error.is_connect() {
-                    return Err(format!("request failed: {}", error.without_url()));
-                }
-            }
-        }
-        tokio::time::sleep(backoff).await;
-        backoff *= 2;
-    }
-    unreachable!("the last attempt always returns")
-}
-
 pub async fn translate(request: Request) -> Result<String, String> {
-    send(&build(&request)?).await
+    let call = build(&request)?;
+    let reply = post_json(&call.url, &call.headers, &call.body).await?;
+    parse_reply(call.wire, &reply)
 }

@@ -164,5 +164,39 @@ fn outside_a_runtime_the_caller_gets_an_error_not_a_panic() {
 #[test]
 fn the_advertised_methods_are_what_the_sidecar_is_told() {
     assert_eq!(vrct_core::rpc::rpc_env_value(), IMPLEMENTED.join(","));
-    assert!(IMPLEMENTED.contains(&"translate.llm"));
+    for method in ["translate.llm", "translate.deepl", "translate.deepl.check"] {
+        assert!(IMPLEMENTED.contains(&method), "{method}");
+    }
+}
+
+#[tokio::test]
+async fn deepl_calls_are_answered_through_the_bridge() {
+    let server = common::mock(vec![(
+        200,
+        json!({"translations": [{"text": "Hello", "billed_characters": 5}]}).to_string(),
+    )])
+    .await;
+    let lines = Arc::new(Lines::default());
+    let rpc = rpc(&lines);
+
+    assert!(rpc.ingest(&request_line(json!({
+        "id": 1, "method": "translate.deepl",
+        "params": {"auth_key": "k", "text": "こんにちは", "source_lang": "JA", "target_lang": "EN-US",
+                   "server_url": server.base()},
+    }))));
+    assert!(rpc.ingest(&request_line(json!({
+        "id": 2, "method": "translate.deepl.check",
+        "params": {"auth_key": "k", "server_url": server.base()},
+    }))));
+    assert!(rpc.ingest(&request_line(json!({
+        "id": 3, "method": "translate.deepl",
+        "params": {"auth_key": "k", "text": "x", "target_lang": "EN"},
+    }))));
+
+    let mut answers = lines.wait_for(3).await;
+    answers.sort_by_key(|answer| answer["id"].as_u64());
+    assert_eq!(answers[0], json!({"id": 1, "ok": true, "result": "Hello"}));
+    assert_eq!(answers[1], json!({"id": 2, "ok": true, "result": true}));
+    assert_eq!(answers[2]["ok"], false);
+    assert!(answers[2]["error"].as_str().unwrap().contains("EN-GB"));
 }
