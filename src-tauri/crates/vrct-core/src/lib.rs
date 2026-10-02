@@ -13,5 +13,6 @@ pub mod rpc;
 pub mod settings;
 pub mod setters;
 pub mod sinks;
+pub mod transcription;
 pub mod translation;
 pub mod updater;
