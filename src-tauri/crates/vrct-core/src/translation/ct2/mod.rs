@@ -1,4 +1,4 @@
-//! Local translation with CTranslate2 (M2M100 models), run inside this process.
+//! Local translation with CTranslate2 (M2M100 and NLLB models), run inside this process.
 //!
 //! Python still downloads and verifies the weights; Rust loads them from the same
 //! place: `<path>/weights/ctranslate2/<weight type>/` for the model and, under
@@ -6,19 +6,84 @@
 //! cache_dir=..)` left behind. A failed load leaves nothing loaded, and the
 //! Python side then loads the model itself as before.
 //!
-//! Only the CPU build is supported, and only M2M100 for now; NLLB stays in
-//! Python until it has its own tokenizer here.
+//! Only the CPU build is supported.
 
 pub mod m2m100;
+pub mod nllb;
 
-use std::path::PathBuf;
+use std::fs;
+use std::path::{Path, PathBuf};
 use std::sync::Mutex;
 
 use ct2rs::sys::{ComputeType, Config, Device, TranslationOptions, Translator};
 use serde::Deserialize;
 
 /// Weight types this build runs; the directory is named after the type.
-const WEIGHT_TYPES: [&str; 2] = ["m2m100_418M-ct2-int8", "m2m100_1.2B-ct2-int8"];
+const M2M100_WEIGHTS: [&str; 2] = ["m2m100_418M-ct2-int8", "m2m100_1.2B-ct2-int8"];
+const NLLB_WEIGHTS: [&str; 3] =
+    ["nllb-200-distilled-600M-ct2-int8", "nllb-200-distilled-1.3B-ct2-int8", "nllb-200-3.3B-ct2-int8"];
+
+/// The tokenizer of the loaded model; which one follows from its weight type.
+enum Tokenizer {
+    M2m100(m2m100::Tokenizer),
+    Nllb(Box<nllb::Tokenizer>),
+}
+
+impl Tokenizer {
+    fn open(weight_type: &str, tokenizer_root: &Path) -> Result<Self, String> {
+        let missing = || format!("no tokenizer files under {}", tokenizer_root.display());
+        if M2M100_WEIGHTS.contains(&weight_type) {
+            let dir = m2m100::Tokenizer::find(tokenizer_root).ok_or_else(missing)?;
+            m2m100::Tokenizer::open(&dir).map(Self::M2m100)
+        } else if NLLB_WEIGHTS.contains(&weight_type) {
+            let dir = nllb::Tokenizer::find(tokenizer_root).ok_or_else(missing)?;
+            nllb::Tokenizer::open(&dir).map(|tokenizer| Self::Nllb(Box::new(tokenizer)))
+        } else {
+            Err(format!("{weight_type} is not run by this build"))
+        }
+    }
+
+    fn source_tokens(&self, text: &str, source: &str) -> Result<Vec<String>, String> {
+        match self {
+            Self::M2m100(tokenizer) => tokenizer.source_tokens(text, source),
+            Self::Nllb(tokenizer) => tokenizer.source_tokens(text, source),
+        }
+    }
+
+    fn target_prefix(&self, target: &str) -> Result<String, String> {
+        match self {
+            Self::M2m100(tokenizer) => tokenizer.target_prefix(target),
+            Self::Nllb(tokenizer) => tokenizer.target_prefix(target),
+        }
+    }
+
+    fn decode(&self, tokens: &[String]) -> Result<String, String> {
+        match self {
+            Self::M2m100(tokenizer) => tokenizer.decode(tokens),
+            Self::Nllb(tokenizer) => tokenizer.decode(tokens),
+        }
+    }
+}
+
+/// Where `AutoTokenizer.from_pretrained(repo, cache_dir=dir)` left a tokenizer:
+/// `dir` itself, or `dir/models--<org>--<name>/snapshots/<revision>`; the first
+/// place holding every one of `files`.
+fn find_files(dir: &Path, files: &[&str]) -> Option<PathBuf> {
+    let complete = |path: &Path| files.iter().all(|file| path.join(file).is_file());
+    if complete(dir) {
+        return Some(dir.to_path_buf());
+    }
+    let children = |path: &Path| -> Vec<PathBuf> {
+        let mut found: Vec<PathBuf> = fs::read_dir(path).into_iter().flatten().flatten().map(|entry| entry.path()).collect();
+        found.sort();
+        found
+    };
+    children(dir)
+        .into_iter()
+        .filter(|path| path.is_dir())
+        .flat_map(|repo| children(&repo.join("snapshots")))
+        .find(|snapshot| complete(snapshot))
+}
 
 #[derive(Debug, Clone, Deserialize)]
 pub struct LoadRequest {
@@ -56,7 +121,7 @@ pub struct TranslateRequest {
 struct Loaded {
     weight_type: String,
     translator: Translator,
-    tokenizer: m2m100::Tokenizer,
+    tokenizer: Tokenizer,
 }
 
 /// The one loaded model. Loading and translating take the same lock, like the
@@ -71,14 +136,9 @@ impl Engine {
         let mut loaded = self.loaded.lock().map_err(|_| "model lock poisoned".to_string())?;
         *loaded = None;
 
-        if !WEIGHT_TYPES.contains(&request.weight_type.as_str()) {
-            return Err(format!("{} is not run by this build", request.weight_type));
-        }
         let config = config(request)?;
         let directory = request.path.join("weights").join("ctranslate2").join(&request.weight_type);
-        let tokenizer_dir = m2m100::Tokenizer::find(&directory.join("tokenizer"))
-            .ok_or_else(|| format!("no tokenizer files under {}", directory.join("tokenizer").display()))?;
-        let tokenizer = m2m100::Tokenizer::open(&tokenizer_dir)?;
+        let tokenizer = Tokenizer::open(&request.weight_type, &directory.join("tokenizer"))?;
         let translator = Translator::new(&directory, &config).map_err(|e| format!("cannot load the model: {e}"))?;
         *loaded = Some(Loaded { weight_type: request.weight_type.clone(), translator, tokenizer });
         Ok(())

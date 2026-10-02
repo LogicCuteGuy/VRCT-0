@@ -25,12 +25,23 @@ use vrct_core::translation::ct2::{Engine as Ct2, LoadRequest, TranslateRequest};
 /// The fixture passes for this weight type; only the name matters to the loader.
 const WEIGHT_TYPE: &str = "m2m100_418M-ct2-int8";
 
+/// Same for the NLLB fixture.
+const NLLB_WEIGHT_TYPE: &str = "nllb-200-distilled-600M-ct2-int8";
+
 fn fixtures() -> PathBuf {
     Path::new(env!("CARGO_MANIFEST_DIR")).join("tests/fixtures/ct2_tiny")
 }
 
+fn nllb_fixtures() -> PathBuf {
+    Path::new(env!("CARGO_MANIFEST_DIR")).join("tests/fixtures/ct2_tiny_nllb")
+}
+
 fn golden() -> Value {
     serde_json::from_str(&fs::read_to_string(fixtures().join("golden.json")).unwrap()).unwrap()
+}
+
+fn nllb_golden() -> Value {
+    serde_json::from_str(&fs::read_to_string(nllb_fixtures().join("golden.json")).unwrap()).unwrap()
 }
 
 fn strings(value: &Value) -> Vec<String> {
@@ -51,26 +62,34 @@ fn copy_dir(from: &Path, to: &Path) {
 }
 
 /// A VRCT data root laid out as Python leaves it, removed when dropped.
-struct Root(PathBuf);
+struct Root(PathBuf, &'static str);
 
 impl Root {
     /// `snapshot` puts the tokenizer where the Hugging Face cache does.
     fn new(snapshot: bool) -> Self {
+        Self::with(WEIGHT_TYPE, fixtures(), snapshot)
+    }
+
+    fn nllb(snapshot: bool) -> Self {
+        Self::with(NLLB_WEIGHT_TYPE, nllb_fixtures(), snapshot)
+    }
+
+    fn with(weight_type: &'static str, fixtures: PathBuf, snapshot: bool) -> Self {
         static COUNTER: AtomicUsize = AtomicUsize::new(0);
         let root = std::env::temp_dir().join(format!("vrct-ct2-{}-{}", std::process::id(), COUNTER.fetch_add(1, Ordering::SeqCst)));
-        let model = root.join("weights/ctranslate2").join(WEIGHT_TYPE);
-        copy_dir(&fixtures().join("model"), &model);
+        let model = root.join("weights/ctranslate2").join(weight_type);
+        copy_dir(&fixtures.join("model"), &model);
         let tokenizer = if snapshot {
-            model.join("tokenizer/models--facebook--m2m100_418M/snapshots/0123abcd")
+            model.join("tokenizer/models--facebook--fixture/snapshots/0123abcd")
         } else {
             model.join("tokenizer")
         };
-        copy_dir(&fixtures().join("tokenizer"), &tokenizer);
-        Root(root)
+        copy_dir(&fixtures.join("tokenizer"), &tokenizer);
+        Root(root, weight_type)
     }
 
     fn load_request(&self) -> LoadRequest {
-        serde_json::from_value(json!({"path": self.0, "weight_type": WEIGHT_TYPE, "compute_type": "float32"})).unwrap()
+        serde_json::from_value(json!({"path": self.0, "weight_type": self.1, "compute_type": "float32"})).unwrap()
     }
 }
 
@@ -194,9 +213,9 @@ fn a_failed_or_unsupported_load_leaves_nothing_loaded() {
     assert!(engine.load(&cuda).unwrap_err().contains("CPU only"));
     assert!(!engine.is_loaded(WEIGHT_TYPE), "a refused load drops the previous model, as Python does");
 
-    let mut nllb = root.load_request();
-    nllb.weight_type = "nllb-200-distilled-600M-ct2-int8".into();
-    assert!(engine.load(&nllb).unwrap_err().contains("not run by this build"));
+    let mut other = root.load_request();
+    other.weight_type = "whisper-large-v3-ct2".into();
+    assert!(engine.load(&other).unwrap_err().contains("not run by this build"));
 
     let mut odd = root.load_request();
     odd.compute_type = "int3".into();
@@ -290,4 +309,60 @@ async fn the_model_is_loaded_and_used_through_the_call_bridge() {
     assert!(rpc.ingest(&request_line(json!({"id": 3, "method": "ct2.translate", "params": params}))));
     let answers = lines.wait_for(3).await;
     assert_eq!(answers[2], json!({"id": 3, "ok": true, "result": case["output"]}));
+}
+
+// ---- NLLB: the same checks against `tokenizer.json` ----
+
+fn nllb_tokenizer() -> vrct_core::translation::ct2::nllb::Tokenizer {
+    vrct_core::translation::ct2::nllb::Tokenizer::open(&nllb_fixtures().join("tokenizer")).unwrap()
+}
+
+#[test]
+fn nllb_source_tokens_are_what_python_feeds_the_model() {
+    let tokenizer = nllb_tokenizer();
+    for case in nllb_golden()["cases"].as_array().unwrap() {
+        let got = tokenizer.source_tokens(case["text"].as_str().unwrap(), case["source"].as_str().unwrap()).unwrap();
+        assert_eq!(got, strings(&case["source_tokens"]), "{}", case["text"]);
+    }
+}
+
+#[test]
+fn nllb_decoding_matches_python() {
+    let tokenizer = nllb_tokenizer();
+    for case in nllb_golden()["decode_cases"].as_array().unwrap() {
+        let tokens = strings(&case["tokens"]);
+        assert_eq!(tokenizer.decode(&tokens).unwrap(), case["output"].as_str().unwrap(), "{tokens:?}");
+    }
+    // The language code is used as given, known or not.
+    assert_eq!(tokenizer.target_prefix("xxx_Xxxx").unwrap(), "xxx_Xxxx");
+}
+
+#[test]
+fn nllb_translations_match_python_token_for_token() {
+    use vrct_core::translation::ct2::nllb::Tokenizer as Nllb;
+    let root = Root::nllb(true);
+    let tokenizer_root = root.0.join("weights/ctranslate2").join(NLLB_WEIGHT_TYPE).join("tokenizer");
+    assert!(Nllb::find(&tokenizer_root).is_some(), "found in the Hugging Face cache layout");
+
+    let engine = Ct2::default();
+    engine.load(&root.load_request()).unwrap();
+    assert!(engine.is_loaded(NLLB_WEIGHT_TYPE));
+    let golden = nllb_golden();
+    let length = golden["max_decoding_length"].as_u64().unwrap() as usize;
+    for case in golden["cases"].as_array().unwrap() {
+        let request: TranslateRequest = serde_json::from_value(json!({
+            "message": case["text"], "source_language": case["source"], "target_language": case["target"],
+            "weight_type": NLLB_WEIGHT_TYPE, "max_decoding_length": length,
+        }))
+        .unwrap();
+        assert_eq!(engine.translate(&request).unwrap(), case["output"].as_str().unwrap(), "{}", case["text"]);
+    }
+}
+
+#[test]
+fn nllb_without_its_tokenizer_file_does_not_load() {
+    let root = Root::nllb(false);
+    let tokenizer_dir = root.0.join("weights/ctranslate2").join(NLLB_WEIGHT_TYPE).join("tokenizer");
+    fs::remove_file(tokenizer_dir.join("tokenizer.json")).unwrap();
+    assert!(Ct2::default().load(&root.load_request()).unwrap_err().contains("no tokenizer files"));
 }

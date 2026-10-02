@@ -9,7 +9,7 @@ license = "MIT"
 # Local CTranslate2 translation. Off by default: it compiles CTranslate2 and
 # SentencePiece from source (minutes, needs cmake) and, on Windows (MSVC), the
 # build needs RUSTFLAGS="-C target-feature=+crt-static" and a short target dir.
-ct2 = ["dep:ct2rs", "dep:sentencepiece"]
+ct2 = ["dep:ct2rs", "dep:sentencepiece", "dep:tokenizers"]
 
 [dependencies]
 serde = { version = "1", features = ["derive"] }
@@ -26,9 +26,11 @@ futures-util = "0.3"
 chrono = { version = "0.4", default-features = false, features = ["clock"] }
 # rustls so Linux builds need no system OpenSSL.
 reqwest = { version = "0.12", default-features = false, features = ["json", "stream", "rustls-tls"] }
-# CPU-only CTranslate2 (ruy), and SentencePiece for the M2M100 tokenizer.
+# CPU-only CTranslate2 (ruy), SentencePiece for the M2M100 tokenizer, and the
+# `tokenizers` library for NLLB's tokenizer.json.
 ct2rs = { version = "0.10.1", default-features = false, features = ["ruy"], optional = true }
 sentencepiece = { version = "0.13", optional = true }
+tokenizers = { version = "0.22", default-features = false, features = ["onig"], optional = true }
 
 # Win32 calls for the clipboard sink (focus a window, copy, Ctrl+V).
 [target.'cfg(windows)'.dependencies]

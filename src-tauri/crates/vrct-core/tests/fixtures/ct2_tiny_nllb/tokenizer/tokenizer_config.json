@@ -1,0 +1,4 @@
+{
+ "tokenizer_class": "NllbTokenizerFast",
+ "clean_up_tokenization_spaces": true
+}

@@ -4,3 +4,4 @@
 # Binary test fixtures must never be line-ending normalised.
 src-tauri/crates/vrct-core/tests/fixtures/ct2_tiny/model/model.bin binary
 src-tauri/crates/vrct-core/tests/fixtures/ct2_tiny/tokenizer/*.model binary
+src-tauri/crates/vrct-core/tests/fixtures/ct2_tiny_nllb/model/model.bin binary

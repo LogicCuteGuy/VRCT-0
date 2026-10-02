@@ -72,21 +72,7 @@ impl Tokenizer {
     /// Where `AutoTokenizer.from_pretrained(repo, cache_dir=dir)` left the files:
     /// `dir` itself, or `dir/models--<org>--<name>/snapshots/<revision>`.
     pub fn find(dir: &Path) -> Option<PathBuf> {
-        let complete = |path: &Path| path.join(SPM_FILE).is_file() && path.join(VOCAB_FILE).is_file();
-        if complete(dir) {
-            return Some(dir.to_path_buf());
-        }
-        let children = |path: &Path| -> Vec<PathBuf> {
-            let mut found: Vec<PathBuf> =
-                fs::read_dir(path).into_iter().flatten().flatten().map(|entry| entry.path()).collect();
-            found.sort();
-            found
-        };
-        children(dir)
-            .into_iter()
-            .filter(|path| path.is_dir())
-            .flat_map(|repo| children(&repo.join("snapshots")))
-            .find(|snapshot| complete(snapshot))
+        super::find_files(dir, &[SPM_FILE, VOCAB_FILE])
     }
 
     pub fn languages() -> &'static [&'static str] {
@@ -158,7 +144,7 @@ fn is_language_token(token: &str) -> bool {
 }
 
 /// `PreTrainedTokenizerBase.clean_up_tokenization`.
-fn clean_up_tokenization(text: &str) -> String {
+pub(super) fn clean_up_tokenization(text: &str) -> String {
     text.replace(" .", ".")
         .replace(" ?", "?")
         .replace(" !", "!")
