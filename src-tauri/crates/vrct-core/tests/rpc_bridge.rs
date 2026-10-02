@@ -164,7 +164,7 @@ fn outside_a_runtime_the_caller_gets_an_error_not_a_panic() {
 #[test]
 fn the_advertised_methods_are_what_the_sidecar_is_told() {
     assert_eq!(vrct_core::rpc::rpc_env_value(), IMPLEMENTED.join(","));
-    for method in ["translate.llm", "translate.deepl", "translate.deepl.check"] {
+    for method in ["translate.llm", "translate.deepl", "translate.deepl.check", "llm.auth_check", "llm.models"] {
         assert!(IMPLEMENTED.contains(&method), "{method}");
     }
 }
@@ -199,4 +199,27 @@ async fn deepl_calls_are_answered_through_the_bridge() {
     assert_eq!(answers[1], json!({"id": 2, "ok": true, "result": true}));
     assert_eq!(answers[2]["ok"], false);
     assert!(answers[2]["error"].as_str().unwrap().contains("EN-GB"));
+}
+
+#[tokio::test]
+async fn catalog_calls_are_answered_through_the_bridge() {
+    let server = common::mock(vec![(200, json!({"data": [{"id": "gpt-4o"}, {"id": "whisper-1"}]}).to_string())]).await;
+    let lines = Arc::new(Lines::default());
+    let rpc = rpc(&lines);
+
+    for (id, method) in [(1, "llm.auth_check"), (2, "llm.models")] {
+        assert!(rpc.ingest(&request_line(json!({
+            "id": id, "method": method,
+            "params": {"engine": "OpenAI_API", "api_key": "sk-1", "base_url": server.base()},
+        }))));
+    }
+    assert!(rpc.ingest(&request_line(json!({
+        "id": 3, "method": "llm.models", "params": {"engine": "Nope"},
+    }))));
+
+    let mut answers = lines.wait_for(3).await;
+    answers.sort_by_key(|answer| answer["id"].as_u64());
+    assert_eq!(answers[0], json!({"id": 1, "ok": true, "result": true}));
+    assert_eq!(answers[1], json!({"id": 2, "ok": true, "result": ["gpt-4o"]}));
+    assert_eq!(answers[2]["ok"], false);
 }

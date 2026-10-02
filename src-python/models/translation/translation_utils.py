@@ -10,12 +10,28 @@ from typing import Callable
 import yaml
 
 try:
-    from utils import errorLogging, getBestComputeType, isWeightVerifiedCache, writeWeightVerifiedCache, printLog
+    from utils import errorLogging, getBestComputeType, isWeightVerifiedCache, writeWeightVerifiedCache, printLog, rustRpcEnabled, callRust
 except Exception:
     import sys
     print(os_path.dirname(os_path.dirname(os_path.dirname(os_path.abspath(__file__)))))
     sys.path.append(os_path.dirname(os_path.dirname(os_path.dirname(os_path.abspath(__file__)))))
-    from utils import errorLogging, getBestComputeType, isWeightVerifiedCache, writeWeightVerifiedCache, printLog
+    from utils import errorLogging, getBestComputeType, isWeightVerifiedCache, writeWeightVerifiedCache, printLog, rustRpcEnabled, callRust
+
+# Rust ホストが "llm.auth_check" / "llm.models" を実装している場合、LLM エンジンの
+# 認証確認とモデル一覧の取得はホスト側で行う。呼び出し側の各 `_authentication_check` /
+# `_get_available_text_models` が `rustRpcEnabled` で分岐し、結果の扱い (例外を握りつぶして
+# False/[] にするか、そのまま伝えるか) は従来の関数のまま変えない。
+# ホストの最悪ケース (45秒 x 3回 + バックオフ) より長く待つ。
+_LLM_CATALOG_RPC_TIMEOUT_SECONDS = 150
+
+
+def hostAuthCheck(engine: str, api_key: str | None = None, base_url: str | None = None) -> bool:
+    return bool(callRust("llm.auth_check", {"engine": engine, "api_key": api_key, "base_url": base_url}, timeout=_LLM_CATALOG_RPC_TIMEOUT_SECONDS))
+
+
+def hostModelList(engine: str, api_key: str | None = None, base_url: str | None = None) -> list[str]:
+    return list(callRust("llm.models", {"engine": engine, "api_key": api_key, "base_url": base_url}, timeout=_LLM_CATALOG_RPC_TIMEOUT_SECONDS))
+
 
 # 起動時の初回ダウンロードで一時的なネットワーク断が起きても 1 回の取りこぼしで
 # 「AIモデル未検出。VRCTを再起動してください」通知に落ちないよう、タイムアウトと

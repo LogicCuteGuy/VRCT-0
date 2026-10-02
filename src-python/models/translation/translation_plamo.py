@@ -2,15 +2,17 @@ from openai import OpenAI
 from langchain_openai import ChatOpenAI
 from pydantic import SecretStr
 
+from utils import rustRpcEnabled
+
 try:
     from .translation_languages import translation_lang
-    from .translation_utils import loadTranslatePromptConfig
+    from .translation_utils import loadTranslatePromptConfig, hostAuthCheck, hostModelList
 except Exception:
     import sys
     from os import path as os_path
     sys.path.append(os_path.dirname(os_path.dirname(os_path.dirname(os_path.abspath(__file__)))))
     from translation_languages import translation_lang, loadTranslationLanguages
-    from translation_utils import loadTranslatePromptConfig
+    from translation_utils import loadTranslatePromptConfig, hostAuthCheck, hostModelList
     translation_lang = loadTranslationLanguages(path=".", force=True)
 
 BASE_URL = "https://api.platform.preferredai.jp/v1"
@@ -19,6 +21,8 @@ def _authentication_check(api_key: str) -> bool:
     """Check if the provided API key is valid by attempting to list models.
     """
     try:
+        if rustRpcEnabled("llm.auth_check"):
+            return hostAuthCheck("Plamo_API", api_key)
         client = OpenAI(api_key=api_key, base_url=BASE_URL)
         client.models.list()
         return True
@@ -28,6 +32,8 @@ def _authentication_check(api_key: str) -> bool:
 def _get_available_text_models(api_key: str) -> list[str]:
     """Extract all available models from the PLAMO API
     """
+    if rustRpcEnabled("llm.models"):
+        return hostModelList("Plamo_API", api_key)
     client = OpenAI(api_key=api_key, base_url=BASE_URL)
     res = client.models.list()
     allowed_models = []

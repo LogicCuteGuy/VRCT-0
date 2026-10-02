@@ -2,21 +2,25 @@ from langchain_openai import ChatOpenAI
 from pydantic import SecretStr
 import requests
 
+from utils import rustRpcEnabled
+
 try:
     from .translation_languages import translation_lang
-    from .translation_utils import loadTranslatePromptConfig
+    from .translation_utils import loadTranslatePromptConfig, hostAuthCheck, hostModelList
 except Exception:
     import sys
     from os import path as os_path
     sys.path.append(os_path.dirname(os_path.abspath(__file__)))
     from translation_languages import translation_lang, loadTranslationLanguages
-    from translation_utils import loadTranslatePromptConfig
+    from translation_utils import loadTranslatePromptConfig, hostAuthCheck, hostModelList
     translation_lang = loadTranslationLanguages(path=".", force=True)
 
 def _authentication_check(base_url: str | None = None) -> bool:
     """Check if the provided API key is valid by attempting to list models.
     """
     try:
+        if rustRpcEnabled("llm.auth_check"):
+            return hostAuthCheck("LMStudio", base_url=base_url)
         response = requests.get(f"{base_url}/models", timeout=0.2)
         if response.status_code == 200:
             return True
@@ -28,6 +32,11 @@ def _authentication_check(base_url: str | None = None) -> bool:
 def _get_available_text_models(base_url: str | None = None) -> list[str]:
     """Extract the list of available text models from the LM Studio.
     """
+    if rustRpcEnabled("llm.models"):
+        try:
+            return hostModelList("LMStudio", base_url=base_url)
+        except Exception:
+            return []
     try:
         response = requests.get(f"{base_url}/models", timeout=0.2)
         models = response.json()["data"]

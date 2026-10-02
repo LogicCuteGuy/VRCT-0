@@ -11,9 +11,9 @@ use serde_json::{json, Value};
 use super::http::post_json;
 use super::prompt::{py_strip, reply_text, system_prompt};
 
-const OPENAI_BASE: &str = "https://api.openai.com/v1";
-const OLLAMA_BASE: &str = "http://localhost:11434";
-const GEMINI_BASE: &str = "https://generativelanguage.googleapis.com/v1beta";
+pub(super) const OPENAI_BASE: &str = "https://api.openai.com/v1";
+pub(super) const OLLAMA_BASE: &str = "http://localhost:11434";
+pub(super) const GEMINI_BASE: &str = "https://generativelanguage.googleapis.com/v1beta";
 /// langchain-google-genai's default `temperature`; the others send none.
 const GEMINI_TEMPERATURE: f64 = 0.7;
 

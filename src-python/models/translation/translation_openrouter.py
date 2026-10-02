@@ -3,20 +3,25 @@ from openai import OpenAI
 from langchain_openai import ChatOpenAI
 from pydantic import SecretStr
 
+from utils import rustRpcEnabled
+
 try:
     from .translation_languages import translation_lang
-    from .translation_utils import loadTranslatePromptConfig
+    from .translation_utils import loadTranslatePromptConfig, hostAuthCheck, hostModelList
 except Exception:
     import sys
     from os import path as os_path
     sys.path.append(os_path.dirname(os_path.dirname(os_path.dirname(os_path.abspath(__file__)))))
     from translation_languages import translation_lang, loadTranslationLanguages
-    from translation_utils import loadTranslatePromptConfig
+    from translation_utils import loadTranslatePromptConfig, hostAuthCheck, hostModelList
     translation_lang = loadTranslationLanguages(path=".", force=True)
 
 def _authentication_check(api_key: str) -> bool:
     """Check if the provided API key is valid by attempting to list models.
     """
+
+    if rustRpcEnabled("llm.auth_check"):
+        return hostAuthCheck("OpenRouter_API", api_key)
 
     url = "https://openrouter.ai/api/v1/auth/key"
     headers = {
@@ -30,6 +35,8 @@ def _authentication_check(api_key: str) -> bool:
 def _get_available_text_models(api_key: str, base_url: str | None = None) -> list[str]:
     """Extract only OpenRouter models suitable for translation and chat applications.
     """
+    if rustRpcEnabled("llm.models"):
+        return hostModelList("OpenRouter_API", api_key, base_url)
     client = OpenAI(api_key=api_key, base_url=base_url)
     res = client.models.list()
     allowed_models = []

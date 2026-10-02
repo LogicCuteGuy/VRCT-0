@@ -2,16 +2,18 @@ import logging
 from google import genai
 from langchain_google_genai import ChatGoogleGenerativeAI
 
+from utils import rustRpcEnabled
+
 try:
     from .translation_languages import translation_lang
-    from .translation_utils import loadTranslatePromptConfig
+    from .translation_utils import loadTranslatePromptConfig, hostAuthCheck, hostModelList
 except Exception:
     import sys
     from os import path as os_path
     print(os_path.dirname(os_path.dirname(os_path.dirname(os_path.abspath(__file__)))))
     sys.path.append(os_path.dirname(os_path.dirname(os_path.dirname(os_path.abspath(__file__)))))
     from translation_languages import translation_lang
-    from translation_utils import loadTranslatePromptConfig
+    from translation_utils import loadTranslatePromptConfig, hostAuthCheck, hostModelList
 
 logger = logging.getLogger("langchain_google_genai")
 logger.setLevel(logging.ERROR)
@@ -20,6 +22,8 @@ def _authentication_check(api_key: str) -> bool:
     """Check if the provided API key is valid by attempting to list models.
     """
     try:
+        if rustRpcEnabled("llm.auth_check"):
+            return hostAuthCheck("Gemini_API", api_key)
         client = genai.Client(api_key=api_key)
         client.models.list()
         return True
@@ -29,6 +33,8 @@ def _authentication_check(api_key: str) -> bool:
 def _get_available_text_models(api_key: str) -> list[str]:
     """Extract only Gemini models suitable for translation and chat applications
     """
+    if rustRpcEnabled("llm.models"):
+        return hostModelList("Gemini_API", api_key)
     client = genai.Client(api_key=api_key)
     res = client.models.list()
     allowed_models = []

@@ -2,21 +2,25 @@ from openai import OpenAI
 from langchain_openai import ChatOpenAI
 from pydantic import SecretStr
 
+from utils import rustRpcEnabled
+
 try:
     from .translation_languages import translation_lang
-    from .translation_utils import loadTranslatePromptConfig
+    from .translation_utils import loadTranslatePromptConfig, hostAuthCheck, hostModelList
 except Exception:
     import sys
     from os import path as os_path
     sys.path.append(os_path.dirname(os_path.dirname(os_path.dirname(os_path.abspath(__file__)))))
     from translation_languages import translation_lang, loadTranslationLanguages
-    from translation_utils import loadTranslatePromptConfig
+    from translation_utils import loadTranslatePromptConfig, hostAuthCheck, hostModelList
     translation_lang = loadTranslationLanguages(path=".", force=True)
 
 def _authentication_check(api_key: str, base_url: str | None = None) -> bool:
     """Check if the provided API key is valid by attempting to list models.
     """
     try:
+        if rustRpcEnabled("llm.auth_check"):
+            return hostAuthCheck("OpenAI_API", api_key, base_url)
         client = OpenAI(api_key=api_key, base_url=base_url)
         client.models.list()
         return True
@@ -26,6 +30,8 @@ def _authentication_check(api_key: str, base_url: str | None = None) -> bool:
 def _get_available_text_models(api_key: str, base_url: str | None = None) -> list[str]:
     """Extract only GPT models suitable for translation and chat applications (plus those with fine-tuning)
     """
+    if rustRpcEnabled("llm.models"):
+        return hostModelList("OpenAI_API", api_key, base_url)
     client = OpenAI(api_key=api_key, base_url=base_url)
     res = client.models.list()
     allowed_models = []

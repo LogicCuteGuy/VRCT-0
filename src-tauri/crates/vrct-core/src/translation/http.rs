@@ -1,5 +1,5 @@
-//! The HTTP policy shared by every cloud translation engine: one JSON POST
-//! with a bounded wait and a few retries for failures worth retrying.
+//! The HTTP policy shared by the cloud engines: a bounded wait and a few
+//! retries for failures worth retrying.
 //!
 //! Errors are `HTTP <status>[: provider message]` or `request failed: ...`.
 //! They never contain the URL or a key, since they travel back to Python and
@@ -8,7 +8,7 @@
 use std::sync::OnceLock;
 use std::time::Duration;
 
-use reqwest::{Client, StatusCode};
+use reqwest::{Client, Method, Response, StatusCode};
 use serde_json::Value;
 
 /// One attempt, including the provider's time to answer. Python's OpenAI client
@@ -19,6 +19,8 @@ const CONNECT_TIMEOUT: Duration = Duration::from_secs(10);
 /// First try plus two retries, as the OpenAI SDK does by default.
 const ATTEMPTS: u32 = 3;
 const FIRST_BACKOFF: Duration = Duration::from_millis(500);
+
+pub type Headers<'a> = &'a [(&'static str, String)];
 
 fn client() -> &'static Client {
     static CLIENT: OnceLock<Client> = OnceLock::new();
@@ -47,27 +49,33 @@ fn failure_message(body: &str) -> Option<String> {
     Some(message.chars().take(200).collect())
 }
 
-/// POST `body` as JSON and return the JSON reply.
-pub async fn post_json(url: &str, headers: &[(&'static str, String)], body: &Value) -> Result<Value, String> {
+/// Send until a reply that is final: a success, a status not worth retrying, or
+/// the last attempt. Only transport failures are errors here.
+async fn send(
+    method: Method,
+    url: &str,
+    headers: Headers<'_>,
+    body: Option<&Value>,
+    timeout: Option<Duration>,
+    attempts: u32,
+) -> Result<Response, String> {
     let mut backoff = FIRST_BACKOFF;
-    for attempt in 1..=ATTEMPTS {
-        let mut builder = client().post(url).json(body);
+    for attempt in 1..=attempts {
+        let mut builder = client().request(method.clone(), url);
+        if let Some(body) = body {
+            builder = builder.json(body);
+        }
+        if let Some(timeout) = timeout {
+            builder = builder.timeout(timeout);
+        }
         for (name, value) in headers {
             builder = builder.header(*name, value);
         }
-        let last = attempt == ATTEMPTS;
+        let last = attempt == attempts;
         match builder.send().await {
             Ok(response) => {
-                let status = response.status();
-                if status.is_success() {
-                    return response.json().await.map_err(|e| format!("bad reply: {}", e.without_url()));
-                }
-                if !retryable(status) || last {
-                    let body = response.text().await.unwrap_or_default();
-                    return Err(match failure_message(&body) {
-                        Some(message) => format!("HTTP {}: {message}", status.as_u16()),
-                        None => format!("HTTP {}", status.as_u16()),
-                    });
+                if response.status().is_success() || !retryable(response.status()) || last {
+                    return Ok(response);
                 }
             }
             Err(error) => {
@@ -80,4 +88,38 @@ pub async fn post_json(url: &str, headers: &[(&'static str, String)], body: &Val
         backoff *= 2;
     }
     unreachable!("the last attempt always returns")
+}
+
+async fn json_of(response: Response) -> Result<Value, String> {
+    let status = response.status();
+    if status.is_success() {
+        return response.json().await.map_err(|e| format!("bad reply: {}", e.without_url()));
+    }
+    let body = response.text().await.unwrap_or_default();
+    Err(match failure_message(&body) {
+        Some(message) => format!("HTTP {}: {message}", status.as_u16()),
+        None => format!("HTTP {}", status.as_u16()),
+    })
+}
+
+/// POST `body` as JSON and return the JSON reply.
+pub async fn post_json(url: &str, headers: Headers<'_>, body: &Value) -> Result<Value, String> {
+    json_of(send(Method::POST, url, headers, Some(body), None, ATTEMPTS).await?).await
+}
+
+/// GET with the cloud policy (retries included) and return the JSON reply.
+pub async fn get_json(url: &str, headers: Headers<'_>) -> Result<Value, String> {
+    json_of(send(Method::GET, url, headers, None, None, ATTEMPTS).await?).await
+}
+
+/// One GET without retries and with its own wait: a local server, where nothing
+/// is worth waiting on, or a key check whose status alone is the answer. An
+/// unreachable server is an error, any answer is returned as its status.
+pub async fn get_status_once(url: &str, headers: Headers<'_>, timeout: Duration) -> Result<u16, String> {
+    Ok(send(Method::GET, url, headers, None, Some(timeout), 1).await?.status().as_u16())
+}
+
+/// Like `get_status_once`, returning the JSON reply of a successful answer.
+pub async fn get_json_once(url: &str, headers: Headers<'_>, timeout: Duration) -> Result<Value, String> {
+    json_of(send(Method::GET, url, headers, None, Some(timeout), 1).await?).await
 }

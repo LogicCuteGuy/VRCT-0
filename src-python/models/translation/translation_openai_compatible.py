@@ -1,15 +1,17 @@
 from openai import OpenAI
 
+from utils import rustRpcEnabled
+
 try:
     from .translation_languages import translation_lang
-    from .translation_utils import loadTranslatePromptConfig
+    from .translation_utils import loadTranslatePromptConfig, hostAuthCheck, hostModelList
     from .translation_openai import OpenAIClient, _authentication_check
 except Exception:
     import sys
     from os import path as os_path
     sys.path.append(os_path.dirname(os_path.dirname(os_path.dirname(os_path.abspath(__file__)))))
     from translation_languages import translation_lang, loadTranslationLanguages
-    from translation_utils import loadTranslatePromptConfig
+    from translation_utils import loadTranslatePromptConfig, hostAuthCheck, hostModelList
     from translation_openai import OpenAIClient, _authentication_check
     translation_lang = loadTranslationLanguages(path=".", force=True)
 
@@ -37,6 +39,8 @@ def _get_available_text_models(api_key: str, base_url: str) -> list[str]:
     プロバイダ独自命名（`llama-3.3-70b`, `mistral-large-latest`, `claude-3-5-sonnet` 等）
     が多いため `gpt-` プレフィックス判定は行わない。
     """
+    if rustRpcEnabled("llm.models"):
+        return hostModelList("OpenAI_Compatible", api_key, base_url)
     client = OpenAI(api_key=api_key, base_url=base_url)
     res = client.models.list()
     allowed_models = []
