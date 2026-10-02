@@ -42,7 +42,16 @@ impl Backend {
         let sidecar = Arc::new(Sidecar::default());
         let replica = Arc::new(ConfigReplica::default());
         let sinks = Arc::new(Sinks::new(Arc::clone(&replica)));
-        let rpc = Arc::new(Rpc::new(sidecar.clone() as Arc<dyn LineWriter>));
+        let writer = sidecar.clone() as Arc<dyn LineWriter>;
+        let rpc = Rpc::new(Arc::clone(&writer));
+        // Audio is captured in Rust only where the ONNX Runtime for the VAD is installed (Windows);
+        // anywhere else the methods are not advertised and Python keeps its own capture.
+        #[cfg(windows)]
+        let rpc = match vrct_core::audio::host::WasapiFactory::locate() {
+            Some(factory) => rpc.with_audio(Arc::new(vrct_core::audio::host::AudioHost::new(Arc::new(factory), writer))),
+            None => rpc,
+        };
+        let rpc = Arc::new(rpc);
 
         let router = Router::new(Arc::clone(&sink)).with_fallback(sidecar.clone());
         let router = config::register_getters(router, &replica);

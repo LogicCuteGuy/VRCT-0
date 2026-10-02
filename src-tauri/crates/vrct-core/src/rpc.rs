@@ -20,6 +20,7 @@ use base64::{engine::general_purpose::STANDARD, Engine};
 use futures_util::future::BoxFuture;
 use serde_json::{json, Value};
 
+use crate::audio::host::{self as audio_host, AudioHost};
 use crate::protocol::{sidecar_line, Response};
 #[cfg(feature = "ct2")]
 use crate::translation::ct2;
@@ -58,11 +59,13 @@ type Handler = Arc<dyn Fn(Value) -> BoxFuture<'static, Result<Value, String>> + 
 pub struct Rpc {
     handlers: HashMap<&'static str, Handler>,
     writer: Arc<dyn LineWriter>,
+    /// Methods registered beyond `IMPLEMENTED`: they depend on the machine (audio needs the ONNX Runtime).
+    extra: Vec<&'static str>,
 }
 
 impl Rpc {
     pub fn new(writer: Arc<dyn LineWriter>) -> Self {
-        let rpc = Self { handlers: HashMap::new(), writer };
+        let rpc = Self { handlers: HashMap::new(), writer, extra: Vec::new() };
         let rpc = rpc.method("translate.llm", |params| async move {
             let request: llm::Request = serde_json::from_value(params).map_err(|e| format!("bad params: {e}"))?;
             llm::translate(request).await.map(Value::String)
@@ -118,6 +121,32 @@ impl Rpc {
                     .map_err(|_| "internal error".to_string())?
                     .map(Value::String)
             }
+        })
+    }
+
+    /// What to put in `VRCT_RUST_RPC`: the methods of this build plus the audio ones if they were added.
+    pub fn env_value(&self) -> String {
+        IMPLEMENTED.iter().chain(self.extra.iter()).copied().collect::<Vec<_>>().join(",")
+    }
+
+    /// Adds the audio methods (`audio.*`). Start and stop block while a device opens or a session
+    /// finishes, so they run on blocking threads.
+    pub fn with_audio(mut self, host: Arc<AudioHost>) -> Self {
+        let devices = Arc::clone(&host);
+        let start = Arc::clone(&host);
+        let stop = host;
+        self.extra.extend(audio_host::METHODS);
+        self.method("audio.devices", move |_| {
+            let host = Arc::clone(&devices);
+            async move { tokio::task::spawn_blocking(move || host.devices()).await.map_err(|_| "internal error".to_string())? }
+        })
+        .method("audio.start", move |params| {
+            let host = Arc::clone(&start);
+            async move { tokio::task::spawn_blocking(move || host.start(params)).await.map_err(|_| "internal error".to_string())? }
+        })
+        .method("audio.stop", move |params| {
+            let host = Arc::clone(&stop);
+            async move { tokio::task::spawn_blocking(move || host.stop(params)).await.map_err(|_| "internal error".to_string())? }
         })
     }
 

@@ -6,7 +6,7 @@ use tauri_plugin_shell::ShellExt;
 use vrct_core::config::{ConfigReplica, BRIDGE_ENV};
 use vrct_core::protocol::{parse_sidecar_line, sidecar_line};
 use vrct_core::router::{Fallback, Router};
-use vrct_core::rpc::{rpc_env_value, LineWriter, Rpc, RPC_ENV_NAME};
+use vrct_core::rpc::{LineWriter, Rpc, RPC_ENV_NAME};
 use vrct_core::sinks::{sinks_env_value, Sinks, SINKS_ENV_NAME};
 
 /// The legacy Python process. Endpoints Rust has not taken over are written to
@@ -51,7 +51,7 @@ impl Sidecar {
                 command
                     .env(BRIDGE_ENV.0, BRIDGE_ENV.1)
                     .env(SINKS_ENV_NAME, sinks_env_value())
-                    .env(RPC_ENV_NAME, rpc_env_value())
+                    .env(RPC_ENV_NAME, rpc.env_value())
             })
             .and_then(|command| command.spawn())
             .map_err(|error| error.to_string())?;

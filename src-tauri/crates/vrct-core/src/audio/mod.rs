@@ -8,6 +8,7 @@
 //! and are checked against its output.
 
 pub mod devices;
+pub mod host;
 pub mod normalize;
 pub mod pipeline;
 pub mod samples;
