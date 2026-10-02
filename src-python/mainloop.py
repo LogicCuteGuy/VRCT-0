@@ -24,7 +24,7 @@ warnings.filterwarnings(
 )
 
 from controller import Controller  # noqa: E402
-from utils import printLog, printResponse, errorLogging, encodeBase64 # noqa: E402
+from utils import printLog, printResponse, errorLogging, encodeBase64, resolveRustCall, RUST_RPC_RESPONSE_ENDPOINT # noqa: E402
 
 logging.getLogger("huggingface_hub").setLevel(logging.ERROR)
 
@@ -668,19 +668,27 @@ class Main:
                     # EOF reached; sleep briefly and re-check stop event
                     time.sleep(0.1)
                     continue
-                received_data = json.loads(line.strip())
-
-                if received_data:
-                    endpoint = received_data.get("endpoint")
-                    data = received_data.get("data")
-                    data = encodeBase64(data) if data is not None else None
-                    printLog(endpoint, {"receive_data": data})
-                    self.queue.put((endpoint, data, 0))
+                self._handleInputLine(line)
             except json.JSONDecodeError:
                 # malformed input; log and continue
                 errorLogging()
             except Exception:
                 errorLogging()
+
+    def _handleInputLine(self, line: str) -> None:
+        received_data = json.loads(line.strip())
+
+        if received_data:
+            endpoint = received_data.get("endpoint")
+            data = received_data.get("data")
+            data = encodeBase64(data) if data is not None else None
+            if endpoint == RUST_RPC_RESPONSE_ENDPOINT:
+                # The host's answer to a call a worker thread is waiting on.
+                # It carries chat text and API keys, so it skips process.log.
+                resolveRustCall(data)
+                return
+            printLog(endpoint, {"receive_data": data})
+            self.queue.put((endpoint, data, 0))
 
     def startReceiver(self) -> None:
         th_receiver = Thread(target=self.receiver, name="main_receiver")

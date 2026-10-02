@@ -11,6 +11,7 @@ use tauri::{AppHandle, Emitter};
 use vrct_core::config::{self, ConfigReplica};
 use vrct_core::protocol::Response;
 use vrct_core::router::{ResponseSink, Router};
+use vrct_core::rpc::{LineWriter, Rpc};
 use vrct_core::sinks::Sinks;
 
 use sidecar::Sidecar;
@@ -31,6 +32,7 @@ pub struct Backend {
     sidecar: Arc<Sidecar>,
     replica: Arc<ConfigReplica>,
     sinks: Arc<Sinks>,
+    rpc: Arc<Rpc>,
     started: AtomicBool,
 }
 
@@ -40,6 +42,7 @@ impl Backend {
         let sidecar = Arc::new(Sidecar::default());
         let replica = Arc::new(ConfigReplica::default());
         let sinks = Arc::new(Sinks::new(Arc::clone(&replica)));
+        let rpc = Arc::new(Rpc::new(sidecar.clone() as Arc<dyn LineWriter>));
 
         let router = Router::new(Arc::clone(&sink)).with_fallback(sidecar.clone());
         let router = config::register_getters(router, &replica);
@@ -50,6 +53,7 @@ impl Backend {
             sidecar,
             replica,
             sinks,
+            rpc,
             started: AtomicBool::new(false),
         })
     }
@@ -66,6 +70,7 @@ impl Backend {
                 Arc::clone(&self.router),
                 Arc::clone(&self.replica),
                 Arc::clone(&self.sinks),
+                Arc::clone(&self.rpc),
             )
             .inspect_err(|_| self.started.store(false, Ordering::SeqCst))
     }

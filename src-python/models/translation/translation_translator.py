@@ -12,7 +12,7 @@ except Exception:
     from translation_utils import ctranslate2_weights
     from translation_providers import TRANSLATION_PROVIDER_REGISTRY
 
-from utils import errorLogging, getBestComputeType
+from utils import errorLogging, getBestComputeType, rustRpcEnabled, callRust
 
 try:
     # Bing の認証情報パース (parse_bing_credentials) は monkey-patch を
@@ -99,6 +99,37 @@ try:
     from .translation_ollama import OllamaClient
 except Exception:
     from translation_ollama import OllamaClient
+
+
+# Rust ホストが "translate.llm" を実装している場合、LLM 系エンジンの HTTP 呼び出しは
+# ホスト側で行う。Python が持つのは認証済みの api_key/model/base_url と会話履歴だけで、
+# それをそのまま渡す。ホストの最悪ケース (45秒 x 3回 + バックオフ) より長く待つ。
+_LLM_RPC_TIMEOUT_SECONDS = 150
+
+
+def _translateWithLLMClient(engine_name: str, client: Any, message: str, input_lang: str, output_lang: str) -> Any:
+    """`client.translate()` を呼ぶか、ホストが引き受けている場合は Rust へ委譲する。
+
+    履歴は `setContextHistory` で入れた最新の値をそのまま使う (空の呼び出しで
+    リセットしない従来の挙動を保つ)。ホスト側の失敗は例外で戻り、呼び出し元の
+    `translate()` が従来通り False に変換する。
+    """
+    if not rustRpcEnabled("translate.llm"):
+        return client.translate(message, input_lang=input_lang, output_lang=output_lang)
+    return callRust(
+        "translate.llm",
+        {
+            "engine": engine_name,
+            "base_url": getattr(client, "base_url", None),
+            "api_key": getattr(client, "api_key", None),
+            "model": getattr(client, "model", None) or "",
+            "text": message,
+            "input_lang": input_lang,
+            "output_lang": output_lang,
+            "history": list(getattr(client, "_context_history", None) or []),
+        },
+        timeout=_LLM_RPC_TIMEOUT_SECONDS,
+    )
 
 
 class Translator:
@@ -594,44 +625,28 @@ class Translator:
                     else:
                         if context_history:
                             provider_client.setContextHistory(context_history)
-                        result = provider_client.translate(
-                            message,
-                            input_lang=source_language,
-                            output_lang=target_language,
-                            )
+                        result = _translateWithLLMClient(name, provider_client, message, source_language, target_language)
                 case "OpenAI_Compatible":
                     if self.openai_compatible_client is None:
                         result = False
                     else:
                         if context_history:
                             self.openai_compatible_client.setContextHistory(context_history)
-                        result = self.openai_compatible_client.translate(
-                            message,
-                            input_lang=source_language,
-                            output_lang=target_language,
-                        )
+                        result = _translateWithLLMClient("OpenAI_Compatible", self.openai_compatible_client, message, source_language, target_language)
                 case "LMStudio":
                     if self.lmstudio_client is None:
                         result = False
                     else:
                         if context_history:
                             self.lmstudio_client.setContextHistory(context_history)
-                        result = self.lmstudio_client.translate(
-                            message,
-                            input_lang=source_language,
-                            output_lang=target_language,
-                        )
+                        result = _translateWithLLMClient("LMStudio", self.lmstudio_client, message, source_language, target_language)
                 case "Ollama":
                     if self.ollama_client is None:
                         result = False
                     else:
                         if context_history:
                             self.ollama_client.setContextHistory(context_history)
-                        result = self.ollama_client.translate(
-                            message,
-                            input_lang=source_language,
-                            output_lang=target_language,
-                        )
+                        result = _translateWithLLMClient("Ollama", self.ollama_client, message, source_language, target_language)
                 case "Google":
                     if ENABLE_TRANSLATORS is True and other_web_Translator is not None:
                         result = other_web_Translator(

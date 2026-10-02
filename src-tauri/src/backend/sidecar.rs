@@ -6,6 +6,7 @@ use tauri_plugin_shell::ShellExt;
 use vrct_core::config::{ConfigReplica, BRIDGE_ENV};
 use vrct_core::protocol::{parse_sidecar_line, sidecar_line};
 use vrct_core::router::{Fallback, Router};
+use vrct_core::rpc::{rpc_env_value, LineWriter, Rpc, RPC_ENV_NAME};
 use vrct_core::sinks::{sinks_env_value, Sinks, SINKS_ENV_NAME};
 
 /// The legacy Python process. Endpoints Rust has not taken over are written to
@@ -25,6 +26,15 @@ impl Fallback for Sidecar {
     }
 }
 
+/// Answers to the sidecar's RPC calls travel on the same stdin as requests.
+impl LineWriter for Sidecar {
+    fn write_line(&self, line: &str) -> Result<(), String> {
+        let mut child = self.child.lock().unwrap();
+        let child = child.as_mut().ok_or("Backend sidecar is not running")?;
+        child.write(line.as_bytes()).map_err(|error| error.to_string())
+    }
+}
+
 impl Sidecar {
     pub fn spawn(
         self: &Arc<Self>,
@@ -32,6 +42,7 @@ impl Sidecar {
         router: Arc<Router>,
         replica: Arc<ConfigReplica>,
         sinks: Arc<Sinks>,
+        rpc: Arc<Rpc>,
     ) -> Result<(), String> {
         let (mut events, child) = app
             .shell()
@@ -40,6 +51,7 @@ impl Sidecar {
                 command
                     .env(BRIDGE_ENV.0, BRIDGE_ENV.1)
                     .env(SINKS_ENV_NAME, sinks_env_value())
+                    .env(RPC_ENV_NAME, rpc_env_value())
             })
             .and_then(|command| command.spawn())
             .map_err(|error| error.to_string())?;
@@ -56,9 +68,13 @@ impl Sidecar {
                             continue;
                         };
                         // Bridge traffic is for Rust only (config carries secrets,
-                        // sink lines carry the user's chat). Sinks go first because
-                        // the replica swallows every other /internal/ line.
-                        if sinks.ingest(&response) || replica.ingest(&response) {
+                        // sink and RPC lines carry the user's chat and API keys).
+                        // Sinks and RPC go first because the replica swallows
+                        // every other /internal/ line.
+                        if sinks.ingest(&response)
+                            || rpc.ingest(&response)
+                            || replica.ingest(&response)
+                        {
                             continue;
                         }
                         let initialized = response.endpoint == "/run/initialization_complete";

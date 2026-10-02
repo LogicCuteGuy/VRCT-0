@@ -254,6 +254,83 @@ def rustSinkEnabled(name: str) -> bool:
     return name in os.environ.get(_SINKS_ENV, "").split(",")
 
 
+_RPC_ENV = "VRCT_RUST_RPC"
+RUST_RPC_REQUEST_ENDPOINT = "/internal/rpc/request"
+RUST_RPC_RESPONSE_ENDPOINT = "/internal/rpc/response"
+
+
+class RustCallError(Exception):
+    """A call into the Rust host failed, timed out, or was refused."""
+
+
+class _PendingRustCall:
+    __slots__ = ("event", "answer")
+
+    def __init__(self) -> None:
+        self.event = threading.Event()
+        self.answer: Optional[Dict[str, Any]] = None
+
+
+_rust_calls_lock = threading.Lock()
+_rust_calls_next_id = 0
+_rust_calls_pending: Dict[int, _PendingRustCall] = {}
+
+
+def rustRpcEnabled(name: str) -> bool:
+    """True when the Rust host says it implements the `name` call.
+
+    Same contract as `rustSinkEnabled`: the host lists its methods in
+    VRCT_RUST_RPC, and anything not listed (or any standalone run) stays here.
+    """
+    return name in os.environ.get(_RPC_ENV, "").split(",")
+
+
+def callRust(method: str, params: Any, timeout: float = 120.0) -> Any:
+    """Ask the Rust host to run `method` and wait for its result.
+
+    Each call carries its own id, so the pipeline's worker threads can wait
+    side by side. Raises `RustCallError` when Rust reports a failure or does not
+    answer within `timeout` seconds. The request line carries chat text and API
+    keys, so it bypasses process.log like every other internal message.
+    """
+    global _rust_calls_next_id
+    pending = _PendingRustCall()
+    with _rust_calls_lock:
+        _rust_calls_next_id += 1
+        call_id = _rust_calls_next_id
+        _rust_calls_pending[call_id] = pending
+    try:
+        _enqueueResponseLine(json.dumps({
+            "status": 200,
+            "endpoint": RUST_RPC_REQUEST_ENDPOINT,
+            "result": {"id": call_id, "method": method, "params": params},
+        }))
+        if not pending.event.wait(timeout):
+            raise RustCallError(f"{method} timed out after {timeout}s")
+    finally:
+        with _rust_calls_lock:
+            _rust_calls_pending.pop(call_id, None)
+    answer = pending.answer or {}
+    if not answer.get("ok"):
+        raise RustCallError(f"{method} failed: {answer.get('error')}")
+    return answer.get("result")
+
+
+def resolveRustCall(answer: Any) -> bool:
+    """Hand a host answer (`{id, ok, result | error}`) to the call waiting for it.
+
+    Returns False for an answer nobody waits for any more (the call timed out).
+    """
+    call_id = answer.get("id") if isinstance(answer, dict) else None
+    with _rust_calls_lock:
+        pending = _rust_calls_pending.get(call_id)
+    if pending is None:
+        return False
+    pending.answer = answer
+    pending.event.set()
+    return True
+
+
 def putDroppingOldestOnFull(q: "queue.Queue", item: Any) -> bool:
     """非ブロッキングでqに積む。満杯なら最も古い項目を1つ捨てて積み直す。
 
