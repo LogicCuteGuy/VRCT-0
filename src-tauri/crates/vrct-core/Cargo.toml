@@ -32,6 +32,11 @@ ct2rs = { version = "0.10.1", default-features = false, features = ["ruy"], opti
 sentencepiece = { version = "0.13", optional = true }
 tokenizers = { version = "0.22", default-features = false, features = ["onig"], optional = true }
 
+# ONNX Runtime for the Silero VAD. `load-dynamic`: the runtime library is found at run time
+# (next to the executable or ORT_DYLIB_PATH), so building downloads nothing. api-26 is the
+# newest API level the 1.26 runtime on a development machine offers.
+ort = { version = "=2.0.0-rc.13", default-features = false, features = ["std", "api-26", "load-dynamic"] }
+
 # Win32 calls for the clipboard sink (focus a window, copy, Ctrl+V).
 [target.'cfg(windows)'.dependencies]
 windows-sys = { version = "0.59", features = [

@@ -20,7 +20,8 @@ use super::{FRAME_BYTES, FRAME_SAMPLES, TARGET_SAMPLE_RATE};
 
 /// Probability that one frame of 512 samples (floats in -1..1) contains speech.
 pub trait FrameProbability {
-    fn probability(&mut self, frame: &[f32]) -> f32;
+    /// An error (the model failing to run) stops `process`/`flush`, as an exception does in Python.
+    fn probability(&mut self, frame: &[f32]) -> Result<f32, String>;
     fn reset(&mut self);
 }
 
@@ -171,37 +172,43 @@ impl<P: FrameProbability> VadSegmenter<P> {
     }
 
     /// Feed 16 kHz mono PCM of any length; whole frames are consumed, the rest waits for the next call.
-    pub fn process(&mut self, pcm: &[u8]) -> Vec<SpeechSegment> {
+    /// On an engine error the frame that failed is dropped and the frames after it stay queued.
+    pub fn process(&mut self, pcm: &[u8]) -> Result<Vec<SpeechSegment>, String> {
         self.remainder.extend_from_slice(pcm);
         let mut segments = Vec::new();
         let mut offset = 0;
         while self.remainder.len() - offset >= FRAME_BYTES {
             let frame = self.remainder[offset..offset + FRAME_BYTES].to_vec();
             offset += FRAME_BYTES;
-            let probability = self.score(&frame);
-            if let Some(segment) = self.process_frame(frame, probability) {
-                segments.push(segment);
-            }
+            let scored = self.score(&frame);
+            let segment = match scored {
+                Ok(probability) => self.process_frame(frame, probability),
+                Err(e) => {
+                    self.remainder.drain(..offset);
+                    return Err(e);
+                }
+            };
+            segments.extend(segment);
         }
         self.remainder.drain(..offset);
-        segments
+        Ok(segments)
     }
 
     /// Close the stream (pause, stop): a trailing partial frame is zero-padded
     /// and scored, and a segment still open is ended with `Flush`.
-    pub fn flush(&mut self) -> Option<SpeechSegment> {
+    pub fn flush(&mut self) -> Result<Option<SpeechSegment>, String> {
         if !self.remainder.is_empty() {
             let mut padded = std::mem::take(&mut self.remainder);
             padded.resize(FRAME_BYTES, 0);
-            let probability = self.score(&padded);
+            let probability = self.score(&padded)?;
             if let Some(segment) = self.process_frame(padded, probability) {
-                return Some(segment);
+                return Ok(Some(segment));
             }
         }
         if !self.speaking {
-            return None;
+            return Ok(None);
         }
-        self.finish_segment(SegmentEnd::Flush)
+        Ok(self.finish_segment(SegmentEnd::Flush))
     }
 
     /// Back to the initial state (mute, device change). The segment id is kept.
@@ -216,7 +223,7 @@ impl<P: FrameProbability> VadSegmenter<P> {
         self.probability.reset();
     }
 
-    fn score(&mut self, frame: &[u8]) -> f32 {
+    fn score(&mut self, frame: &[u8]) -> Result<f32, String> {
         let samples: Vec<f32> = frame
             .chunks_exact(2)
             .map(|pair| f32::from(i16::from_le_bytes([pair[0], pair[1]])) / 32768.0)

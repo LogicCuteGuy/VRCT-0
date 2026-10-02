@@ -2,10 +2,11 @@
 //!
 //! `normalize` turns whatever PCM a device delivers into 16 kHz mono 16-bit,
 //! `vad` cuts that stream into speech segments with a state machine around a
-//! per-frame speech probability. Both follow `models/transcription/audio_vad.py`
+//! per-frame speech probability, which `silero` computes. Both follow `models/transcription/audio_vad.py`
 //! and are checked against its output.
 
 pub mod normalize;
+pub mod silero;
 pub mod vad;
 
 /// What the speech-segment code consumes: 16 kHz, mono, signed 16-bit little endian.

@@ -86,12 +86,12 @@ struct Script {
 struct ScriptedEngine(Arc<Mutex<Script>>);
 
 impl FrameProbability for ScriptedEngine {
-    fn probability(&mut self, frame: &[f32]) -> f32 {
+    fn probability(&mut self, frame: &[f32]) -> Result<f32, String> {
         assert_eq!(frame.len(), FRAME_SAMPLES);
         let mut script = self.0.lock().unwrap();
         let index = script.calls.len();
         script.calls.push([f64::from(frame[0]), f64::from(frame[255]), f64::from(frame[FRAME_SAMPLES - 1])]);
-        script.probs[index]
+        Ok(script.probs[index])
     }
 
     fn reset(&mut self) {
@@ -151,14 +151,14 @@ fn segmenter_matches_python_in_every_scenario() {
             let expected = &step["result"];
             match text(step, "op") {
                 "process" => {
-                    let segments = segmenter.process(&pcm(number(step, "start"), number(step, "frames"), number(step, "extra")));
+                    let segments = segmenter.process(&pcm(number(step, "start"), number(step, "frames"), number(step, "extra"))).unwrap();
                     let wanted = expected["segments"].as_array().unwrap();
                     assert_eq!(segments.len(), wanted.len(), "{context}: segment count");
                     for (got, want) in segments.iter().zip(wanted) {
                         same_segment(got, want, &context);
                     }
                 }
-                "flush" => match (segmenter.flush(), &expected["segment"]) {
+                "flush" => match (segmenter.flush().unwrap(), &expected["segment"]) {
                     (None, Value::Null) => {}
                     (Some(got), want @ Value::Object(_)) => same_segment(&got, want, &context),
                     (got, want) => panic!("{context}: flush gave {got:?}, Python gave {want}"),
@@ -199,14 +199,48 @@ fn segment_ids_come_from_one_shared_counter() {
     let (mut first, mut second) = (speaker(), speaker());
 
     let speak = |segmenter: &mut VadSegmenter<ScriptedEngine>| {
-        assert!(segmenter.process(&pcm(0, 3, 0)).is_empty());
-        segmenter.flush().unwrap().segment_id
+        assert!(segmenter.process(&pcm(0, 3, 0)).unwrap().is_empty());
+        segmenter.flush().unwrap().unwrap().segment_id
     };
     // Each took an id when it was made; ending a segment takes the next free one.
     assert_eq!(speak(&mut first), 10);
     assert_eq!(speak(&mut second), 11);
     assert_eq!(speak(&mut first), 12);
     assert_eq!(speak(&mut second), 13);
+}
+
+/// An engine that fails on its second frame.
+struct Failing(usize);
+
+impl FrameProbability for Failing {
+    fn probability(&mut self, _frame: &[f32]) -> Result<f32, String> {
+        self.0 += 1;
+        if self.0 == 2 {
+            Err("model failed".to_string())
+        } else {
+            Ok(0.0)
+        }
+    }
+
+    fn reset(&mut self) {}
+}
+
+#[test]
+fn an_engine_error_stops_process_and_drops_only_the_failed_frame() {
+    let mut segmenter = VadSegmenter::with_ids(Failing(0), VadConfig::default(), SegmentIds::starting_at(0));
+    assert_eq!(segmenter.process(&pcm(0, 3, 0)).unwrap_err(), "model failed");
+    // Frames 1 and 2 are gone; frame 3 is still queued and is scored by the next call.
+    assert!(segmenter.process(&[]).unwrap().is_empty());
+    assert_eq!(segmenter.engine().0, 3);
+    assert!(segmenter.process(&[]).unwrap().is_empty());
+    assert_eq!(segmenter.engine().0, 3, "nothing is left to score");
+}
+
+#[test]
+fn an_engine_error_in_flush_is_reported() {
+    let mut segmenter = VadSegmenter::with_ids(Failing(1), VadConfig::default(), SegmentIds::starting_at(0));
+    segmenter.process(&pcm(0, 0, 100)).unwrap();
+    assert_eq!(segmenter.flush().unwrap_err(), "model failed");
 }
 
 #[test]
