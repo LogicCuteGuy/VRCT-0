@@ -10,6 +10,7 @@ pub mod config;
 pub mod protocol;
 pub mod router;
 pub mod rpc;
+pub mod settings;
 pub mod sinks;
 pub mod translation;
 pub mod updater;
