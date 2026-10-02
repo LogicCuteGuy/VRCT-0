@@ -7,8 +7,11 @@
 
 pub mod devices;
 pub mod normalize;
+pub mod samples;
 pub mod silero;
 pub mod vad;
+#[cfg(windows)]
+pub mod capture;
 #[cfg(windows)]
 pub mod wasapi;
 

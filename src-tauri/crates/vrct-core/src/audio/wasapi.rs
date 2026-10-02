@@ -26,7 +26,7 @@ pub fn list_devices() -> Result<DeviceList, String> {
 
 /// The name Windows shows and PortAudio reports, e.g. `Microphone (UGREEN Camera)`. cpal's own
 /// `name()` is only the part before the parentheses; the whole is its first extended line.
-fn name_of<D: DeviceTrait>(device: &D) -> Option<String> {
+pub(super) fn name_of<D: DeviceTrait>(device: &D) -> Option<String> {
     let description = device.description().ok()?;
     Some(description.extended().first().cloned().unwrap_or_else(|| description.name().to_string()))
 }
