@@ -21,7 +21,7 @@ use futures_util::future::BoxFuture;
 use serde_json::{json, Value};
 
 use crate::protocol::{sidecar_line, Response};
-use crate::translation::{catalog, deepl, llm};
+use crate::translation::{catalog, deepl, llm, text};
 
 /// Env var telling the sidecar which methods Rust implements (comma separated).
 pub const RPC_ENV_NAME: &str = "VRCT_RUST_RPC";
@@ -32,6 +32,7 @@ pub const IMPLEMENTED: &[&str] = &[
     "translate.deepl.check",
     "llm.auth_check",
     "llm.models",
+    "translate.text",
 ];
 
 const REQUEST: &str = "/internal/rpc/request";
@@ -67,6 +68,10 @@ impl Rpc {
         .method("translate.deepl.check", |params| async move {
             let request: deepl::Check = serde_json::from_value(params).map_err(|e| format!("bad params: {e}"))?;
             deepl::check(request).await.map(Value::Bool)
+        })
+        .method("translate.text", |params| async move {
+            let request: text::Request = serde_json::from_value(params).map_err(|e| format!("bad params: {e}"))?;
+            text::translate(request).await.map(|outcome| outcome.to_json())
         })
         .method("llm.auth_check", |params| async move {
             let target: catalog::Target = serde_json::from_value(params).map_err(|e| format!("bad params: {e}"))?;

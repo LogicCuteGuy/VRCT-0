@@ -164,7 +164,7 @@ fn outside_a_runtime_the_caller_gets_an_error_not_a_panic() {
 #[test]
 fn the_advertised_methods_are_what_the_sidecar_is_told() {
     assert_eq!(vrct_core::rpc::rpc_env_value(), IMPLEMENTED.join(","));
-    for method in ["translate.llm", "translate.deepl", "translate.deepl.check", "llm.auth_check", "llm.models"] {
+    for method in ["translate.llm", "translate.deepl", "translate.deepl.check", "llm.auth_check", "llm.models", "translate.text"] {
         assert!(IMPLEMENTED.contains(&method), "{method}");
     }
 }
@@ -221,5 +221,33 @@ async fn catalog_calls_are_answered_through_the_bridge() {
     answers.sort_by_key(|answer| answer["id"].as_u64());
     assert_eq!(answers[0], json!({"id": 1, "ok": true, "result": true}));
     assert_eq!(answers[1], json!({"id": 2, "ok": true, "result": ["gpt-4o"]}));
+    assert_eq!(answers[2]["ok"], false);
+}
+
+#[tokio::test]
+async fn a_whole_translation_is_answered_as_text_or_unsupported() {
+    let server = common::mock(vec![(
+        200,
+        json!({"choices": [{"message": {"content": "Hello"}}]}).to_string(),
+    )])
+    .await;
+    let lines = Arc::new(Lines::default());
+    let rpc = rpc(&lines);
+
+    let params = |source: &str| {
+        json!({
+            "engine": "OpenAI_API", "source_language": source, "target_language": "English",
+            "target_country": "United States", "text": "こんにちは",
+            "api_key": "sk-1", "base_url": server.base(), "model": "m",
+        })
+    };
+    assert!(rpc.ingest(&request_line(json!({"id": 1, "method": "translate.text", "params": params("Japanese")}))));
+    assert!(rpc.ingest(&request_line(json!({"id": 2, "method": "translate.text", "params": params("Klingon")}))));
+    assert!(rpc.ingest(&request_line(json!({"id": 3, "method": "translate.text", "params": {"engine": "Google"}}))));
+
+    let mut answers = lines.wait_for(3).await;
+    answers.sort_by_key(|answer| answer["id"].as_u64());
+    assert_eq!(answers[0], json!({"id": 1, "ok": true, "result": {"kind": "text", "text": "Hello"}}));
+    assert_eq!(answers[1]["result"]["kind"], "unsupported");
     assert_eq!(answers[2]["ok"], false);
 }

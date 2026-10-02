@@ -121,13 +121,10 @@ def _translateWithLLMClient(engine_name: str, client: Any, message: str, input_l
         "translate.llm",
         {
             "engine": engine_name,
-            "base_url": getattr(client, "base_url", None),
-            "api_key": getattr(client, "api_key", None),
-            "model": getattr(client, "model", None) or "",
             "text": message,
             "input_lang": input_lang,
             "output_lang": output_lang,
-            "history": list(getattr(client, "_context_history", None) or []),
+            **_llmClientState(engine_name, client),
         },
         timeout=_LLM_RPC_TIMEOUT_SECONDS,
     )
@@ -135,6 +132,21 @@ def _translateWithLLMClient(engine_name: str, client: Any, message: str, input_l
 
 # DeepL も同様。ホストの最悪ケース (45秒 x 3回 + バックオフ) より長く待つ。
 _DEEPL_RPC_TIMEOUT_SECONDS = 150
+
+# "translate.text" は 1 回の翻訳の全体 (言語名 -> コードの解決、サポート外の判定、
+# エンジン呼び出し) をホストが行う。ホストが担当しないエンジンでは使わない。
+_TEXT_RPC_TIMEOUT_SECONDS = 150
+_NOT_HOSTED = object()
+
+
+def _llmClientState(engine_name: str, client: Any) -> dict:
+    """ホストに渡す、認証済みクライアントの状態。履歴は `setContextHistory` で入れた最新の値。"""
+    return {
+        "base_url": getattr(client, "base_url", None),
+        "api_key": getattr(client, "api_key", None),
+        "model": getattr(client, "model", None) or "",
+        "history": list(getattr(client, "_context_history", None) or []),
+    }
 
 
 class _HostDeepLClient:
@@ -224,6 +236,56 @@ class Translator:
             self.deepl_client = None
             result = False
         return result
+
+    def _translateInHost(self, translator_name: str, weight_type: str, source_language: str, target_language: str, target_country: str, message: str, context_history: Optional[list[dict]]) -> Any:
+        """DeepL / LLM エンジンの翻訳全体を Rust ホストに任せる (`translate.text`)。
+
+        結果の意味は `translate()` と同じ: 文字列、サポート外の言語なら None、
+        失敗は例外 (呼び出し元が False に変換する)。ホストが担当しない場合や、
+        ホストでは扱えない状態 (SDK の DeepL クライアントなど) は `_NOT_HOSTED`
+        を返し、Python の従来の経路に任せる。
+        """
+        if translator_name == "DeepL_API":
+            if self.is_enable_translators is not True:
+                return ""
+            client = self.deepl_client
+            if client is None:
+                return False
+            if not isinstance(client, _HostDeepLClient):
+                return _NOT_HOSTED
+            state = {"api_key": client._auth_key, "base_url": None, "model": "", "history": []}
+        else:
+            if translator_name in TRANSLATION_PROVIDER_REGISTRY:
+                client = self._provider_clients.get(translator_name)
+            elif translator_name == "OpenAI_Compatible":
+                client = self.openai_compatible_client
+            elif translator_name == "LMStudio":
+                client = self.lmstudio_client
+            elif translator_name == "Ollama":
+                client = self.ollama_client
+            else:
+                return _NOT_HOSTED
+            if client is None:
+                return False
+            if context_history:
+                client.setContextHistory(context_history)
+            state = _llmClientState(translator_name, client)
+        answer = callRust(
+            "translate.text",
+            {
+                "engine": translator_name,
+                "source_language": source_language,
+                "target_language": target_language,
+                "target_country": target_country,
+                "weight_type": weight_type,
+                "text": message,
+                **state,
+            },
+            timeout=_TEXT_RPC_TIMEOUT_SECONDS,
+        )
+        if answer.get("kind") == "unsupported":
+            return None
+        return answer["text"]
 
     def authenticationRegistryAuthKey(self, engine_key: str, auth_key: str, root_path: str = None, **client_kwargs) -> bool:
         """`TRANSLATION_PROVIDER_REGISTRY` 登録エンジン共通の認証処理。
@@ -633,6 +695,11 @@ class Translator:
         try:
             if source_language == target_language:
                 return message
+
+            if rustRpcEnabled("translate.text"):
+                hosted = self._translateInHost(translator_name, weight_type, source_language, target_language, target_country, message, context_history)
+                if hosted is not _NOT_HOSTED:
+                    return hosted
 
             result: Any = ""
             source_language, target_language = self.getLanguageCode(translator_name, weight_type, target_country, source_language, target_language)
