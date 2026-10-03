@@ -7,6 +7,7 @@
 
 pub mod audio;
 pub mod config;
+pub mod pipeline;
 pub mod protocol;
 pub mod router;
 pub mod rpc;
