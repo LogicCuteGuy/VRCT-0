@@ -36,6 +36,9 @@ ct2rs = { version = "0.10.1", default-features = false, features = ["ruy"], opti
 sentencepiece = { version = "0.13", optional = true }
 tokenizers = { version = "0.22", default-features = false, features = ["onig"], optional = true }
 
+# FLAC for the Google speech endpoint (pure Rust, Apache-2.0); without its logging, thread and serde extras.
+flacenc = { version = "0.5.1", default-features = false }
+
 # ONNX Runtime for the Silero VAD. `load-dynamic`: the runtime library is found at run time
 # (next to the executable or ORT_DYLIB_PATH), so building downloads nothing. api-26 is the
 # newest API level the 1.26 runtime on a development machine offers.
@@ -58,5 +61,7 @@ windows-sys = { version = "0.59", features = [
 ] }
 
 [dev-dependencies]
+# Reads back the FLAC that flacenc wrote, to check it holds the samples it was given.
+claxon = "0.4.3"
 tokio-tungstenite = { version = "0.26", default-features = false, features = ["connect"] }
 tokio = { version = "1", features = ["rt", "rt-multi-thread", "macros", "time", "test-util"] }

@@ -57,7 +57,7 @@ impl Pcm16MonoNormalizer {
 }
 
 /// `audioop.lin2lin(data, width, 2)` for widths 1-4, and the plain reading of 16-bit data.
-fn to_i16(data: &[u8], width: usize) -> Result<Vec<i16>, String> {
+pub(crate) fn to_i16(data: &[u8], width: usize) -> Result<Vec<i16>, String> {
     if !(1..=4).contains(&width) {
         return Err(format!("unsupported sample width {width}"));
     }
