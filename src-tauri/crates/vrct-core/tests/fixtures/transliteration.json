@@ -1,0 +1,3082 @@
+[
+  {
+    "text": "",
+    "hiragana": false,
+    "romaji": false,
+    "expected": []
+  },
+  {
+    "text": "",
+    "hiragana": true,
+    "romaji": false,
+    "expected": []
+  },
+  {
+    "text": "",
+    "hiragana": false,
+    "romaji": true,
+    "expected": []
+  },
+  {
+    "text": "",
+    "hiragana": true,
+    "romaji": true,
+    "expected": []
+  },
+  {
+    "text": " ",
+    "hiragana": false,
+    "romaji": false,
+    "expected": []
+  },
+  {
+    "text": " ",
+    "hiragana": true,
+    "romaji": false,
+    "expected": [
+      {
+        "orig": " ",
+        "hira": " "
+      }
+    ]
+  },
+  {
+    "text": " ",
+    "hiragana": false,
+    "romaji": true,
+    "expected": [
+      {
+        "orig": " ",
+        "hepburn": ""
+      }
+    ]
+  },
+  {
+    "text": " ",
+    "hiragana": true,
+    "romaji": true,
+    "expected": [
+      {
+        "orig": " ",
+        "hira": " ",
+        "hepburn": ""
+      }
+    ]
+  },
+  {
+    "text": "\t\n",
+    "hiragana": false,
+    "romaji": false,
+    "expected": []
+  },
+  {
+    "text": "\t\n",
+    "hiragana": true,
+    "romaji": false,
+    "expected": [
+      {
+        "orig": "\t\n",
+        "hira": "\t\n"
+      }
+    ]
+  },
+  {
+    "text": "\t\n",
+    "hiragana": false,
+    "romaji": true,
+    "expected": [
+      {
+        "orig": "\t\n",
+        "hepburn": ""
+      }
+    ]
+  },
+  {
+    "text": "\t\n",
+    "hiragana": true,
+    "romaji": true,
+    "expected": [
+      {
+        "orig": "\t\n",
+        "hira": "\t\n",
+        "hepburn": ""
+      }
+    ]
+  },
+  {
+    "text": "東京に行く",
+    "hiragana": false,
+    "romaji": false,
+    "expected": []
+  },
+  {
+    "text": "東京に行く",
+    "hiragana": true,
+    "romaji": false,
+    "expected": [
+      {
+        "orig": "東京",
+        "hira": "とうきょう"
+      },
+      {
+        "orig": "に",
+        "hira": "に"
+      },
+      {
+        "orig": "行",
+        "hira": "い"
+      },
+      {
+        "orig": "く",
+        "hira": "く"
+      }
+    ]
+  },
+  {
+    "text": "東京に行く",
+    "hiragana": false,
+    "romaji": true,
+    "expected": [
+      {
+        "orig": "東京",
+        "hepburn": "toukyou"
+      },
+      {
+        "orig": "に",
+        "hepburn": "ni"
+      },
+      {
+        "orig": "行",
+        "hepburn": "i"
+      },
+      {
+        "orig": "く",
+        "hepburn": "ku"
+      }
+    ]
+  },
+  {
+    "text": "東京に行く",
+    "hiragana": true,
+    "romaji": true,
+    "expected": [
+      {
+        "orig": "東京",
+        "hira": "とうきょう",
+        "hepburn": "toukyou"
+      },
+      {
+        "orig": "に",
+        "hira": "に",
+        "hepburn": "ni"
+      },
+      {
+        "orig": "行",
+        "hira": "い",
+        "hepburn": "i"
+      },
+      {
+        "orig": "く",
+        "hira": "く",
+        "hepburn": "ku"
+      }
+    ]
+  },
+  {
+    "text": "外国人参政権",
+    "hiragana": false,
+    "romaji": false,
+    "expected": []
+  },
+  {
+    "text": "外国人参政権",
+    "hiragana": true,
+    "romaji": false,
+    "expected": [
+      {
+        "orig": "外国人参政権",
+        "hira": "がいこくじんさんせいけん"
+      }
+    ]
+  },
+  {
+    "text": "外国人参政権",
+    "hiragana": false,
+    "romaji": true,
+    "expected": [
+      {
+        "orig": "外国人参政権",
+        "hepburn": "gaikokujinsanseiken"
+      }
+    ]
+  },
+  {
+    "text": "外国人参政権",
+    "hiragana": true,
+    "romaji": true,
+    "expected": [
+      {
+        "orig": "外国人参政権",
+        "hira": "がいこくじんさんせいけん",
+        "hepburn": "gaikokujinsanseiken"
+      }
+    ]
+  },
+  {
+    "text": "選挙管理委員会",
+    "hiragana": false,
+    "romaji": false,
+    "expected": []
+  },
+  {
+    "text": "選挙管理委員会",
+    "hiragana": true,
+    "romaji": false,
+    "expected": [
+      {
+        "orig": "選挙管理委員会",
+        "hira": "せんきょかんりいいんかい"
+      }
+    ]
+  },
+  {
+    "text": "選挙管理委員会",
+    "hiragana": false,
+    "romaji": true,
+    "expected": [
+      {
+        "orig": "選挙管理委員会",
+        "hepburn": "senkyokanriiinkai"
+      }
+    ]
+  },
+  {
+    "text": "選挙管理委員会",
+    "hiragana": true,
+    "romaji": true,
+    "expected": [
+      {
+        "orig": "選挙管理委員会",
+        "hira": "せんきょかんりいいんかい",
+        "hepburn": "senkyokanriiinkai"
+      }
+    ]
+  },
+  {
+    "text": "美しい花を見る",
+    "hiragana": false,
+    "romaji": false,
+    "expected": []
+  },
+  {
+    "text": "美しい花を見る",
+    "hiragana": true,
+    "romaji": false,
+    "expected": [
+      {
+        "orig": "美",
+        "hira": "うつく"
+      },
+      {
+        "orig": "しい",
+        "hira": "しい"
+      },
+      {
+        "orig": "花",
+        "hira": "はな"
+      },
+      {
+        "orig": "を",
+        "hira": "を"
+      },
+      {
+        "orig": "見",
+        "hira": "み"
+      },
+      {
+        "orig": "る",
+        "hira": "る"
+      }
+    ]
+  },
+  {
+    "text": "美しい花を見る",
+    "hiragana": false,
+    "romaji": true,
+    "expected": [
+      {
+        "orig": "美",
+        "hepburn": "utsuku"
+      },
+      {
+        "orig": "しい",
+        "hepburn": "shii"
+      },
+      {
+        "orig": "花",
+        "hepburn": "hana"
+      },
+      {
+        "orig": "を",
+        "hepburn": "wo"
+      },
+      {
+        "orig": "見",
+        "hepburn": "mi"
+      },
+      {
+        "orig": "る",
+        "hepburn": "ru"
+      }
+    ]
+  },
+  {
+    "text": "美しい花を見る",
+    "hiragana": true,
+    "romaji": true,
+    "expected": [
+      {
+        "orig": "美",
+        "hira": "うつく",
+        "hepburn": "utsuku"
+      },
+      {
+        "orig": "しい",
+        "hira": "しい",
+        "hepburn": "shii"
+      },
+      {
+        "orig": "花",
+        "hira": "はな",
+        "hepburn": "hana"
+      },
+      {
+        "orig": "を",
+        "hira": "を",
+        "hepburn": "wo"
+      },
+      {
+        "orig": "見",
+        "hira": "み",
+        "hepburn": "mi"
+      },
+      {
+        "orig": "る",
+        "hira": "る",
+        "hepburn": "ru"
+      }
+    ]
+  },
+  {
+    "text": "何",
+    "hiragana": false,
+    "romaji": false,
+    "expected": []
+  },
+  {
+    "text": "何",
+    "hiragana": true,
+    "romaji": false,
+    "expected": [
+      {
+        "orig": "何",
+        "hira": "なに"
+      }
+    ]
+  },
+  {
+    "text": "何",
+    "hiragana": false,
+    "romaji": true,
+    "expected": [
+      {
+        "orig": "何",
+        "hepburn": "nani"
+      }
+    ]
+  },
+  {
+    "text": "何",
+    "hiragana": true,
+    "romaji": true,
+    "expected": [
+      {
+        "orig": "何",
+        "hira": "なに",
+        "hepburn": "nani"
+      }
+    ]
+  },
+  {
+    "text": "何が好き？",
+    "hiragana": false,
+    "romaji": false,
+    "expected": []
+  },
+  {
+    "text": "何が好き？",
+    "hiragana": true,
+    "romaji": false,
+    "expected": [
+      {
+        "orig": "何",
+        "hira": "なに"
+      },
+      {
+        "orig": "が",
+        "hira": "が"
+      },
+      {
+        "orig": "好",
+        "hira": "す"
+      },
+      {
+        "orig": "き",
+        "hira": "き"
+      },
+      {
+        "orig": "？",
+        "hira": "？"
+      }
+    ]
+  },
+  {
+    "text": "何が好き？",
+    "hiragana": false,
+    "romaji": true,
+    "expected": [
+      {
+        "orig": "何",
+        "hepburn": "nani"
+      },
+      {
+        "orig": "が",
+        "hepburn": "ga"
+      },
+      {
+        "orig": "好",
+        "hepburn": "su"
+      },
+      {
+        "orig": "き",
+        "hepburn": "ki"
+      },
+      {
+        "orig": "？",
+        "hepburn": "？"
+      }
+    ]
+  },
+  {
+    "text": "何が好き？",
+    "hiragana": true,
+    "romaji": true,
+    "expected": [
+      {
+        "orig": "何",
+        "hira": "なに",
+        "hepburn": "nani"
+      },
+      {
+        "orig": "が",
+        "hira": "が",
+        "hepburn": "ga"
+      },
+      {
+        "orig": "好",
+        "hira": "す",
+        "hepburn": "su"
+      },
+      {
+        "orig": "き",
+        "hira": "き",
+        "hepburn": "ki"
+      },
+      {
+        "orig": "？",
+        "hira": "？",
+        "hepburn": "？"
+      }
+    ]
+  },
+  {
+    "text": "何色ありますか？",
+    "hiragana": false,
+    "romaji": false,
+    "expected": []
+  },
+  {
+    "text": "何色ありますか？",
+    "hiragana": true,
+    "romaji": false,
+    "expected": [
+      {
+        "orig": "何色",
+        "hira": "なにいろ"
+      },
+      {
+        "orig": "あり",
+        "hira": "あり"
+      },
+      {
+        "orig": "ます",
+        "hira": "ます"
+      },
+      {
+        "orig": "か",
+        "hira": "か"
+      },
+      {
+        "orig": "？",
+        "hira": "？"
+      }
+    ]
+  },
+  {
+    "text": "何色ありますか？",
+    "hiragana": false,
+    "romaji": true,
+    "expected": [
+      {
+        "orig": "何色",
+        "hepburn": "naniiro"
+      },
+      {
+        "orig": "あり",
+        "hepburn": "ari"
+      },
+      {
+        "orig": "ます",
+        "hepburn": "masu"
+      },
+      {
+        "orig": "か",
+        "hepburn": "ka"
+      },
+      {
+        "orig": "？",
+        "hepburn": "？"
+      }
+    ]
+  },
+  {
+    "text": "何色ありますか？",
+    "hiragana": true,
+    "romaji": true,
+    "expected": [
+      {
+        "orig": "何色",
+        "hira": "なにいろ",
+        "hepburn": "naniiro"
+      },
+      {
+        "orig": "あり",
+        "hira": "あり",
+        "hepburn": "ari"
+      },
+      {
+        "orig": "ます",
+        "hira": "ます",
+        "hepburn": "masu"
+      },
+      {
+        "orig": "か",
+        "hira": "か",
+        "hepburn": "ka"
+      },
+      {
+        "orig": "？",
+        "hira": "？",
+        "hepburn": "？"
+      }
+    ]
+  },
+  {
+    "text": "何語ですか？",
+    "hiragana": false,
+    "romaji": false,
+    "expected": []
+  },
+  {
+    "text": "何語ですか？",
+    "hiragana": true,
+    "romaji": false,
+    "expected": [
+      {
+        "orig": "何語",
+        "hira": "なにご"
+      },
+      {
+        "orig": "です",
+        "hira": "です"
+      },
+      {
+        "orig": "か",
+        "hira": "か"
+      },
+      {
+        "orig": "？",
+        "hira": "？"
+      }
+    ]
+  },
+  {
+    "text": "何語ですか？",
+    "hiragana": false,
+    "romaji": true,
+    "expected": [
+      {
+        "orig": "何語",
+        "hepburn": "nanigo"
+      },
+      {
+        "orig": "です",
+        "hepburn": "desu"
+      },
+      {
+        "orig": "か",
+        "hepburn": "ka"
+      },
+      {
+        "orig": "？",
+        "hepburn": "？"
+      }
+    ]
+  },
+  {
+    "text": "何語ですか？",
+    "hiragana": true,
+    "romaji": true,
+    "expected": [
+      {
+        "orig": "何語",
+        "hira": "なにご",
+        "hepburn": "nanigo"
+      },
+      {
+        "orig": "です",
+        "hira": "です",
+        "hepburn": "desu"
+      },
+      {
+        "orig": "か",
+        "hira": "か",
+        "hepburn": "ka"
+      },
+      {
+        "orig": "？",
+        "hira": "？",
+        "hepburn": "？"
+      }
+    ]
+  },
+  {
+    "text": "何ですか",
+    "hiragana": false,
+    "romaji": false,
+    "expected": []
+  },
+  {
+    "text": "何ですか",
+    "hiragana": true,
+    "romaji": false,
+    "expected": [
+      {
+        "orig": "何",
+        "hira": "なん"
+      },
+      {
+        "orig": "です",
+        "hira": "です"
+      },
+      {
+        "orig": "か",
+        "hira": "か"
+      }
+    ]
+  },
+  {
+    "text": "何ですか",
+    "hiragana": false,
+    "romaji": true,
+    "expected": [
+      {
+        "orig": "何",
+        "hepburn": "nan"
+      },
+      {
+        "orig": "です",
+        "hepburn": "desu"
+      },
+      {
+        "orig": "か",
+        "hepburn": "ka"
+      }
+    ]
+  },
+  {
+    "text": "何ですか",
+    "hiragana": true,
+    "romaji": true,
+    "expected": [
+      {
+        "orig": "何",
+        "hira": "なん",
+        "hepburn": "nan"
+      },
+      {
+        "orig": "です",
+        "hira": "です",
+        "hepburn": "desu"
+      },
+      {
+        "orig": "か",
+        "hira": "か",
+        "hepburn": "ka"
+      }
+    ]
+  },
+  {
+    "text": "何と何に",
+    "hiragana": false,
+    "romaji": false,
+    "expected": []
+  },
+  {
+    "text": "何と何に",
+    "hiragana": true,
+    "romaji": false,
+    "expected": [
+      {
+        "orig": "何",
+        "hira": "なん"
+      },
+      {
+        "orig": "と",
+        "hira": "と"
+      },
+      {
+        "orig": "何",
+        "hira": "なん"
+      },
+      {
+        "orig": "に",
+        "hira": "に"
+      }
+    ]
+  },
+  {
+    "text": "何と何に",
+    "hiragana": false,
+    "romaji": true,
+    "expected": [
+      {
+        "orig": "何",
+        "hepburn": "nan"
+      },
+      {
+        "orig": "と",
+        "hepburn": "to"
+      },
+      {
+        "orig": "何",
+        "hepburn": "nan"
+      },
+      {
+        "orig": "に",
+        "hepburn": "ni"
+      }
+    ]
+  },
+  {
+    "text": "何と何に",
+    "hiragana": true,
+    "romaji": true,
+    "expected": [
+      {
+        "orig": "何",
+        "hira": "なん",
+        "hepburn": "nan"
+      },
+      {
+        "orig": "と",
+        "hira": "と",
+        "hepburn": "to"
+      },
+      {
+        "orig": "何",
+        "hira": "なん",
+        "hepburn": "nan"
+      },
+      {
+        "orig": "に",
+        "hira": "に",
+        "hepburn": "ni"
+      }
+    ]
+  },
+  {
+    "text": "取り敢えず検索してみる",
+    "hiragana": false,
+    "romaji": false,
+    "expected": []
+  },
+  {
+    "text": "取り敢えず検索してみる",
+    "hiragana": true,
+    "romaji": false,
+    "expected": [
+      {
+        "orig": "取",
+        "hira": "と"
+      },
+      {
+        "orig": "り",
+        "hira": "り"
+      },
+      {
+        "orig": "敢",
+        "hira": "あ"
+      },
+      {
+        "orig": "えず",
+        "hira": "えず"
+      },
+      {
+        "orig": "検索",
+        "hira": "けんさく"
+      },
+      {
+        "orig": "し",
+        "hira": "し"
+      },
+      {
+        "orig": "て",
+        "hira": "て"
+      },
+      {
+        "orig": "みる",
+        "hira": "みる"
+      }
+    ]
+  },
+  {
+    "text": "取り敢えず検索してみる",
+    "hiragana": false,
+    "romaji": true,
+    "expected": [
+      {
+        "orig": "取",
+        "hepburn": "to"
+      },
+      {
+        "orig": "り",
+        "hepburn": "ri"
+      },
+      {
+        "orig": "敢",
+        "hepburn": "a"
+      },
+      {
+        "orig": "えず",
+        "hepburn": "ezu"
+      },
+      {
+        "orig": "検索",
+        "hepburn": "kensaku"
+      },
+      {
+        "orig": "し",
+        "hepburn": "shi"
+      },
+      {
+        "orig": "て",
+        "hepburn": "te"
+      },
+      {
+        "orig": "みる",
+        "hepburn": "miru"
+      }
+    ]
+  },
+  {
+    "text": "取り敢えず検索してみる",
+    "hiragana": true,
+    "romaji": true,
+    "expected": [
+      {
+        "orig": "取",
+        "hira": "と",
+        "hepburn": "to"
+      },
+      {
+        "orig": "り",
+        "hira": "り",
+        "hepburn": "ri"
+      },
+      {
+        "orig": "敢",
+        "hira": "あ",
+        "hepburn": "a"
+      },
+      {
+        "orig": "えず",
+        "hira": "えず",
+        "hepburn": "ezu"
+      },
+      {
+        "orig": "検索",
+        "hira": "けんさく",
+        "hepburn": "kensaku"
+      },
+      {
+        "orig": "し",
+        "hira": "し",
+        "hepburn": "shi"
+      },
+      {
+        "orig": "て",
+        "hira": "て",
+        "hepburn": "te"
+      },
+      {
+        "orig": "みる",
+        "hira": "みる",
+        "hepburn": "miru"
+      }
+    ]
+  },
+  {
+    "text": "入り込む",
+    "hiragana": false,
+    "romaji": false,
+    "expected": []
+  },
+  {
+    "text": "入り込む",
+    "hiragana": true,
+    "romaji": false,
+    "expected": [
+      {
+        "orig": "入",
+        "hira": "はい"
+      },
+      {
+        "orig": "り",
+        "hira": "り"
+      },
+      {
+        "orig": "込",
+        "hira": "こ"
+      },
+      {
+        "orig": "む",
+        "hira": "む"
+      }
+    ]
+  },
+  {
+    "text": "入り込む",
+    "hiragana": false,
+    "romaji": true,
+    "expected": [
+      {
+        "orig": "入",
+        "hepburn": "hai"
+      },
+      {
+        "orig": "り",
+        "hepburn": "ri"
+      },
+      {
+        "orig": "込",
+        "hepburn": "ko"
+      },
+      {
+        "orig": "む",
+        "hepburn": "mu"
+      }
+    ]
+  },
+  {
+    "text": "入り込む",
+    "hiragana": true,
+    "romaji": true,
+    "expected": [
+      {
+        "orig": "入",
+        "hira": "はい",
+        "hepburn": "hai"
+      },
+      {
+        "orig": "り",
+        "hira": "り",
+        "hepburn": "ri"
+      },
+      {
+        "orig": "込",
+        "hira": "こ",
+        "hepburn": "ko"
+      },
+      {
+        "orig": "む",
+        "hira": "む",
+        "hepburn": "mu"
+      }
+    ]
+  },
+  {
+    "text": "上がる",
+    "hiragana": false,
+    "romaji": false,
+    "expected": []
+  },
+  {
+    "text": "上がる",
+    "hiragana": true,
+    "romaji": false,
+    "expected": [
+      {
+        "orig": "上",
+        "hira": "あ"
+      },
+      {
+        "orig": "がる",
+        "hira": "がる"
+      }
+    ]
+  },
+  {
+    "text": "上がる",
+    "hiragana": false,
+    "romaji": true,
+    "expected": [
+      {
+        "orig": "上",
+        "hepburn": "a"
+      },
+      {
+        "orig": "がる",
+        "hepburn": "garu"
+      }
+    ]
+  },
+  {
+    "text": "上がる",
+    "hiragana": true,
+    "romaji": true,
+    "expected": [
+      {
+        "orig": "上",
+        "hira": "あ",
+        "hepburn": "a"
+      },
+      {
+        "orig": "がる",
+        "hira": "がる",
+        "hepburn": "garu"
+      }
+    ]
+  },
+  {
+    "text": "行事を行う",
+    "hiragana": false,
+    "romaji": false,
+    "expected": []
+  },
+  {
+    "text": "行事を行う",
+    "hiragana": true,
+    "romaji": false,
+    "expected": [
+      {
+        "orig": "行事",
+        "hira": "ぎょうじ"
+      },
+      {
+        "orig": "を",
+        "hira": "を"
+      },
+      {
+        "orig": "行",
+        "hira": "おこな"
+      },
+      {
+        "orig": "う",
+        "hira": "う"
+      }
+    ]
+  },
+  {
+    "text": "行事を行う",
+    "hiragana": false,
+    "romaji": true,
+    "expected": [
+      {
+        "orig": "行事",
+        "hepburn": "gyouji"
+      },
+      {
+        "orig": "を",
+        "hepburn": "wo"
+      },
+      {
+        "orig": "行",
+        "hepburn": "okona"
+      },
+      {
+        "orig": "う",
+        "hepburn": "u"
+      }
+    ]
+  },
+  {
+    "text": "行事を行う",
+    "hiragana": true,
+    "romaji": true,
+    "expected": [
+      {
+        "orig": "行事",
+        "hira": "ぎょうじ",
+        "hepburn": "gyouji"
+      },
+      {
+        "orig": "を",
+        "hira": "を",
+        "hepburn": "wo"
+      },
+      {
+        "orig": "行",
+        "hira": "おこな",
+        "hepburn": "okona"
+      },
+      {
+        "orig": "う",
+        "hira": "う",
+        "hepburn": "u"
+      }
+    ]
+  },
+  {
+    "text": "パーティーに行く",
+    "hiragana": false,
+    "romaji": false,
+    "expected": []
+  },
+  {
+    "text": "パーティーに行く",
+    "hiragana": true,
+    "romaji": false,
+    "expected": [
+      {
+        "orig": "パーティー",
+        "hira": "ぱーてぃー"
+      },
+      {
+        "orig": "に",
+        "hira": "に"
+      },
+      {
+        "orig": "行",
+        "hira": "い"
+      },
+      {
+        "orig": "く",
+        "hira": "く"
+      }
+    ]
+  },
+  {
+    "text": "パーティーに行く",
+    "hiragana": false,
+    "romaji": true,
+    "expected": [
+      {
+        "orig": "パーティー",
+        "hepburn": "paatii"
+      },
+      {
+        "orig": "に",
+        "hepburn": "ni"
+      },
+      {
+        "orig": "行",
+        "hepburn": "i"
+      },
+      {
+        "orig": "く",
+        "hepburn": "ku"
+      }
+    ]
+  },
+  {
+    "text": "パーティーに行く",
+    "hiragana": true,
+    "romaji": true,
+    "expected": [
+      {
+        "orig": "パーティー",
+        "hira": "ぱーてぃー",
+        "hepburn": "paatii"
+      },
+      {
+        "orig": "に",
+        "hira": "に",
+        "hepburn": "ni"
+      },
+      {
+        "orig": "行",
+        "hira": "い",
+        "hepburn": "i"
+      },
+      {
+        "orig": "く",
+        "hira": "く",
+        "hepburn": "ku"
+      }
+    ]
+  },
+  {
+    "text": "コンピューターを使う",
+    "hiragana": false,
+    "romaji": false,
+    "expected": []
+  },
+  {
+    "text": "コンピューターを使う",
+    "hiragana": true,
+    "romaji": false,
+    "expected": [
+      {
+        "orig": "コンピューター",
+        "hira": "こんぴゅーたー"
+      },
+      {
+        "orig": "を",
+        "hira": "を"
+      },
+      {
+        "orig": "使",
+        "hira": "つか"
+      },
+      {
+        "orig": "う",
+        "hira": "う"
+      }
+    ]
+  },
+  {
+    "text": "コンピューターを使う",
+    "hiragana": false,
+    "romaji": true,
+    "expected": [
+      {
+        "orig": "コンピューター",
+        "hepburn": "kompyuutaa"
+      },
+      {
+        "orig": "を",
+        "hepburn": "wo"
+      },
+      {
+        "orig": "使",
+        "hepburn": "tsuka"
+      },
+      {
+        "orig": "う",
+        "hepburn": "u"
+      }
+    ]
+  },
+  {
+    "text": "コンピューターを使う",
+    "hiragana": true,
+    "romaji": true,
+    "expected": [
+      {
+        "orig": "コンピューター",
+        "hira": "こんぴゅーたー",
+        "hepburn": "kompyuutaa"
+      },
+      {
+        "orig": "を",
+        "hira": "を",
+        "hepburn": "wo"
+      },
+      {
+        "orig": "使",
+        "hira": "つか",
+        "hepburn": "tsuka"
+      },
+      {
+        "orig": "う",
+        "hira": "う",
+        "hepburn": "u"
+      }
+    ]
+  },
+  {
+    "text": "シェアハウスに住む",
+    "hiragana": false,
+    "romaji": false,
+    "expected": []
+  },
+  {
+    "text": "シェアハウスに住む",
+    "hiragana": true,
+    "romaji": false,
+    "expected": [
+      {
+        "orig": "シェアハウス",
+        "hira": "しぇあはうす"
+      },
+      {
+        "orig": "に",
+        "hira": "に"
+      },
+      {
+        "orig": "住",
+        "hira": "す"
+      },
+      {
+        "orig": "む",
+        "hira": "む"
+      }
+    ]
+  },
+  {
+    "text": "シェアハウスに住む",
+    "hiragana": false,
+    "romaji": true,
+    "expected": [
+      {
+        "orig": "シェアハウス",
+        "hepburn": "sheahausu"
+      },
+      {
+        "orig": "に",
+        "hepburn": "ni"
+      },
+      {
+        "orig": "住",
+        "hepburn": "su"
+      },
+      {
+        "orig": "む",
+        "hepburn": "mu"
+      }
+    ]
+  },
+  {
+    "text": "シェアハウスに住む",
+    "hiragana": true,
+    "romaji": true,
+    "expected": [
+      {
+        "orig": "シェアハウス",
+        "hira": "しぇあはうす",
+        "hepburn": "sheahausu"
+      },
+      {
+        "orig": "に",
+        "hira": "に",
+        "hepburn": "ni"
+      },
+      {
+        "orig": "住",
+        "hira": "す",
+        "hepburn": "su"
+      },
+      {
+        "orig": "む",
+        "hira": "む",
+        "hepburn": "mu"
+      }
+    ]
+  },
+  {
+    "text": "ヴァイオリンを弾く",
+    "hiragana": false,
+    "romaji": false,
+    "expected": []
+  },
+  {
+    "text": "ヴァイオリンを弾く",
+    "hiragana": true,
+    "romaji": false,
+    "expected": [
+      {
+        "orig": "ヴァイオリン",
+        "hira": "ヴぁいおりん"
+      },
+      {
+        "orig": "を",
+        "hira": "を"
+      },
+      {
+        "orig": "弾",
+        "hira": "ひ"
+      },
+      {
+        "orig": "く",
+        "hira": "く"
+      }
+    ]
+  },
+  {
+    "text": "ヴァイオリンを弾く",
+    "hiragana": false,
+    "romaji": true,
+    "expected": [
+      {
+        "orig": "ヴァイオリン",
+        "hepburn": "vaiorin"
+      },
+      {
+        "orig": "を",
+        "hepburn": "wo"
+      },
+      {
+        "orig": "弾",
+        "hepburn": "hi"
+      },
+      {
+        "orig": "く",
+        "hepburn": "ku"
+      }
+    ]
+  },
+  {
+    "text": "ヴァイオリンを弾く",
+    "hiragana": true,
+    "romaji": true,
+    "expected": [
+      {
+        "orig": "ヴァイオリン",
+        "hira": "ヴぁいおりん",
+        "hepburn": "vaiorin"
+      },
+      {
+        "orig": "を",
+        "hira": "を",
+        "hepburn": "wo"
+      },
+      {
+        "orig": "弾",
+        "hira": "ひ",
+        "hepburn": "hi"
+      },
+      {
+        "orig": "く",
+        "hira": "く",
+        "hepburn": "ku"
+      }
+    ]
+  },
+  {
+    "text": "ギュウニュウを飲む",
+    "hiragana": false,
+    "romaji": false,
+    "expected": []
+  },
+  {
+    "text": "ギュウニュウを飲む",
+    "hiragana": true,
+    "romaji": false,
+    "expected": [
+      {
+        "orig": "ギュウ",
+        "hira": "ぎゅう"
+      },
+      {
+        "orig": "ニュウ",
+        "hira": "にゅう"
+      },
+      {
+        "orig": "を",
+        "hira": "を"
+      },
+      {
+        "orig": "飲",
+        "hira": "の"
+      },
+      {
+        "orig": "む",
+        "hira": "む"
+      }
+    ]
+  },
+  {
+    "text": "ギュウニュウを飲む",
+    "hiragana": false,
+    "romaji": true,
+    "expected": [
+      {
+        "orig": "ギュウ",
+        "hepburn": "gyuu"
+      },
+      {
+        "orig": "ニュウ",
+        "hepburn": "nyuu"
+      },
+      {
+        "orig": "を",
+        "hepburn": "wo"
+      },
+      {
+        "orig": "飲",
+        "hepburn": "no"
+      },
+      {
+        "orig": "む",
+        "hepburn": "mu"
+      }
+    ]
+  },
+  {
+    "text": "ギュウニュウを飲む",
+    "hiragana": true,
+    "romaji": true,
+    "expected": [
+      {
+        "orig": "ギュウ",
+        "hira": "ぎゅう",
+        "hepburn": "gyuu"
+      },
+      {
+        "orig": "ニュウ",
+        "hira": "にゅう",
+        "hepburn": "nyuu"
+      },
+      {
+        "orig": "を",
+        "hira": "を",
+        "hepburn": "wo"
+      },
+      {
+        "orig": "飲",
+        "hira": "の",
+        "hepburn": "no"
+      },
+      {
+        "orig": "む",
+        "hira": "む",
+        "hepburn": "mu"
+      }
+    ]
+  },
+  {
+    "text": "ニューヨークに行く",
+    "hiragana": false,
+    "romaji": false,
+    "expected": []
+  },
+  {
+    "text": "ニューヨークに行く",
+    "hiragana": true,
+    "romaji": false,
+    "expected": [
+      {
+        "orig": "ニューヨーク",
+        "hira": "にゅーよーく"
+      },
+      {
+        "orig": "に",
+        "hira": "に"
+      },
+      {
+        "orig": "行",
+        "hira": "い"
+      },
+      {
+        "orig": "く",
+        "hira": "く"
+      }
+    ]
+  },
+  {
+    "text": "ニューヨークに行く",
+    "hiragana": false,
+    "romaji": true,
+    "expected": [
+      {
+        "orig": "ニューヨーク",
+        "hepburn": "nyuuyooku"
+      },
+      {
+        "orig": "に",
+        "hepburn": "ni"
+      },
+      {
+        "orig": "行",
+        "hepburn": "i"
+      },
+      {
+        "orig": "く",
+        "hepburn": "ku"
+      }
+    ]
+  },
+  {
+    "text": "ニューヨークに行く",
+    "hiragana": true,
+    "romaji": true,
+    "expected": [
+      {
+        "orig": "ニューヨーク",
+        "hira": "にゅーよーく",
+        "hepburn": "nyuuyooku"
+      },
+      {
+        "orig": "に",
+        "hira": "に",
+        "hepburn": "ni"
+      },
+      {
+        "orig": "行",
+        "hira": "い",
+        "hepburn": "i"
+      },
+      {
+        "orig": "く",
+        "hira": "く",
+        "hepburn": "ku"
+      }
+    ]
+  },
+  {
+    "text": "キャッチ マッチャ シンブン",
+    "hiragana": false,
+    "romaji": false,
+    "expected": []
+  },
+  {
+    "text": "キャッチ マッチャ シンブン",
+    "hiragana": true,
+    "romaji": false,
+    "expected": [
+      {
+        "orig": "キャッチ",
+        "hira": "きゃっち"
+      },
+      {
+        "orig": " ",
+        "hira": " "
+      },
+      {
+        "orig": "マッチャ",
+        "hira": "まっちゃ"
+      },
+      {
+        "orig": " ",
+        "hira": " "
+      },
+      {
+        "orig": "シンブン",
+        "hira": "しんぶん"
+      }
+    ]
+  },
+  {
+    "text": "キャッチ マッチャ シンブン",
+    "hiragana": false,
+    "romaji": true,
+    "expected": [
+      {
+        "orig": "キャッチ",
+        "hepburn": "kyacchi"
+      },
+      {
+        "orig": " ",
+        "hepburn": ""
+      },
+      {
+        "orig": "マッチャ",
+        "hepburn": "maccha"
+      },
+      {
+        "orig": " ",
+        "hepburn": ""
+      },
+      {
+        "orig": "シンブン",
+        "hepburn": "shimbun"
+      }
+    ]
+  },
+  {
+    "text": "キャッチ マッチャ シンブン",
+    "hiragana": true,
+    "romaji": true,
+    "expected": [
+      {
+        "orig": "キャッチ",
+        "hira": "きゃっち",
+        "hepburn": "kyacchi"
+      },
+      {
+        "orig": " ",
+        "hira": " ",
+        "hepburn": ""
+      },
+      {
+        "orig": "マッチャ",
+        "hira": "まっちゃ",
+        "hepburn": "maccha"
+      },
+      {
+        "orig": " ",
+        "hira": " ",
+        "hepburn": ""
+      },
+      {
+        "orig": "シンブン",
+        "hira": "しんぶん",
+        "hepburn": "shimbun"
+      }
+    ]
+  },
+  {
+    "text": "カタカナ",
+    "hiragana": false,
+    "romaji": false,
+    "expected": []
+  },
+  {
+    "text": "カタカナ",
+    "hiragana": true,
+    "romaji": false,
+    "expected": [
+      {
+        "orig": "カタカナ",
+        "hira": "かたかな"
+      }
+    ]
+  },
+  {
+    "text": "カタカナ",
+    "hiragana": false,
+    "romaji": true,
+    "expected": [
+      {
+        "orig": "カタカナ",
+        "hepburn": "katakana"
+      }
+    ]
+  },
+  {
+    "text": "カタカナ",
+    "hiragana": true,
+    "romaji": true,
+    "expected": [
+      {
+        "orig": "カタカナ",
+        "hira": "かたかな",
+        "hepburn": "katakana"
+      }
+    ]
+  },
+  {
+    "text": "hello-world SESSIONID",
+    "hiragana": false,
+    "romaji": false,
+    "expected": []
+  },
+  {
+    "text": "hello-world SESSIONID",
+    "hiragana": true,
+    "romaji": false,
+    "expected": [
+      {
+        "orig": "hello",
+        "hira": "はろー"
+      },
+      {
+        "orig": "-",
+        "hira": "-"
+      },
+      {
+        "orig": "world",
+        "hira": "わーるど"
+      },
+      {
+        "orig": " ",
+        "hira": " "
+      },
+      {
+        "orig": "SESSIONID",
+        "hira": "sessionid"
+      }
+    ]
+  },
+  {
+    "text": "hello-world SESSIONID",
+    "hiragana": false,
+    "romaji": true,
+    "expected": [
+      {
+        "orig": "hello",
+        "hepburn": "haroo"
+      },
+      {
+        "orig": "-",
+        "hepburn": ""
+      },
+      {
+        "orig": "world",
+        "hepburn": "waarudo"
+      },
+      {
+        "orig": " ",
+        "hepburn": ""
+      },
+      {
+        "orig": "SESSIONID",
+        "hepburn": "sessionid"
+      }
+    ]
+  },
+  {
+    "text": "hello-world SESSIONID",
+    "hiragana": true,
+    "romaji": true,
+    "expected": [
+      {
+        "orig": "hello",
+        "hira": "はろー",
+        "hepburn": "haroo"
+      },
+      {
+        "orig": "-",
+        "hira": "-",
+        "hepburn": ""
+      },
+      {
+        "orig": "world",
+        "hira": "わーるど",
+        "hepburn": "waarudo"
+      },
+      {
+        "orig": " ",
+        "hira": " ",
+        "hepburn": ""
+      },
+      {
+        "orig": "SESSIONID",
+        "hira": "sessionid",
+        "hepburn": "sessionid"
+      }
+    ]
+  },
+  {
+    "text": "SessionIDを取得する",
+    "hiragana": false,
+    "romaji": false,
+    "expected": []
+  },
+  {
+    "text": "SessionIDを取得する",
+    "hiragana": true,
+    "romaji": false,
+    "expected": [
+      {
+        "orig": "SessionID",
+        "hira": "sessionid"
+      },
+      {
+        "orig": "を",
+        "hira": "を"
+      },
+      {
+        "orig": "取得",
+        "hira": "しゅとく"
+      },
+      {
+        "orig": "する",
+        "hira": "する"
+      }
+    ]
+  },
+  {
+    "text": "SessionIDを取得する",
+    "hiragana": false,
+    "romaji": true,
+    "expected": [
+      {
+        "orig": "SessionID",
+        "hepburn": "sessionid"
+      },
+      {
+        "orig": "を",
+        "hepburn": "wo"
+      },
+      {
+        "orig": "取得",
+        "hepburn": "shutoku"
+      },
+      {
+        "orig": "する",
+        "hepburn": "suru"
+      }
+    ]
+  },
+  {
+    "text": "SessionIDを取得する",
+    "hiragana": true,
+    "romaji": true,
+    "expected": [
+      {
+        "orig": "SessionID",
+        "hira": "sessionid",
+        "hepburn": "sessionid"
+      },
+      {
+        "orig": "を",
+        "hira": "を",
+        "hepburn": "wo"
+      },
+      {
+        "orig": "取得",
+        "hira": "しゅとく",
+        "hepburn": "shutoku"
+      },
+      {
+        "orig": "する",
+        "hira": "する",
+        "hepburn": "suru"
+      }
+    ]
+  },
+  {
+    "text": "😀日本語😃",
+    "hiragana": false,
+    "romaji": false,
+    "expected": []
+  },
+  {
+    "text": "😀日本語😃",
+    "hiragana": true,
+    "romaji": false,
+    "expected": [
+      {
+        "orig": "😀",
+        "hira": "😀"
+      },
+      {
+        "orig": "日本語",
+        "hira": "にほんご"
+      },
+      {
+        "orig": "😃",
+        "hira": "😃"
+      }
+    ]
+  },
+  {
+    "text": "😀日本語😃",
+    "hiragana": false,
+    "romaji": true,
+    "expected": [
+      {
+        "orig": "😀",
+        "hepburn": "😀"
+      },
+      {
+        "orig": "日本語",
+        "hepburn": "nihongo"
+      },
+      {
+        "orig": "😃",
+        "hepburn": "😃"
+      }
+    ]
+  },
+  {
+    "text": "😀日本語😃",
+    "hiragana": true,
+    "romaji": true,
+    "expected": [
+      {
+        "orig": "😀",
+        "hira": "😀",
+        "hepburn": "😀"
+      },
+      {
+        "orig": "日本語",
+        "hira": "にほんご",
+        "hepburn": "nihongo"
+      },
+      {
+        "orig": "😃",
+        "hira": "😃",
+        "hepburn": "😃"
+      }
+    ]
+  },
+  {
+    "text": "สวัสดี 世界 한국어 你好 مرحبا",
+    "hiragana": false,
+    "romaji": false,
+    "expected": []
+  },
+  {
+    "text": "สวัสดี 世界 한국어 你好 مرحبا",
+    "hiragana": true,
+    "romaji": false,
+    "expected": [
+      {
+        "orig": "สวัสดี",
+        "hira": "สวัสดี"
+      },
+      {
+        "orig": " ",
+        "hira": " "
+      },
+      {
+        "orig": "世界",
+        "hira": "せかい"
+      },
+      {
+        "orig": " ",
+        "hira": " "
+      },
+      {
+        "orig": "한국어",
+        "hira": "한국어"
+      },
+      {
+        "orig": " ",
+        "hira": " "
+      },
+      {
+        "orig": "你好",
+        "hira": "你好"
+      },
+      {
+        "orig": " ",
+        "hira": " "
+      },
+      {
+        "orig": "مرحبا",
+        "hira": "مرحبا"
+      }
+    ]
+  },
+  {
+    "text": "สวัสดี 世界 한국어 你好 مرحبا",
+    "hiragana": false,
+    "romaji": true,
+    "expected": [
+      {
+        "orig": "สวัสดี",
+        "hepburn": "สวัสดี"
+      },
+      {
+        "orig": " ",
+        "hepburn": ""
+      },
+      {
+        "orig": "世界",
+        "hepburn": "sekai"
+      },
+      {
+        "orig": " ",
+        "hepburn": ""
+      },
+      {
+        "orig": "한국어",
+        "hepburn": "한국어"
+      },
+      {
+        "orig": " ",
+        "hepburn": ""
+      },
+      {
+        "orig": "你好",
+        "hepburn": "你好"
+      },
+      {
+        "orig": " ",
+        "hepburn": ""
+      },
+      {
+        "orig": "مرحبا",
+        "hepburn": "مرحبا"
+      }
+    ]
+  },
+  {
+    "text": "สวัสดี 世界 한국어 你好 مرحبا",
+    "hiragana": true,
+    "romaji": true,
+    "expected": [
+      {
+        "orig": "สวัสดี",
+        "hira": "สวัสดี",
+        "hepburn": "สวัสดี"
+      },
+      {
+        "orig": " ",
+        "hira": " ",
+        "hepburn": ""
+      },
+      {
+        "orig": "世界",
+        "hira": "せかい",
+        "hepburn": "sekai"
+      },
+      {
+        "orig": " ",
+        "hira": " ",
+        "hepburn": ""
+      },
+      {
+        "orig": "한국어",
+        "hira": "한국어",
+        "hepburn": "한국어"
+      },
+      {
+        "orig": " ",
+        "hira": " ",
+        "hepburn": ""
+      },
+      {
+        "orig": "你好",
+        "hira": "你好",
+        "hepburn": "你好"
+      },
+      {
+        "orig": " ",
+        "hira": " ",
+        "hepburn": ""
+      },
+      {
+        "orig": "مرحبا",
+        "hira": "مرحبا",
+        "hepburn": "مرحبا"
+      }
+    ]
+  },
+  {
+    "text": "日本語English１２３  ｶﾀｶﾅ",
+    "hiragana": false,
+    "romaji": false,
+    "expected": []
+  },
+  {
+    "text": "日本語English１２３  ｶﾀｶﾅ",
+    "hiragana": true,
+    "romaji": false,
+    "expected": [
+      {
+        "orig": "日本語",
+        "hira": "にほんご"
+      },
+      {
+        "orig": "English",
+        "hira": "いんぐりっしゅ"
+      },
+      {
+        "orig": "１２３",
+        "hira": "いちにさん"
+      },
+      {
+        "orig": " ",
+        "hira": " "
+      },
+      {
+        "orig": " ",
+        "hira": " "
+      },
+      {
+        "orig": "ｶﾀｶﾅ",
+        "hira": "かたかな"
+      }
+    ]
+  },
+  {
+    "text": "日本語English１２３  ｶﾀｶﾅ",
+    "hiragana": false,
+    "romaji": true,
+    "expected": [
+      {
+        "orig": "日本語",
+        "hepburn": "nihongo"
+      },
+      {
+        "orig": "English",
+        "hepburn": "ingurisshu"
+      },
+      {
+        "orig": "１２３",
+        "hepburn": "ichinisan"
+      },
+      {
+        "orig": " ",
+        "hepburn": ""
+      },
+      {
+        "orig": " ",
+        "hepburn": ""
+      },
+      {
+        "orig": "ｶﾀｶﾅ",
+        "hepburn": "katakana"
+      }
+    ]
+  },
+  {
+    "text": "日本語English１２３  ｶﾀｶﾅ",
+    "hiragana": true,
+    "romaji": true,
+    "expected": [
+      {
+        "orig": "日本語",
+        "hira": "にほんご",
+        "hepburn": "nihongo"
+      },
+      {
+        "orig": "English",
+        "hira": "いんぐりっしゅ",
+        "hepburn": "ingurisshu"
+      },
+      {
+        "orig": "１２３",
+        "hira": "いちにさん",
+        "hepburn": "ichinisan"
+      },
+      {
+        "orig": " ",
+        "hira": " ",
+        "hepburn": ""
+      },
+      {
+        "orig": " ",
+        "hira": " ",
+        "hepburn": ""
+      },
+      {
+        "orig": "ｶﾀｶﾅ",
+        "hira": "かたかな",
+        "hepburn": "katakana"
+      }
+    ]
+  },
+  {
+    "text": "漢字(かんじ)の読み方",
+    "hiragana": false,
+    "romaji": false,
+    "expected": []
+  },
+  {
+    "text": "漢字(かんじ)の読み方",
+    "hiragana": true,
+    "romaji": false,
+    "expected": [
+      {
+        "orig": "漢字",
+        "hira": "かん"
+      },
+      {
+        "orig": "(かんじ)",
+        "hira": "じ"
+      },
+      {
+        "orig": "の",
+        "hira": "の"
+      },
+      {
+        "orig": "読",
+        "hira": "よみ"
+      },
+      {
+        "orig": "み",
+        "hira": "か"
+      },
+      {
+        "orig": "方",
+        "hira": "た"
+      }
+    ]
+  },
+  {
+    "text": "漢字(かんじ)の読み方",
+    "hiragana": false,
+    "romaji": true,
+    "expected": [
+      {
+        "orig": "漢字",
+        "hepburn": "kan"
+      },
+      {
+        "orig": "(かんじ)",
+        "hepburn": "ji"
+      },
+      {
+        "orig": "の",
+        "hepburn": "no"
+      },
+      {
+        "orig": "読",
+        "hepburn": "yomi"
+      },
+      {
+        "orig": "み",
+        "hepburn": "ka"
+      },
+      {
+        "orig": "方",
+        "hepburn": "ta"
+      }
+    ]
+  },
+  {
+    "text": "漢字(かんじ)の読み方",
+    "hiragana": true,
+    "romaji": true,
+    "expected": [
+      {
+        "orig": "漢字",
+        "hira": "かん",
+        "hepburn": "kan"
+      },
+      {
+        "orig": "(かんじ)",
+        "hira": "じ",
+        "hepburn": "ji"
+      },
+      {
+        "orig": "の",
+        "hira": "の",
+        "hepburn": "no"
+      },
+      {
+        "orig": "読",
+        "hira": "よみ",
+        "hepburn": "yomi"
+      },
+      {
+        "orig": "み",
+        "hira": "か",
+        "hepburn": "ka"
+      },
+      {
+        "orig": "方",
+        "hira": "た",
+        "hepburn": "ta"
+      }
+    ]
+  },
+  {
+    "text": "é AＢＣ",
+    "hiragana": false,
+    "romaji": false,
+    "expected": []
+  },
+  {
+    "text": "é AＢＣ",
+    "hiragana": true,
+    "romaji": false,
+    "expected": [
+      {
+        "orig": "e",
+        "hira": "e"
+      },
+      {
+        "orig": "́",
+        "hira": "́"
+      },
+      {
+        "orig": " ",
+        "hira": " "
+      },
+      {
+        "orig": "AＢＣ",
+        "hira": "えーびーしー"
+      }
+    ]
+  },
+  {
+    "text": "é AＢＣ",
+    "hiragana": false,
+    "romaji": true,
+    "expected": [
+      {
+        "orig": "e",
+        "hepburn": "e"
+      },
+      {
+        "orig": "́",
+        "hepburn": "́"
+      },
+      {
+        "orig": " ",
+        "hepburn": ""
+      },
+      {
+        "orig": "AＢＣ",
+        "hepburn": "eebiishii"
+      }
+    ]
+  },
+  {
+    "text": "é AＢＣ",
+    "hiragana": true,
+    "romaji": true,
+    "expected": [
+      {
+        "orig": "e",
+        "hira": "e",
+        "hepburn": "e"
+      },
+      {
+        "orig": "́",
+        "hira": "́",
+        "hepburn": "́"
+      },
+      {
+        "orig": " ",
+        "hira": " ",
+        "hepburn": ""
+      },
+      {
+        "orig": "AＢＣ",
+        "hira": "えーびーしー",
+        "hepburn": "eebiishii"
+      }
+    ]
+  },
+  {
+    "text": "ー--⁓〜〰",
+    "hiragana": false,
+    "romaji": false,
+    "expected": []
+  },
+  {
+    "text": "ー--⁓〜〰",
+    "hiragana": true,
+    "romaji": false,
+    "expected": [
+      {
+        "orig": "ー--⁓〜〰",
+        "hira": "ー--⁓〜〰"
+      }
+    ]
+  },
+  {
+    "text": "ー--⁓〜〰",
+    "hiragana": false,
+    "romaji": true,
+    "expected": [
+      {
+        "orig": "ー--⁓〜〰",
+        "hepburn": "⁓〜〰"
+      }
+    ]
+  },
+  {
+    "text": "ー--⁓〜〰",
+    "hiragana": true,
+    "romaji": true,
+    "expected": [
+      {
+        "orig": "ー--⁓〜〰",
+        "hira": "ー--⁓〜〰",
+        "hepburn": "⁓〜〰"
+      }
+    ]
+  },
+  {
+    "text": "ヮヵヶヴッ",
+    "hiragana": false,
+    "romaji": false,
+    "expected": []
+  },
+  {
+    "text": "ヮヵヶヴッ",
+    "hiragana": true,
+    "romaji": false,
+    "expected": [
+      {
+        "orig": "ヮ",
+        "hira": "ゎ"
+      },
+      {
+        "orig": "ヵヶヴッ",
+        "hira": "ヵヶヴっ"
+      }
+    ]
+  },
+  {
+    "text": "ヮヵヶヴッ",
+    "hiragana": false,
+    "romaji": true,
+    "expected": [
+      {
+        "orig": "ヮ",
+        "hepburn": ""
+      },
+      {
+        "orig": "ヵヶヴッ",
+        "hepburn": "vu"
+      }
+    ]
+  },
+  {
+    "text": "ヮヵヶヴッ",
+    "hiragana": true,
+    "romaji": true,
+    "expected": [
+      {
+        "orig": "ヮ",
+        "hira": "ゎ",
+        "hepburn": ""
+      },
+      {
+        "orig": "ヵヶヴッ",
+        "hira": "ヵヶヴっ",
+        "hepburn": "vu"
+      }
+    ]
+  },
+  {
+    "text": "𠮷野家と𩸽",
+    "hiragana": false,
+    "romaji": false,
+    "expected": []
+  },
+  {
+    "text": "𠮷野家と𩸽",
+    "hiragana": true,
+    "romaji": false,
+    "expected": [
+      {
+        "orig": "𠮷",
+        "hira": "𠮷"
+      },
+      {
+        "orig": "野家",
+        "hira": "のえ"
+      },
+      {
+        "orig": "と",
+        "hira": "と"
+      },
+      {
+        "orig": "𩸽",
+        "hira": "𩸽"
+      }
+    ]
+  },
+  {
+    "text": "𠮷野家と𩸽",
+    "hiragana": false,
+    "romaji": true,
+    "expected": [
+      {
+        "orig": "𠮷",
+        "hepburn": "𠮷"
+      },
+      {
+        "orig": "野家",
+        "hepburn": "noe"
+      },
+      {
+        "orig": "と",
+        "hepburn": "to"
+      },
+      {
+        "orig": "𩸽",
+        "hepburn": "𩸽"
+      }
+    ]
+  },
+  {
+    "text": "𠮷野家と𩸽",
+    "hiragana": true,
+    "romaji": true,
+    "expected": [
+      {
+        "orig": "𠮷",
+        "hira": "𠮷",
+        "hepburn": "𠮷"
+      },
+      {
+        "orig": "野家",
+        "hira": "のえ",
+        "hepburn": "noe"
+      },
+      {
+        "orig": "と",
+        "hira": "と",
+        "hepburn": "to"
+      },
+      {
+        "orig": "𩸽",
+        "hira": "𩸽",
+        "hepburn": "𩸽"
+      }
+    ]
+  },
+  {
+    "text": "「」[]<>!@#$%^&*()_+-={}|\\;:'\",./?`~",
+    "hiragana": false,
+    "romaji": false,
+    "expected": []
+  },
+  {
+    "text": "「」[]<>!@#$%^&*()_+-={}|\\;:'\",./?`~",
+    "hiragana": true,
+    "romaji": false,
+    "expected": [
+      {
+        "orig": "「",
+        "hira": "「"
+      },
+      {
+        "orig": "」[]<>!@#$%^&*()_+-={}|\\;:'\",./?`~",
+        "hira": "」[]<>!@#$%^&*()_+-={}|\\;:'\",./?`~"
+      }
+    ]
+  },
+  {
+    "text": "「」[]<>!@#$%^&*()_+-={}|\\;:'\",./?`~",
+    "hiragana": false,
+    "romaji": true,
+    "expected": [
+      {
+        "orig": "「",
+        "hepburn": "「"
+      },
+      {
+        "orig": "」[]<>!@#$%^&*()_+-={}|\\;:'\",./?`~",
+        "hepburn": "」[]<>!@#$%^&*()_+={}|\\;:'\",./?`~"
+      }
+    ]
+  },
+  {
+    "text": "「」[]<>!@#$%^&*()_+-={}|\\;:'\",./?`~",
+    "hiragana": true,
+    "romaji": true,
+    "expected": [
+      {
+        "orig": "「",
+        "hira": "「",
+        "hepburn": "「"
+      },
+      {
+        "orig": "」[]<>!@#$%^&*()_+-={}|\\;:'\",./?`~",
+        "hira": "」[]<>!@#$%^&*()_+-={}|\\;:'\",./?`~",
+        "hepburn": "」[]<>!@#$%^&*()_+={}|\\;:'\",./?`~"
+      }
+    ]
+  },
+  {
+    "text": "東京都国立市で会議を開催します。",
+    "hiragana": false,
+    "romaji": false,
+    "expected": []
+  },
+  {
+    "text": "東京都国立市で会議を開催します。",
+    "hiragana": true,
+    "romaji": false,
+    "expected": [
+      {
+        "orig": "東京都国立市",
+        "hira": "とうきょうとくにたちし"
+      },
+      {
+        "orig": "で",
+        "hira": "で"
+      },
+      {
+        "orig": "会議",
+        "hira": "かいぎ"
+      },
+      {
+        "orig": "を",
+        "hira": "を"
+      },
+      {
+        "orig": "開催",
+        "hira": "かいさい"
+      },
+      {
+        "orig": "し",
+        "hira": "し"
+      },
+      {
+        "orig": "ます",
+        "hira": "ます"
+      },
+      {
+        "orig": "。",
+        "hira": "。"
+      }
+    ]
+  },
+  {
+    "text": "東京都国立市で会議を開催します。",
+    "hiragana": false,
+    "romaji": true,
+    "expected": [
+      {
+        "orig": "東京都国立市",
+        "hepburn": "toukyoutokunitachishi"
+      },
+      {
+        "orig": "で",
+        "hepburn": "de"
+      },
+      {
+        "orig": "会議",
+        "hepburn": "kaigi"
+      },
+      {
+        "orig": "を",
+        "hepburn": "wo"
+      },
+      {
+        "orig": "開催",
+        "hepburn": "kaisai"
+      },
+      {
+        "orig": "し",
+        "hepburn": "shi"
+      },
+      {
+        "orig": "ます",
+        "hepburn": "masu"
+      },
+      {
+        "orig": "。",
+        "hepburn": "。"
+      }
+    ]
+  },
+  {
+    "text": "東京都国立市で会議を開催します。",
+    "hiragana": true,
+    "romaji": true,
+    "expected": [
+      {
+        "orig": "東京都国立市",
+        "hira": "とうきょうとくにたちし",
+        "hepburn": "toukyoutokunitachishi"
+      },
+      {
+        "orig": "で",
+        "hira": "で",
+        "hepburn": "de"
+      },
+      {
+        "orig": "会議",
+        "hira": "かいぎ",
+        "hepburn": "kaigi"
+      },
+      {
+        "orig": "を",
+        "hira": "を",
+        "hepburn": "wo"
+      },
+      {
+        "orig": "開催",
+        "hira": "かいさい",
+        "hepburn": "kaisai"
+      },
+      {
+        "orig": "し",
+        "hira": "し",
+        "hepburn": "shi"
+      },
+      {
+        "orig": "ます",
+        "hira": "ます",
+        "hepburn": "masu"
+      },
+      {
+        "orig": "。",
+        "hira": "。",
+        "hepburn": "。"
+      }
+    ]
+  },
+  {
+    "text": "ＶＲＣＴで翻訳する",
+    "hiragana": false,
+    "romaji": false,
+    "expected": []
+  },
+  {
+    "text": "ＶＲＣＴで翻訳する",
+    "hiragana": true,
+    "romaji": false,
+    "expected": [
+      {
+        "orig": "ＶＲＣＴ",
+        "hira": "vrct"
+      },
+      {
+        "orig": "で",
+        "hira": "で"
+      },
+      {
+        "orig": "翻訳",
+        "hira": "ほんやく"
+      },
+      {
+        "orig": "する",
+        "hira": "する"
+      }
+    ]
+  },
+  {
+    "text": "ＶＲＣＴで翻訳する",
+    "hiragana": false,
+    "romaji": true,
+    "expected": [
+      {
+        "orig": "ＶＲＣＴ",
+        "hepburn": "vrct"
+      },
+      {
+        "orig": "で",
+        "hepburn": "de"
+      },
+      {
+        "orig": "翻訳",
+        "hepburn": "honyaku"
+      },
+      {
+        "orig": "する",
+        "hepburn": "suru"
+      }
+    ]
+  },
+  {
+    "text": "ＶＲＣＴで翻訳する",
+    "hiragana": true,
+    "romaji": true,
+    "expected": [
+      {
+        "orig": "ＶＲＣＴ",
+        "hira": "vrct",
+        "hepburn": "vrct"
+      },
+      {
+        "orig": "で",
+        "hira": "で",
+        "hepburn": "de"
+      },
+      {
+        "orig": "翻訳",
+        "hira": "ほんやく",
+        "hepburn": "honyaku"
+      },
+      {
+        "orig": "する",
+        "hira": "する",
+        "hepburn": "suru"
+      }
+    ]
+  },
+  {
+    "text": "２０２６年１０月３日",
+    "hiragana": false,
+    "romaji": false,
+    "expected": []
+  },
+  {
+    "text": "２０２６年１０月３日",
+    "hiragana": true,
+    "romaji": false,
+    "expected": [
+      {
+        "orig": "２０２６",
+        "hira": "にれいにろく"
+      },
+      {
+        "orig": "年",
+        "hira": "ねん"
+      },
+      {
+        "orig": "１０",
+        "hira": "いちれい"
+      },
+      {
+        "orig": "月",
+        "hira": "がつ"
+      },
+      {
+        "orig": "３",
+        "hira": "みっ"
+      },
+      {
+        "orig": "日",
+        "hira": "か"
+      }
+    ]
+  },
+  {
+    "text": "２０２６年１０月３日",
+    "hiragana": false,
+    "romaji": true,
+    "expected": [
+      {
+        "orig": "２０２６",
+        "hepburn": "nireiniroku"
+      },
+      {
+        "orig": "年",
+        "hepburn": "nen"
+      },
+      {
+        "orig": "１０",
+        "hepburn": "ichirei"
+      },
+      {
+        "orig": "月",
+        "hepburn": "gatsu"
+      },
+      {
+        "orig": "３",
+        "hepburn": "mi"
+      },
+      {
+        "orig": "日",
+        "hepburn": "ka"
+      }
+    ]
+  },
+  {
+    "text": "２０２６年１０月３日",
+    "hiragana": true,
+    "romaji": true,
+    "expected": [
+      {
+        "orig": "２０２６",
+        "hira": "にれいにろく",
+        "hepburn": "nireiniroku"
+      },
+      {
+        "orig": "年",
+        "hira": "ねん",
+        "hepburn": "nen"
+      },
+      {
+        "orig": "１０",
+        "hira": "いちれい",
+        "hepburn": "ichirei"
+      },
+      {
+        "orig": "月",
+        "hira": "がつ",
+        "hepburn": "gatsu"
+      },
+      {
+        "orig": "３",
+        "hira": "みっ",
+        "hepburn": "mi"
+      },
+      {
+        "orig": "日",
+        "hira": "か",
+        "hepburn": "ka"
+      }
+    ]
+  },
+  {
+    "text": "\r\n‍️",
+    "hiragana": false,
+    "romaji": false,
+    "expected": []
+  },
+  {
+    "text": "\r\n‍️",
+    "hiragana": true,
+    "romaji": false,
+    "expected": [
+      {
+        "orig": "\r\n‍️",
+        "hira": "\r\n‍️"
+      }
+    ]
+  },
+  {
+    "text": "\r\n‍️",
+    "hiragana": false,
+    "romaji": true,
+    "expected": [
+      {
+        "orig": "\r\n‍️",
+        "hepburn": "‍️"
+      }
+    ]
+  },
+  {
+    "text": "\r\n‍️",
+    "hiragana": true,
+    "romaji": true,
+    "expected": [
+      {
+        "orig": "\r\n‍️",
+        "hira": "\r\n‍️",
+        "hepburn": "‍️"
+      }
+    ]
+  },
+  {
+    "text": "未知語カタカナボブズヌヌ",
+    "hiragana": false,
+    "romaji": false,
+    "expected": []
+  },
+  {
+    "text": "未知語カタカナボブズヌヌ",
+    "hiragana": true,
+    "romaji": false,
+    "expected": [
+      {
+        "orig": "未知語",
+        "hira": "みちご"
+      },
+      {
+        "orig": "カタカナボブズヌヌ",
+        "hira": "かたかなぼぶずぬぬ"
+      }
+    ]
+  },
+  {
+    "text": "未知語カタカナボブズヌヌ",
+    "hiragana": false,
+    "romaji": true,
+    "expected": [
+      {
+        "orig": "未知語",
+        "hepburn": "michigo"
+      },
+      {
+        "orig": "カタカナボブズヌヌ",
+        "hepburn": "katakanabobuzununu"
+      }
+    ]
+  },
+  {
+    "text": "未知語カタカナボブズヌヌ",
+    "hiragana": true,
+    "romaji": true,
+    "expected": [
+      {
+        "orig": "未知語",
+        "hira": "みちご",
+        "hepburn": "michigo"
+      },
+      {
+        "orig": "カタカナボブズヌヌ",
+        "hira": "かたかなぼぶずぬぬ",
+        "hepburn": "katakanabobuzununu"
+      }
+    ]
+  }
+]

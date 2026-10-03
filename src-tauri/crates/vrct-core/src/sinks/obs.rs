@@ -32,7 +32,9 @@ const NO_CACHE: &str = "no-store, max-age=0";
 /// numeric string) gives `min`, as Python's `except Exception` did.
 fn clamp_int(value: &Value, min: i64, max: i64) -> i64 {
     let number = match value {
-        Value::Number(n) => n.as_i64().or_else(|| n.as_f64().filter(|f| f.is_finite()).map(|f| f as i64)),
+        Value::Number(n) => n
+            .as_i64()
+            .or_else(|| n.as_f64().filter(|f| f.is_finite()).map(|f| f as i64)),
         Value::String(s) => s.trim().parse::<i64>().ok(),
         Value::Bool(b) => Some(i64::from(*b)),
         _ => None,
@@ -49,7 +51,11 @@ fn normalize_hex_color(value: &Value, fallback: &str) -> String {
     let valid = text.len() == 7
         && text.starts_with('#')
         && text[1..].bytes().all(|b| b.is_ascii_hexdigit());
-    if valid { text.to_string() } else { fallback.to_string() }
+    if valid {
+        text.to_string()
+    } else {
+        fallback.to_string()
+    }
 }
 
 /// The token goes inside a JS string literal. Real tokens
@@ -73,17 +79,37 @@ fn js_string_body(token: &str) -> String {
 /// The page for the settings currently in the replica.
 pub fn render_page(replica: &ConfigReplica) -> String {
     let value = |key: &str, default: Value| replica.get(key).unwrap_or(default);
-    let int = |key: &str, default: i64, min: i64, max: i64| clamp_int(&value(key, Value::from(default)), min, max);
+    let int = |key: &str, default: i64, min: i64, max: i64| {
+        clamp_int(&value(key, Value::from(default)), min, max)
+    };
 
     let settings = [
-        ("@@WS_PORT@@", int("WEBSOCKET_PORT", 2231, 1, 65535).to_string()),
-        ("@@MAX_MESSAGES@@", int("OBS_BROWSER_SOURCE_MAX_MESSAGES", 14, 1, 50).to_string()),
-        ("@@DISPLAY_DURATION@@", int("OBS_BROWSER_SOURCE_DISPLAY_DURATION", 60, 1, 120).to_string()),
-        ("@@FADEOUT_DURATION@@", int("OBS_BROWSER_SOURCE_FADEOUT_DURATION", 12, 0, 120).to_string()),
-        ("@@FONT_SIZE@@", int("OBS_BROWSER_SOURCE_FONT_SIZE", 40, 10, 200).to_string()),
+        (
+            "@@WS_PORT@@",
+            int("WEBSOCKET_PORT", 2231, 1, 65535).to_string(),
+        ),
+        (
+            "@@MAX_MESSAGES@@",
+            int("OBS_BROWSER_SOURCE_MAX_MESSAGES", 14, 1, 50).to_string(),
+        ),
+        (
+            "@@DISPLAY_DURATION@@",
+            int("OBS_BROWSER_SOURCE_DISPLAY_DURATION", 60, 1, 120).to_string(),
+        ),
+        (
+            "@@FADEOUT_DURATION@@",
+            int("OBS_BROWSER_SOURCE_FADEOUT_DURATION", 12, 0, 120).to_string(),
+        ),
+        (
+            "@@FONT_SIZE@@",
+            int("OBS_BROWSER_SOURCE_FONT_SIZE", 40, 10, 200).to_string(),
+        ),
         (
             "@@FONT_COLOR@@",
-            normalize_hex_color(&value("OBS_BROWSER_SOURCE_FONT_COLOR", Value::from("#FFFFFF")), "#FFFFFF"),
+            normalize_hex_color(
+                &value("OBS_BROWSER_SOURCE_FONT_COLOR", Value::from("#FFFFFF")),
+                "#FFFFFF",
+            ),
         ),
         (
             "@@OUTLINE_THICKNESS@@",
@@ -92,7 +118,10 @@ pub fn render_page(replica: &ConfigReplica) -> String {
         (
             "@@OUTLINE_COLOR@@",
             normalize_hex_color(
-                &value("OBS_BROWSER_SOURCE_FONT_OUTLINE_COLOR", Value::from("#000000")),
+                &value(
+                    "OBS_BROWSER_SOURCE_FONT_OUTLINE_COLOR",
+                    Value::from("#000000"),
+                ),
                 "#000000",
             ),
         ),
@@ -116,15 +145,26 @@ struct Reply {
     body: Vec<u8>,
 }
 
-fn reply(status: &'static str, content_type: Option<&'static str>, body: impl Into<Vec<u8>>) -> Reply {
-    Reply { status, content_type, body: body.into() }
+fn reply(
+    status: &'static str,
+    content_type: Option<&'static str>,
+    body: impl Into<Vec<u8>>,
+) -> Reply {
+    Reply {
+        status,
+        content_type,
+        body: body.into(),
+    }
 }
 
 /// The path of an HTTP request target, without query or fragment.
 fn request_path(target: &str) -> &str {
     let target = target.split(['?', '#']).next().unwrap_or("");
     // Absolute form ("GET http://host/obs HTTP/1.1"): drop the authority.
-    match target.strip_prefix("http://").or_else(|| target.strip_prefix("https://")) {
+    match target
+        .strip_prefix("http://")
+        .or_else(|| target.strip_prefix("https://"))
+    {
         Some(rest) => rest.find('/').map_or("", |at| &rest[at..]),
         None => target,
     }
@@ -136,10 +176,18 @@ fn route(head: &str, replica: &ConfigReplica) -> Reply {
         return reply("400 Bad Request", None, "");
     };
     if method != "GET" {
-        return reply("501 Not Implemented", Some("text/plain; charset=utf-8"), "unsupported method\n");
+        return reply(
+            "501 Not Implemented",
+            Some("text/plain; charset=utf-8"),
+            "unsupported method\n",
+        );
     }
     match request_path(target) {
-        "/" | "/obs" => reply("200 OK", Some("text/html; charset=utf-8"), render_page(replica)),
+        "/" | "/obs" => reply(
+            "200 OK",
+            Some("text/html; charset=utf-8"),
+            render_page(replica),
+        ),
         "/health" => reply("200 OK", Some("text/plain; charset=utf-8"), "ok"),
         _ => reply("404 Not Found", None, ""),
     }
@@ -154,7 +202,8 @@ async fn read_head(stream: &mut TcpStream) -> Option<String> {
             return None;
         }
         head.extend_from_slice(&chunk[..read]);
-        let complete = head.windows(4).any(|w| w == b"\r\n\r\n") || head.windows(2).any(|w| w == b"\n\n");
+        let complete =
+            head.windows(4).any(|w| w == b"\r\n\r\n") || head.windows(2).any(|w| w == b"\n\n");
         if complete {
             return Some(String::from_utf8_lossy(&head).into_owned());
         }
@@ -176,7 +225,10 @@ async fn handle(mut stream: TcpStream, replica: Arc<ConfigReplica>) {
             response.push_str(&format!("Cache-Control: {NO_CACHE}\r\n"));
         }
     }
-    response.push_str(&format!("Content-Length: {}\r\nConnection: close\r\n\r\n", reply.body.len()));
+    response.push_str(&format!(
+        "Content-Length: {}\r\nConnection: close\r\n\r\n",
+        reply.body.len()
+    ));
     let mut bytes = response.into_bytes();
     bytes.extend_from_slice(&reply.body);
     let _ = stream.write_all(&bytes).await;
@@ -196,28 +248,99 @@ pub struct ObsSink {
 
 impl ObsSink {
     pub fn new(replica: Arc<ConfigReplica>) -> Self {
-        Self { replica, running: Mutex::new(None) }
+        Self {
+            replica,
+            running: Mutex::new(None),
+        }
     }
 
     /// Start serving (replacing a server on another address). Must be called
     /// from inside a Tokio runtime; the bind happens in the background and a
     /// failure is reported on stderr.
     pub fn start(&self, host: &str, port: u16) -> Result<(), String> {
+        self.start_impl(host, port, false)
+    }
+    pub fn start_checked(&self, host: &str, port: u16) -> Result<(), String> {
+        let bound = self.prepare(host, port)?;
+        self.start_prepared(host, port, bound)
+    }
+
+    pub(crate) fn prepare(
+        &self,
+        host: &str,
+        port: u16,
+    ) -> Result<Option<tokio::net::TcpListener>, String> {
         if is_wildcard(host) {
-            return Err(format!("refusing to serve the OBS page on wildcard address {host}"));
+            return Err(format!("refusing to serve OBS on wildcard address {host}"));
+        }
+        if self
+            .running
+            .lock()
+            .unwrap()
+            .as_ref()
+            .is_some_and(|r| r.host == host && r.port == port)
+        {
+            return Ok(None);
+        }
+        let socket = std::net::TcpListener::bind((host, port))
+            .map_err(|e| format!("OBS bind failed: {e}"))?;
+        socket.set_nonblocking(true).map_err(|e| e.to_string())?;
+        tokio::net::TcpListener::from_std(socket)
+            .map(Some)
+            .map_err(|e| e.to_string())
+    }
+    pub(crate) fn start_prepared(
+        &self,
+        host: &str,
+        port: u16,
+        bound: Option<tokio::net::TcpListener>,
+    ) -> Result<(), String> {
+        self.start_with(host, port, bound)
+    }
+    fn start_impl(&self, host: &str, port: u16, checked: bool) -> Result<(), String> {
+        let bound = if checked {
+            self.prepare(host, port)?
+        } else {
+            None
+        };
+        self.start_with(host, port, bound)
+    }
+    fn start_with(
+        &self,
+        host: &str,
+        port: u16,
+        listener: Option<tokio::net::TcpListener>,
+    ) -> Result<(), String> {
+        if is_wildcard(host) {
+            return Err(format!(
+                "refusing to serve the OBS page on wildcard address {host}"
+            ));
         }
         let runtime = tokio::runtime::Handle::try_current()
             .map_err(|_| "OBS sink needs a Tokio runtime".to_string())?;
         let mut running = self.running.lock().unwrap();
-        if running.as_ref().is_some_and(|r| r.host == host && r.port == port) {
+        if running
+            .as_ref()
+            .is_some_and(|r| r.host == host && r.port == port)
+        {
             return Ok(());
         }
         if let Some(previous) = running.take() {
             let _ = previous.shutdown.send(true);
         }
         let (shutdown, shutdown_rx) = watch::channel(false);
-        runtime.spawn(serve(host.to_string(), port, Arc::clone(&self.replica), shutdown_rx));
-        *running = Some(Running { host: host.to_string(), port, shutdown });
+        runtime.spawn(serve(
+            host.to_string(),
+            port,
+            Arc::clone(&self.replica),
+            shutdown_rx,
+            listener,
+        ));
+        *running = Some(Running {
+            host: host.to_string(),
+            port,
+            shutdown,
+        });
         Ok(())
     }
 
@@ -228,8 +351,18 @@ impl ObsSink {
     }
 }
 
-async fn serve(host: String, port: u16, replica: Arc<ConfigReplica>, mut shutdown: watch::Receiver<bool>) {
-    let listener = match bind(&host, port, &mut shutdown).await {
+async fn serve(
+    host: String,
+    port: u16,
+    replica: Arc<ConfigReplica>,
+    mut shutdown: watch::Receiver<bool>,
+    bound: Option<tokio::net::TcpListener>,
+) {
+    let listener = match if let Some(listener) = bound {
+        Ok(listener)
+    } else {
+        bind(&host, port, &mut shutdown).await
+    } {
         Ok(listener) => listener,
         Err(error) => {
             eprintln!("[sinks] obs: {error}");
@@ -268,8 +401,18 @@ mod tests {
     #[test]
     fn colours_must_be_six_hex_digits() {
         assert_eq!(normalize_hex_color(&json!("#AbCdEf"), "#000000"), "#AbCdEf");
-        assert_eq!(normalize_hex_color(&json!("  #abcdef\n"), "#000000"), "#abcdef");
-        for bad in [json!("red"), json!("#12345"), json!("#1234567"), json!("#GGGGGG"), json!(5), Value::Null] {
+        assert_eq!(
+            normalize_hex_color(&json!("  #abcdef\n"), "#000000"),
+            "#abcdef"
+        );
+        for bad in [
+            json!("red"),
+            json!("#12345"),
+            json!("#1234567"),
+            json!("#GGGGGG"),
+            json!(5),
+            Value::Null,
+        ] {
             assert_eq!(normalize_hex_color(&bad, "#000000"), "#000000", "{bad}");
         }
     }
@@ -279,7 +422,7 @@ mod tests {
         assert_eq!(js_string_body("abc_DEF-123"), "abc_DEF-123");
         let escaped = js_string_body("a\"b</script>\n\u{1F642}");
         assert!(!escaped.contains(['"', '<', '\n']), "{escaped}");
-        assert_eq!(js_string_body("\"" ), "\\u0022");
+        assert_eq!(js_string_body("\""), "\\u0022");
         assert_eq!(js_string_body("\u{1F642}"), "\\ud83d\\ude42");
     }
 

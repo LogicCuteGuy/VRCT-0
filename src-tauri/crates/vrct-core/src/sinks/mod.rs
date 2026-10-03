@@ -19,6 +19,7 @@ use serde_json::Value;
 
 use crate::config::ConfigReplica;
 use crate::protocol::Response;
+use crate::settings::Settings;
 
 use clipboard::ClipboardSink;
 use logger::LoggerSink;
@@ -53,6 +54,7 @@ pub fn sinks_env_value() -> String {
 }
 
 pub struct Sinks {
+    configuration: std::sync::Mutex<()>,
     osc: OscSink,
     websocket: WebSocketSink,
     logger: LoggerSink,
@@ -63,12 +65,105 @@ pub struct Sinks {
 impl Sinks {
     pub fn new(replica: Arc<ConfigReplica>) -> Self {
         Self {
+            configuration: std::sync::Mutex::new(()),
             osc: OscSink::new(Arc::clone(&replica)),
             websocket: WebSocketSink::new(Arc::clone(&replica)),
             obs: ObsSink::new(replica),
             logger: LoggerSink::new(),
             clipboard: ClipboardSink::new(),
         }
+    }
+
+    pub fn message(&self, message: &str, notification: bool) -> Result<(), String> {
+        self.osc.message(message, notification)
+    }
+    pub fn typing(&self, enabled: bool) -> Result<(), String> {
+        self.osc.typing(enabled)
+    }
+
+    pub fn configure(&self, name: &str, settings: &Settings) -> Result<(), String> {
+        let _serial = self.configuration.lock().unwrap_or_else(|p| p.into_inner());
+        let host = settings
+            .get_str("WEBSOCKET_HOST")
+            .unwrap_or_else(|| "127.0.0.1".into());
+        let port = |key: &str| {
+            settings
+                .get(key)
+                .and_then(|p| p.as_u64())
+                .and_then(|p| u16::try_from(p).ok())
+                .ok_or_else(|| format!("Invalid {key}"))
+        };
+        if matches!(
+            name,
+            "WEBSOCKET_HOST"
+                | "WEBSOCKET_PORT"
+                | "WEBSOCKET_SERVER"
+                | "OBS_BROWSER_SOURCE"
+                | "OBS_BROWSER_SOURCE_PORT"
+        ) {
+            let obs = settings.get_bool("OBS_BROWSER_SOURCE") == Some(true);
+            let websocket = settings.get_bool("WEBSOCKET_SERVER") == Some(true) || obs;
+            let ws_port = port("WEBSOCKET_PORT")?;
+            let obs_port = port("OBS_BROWSER_SOURCE_PORT")?;
+            // Reserve every replacement before publishing any of them. If the
+            // second bind fails, the first reservation drops and both old
+            // servers remain usable.
+            let ws_bound = if websocket {
+                self.websocket.prepare(&host, ws_port)?
+            } else {
+                None
+            };
+            let obs_bound = if obs {
+                self.obs.prepare(&host, obs_port)?
+            } else {
+                None
+            };
+            if websocket {
+                self.websocket.start_prepared(&host, ws_port, ws_bound)?;
+            } else {
+                self.websocket.stop();
+            }
+            if obs {
+                self.obs.start_prepared(&host, obs_port, obs_bound)?;
+            } else {
+                self.obs.stop();
+            }
+        }
+        if name == "LOGGER_FEATURE" {
+            if settings.get_bool(name) == Some(true) {
+                let path =
+                    std::path::PathBuf::from(settings.get_str("PATH_LOGS").unwrap_or_default())
+                        .join(format!(
+                            "{}.log",
+                            chrono::Local::now().format("%Y-%m-%d_%H-%M-%S")
+                        ));
+                self.logger.start(&path.to_string_lossy())?;
+            } else {
+                self.logger.stop();
+            }
+        }
+        Ok(())
+    }
+    pub fn shutdown(&self) {
+        self.obs.stop();
+        self.websocket.stop();
+        self.logger.stop();
+    }
+
+    pub fn copy_and_paste(&self, text: &str) -> Result<(), String> {
+        self.clipboard.copy_into_vr(text)
+    }
+
+    pub fn websocket_alive(&self) -> bool {
+        self.websocket.is_running()
+    }
+
+    pub fn broadcast(&self, text: &str) {
+        self.websocket.broadcast(text);
+    }
+
+    pub fn log_info(&self, text: &str) -> Result<(), String> {
+        self.logger.info(text)
     }
 
     /// Perform the output a sink line asks for. Returns true when the line

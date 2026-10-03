@@ -1,70 +1,82 @@
 {
-    "$schema": "https://schema.tauri.app/config/2",
-    "productName": "VRCT",
-    "version": "3.5.1-beta.1",
-    "identifier": "com.vrct.app",
-    "build": {
-        "beforeDevCommand": "",
-        "devUrl": "http://localhost:1420",
-        "beforeBuildCommand": "",
-        "frontendDist": "../dist"
-    },
-    "app": {
-        "enableGTKAppId": false,
-        "windows": [
-            {
-                "title": "VRCT",
-                "center": true,
-                "width": 450,
-                "height": 220,
-                "minWidth": 400,
-                "minHeight": 200,
-                "transparent": true,
-                "decorations": false,
-                "shadow": false
-            }
-        ],
-        "security": {
-            "csp": null,
-            "capabilities": [
-                "default",
-                "vrct-capability"
-            ]
-        }
-    },
-    "bundle": {
-        "active": true,
-        "targets": "nsis",
-        "publisher": "m's software",
-        "copyright": "Copyright m's software",
-        "licenseFile": "../LICENSE",
-        "shortDescription": "VRCT",
-        "icon": [
-            "icons/32x32.png",
-            "icons/128x128.png",
-            "icons/128x128@2x.png",
-            "icons/icon.icns",
-            "icons/icon.ico"
-        ],
-        "externalBin": [
-            "bin/VRCT-sidecar"
-        ],
-        "resources": {
-            "bin/_internal": "_internal"
-        },
-        "windows": {
-            "nsis": {
-                "template": "nsis/template.nsi",
-                "installMode": "currentUser",
-                "displayLanguageSelector": true,
-                "languages": [
-                    "English",
-                    "Japanese",
-                    "Korean",
-                    "TradChinese",
-                    "SimpChinese"
-                ]
-            }
-        }
+  "$schema": "https://schema.tauri.app/config/2",
+  "productName": "VRCT",
+  "version": "3.5.1-beta.1",
+  "identifier": "com.vrct.app",
+  "build": {
+    "beforeDevCommand": "",
+    "devUrl": "http://localhost:1420",
+    "beforeBuildCommand": "",
+    "frontendDist": "../dist"
+  },
+  "app": {
+    "enableGTKAppId": false,
+    "windows": [
+      {
+        "title": "VRCT",
+        "center": true,
+        "width": 450,
+        "height": 220,
+        "minWidth": 400,
+        "minHeight": 200,
+        "transparent": true,
+        "decorations": false,
+        "shadow": false
+      }
+    ],
+    "security": {
+      "csp": null,
+      "capabilities": [
+        "default",
+        "vrct-capability"
+      ]
     }
+  },
+  "bundle": {
+    "active": true,
+    "targets": "nsis",
+    "publisher": "m's software",
+    "copyright": "Copyright m's software",
+    "licenseFile": "../LICENSE",
+    "shortDescription": "VRCT",
+    "icon": [
+      "icons/32x32.png",
+      "icons/128x128.png",
+      "icons/128x128@2x.png",
+      "icons/icon.icns",
+      "icons/icon.ico"
+    ],
+    "resources": {
+      "resources/openvr/openvr_api.dll": "openvr_api.dll",
+      "resources/openvr/LICENSE": "licenses/openvr-LICENSE",
+      "resources/transliteration": "resources/transliteration",
+      "resources/fonts": "resources/fonts",
+      "resources/ocr": "resources/ocr",
+      "resources/onnxruntime/onnxruntime.dll": "onnxruntime.dll",
+      "resources/onnxruntime/onnxruntime_providers_shared.dll": "onnxruntime_providers_shared.dll",
+      "resources/onnxruntime/LICENSE": "licenses/onnxruntime-LICENSE",
+      "resources/onnxruntime/ThirdPartyNotices.txt": "licenses/onnxruntime-ThirdPartyNotices.txt",
+      "resources/msvc/msvcp140.dll": "msvcp140.dll",
+      "resources/msvc/msvcp140_1.dll": "msvcp140_1.dll",
+      "resources/msvc/vcruntime140.dll": "vcruntime140.dll",
+      "resources/msvc/vcruntime140_1.dll": "vcruntime140_1.dll",
+      "resources/msvc/manifest.json": "resources/msvc/manifest.json",
+      "resources/msvc/NOTICE.md": "licenses/MSVC-NOTICE.md",
+      "resources/msvc/Redist.txt": "licenses/MSVC-Redist.txt"
+    },
+    "windows": {
+      "nsis": {
+        "template": "nsis/template.nsi",
+        "installMode": "currentUser",
+        "displayLanguageSelector": true,
+        "languages": [
+          "English",
+          "Japanese",
+          "Korean",
+          "TradChinese",
+          "SimpChinese"
+        ]
+      }
+    }
+  }
 }

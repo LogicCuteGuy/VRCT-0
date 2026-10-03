@@ -11,8 +11,23 @@ use serde_json::Value;
 fn table() -> &'static Value {
     static TABLE: OnceLock<Value> = OnceLock::new();
     TABLE.get_or_init(|| {
-        serde_json::from_str(include_str!("assets/languages.json")).expect("languages.json is valid JSON")
+        serde_json::from_str(include_str!("assets/languages.json"))
+            .expect("languages.json is valid JSON")
     })
+}
+
+pub fn source_languages(engine: &str, weight: &str) -> Vec<String> {
+    let scope = if engine == "CTranslate2" {
+        &table()[engine][weight]
+    } else {
+        &table()[engine]
+    };
+    scope["source"]
+        .as_object()
+        .into_iter()
+        .flatten()
+        .map(|(name, _)| name.clone())
+        .collect()
 }
 
 /// The engine does not know one of the languages (or the engine itself).
@@ -30,7 +45,9 @@ impl std::fmt::Display for Unsupported {
 /// DeepL has no plain "English" or "Portuguese" target: the country picks the variant.
 fn deepl_target(target: &str, country: &str) -> String {
     match target {
-        "English" if ["United States", "Canada", "Philippines"].contains(&country) => "English American".into(),
+        "English" if ["United States", "Canada", "Philippines"].contains(&country) => {
+            "English American".into()
+        }
         "English" => "English British".into(),
         "Portuguese" if country == "Portugal" => "Portuguese European".into(),
         "Portuguese" => "Portuguese Brazilian".into(),
@@ -48,15 +65,28 @@ pub fn language_codes(
     target: &str,
 ) -> Result<(String, String), Unsupported> {
     let unsupported = || {
-        Unsupported(format!("{engine} does not support language (source={source:?}, target={target:?})"))
+        Unsupported(format!(
+            "{engine} does not support language (source={source:?}, target={target:?})"
+        ))
     };
     let scope = match engine {
-        "CTranslate2" => table().get(engine).and_then(|weights| weights.get(weight_type)),
+        "CTranslate2" => table()
+            .get(engine)
+            .and_then(|weights| weights.get(weight_type)),
         _ => table().get(engine),
     }
     .ok_or_else(unsupported)?;
-    let target = if engine == "DeepL_API" { deepl_target(target, country) } else { target.to_string() };
-    let code = |side: &str, name: &str| scope.get(side).and_then(|names| names.get(name)).and_then(Value::as_str);
+    let target = if engine == "DeepL_API" {
+        deepl_target(target, country)
+    } else {
+        target.to_string()
+    };
+    let code = |side: &str, name: &str| {
+        scope
+            .get(side)
+            .and_then(|names| names.get(name))
+            .and_then(Value::as_str)
+    };
     match (code("source", source), code("target", &target)) {
         (Some(source), Some(target)) => Ok((source.to_string(), target.to_string())),
         _ => Err(unsupported()),

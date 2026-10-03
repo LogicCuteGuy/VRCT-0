@@ -28,9 +28,8 @@ struct Deps {
 }
 
 impl Deps {
-    /// Settings still live in the sidecar's config (mirrored in the replica);
-    /// until the mirror is filled, fall back to what the running version
-    /// implies, like `Config._channelForVersion`.
+    /// Read the channel from native Settings, falling back to the running
+    /// version when the property is absent.
     fn channel(&self) -> Channel {
         match self.replica.get_str("SELECTED_RELEASE_CHANNEL") {
             Some(channel) => Channel::parse(&channel),
@@ -61,7 +60,12 @@ fn requested_version(data: Option<Value>) -> Option<String> {
     }
 }
 
-async fn run_update(deps: Arc<Deps>, endpoint: &'static str, edition: Edition, version: Option<String>) {
+async fn run_update(
+    deps: Arc<Deps>,
+    endpoint: &'static str,
+    edition: Edition,
+    version: Option<String>,
+) {
     // A second click must not start a download that wipes the first one's files.
     if deps.update_running.swap(true, Ordering::SeqCst) {
         return;
@@ -69,8 +73,11 @@ async fn run_update(deps: Arc<Deps>, endpoint: &'static str, edition: Edition, v
     if let Err(message) = try_update(&deps, edition, version).await {
         eprintln!("update failed: {message}");
         // Status 500 surfaces as the UI's error notification.
-        deps.sink
-            .emit(Response::new(500, endpoint, json!(format!("Update failed: {message}"))));
+        deps.sink.emit(Response::new(
+            500,
+            endpoint,
+            json!(format!("Update failed: {message}")),
+        ));
     }
     deps.update_running.store(false, Ordering::SeqCst);
 }
@@ -103,7 +110,10 @@ async fn try_update(deps: &Deps, edition: Edition, version: Option<String>) -> R
         // The installer replaces files this process holds open; quit now.
         InstallOutcome::Launched => deps.app.exit(0),
         InstallOutcome::Manual(path) => {
-            eprintln!("update downloaded; finish installing manually: {}", path.display());
+            eprintln!(
+                "update downloaded; finish installing manually: {}",
+                path.display()
+            );
         }
     }
     Ok(())
@@ -156,7 +166,10 @@ pub fn register(
                     Ok(check) => (200, json!(check)),
                     Err(error) => {
                         eprintln!("update check failed: {error}");
-                        (200, json!({"is_update_available": false, "new_version": null}))
+                        (
+                            200,
+                            json!({"is_update_available": false, "new_version": null}),
+                        )
                     }
                 }
             }
@@ -164,14 +177,24 @@ pub fn register(
         .handle("/run/update_software", move |data| {
             let deps = Arc::clone(&cpu);
             async move {
-                tokio::spawn(run_update(deps, "/run/update_software", Edition::Cpu, requested_version(data)));
+                tokio::spawn(run_update(
+                    deps,
+                    "/run/update_software",
+                    Edition::Cpu,
+                    requested_version(data),
+                ));
                 (200, json!(true))
             }
         })
         .handle("/run/update_cuda_software", move |data| {
             let deps = Arc::clone(&gpu);
             async move {
-                tokio::spawn(run_update(deps, "/run/update_cuda_software", Edition::Gpu, requested_version(data)));
+                tokio::spawn(run_update(
+                    deps,
+                    "/run/update_cuda_software",
+                    Edition::Gpu,
+                    requested_version(data),
+                ));
                 (200, json!(true))
             }
         }))
@@ -183,7 +206,10 @@ mod tests {
 
     #[test]
     fn only_a_non_empty_string_pins_a_version() {
-        assert_eq!(requested_version(Some(json!("3.5.1"))), Some("3.5.1".into()));
+        assert_eq!(
+            requested_version(Some(json!("3.5.1"))),
+            Some("3.5.1".into())
+        );
         assert_eq!(requested_version(Some(json!(""))), None);
         assert_eq!(requested_version(Some(Value::Null)), None);
         assert_eq!(requested_version(None), None);

@@ -9,3 +9,10 @@
 
 # Customize
 /bin
+
+# Verified runtime assets downloaded by the native Rust prepare task.
+/resources/onnxruntime/*.dll
+/resources/ocr/*.onnx
+/resources/msvc/*.dll
+/resources/msvc/manifest.json
+/resources/msvc/Redist.txt

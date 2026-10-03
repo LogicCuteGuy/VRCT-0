@@ -21,6 +21,12 @@ base64 = "0.22"
 getrandom = "0.3"
 semver = "1"
 sha2 = "0.10"
+sha1 = "0.10"
+fontdue = "0.9"
+rustybuzz = "0.20"
+image = { version = "0.25", default-features = false, features = ["png", "jpeg"] }
+imageproc = { version = "0.25", default-features = false }
+unicode-bidi = "0.3"
 hex = "0.4"
 thiserror = "2"
 tokio = { version = "1", features = ["rt", "sync", "time", "fs", "io-util", "macros", "net"] }
@@ -29,7 +35,11 @@ futures-util = "0.3"
 # Local time for log lines only; `clock` without chrono's default features.
 chrono = { version = "0.4", default-features = false, features = ["clock"] }
 # rustls so Linux builds need no system OpenSSL.
-reqwest = { version = "0.12", default-features = false, features = ["json", "stream", "rustls-tls"] }
+reqwest = { version = "0.12", default-features = false, features = ["json", "stream", "rustls-tls", "cookies"] }
+hmac = "0.12"
+md-5 = "0.10"
+mdns-sd = "=0.21.4"
+sudachi = { git = "https://github.com/WorksApplications/sudachi.rs", rev = "7e2f287bbfffc036421cf960802e41a696727747" }
 # CPU-only CTranslate2 (ruy), SentencePiece for the M2M100 tokenizer, and the
 # `tokenizers` library for NLLB's tokenizer.json.
 ct2rs = { version = "0.10.1", default-features = false, features = ["ruy"], optional = true }
@@ -46,12 +56,15 @@ ort = { version = "=2.0.0-rc.13", default-features = false, features = ["std", "
 
 # Win32 calls for the clipboard sink (focus a window, copy, Ctrl+V).
 [target.'cfg(windows)'.dependencies]
+# Load the bundled Valve OpenVR client without requiring SteamVR at app startup.
+libloading = "=0.8.6"
 # WASAPI capture (microphones, and loopback of a playback device for speaker audio).
 # Windows only: Linux/macOS keep capturing in the Python backend, and this keeps
 # libasound out of their builds.
 cpal = "=0.17.1"
 windows-sys = { version = "0.59", features = [
     "Win32_Foundation",
+    "Win32_Graphics_Gdi",
     "Win32_System_DataExchange",
     "Win32_System_Memory",
     "Win32_System_Ole",

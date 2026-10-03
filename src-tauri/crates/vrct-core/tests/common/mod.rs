@@ -50,7 +50,9 @@ pub async fn mock(replies: Vec<(u16, String)>) -> Mock {
     tokio::spawn(async move {
         let mut served = 0usize;
         loop {
-            let Ok((mut stream, _)) = listener.accept().await else { return };
+            let Ok((mut stream, _)) = listener.accept().await else {
+                return;
+            };
             let mut raw = Vec::new();
             let mut chunk = [0u8; 4096];
             let head_end = loop {
@@ -84,7 +86,12 @@ pub async fn mock(replies: Vec<(u16, String)>) -> Mock {
                 raw.extend_from_slice(&chunk[..n]);
             }
             let body = serde_json::from_slice(&raw[head_end..]).unwrap_or(Value::Null);
-            log.lock().unwrap().push(Captured { request_line, headers, body, raw: raw[head_end..].to_vec() });
+            log.lock().unwrap().push(Captured {
+                request_line,
+                headers,
+                body,
+                raw: raw[head_end..].to_vec(),
+            });
 
             let (status, text) = &replies[served.min(replies.len() - 1)];
             served += 1;

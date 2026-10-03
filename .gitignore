@@ -77,3 +77,6 @@ src-python/telemetry_state.json
 # CTranslate2 model config of the tiny test fixture (the rule above would hide it).
 !src-tauri/crates/vrct-core/tests/fixtures/ct2_tiny/model/config.json
 !src-tauri/crates/vrct-core/tests/fixtures/ct2_tiny_nllb/model/config.json
+src-tauri/resources/transliteration/system.dic
+src-tauri/resources/ocr/*.onnx
+src-tauri/resources/ocr/*.partial

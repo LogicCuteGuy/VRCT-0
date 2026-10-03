@@ -5,3 +5,7 @@
 src-tauri/crates/vrct-core/tests/fixtures/ct2_tiny/model/model.bin binary
 src-tauri/crates/vrct-core/tests/fixtures/ct2_tiny/tokenizer/*.model binary
 src-tauri/crates/vrct-core/tests/fixtures/ct2_tiny_nllb/model/model.bin binary
+
+# Native resource checksums cover exact bytes, including vendor line endings.
+# Preserve licenses/data verbatim and do not apply source whitespace rules.
+src-tauri/resources/** -text -eol -whitespace

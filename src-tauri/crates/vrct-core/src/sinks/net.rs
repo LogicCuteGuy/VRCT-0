@@ -19,7 +19,11 @@ pub fn is_wildcard(host: &str) -> bool {
 
 /// Bind, retrying briefly (a stop followed by a start on the same port),
 /// and give up early if `shutdown` fires first.
-pub async fn bind(host: &str, port: u16, shutdown: &mut watch::Receiver<bool>) -> Result<TcpListener, String> {
+pub async fn bind(
+    host: &str,
+    port: u16,
+    shutdown: &mut watch::Receiver<bool>,
+) -> Result<TcpListener, String> {
     let mut last = String::new();
     for _ in 0..BIND_ATTEMPTS {
         match StdTcpListener::bind((host, port)) {

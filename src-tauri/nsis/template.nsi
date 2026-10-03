@@ -1167,6 +1167,13 @@ Function CleanupFailedInstall
     Delete "$INSTDIR\\{{this}}"
   {{/each}}
   RmDir /r "$INSTDIR\_internal"
+  ; Native ZIP assets are app-owned; config.json, logs and weights are user data.
+  Delete "$INSTDIR\native-package-manifest.json"
+  Delete "$INSTDIR\LICENSE"
+  Delete "$INSTDIR\NOTICE.md"
+  Delete "$INSTDIR\VRCT-sidecar.exe"
+  RmDir /r "$INSTDIR\resources"
+  RmDir /r "$INSTDIR\licenses"
   {{#each resources_ancestors}}
     RMDir "$INSTDIR\\{{this}}"
   {{/each}}
@@ -1282,6 +1289,12 @@ Section Uninstall
 
   ; Delete _internal folder (アプリ本体の一部なので常に削除)
   RmDir /r "$INSTDIR\_internal"
+  Delete "$INSTDIR\native-package-manifest.json"
+  Delete "$INSTDIR\LICENSE"
+  Delete "$INSTDIR\NOTICE.md"
+  Delete "$INSTDIR\VRCT-sidecar.exe"
+  RmDir /r "$INSTDIR\resources"
+  RmDir /r "$INSTDIR\licenses"
 
   ; Delete uninstaller
   Delete "$INSTDIR\uninstall.exe"

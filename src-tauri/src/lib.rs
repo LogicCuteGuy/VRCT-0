@@ -96,8 +96,8 @@ async fn backend_start(
     backend.start(&app)
 }
 
-/// Same contract as writing `{endpoint, data}` to the sidecar's stdin: returns
-/// immediately and the response arrives as a `backend-response` event. `data`
+/// Submit a native `{endpoint, data}` request. Returns immediately and
+/// the response arrives as a `backend-response` event. `data`
 /// is the UI's base64-encoded JSON payload.
 #[tauri::command]
 async fn backend_request(

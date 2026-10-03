@@ -14,13 +14,13 @@ use windows_sys::Win32::System::DataExchange::{
 use windows_sys::Win32::System::Memory::{GlobalAlloc, GlobalLock, GlobalUnlock, GMEM_MOVEABLE};
 use windows_sys::Win32::System::Ole::CF_UNICODETEXT;
 use windows_sys::Win32::System::Threading::{
-    AttachThreadInput, GetCurrentThreadId, OpenProcess, QueryFullProcessImageNameW, PROCESS_QUERY_LIMITED_INFORMATION,
+    AttachThreadInput, GetCurrentThreadId, OpenProcess, QueryFullProcessImageNameW,
+    PROCESS_QUERY_LIMITED_INFORMATION,
 };
 use windows_sys::Win32::UI::Input::KeyboardAndMouse::{keybd_event, KEYEVENTF_KEYUP, VK_CONTROL};
 use windows_sys::Win32::UI::WindowsAndMessaging::{
-    BringWindowToTop, EnumWindows, GetForegroundWindow, GetWindowTextLengthW,
-    GetWindowTextW, GetWindowThreadProcessId, IsWindowVisible, SetForegroundWindow, ShowWindow,
-    SW_RESTORE,
+    BringWindowToTop, EnumWindows, GetForegroundWindow, GetWindowTextLengthW, GetWindowTextW,
+    GetWindowThreadProcessId, IsWindowVisible, SetForegroundWindow, ShowWindow, SW_RESTORE,
 };
 
 use super::Desktop;
@@ -37,9 +37,9 @@ impl Desktop for WindowsDesktop {
         let windows = top_level_windows();
         let wanted = name.to_lowercase();
         // Title substring first, then the executable's name, like Python.
-        let by_title = windows
-            .iter()
-            .filter(|hwnd| window_title(**hwnd).is_some_and(|title| title.to_lowercase().contains(&wanted)));
+        let by_title = windows.iter().filter(|hwnd| {
+            window_title(**hwnd).is_some_and(|title| title.to_lowercase().contains(&wanted))
+        });
         if by_title.into_iter().any(|hwnd| focus(*hwnd)) {
             return true;
         }
@@ -51,7 +51,11 @@ impl Desktop for WindowsDesktop {
 
     fn copy(&self, text: &str) -> bool {
         // An embedded NUL would end the text early for every reader.
-        let wide: Vec<u16> = text.encode_utf16().filter(|unit| *unit != 0).chain([0]).collect();
+        let wide: Vec<u16> = text
+            .encode_utf16()
+            .filter(|unit| *unit != 0)
+            .chain([0])
+            .collect();
         if !open_clipboard() {
             return false;
         }
@@ -150,7 +154,9 @@ fn process_name(hwnd: HWND) -> Option<String> {
         return None;
     }
     let path = String::from_utf16_lossy(&buffer[..size as usize]);
-    Path::new(&path).file_name().map(|name| name.to_string_lossy().into_owned())
+    Path::new(&path)
+        .file_name()
+        .map(|name| name.to_string_lossy().into_owned())
 }
 
 /// Windows refuses `SetForegroundWindow` from a process that was not just

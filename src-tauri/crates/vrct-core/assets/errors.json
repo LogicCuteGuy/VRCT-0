@@ -1,0 +1,432 @@
+{
+  "DEVICE_NO_MIC": {
+    "category": "device",
+    "message": "No mic device detected",
+    "severity": "error"
+  },
+  "DEVICE_NO_SPEAKER": {
+    "category": "device",
+    "message": "No speaker device detected",
+    "severity": "error"
+  },
+  "AUDIO_OPEN_ERROR": {
+    "category": "device",
+    "message": "Audio device could not be opened",
+    "severity": "error"
+  },
+  "AUDIO_READ_ERROR": {
+    "category": "device",
+    "message": "Audio capture failed",
+    "severity": "error"
+  },
+  "VAD_INFERENCE_ERROR": {
+    "category": "transcription",
+    "message": "Voice activity detection failed",
+    "severity": "error"
+  },
+  "TRANSCRIBER_INIT_ERROR": {
+    "category": "transcription",
+    "message": "Speech recognizer initialization failed",
+    "severity": "error"
+  },
+  "ASR_ERROR": {
+    "category": "transcription",
+    "message": "Speech recognition failed",
+    "severity": "error"
+  },
+  "CLEANUP_TIMEOUT": {
+    "category": "transcription",
+    "message": "Audio transcription cleanup timed out",
+    "severity": "error"
+  },
+  "AUDIO_TRACKER_STOP_TIMEOUT": {
+    "category": "device",
+    "message": "Audio endpoint tracker cleanup timed out",
+    "severity": "warning"
+  },
+  "TRANSLATION_ENGINE_LIMIT": {
+    "category": "translation",
+    "message": "Translation engine limit error",
+    "severity": "warning"
+  },
+  "TRANSLATION_VRAM_CHAT": {
+    "category": "translation",
+    "message": "VRAM out of memory during translation of chat",
+    "severity": "critical"
+  },
+  "TRANSLATION_VRAM_MIC": {
+    "category": "translation",
+    "message": "VRAM out of memory during translation of mic",
+    "severity": "critical"
+  },
+  "TRANSLATION_VRAM_SPEAKER": {
+    "category": "translation",
+    "message": "VRAM out of memory during translation of speaker",
+    "severity": "critical"
+  },
+  "TRANSLATION_VRAM_ENABLE": {
+    "category": "translation",
+    "message": "VRAM out of memory enabling translation",
+    "severity": "critical"
+  },
+  "TRANSLATION_DISABLED_VRAM": {
+    "category": "translation",
+    "message": "Translation disabled due to VRAM overflow",
+    "severity": "critical"
+  },
+  "TRANSCRIPTION_VRAM_MIC": {
+    "category": "transcription",
+    "message": "VRAM out of memory during mic transcription",
+    "severity": "critical"
+  },
+  "TRANSCRIPTION_VRAM_SPEAKER": {
+    "category": "transcription",
+    "message": "VRAM out of memory during speaker transcription",
+    "severity": "critical"
+  },
+  "TRANSCRIPTION_SEND_DISABLED_VRAM": {
+    "category": "transcription",
+    "message": "Transcription send disabled due to VRAM overflow",
+    "severity": "critical"
+  },
+  "TRANSCRIPTION_RECEIVE_DISABLED_VRAM": {
+    "category": "transcription",
+    "message": "Transcription receive disabled due to VRAM overflow",
+    "severity": "critical"
+  },
+  "TRANSCRIPTION_API_AUTH_FAILED": {
+    "category": "transcription",
+    "message": "Transcription API rejected the configured API key",
+    "severity": "error"
+  },
+  "TRANSCRIPTION_API_RATE_LIMITED": {
+    "category": "transcription",
+    "message": "Transcription API rate limit exceeded",
+    "severity": "warning"
+  },
+  "TRANSCRIPTION_API_TIMEOUT": {
+    "category": "transcription",
+    "message": "Transcription API request timed out",
+    "severity": "warning"
+  },
+  "TRANSCRIPTION_API_SERVER_ERROR": {
+    "category": "transcription",
+    "message": "Transcription API returned a server error",
+    "severity": "warning"
+  },
+  "WEIGHT_CTRANSLATE2_DOWNLOAD": {
+    "category": "weight",
+    "message": "CTranslate2 weight download error",
+    "severity": "error"
+  },
+  "WEIGHT_WHISPER_DOWNLOAD": {
+    "category": "weight",
+    "message": "Whisper weight download error",
+    "severity": "error"
+  },
+  "VALIDATION_MIC_THRESHOLD": {
+    "category": "validation",
+    "message": "Mic energy threshold value is out of range",
+    "severity": "warning"
+  },
+  "VALIDATION_SPEAKER_THRESHOLD": {
+    "category": "validation",
+    "message": "Speaker energy threshold value is out of range",
+    "severity": "warning"
+  },
+  "VALIDATION_MIC_RECORD_TIMEOUT": {
+    "category": "validation",
+    "message": "Mic record timeout value is out of range",
+    "severity": "warning"
+  },
+  "VALIDATION_MIC_PHRASE_TIMEOUT": {
+    "category": "validation",
+    "message": "Mic phrase timeout value is out of range",
+    "severity": "warning"
+  },
+  "VALIDATION_MIC_MAX_PHRASES": {
+    "category": "validation",
+    "message": "Mic max phrases value is out of range",
+    "severity": "warning"
+  },
+  "VALIDATION_SPEAKER_RECORD_TIMEOUT": {
+    "category": "validation",
+    "message": "Speaker record timeout value is out of range",
+    "severity": "warning"
+  },
+  "VALIDATION_SPEAKER_PHRASE_TIMEOUT": {
+    "category": "validation",
+    "message": "Speaker phrase timeout value is out of range",
+    "severity": "warning"
+  },
+  "VALIDATION_SPEAKER_MAX_PHRASES": {
+    "category": "validation",
+    "message": "Speaker max phrases value is out of range",
+    "severity": "warning"
+  },
+  "VALIDATION_INVALID_IP": {
+    "category": "validation",
+    "message": "Invalid IP address",
+    "severity": "warning"
+  },
+  "VALIDATION_CANNOT_SET_IP": {
+    "category": "validation",
+    "message": "Cannot set IP address",
+    "severity": "error"
+  },
+  "VALIDATION_OSC_PORT_INVALID": {
+    "category": "validation",
+    "message": "OSC port must be a number",
+    "severity": "warning"
+  },
+  "VALIDATION_CONFIG_VALUE_INVALID": {
+    "category": "validation",
+    "message": "The provided value was rejected",
+    "severity": "warning"
+  },
+  "AUTH_DEEPL_LENGTH": {
+    "category": "auth",
+    "message": "DeepL auth key length is not correct",
+    "severity": "warning"
+  },
+  "AUTH_DEEPL_FAILED": {
+    "category": "auth",
+    "message": "Authentication failure of deepL auth key",
+    "severity": "error"
+  },
+  "AUTH_PLAMO_LENGTH": {
+    "category": "auth",
+    "message": "Plamo auth key length is not correct",
+    "severity": "warning"
+  },
+  "AUTH_PLAMO_FAILED": {
+    "category": "auth",
+    "message": "Authentication failure of plamo auth key",
+    "severity": "error"
+  },
+  "AUTH_GEMINI_LENGTH": {
+    "category": "auth",
+    "message": "Gemini auth key length is not correct",
+    "severity": "warning"
+  },
+  "AUTH_GEMINI_FAILED": {
+    "category": "auth",
+    "message": "Authentication failure of gemini auth key",
+    "severity": "error"
+  },
+  "AUTH_OPENAI_INVALID": {
+    "category": "auth",
+    "message": "OpenAI auth key is not valid",
+    "severity": "warning"
+  },
+  "AUTH_OPENAI_FAILED": {
+    "category": "auth",
+    "message": "Authentication failure of OpenAI auth key",
+    "severity": "error"
+  },
+  "AUTH_OPENAI_COMPATIBLE_INVALID": {
+    "category": "auth",
+    "message": "OpenAI-compatible auth key is not valid",
+    "severity": "warning"
+  },
+  "AUTH_OPENAI_COMPATIBLE_FAILED": {
+    "category": "auth",
+    "message": "Authentication failure of OpenAI-compatible endpoint (check URL and auth key)",
+    "severity": "error"
+  },
+  "AUTH_GROQ_INVALID": {
+    "category": "auth",
+    "message": "Groq auth key is not valid",
+    "severity": "warning"
+  },
+  "AUTH_GROQ_FAILED": {
+    "category": "auth",
+    "message": "Authentication failure of Groq auth key",
+    "severity": "error"
+  },
+  "AUTH_OPENROUTER_INVALID": {
+    "category": "auth",
+    "message": "OpenRouter auth key is not valid",
+    "severity": "warning"
+  },
+  "AUTH_OPENROUTER_FAILED": {
+    "category": "auth",
+    "message": "Authentication failure of OpenRouter auth key",
+    "severity": "error"
+  },
+  "MODEL_PLAMO_INVALID": {
+    "category": "model",
+    "message": "Plamo model is not valid",
+    "severity": "warning"
+  },
+  "MODEL_GEMINI_INVALID": {
+    "category": "model",
+    "message": "Gemini model is not valid",
+    "severity": "warning"
+  },
+  "MODEL_OPENAI_INVALID": {
+    "category": "model",
+    "message": "OpenAI model is not valid",
+    "severity": "warning"
+  },
+  "MODEL_OPENAI_COMPATIBLE_INVALID": {
+    "category": "model",
+    "message": "OpenAI-compatible model is not valid",
+    "severity": "warning"
+  },
+  "MODEL_GROQ_INVALID": {
+    "category": "model",
+    "message": "Groq model is not valid",
+    "severity": "warning"
+  },
+  "MODEL_OPENROUTER_INVALID": {
+    "category": "model",
+    "message": "OpenRouter model is not valid",
+    "severity": "warning"
+  },
+  "MODEL_LMSTUDIO_INVALID": {
+    "category": "model",
+    "message": "LMStudio model is not valid",
+    "severity": "warning"
+  },
+  "MODEL_OLLAMA_INVALID": {
+    "category": "model",
+    "message": "ollama model is not valid",
+    "severity": "warning"
+  },
+  "MODEL_TRANSCRIPTION_INVALID": {
+    "category": "model",
+    "message": "Transcription API model is not valid",
+    "severity": "warning"
+  },
+  "CONNECTION_LMSTUDIO_FAILED": {
+    "category": "connection",
+    "message": "Cannot connect to LMStudio server",
+    "severity": "error"
+  },
+  "CONNECTION_OLLAMA_FAILED": {
+    "category": "connection",
+    "message": "Cannot connect to ollama server",
+    "severity": "error"
+  },
+  "CONNECTION_LMSTUDIO_URL_INVALID": {
+    "category": "connection",
+    "message": "LMStudio URL is not valid",
+    "severity": "warning"
+  },
+  "CONNECTION_OPENAI_COMPATIBLE_URL_INVALID": {
+    "category": "connection",
+    "message": "OpenAI-compatible endpoint URL is not valid",
+    "severity": "warning"
+  },
+  "CONNECTION_TRANSCRIPTION_CUSTOM_URL_INVALID": {
+    "category": "connection",
+    "message": "Custom transcription server URL is not valid",
+    "severity": "warning"
+  },
+  "WEBSOCKET_HOST_INVALID": {
+    "category": "websocket",
+    "message": "WebSocket server host is not available",
+    "severity": "error"
+  },
+  "WEBSOCKET_PORT_UNAVAILABLE": {
+    "category": "websocket",
+    "message": "WebSocket server port is not available",
+    "severity": "error"
+  },
+  "WEBSOCKET_PORT_INVALID": {
+    "category": "websocket",
+    "message": "WebSocket server port must be a number",
+    "severity": "warning"
+  },
+  "WEBSOCKET_SERVER_UNAVAILABLE": {
+    "category": "websocket",
+    "message": "WebSocket server host or port is not available",
+    "severity": "error"
+  },
+  "OBS_BROWSER_SOURCE_HOST_UNAVAILABLE": {
+    "category": "obs_browser_source",
+    "message": "OBS Browser Source server host is not available",
+    "severity": "error"
+  },
+  "OBS_BROWSER_SOURCE_PORT_UNAVAILABLE": {
+    "category": "obs_browser_source",
+    "message": "OBS Browser Source server port is not available",
+    "severity": "error"
+  },
+  "OBS_BROWSER_SOURCE_SERVER_UNAVAILABLE": {
+    "category": "obs_browser_source",
+    "message": "OBS Browser Source server is not available",
+    "severity": "error"
+  },
+  "OBS_BROWSER_SOURCE_FONT_COLOR_INVALID": {
+    "category": "obs_browser_source",
+    "message": "OBS Browser Source font color is not valid (#RRGGBB)",
+    "severity": "warning"
+  },
+  "OBS_BROWSER_SOURCE_FONT_OUTLINE_COLOR_INVALID": {
+    "category": "obs_browser_source",
+    "message": "OBS Browser Source outline color is not valid (#RRGGBB)",
+    "severity": "warning"
+  },
+  "OBS_BROWSER_SOURCE_MAX_MESSAGES_INVALID": {
+    "category": "obs_browser_source",
+    "message": "OBS Browser Source max messages must be a number",
+    "severity": "warning"
+  },
+  "OBS_BROWSER_SOURCE_DISPLAY_DURATION_INVALID": {
+    "category": "obs_browser_source",
+    "message": "OBS Browser Source display duration must be a number",
+    "severity": "warning"
+  },
+  "OBS_BROWSER_SOURCE_FADEOUT_DURATION_INVALID": {
+    "category": "obs_browser_source",
+    "message": "OBS Browser Source fadeout duration must be a number",
+    "severity": "warning"
+  },
+  "OBS_BROWSER_SOURCE_FONT_SIZE_INVALID": {
+    "category": "obs_browser_source",
+    "message": "OBS Browser Source font size must be a number",
+    "severity": "warning"
+  },
+  "OBS_BROWSER_SOURCE_FONT_OUTLINE_THICKNESS_INVALID": {
+    "category": "obs_browser_source",
+    "message": "OBS Browser Source outline thickness must be a number",
+    "severity": "warning"
+  },
+  "VRC_MIC_MUTE_SYNC_OSC_DISABLED": {
+    "category": "vrc",
+    "message": "Cannot enable VRC mic mute sync while OSC query is disabled",
+    "severity": "warning"
+  },
+  "OCR_DISABLED_ENGINE_UNAVAILABLE": {
+    "category": "ocr",
+    "message": "OCR disabled: OCR engine or its dependencies are unavailable",
+    "severity": "error"
+  },
+  "OCR_DISABLED_MODEL_LOAD_FAILED": {
+    "category": "ocr",
+    "message": "OCR disabled: failed to load OCR model",
+    "severity": "error"
+  },
+  "OCR_DISABLED_UNSUPPORTED_LANGUAGE": {
+    "category": "ocr",
+    "message": "OCR disabled: source language is not supported",
+    "severity": "error"
+  },
+  "OCR_DISABLED_UNKNOWN": {
+    "category": "ocr",
+    "message": "OCR disabled due to an unknown error",
+    "severity": "error"
+  },
+  "GENERAL_EXCEPTION": {
+    "category": "general",
+    "message": "An error occurred",
+    "severity": "error"
+  },
+  "GENERAL_UNKNOWN": {
+    "category": "general",
+    "message": "Unknown error",
+    "severity": "error"
+  }
+}

@@ -76,20 +76,87 @@ pub struct WebSocketSink {
 
 impl WebSocketSink {
     pub fn new(replica: Arc<ConfigReplica>) -> Self {
-        Self { replica, running: Mutex::new(None) }
+        Self {
+            replica,
+            running: Mutex::new(None),
+        }
     }
 
     /// Start listening (replacing a server on another address). Must be
     /// called from inside a Tokio runtime. The bind itself happens in the
     /// background and is reported on stderr if it fails.
     pub fn start(&self, host: &str, port: u16) -> Result<(), String> {
+        self.start_impl(host, port, false)
+    }
+
+    /// Native controller path: reserve the new socket before releasing the old
+    /// server, so a busy port cannot produce a successful UI response.
+    pub fn start_checked(&self, host: &str, port: u16) -> Result<(), String> {
+        let bound = self.prepare(host, port)?;
+        self.start_prepared(host, port, bound)
+    }
+
+    pub(crate) fn prepare(
+        &self,
+        host: &str,
+        port: u16,
+    ) -> Result<Option<tokio::net::TcpListener>, String> {
         if is_wildcard(host) {
-            return Err(format!("refusing to serve WebSocket on wildcard address {host}"));
+            return Err(format!(
+                "refusing to serve WebSocket on wildcard address {host}"
+            ));
+        }
+        if self
+            .running
+            .lock()
+            .unwrap()
+            .as_ref()
+            .is_some_and(|r| r.host == host && r.port == port)
+        {
+            return Ok(None);
+        }
+        let socket = std::net::TcpListener::bind((host, port))
+            .map_err(|e| format!("WebSocket bind failed: {e}"))?;
+        socket.set_nonblocking(true).map_err(|e| e.to_string())?;
+        tokio::net::TcpListener::from_std(socket)
+            .map(Some)
+            .map_err(|e| e.to_string())
+    }
+    pub(crate) fn start_prepared(
+        &self,
+        host: &str,
+        port: u16,
+        bound: Option<tokio::net::TcpListener>,
+    ) -> Result<(), String> {
+        self.start_with(host, port, bound)
+    }
+
+    fn start_impl(&self, host: &str, port: u16, checked: bool) -> Result<(), String> {
+        let bound = if checked {
+            self.prepare(host, port)?
+        } else {
+            None
+        };
+        self.start_with(host, port, bound)
+    }
+    fn start_with(
+        &self,
+        host: &str,
+        port: u16,
+        listener: Option<tokio::net::TcpListener>,
+    ) -> Result<(), String> {
+        if is_wildcard(host) {
+            return Err(format!(
+                "refusing to serve WebSocket on wildcard address {host}"
+            ));
         }
         let runtime = tokio::runtime::Handle::try_current()
             .map_err(|_| "WebSocket sink needs a Tokio runtime".to_string())?;
         let mut running = self.running.lock().unwrap();
-        if running.as_ref().is_some_and(|r| r.host == host && r.port == port) {
+        if running
+            .as_ref()
+            .is_some_and(|r| r.host == host && r.port == port)
+        {
             return Ok(());
         }
         if let Some(previous) = running.take() {
@@ -103,8 +170,14 @@ impl WebSocketSink {
             Arc::clone(&self.replica),
             shutdown_rx,
             messages.clone(),
+            listener,
         ));
-        *running = Some(Running { host: host.to_string(), port, shutdown, messages });
+        *running = Some(Running {
+            host: host.to_string(),
+            port,
+            shutdown,
+            messages,
+        });
         Ok(())
     }
 
@@ -112,6 +185,10 @@ impl WebSocketSink {
         if let Some(running) = self.running.lock().unwrap().take() {
             let _ = running.shutdown.send(true);
         }
+    }
+
+    pub fn is_running(&self) -> bool {
+        self.running.lock().unwrap().is_some()
     }
 
     /// Send `text` verbatim to every connected client.
@@ -129,8 +206,13 @@ async fn serve(
     replica: Arc<ConfigReplica>,
     mut shutdown: watch::Receiver<bool>,
     messages: broadcast::Sender<Arc<str>>,
+    bound: Option<tokio::net::TcpListener>,
 ) {
-    let listener = match bind(&host, port, &mut shutdown).await {
+    let listener = match if let Some(listener) = bound {
+        Ok(listener)
+    } else {
+        bind(&host, port, &mut shutdown).await
+    } {
         Ok(listener) => listener,
         Err(error) => {
             eprintln!("[sinks] websocket: {error}");
@@ -206,10 +288,19 @@ mod tests {
     #[test]
     fn token_is_read_like_parse_qs() {
         assert_eq!(token_from_query(Some("token=abc")).as_deref(), Some("abc"));
-        assert_eq!(token_from_query(Some("a=1&token=x-y_z&b=2")).as_deref(), Some("x-y_z"));
-        assert_eq!(token_from_query(Some("token=a%2Bb%20c+d")).as_deref(), Some("a+b c d"));
+        assert_eq!(
+            token_from_query(Some("a=1&token=x-y_z&b=2")).as_deref(),
+            Some("x-y_z")
+        );
+        assert_eq!(
+            token_from_query(Some("token=a%2Bb%20c+d")).as_deref(),
+            Some("a+b c d")
+        );
         // The first one wins, as `parse_qs(...)["token"][0]` does.
-        assert_eq!(token_from_query(Some("token=1&token=2")).as_deref(), Some("1"));
+        assert_eq!(
+            token_from_query(Some("token=1&token=2")).as_deref(),
+            Some("1")
+        );
         assert_eq!(token_from_query(Some("token=")).as_deref(), Some(""));
         assert_eq!(token_from_query(Some("tokens=abc")), None);
         assert_eq!(token_from_query(Some("")), None);

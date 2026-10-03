@@ -8,7 +8,17 @@ edition = "2021"
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [workspace]
-members = ["crates/vrct-core"]
+members = ["crates/vrct-core", "crates/xtask"]
+
+# The native core includes inference and shaping libraries. Keep Windows
+# development/test builds within ordinary memory limits during LLVM codegen.
+[profile.dev.package.vrct-core]
+debug = 0
+codegen-units = 16
+
+[profile.test.package.vrct-core]
+debug = 0
+codegen-units = 16
 
 [lib]
 # The `_lib` suffix may seem redundant but it is necessary
@@ -18,6 +28,7 @@ name = "vrct_lib"
 crate-type = ["staticlib", "cdylib", "rlib"]
 
 [features]
+default = ["ct2"]
 # Run local CTranslate2 models in this process (see vrct-core's `ct2` feature).
 # Needs cmake; the static MSVC runtime comes from .cargo/config.toml.
 ct2 = ["vrct-core/ct2"]

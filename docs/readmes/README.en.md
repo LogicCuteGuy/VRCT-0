@@ -97,6 +97,13 @@ VRCT collects anonymous telemetry data via [Aptabase](https://aptabase.com) to h
 
 You can opt out of telemetry in the app settings at any time. See the [Aptabase Privacy Policy](https://aptabase.com/legal/privacy) for more details.
 
+## Native development
+
+The Windows backend runs in Rust. Development and packaging do not require
+Python: use `npm run dev`, `npm run build`, or `npm run release` after
+installing Node, Rust, MSVC/Windows SDK and CMake.
+See [native backend and resource setup](/docs/native_pipeline.md).
+
 ## License
 
 VRCT is released under the [MIT License](/LICENSE), with one exception: the

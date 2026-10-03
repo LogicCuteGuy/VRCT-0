@@ -14,8 +14,17 @@ BOOTH.
 | Copyright | Copyright (c) 2026 misyaguziya. All rights reserved. |
 | License | VRCT Chat-Bubble Detection Model License Agreement — [`LICENSE.txt`](src-python/models/ocr/onnx/LICENSE.txt) (Japanese, authoritative) / [`LICENSE.en.txt`](src-python/models/ocr/onnx/LICENSE.en.txt) (English translation) |
 
-This file is **not** covered by the MIT License in `LICENSE`. Every other
-file in this repository is.
+This file is **not** covered by the MIT License in `LICENSE`. VRCT's
+first-party source is covered by MIT; bundled third-party components retain
+their own licenses.
+
+## Native third-party components
+
+Native packages include OpenVR, ONNX Runtime, the Microsoft Visual C++
+redistributable, Noto fonts, Sudachi dictionaries and general RapidOCR models.
+Their license and attribution files accompany the DLLs under `licenses/` or
+their corresponding `resources/` directories. The restricted chat-bubble
+detector described above is excluded from this fork's built packages.
 
 ### What you may and may not do
 

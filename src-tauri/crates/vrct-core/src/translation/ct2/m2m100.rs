@@ -25,13 +25,13 @@ use serde_json::Value;
 
 /// Language codes the M2M100 models know (`FAIRSEQ_LANGUAGE_CODES["m2m100"]`).
 const LANGUAGES: [&str; 100] = [
-    "af", "am", "ar", "ast", "az", "ba", "be", "bg", "bn", "br", "bs", "ca", "ceb", "cs", "cy", "da",
-    "de", "el", "en", "es", "et", "fa", "ff", "fi", "fr", "fy", "ga", "gd", "gl", "gu", "ha", "he",
-    "hi", "hr", "ht", "hu", "hy", "id", "ig", "ilo", "is", "it", "ja", "jv", "ka", "kk", "km", "kn",
-    "ko", "lb", "lg", "ln", "lo", "lt", "lv", "mg", "mk", "ml", "mn", "mr", "ms", "my", "ne", "nl",
-    "no", "ns", "oc", "or", "pa", "pl", "ps", "pt", "ro", "ru", "sd", "si", "sk", "sl", "so", "sq",
-    "sr", "ss", "su", "sv", "sw", "ta", "th", "tl", "tn", "tr", "uk", "ur", "uz", "vi", "wo", "xh",
-    "yi", "yo", "zh", "zu",
+    "af", "am", "ar", "ast", "az", "ba", "be", "bg", "bn", "br", "bs", "ca", "ceb", "cs", "cy",
+    "da", "de", "el", "en", "es", "et", "fa", "ff", "fi", "fr", "fy", "ga", "gd", "gl", "gu", "ha",
+    "he", "hi", "hr", "ht", "hu", "hy", "id", "ig", "ilo", "is", "it", "ja", "jv", "ka", "kk",
+    "km", "kn", "ko", "lb", "lg", "ln", "lo", "lt", "lv", "mg", "mk", "ml", "mn", "mr", "ms", "my",
+    "ne", "nl", "no", "ns", "oc", "or", "pa", "pl", "ps", "pt", "ro", "ru", "sd", "si", "sk", "sl",
+    "so", "sq", "sr", "ss", "su", "sv", "sw", "ta", "th", "tl", "tn", "tr", "uk", "ur", "uz", "vi",
+    "wo", "xh", "yi", "yo", "zh", "zu",
 ];
 
 const SPM_FILE: &str = "sentencepiece.bpe.model";
@@ -52,8 +52,10 @@ impl Tokenizer {
     pub fn open(dir: &Path) -> Result<Self, String> {
         let pieces = SentencePieceProcessor::open(dir.join(SPM_FILE))
             .map_err(|e| format!("cannot load {SPM_FILE}: {e}"))?;
-        let vocabulary = fs::read_to_string(dir.join(VOCAB_FILE)).map_err(|e| format!("cannot read {VOCAB_FILE}: {e}"))?;
-        let vocabulary: Value = serde_json::from_str(&vocabulary).map_err(|e| format!("bad {VOCAB_FILE}: {e}"))?;
+        let vocabulary = fs::read_to_string(dir.join(VOCAB_FILE))
+            .map_err(|e| format!("cannot read {VOCAB_FILE}: {e}"))?;
+        let vocabulary: Value =
+            serde_json::from_str(&vocabulary).map_err(|e| format!("bad {VOCAB_FILE}: {e}"))?;
         let vocabulary = vocabulary
             .as_object()
             .ok_or_else(|| format!("{VOCAB_FILE} is not an object"))?
@@ -64,9 +66,17 @@ impl Tokenizer {
         let clean_up = fs::read_to_string(dir.join(CONFIG_FILE))
             .ok()
             .and_then(|text| serde_json::from_str::<Value>(&text).ok())
-            .and_then(|config| config.get("clean_up_tokenization_spaces").and_then(Value::as_bool))
+            .and_then(|config| {
+                config
+                    .get("clean_up_tokenization_spaces")
+                    .and_then(Value::as_bool)
+            })
             .unwrap_or(true);
-        Ok(Self { pieces, vocabulary, clean_up })
+        Ok(Self {
+            pieces,
+            vocabulary,
+            clean_up,
+        })
     }
 
     /// Where `AutoTokenizer.from_pretrained(repo, cache_dir=dir)` left the files:
@@ -94,7 +104,10 @@ impl Tokenizer {
     /// `convert_ids_to_tokens(encode(text))` with `src_lang = source`.
     pub fn source_tokens(&self, text: &str, source: &str) -> Result<Vec<String>, String> {
         let mut tokens = vec![Self::language_token(source)?];
-        let pieces = self.pieces.encode(text).map_err(|e| format!("cannot tokenise: {e}"))?;
+        let pieces = self
+            .pieces
+            .encode(text)
+            .map_err(|e| format!("cannot tokenise: {e}"))?;
         tokens.extend(pieces.into_iter().map(|piece| {
             if self.vocabulary.contains(&piece.piece) {
                 piece.piece
@@ -118,7 +131,12 @@ impl Tokenizer {
         let mut run: Vec<&str> = Vec::new();
         let flush = |text: &mut String, run: &mut Vec<&str>| -> Result<(), String> {
             if !run.is_empty() {
-                text.push_str(&self.pieces.decode_pieces(run).map_err(|e| format!("cannot decode: {e}"))?);
+                text.push_str(
+                    &self
+                        .pieces
+                        .decode_pieces(run)
+                        .map_err(|e| format!("cannot decode: {e}"))?,
+                );
                 run.clear();
             }
             Ok(())
@@ -135,12 +153,19 @@ impl Tokenizer {
         }
         flush(&mut text, &mut run)?;
         let text = text.trim();
-        Ok(if self.clean_up { clean_up_tokenization(text) } else { text.to_string() })
+        Ok(if self.clean_up {
+            clean_up_tokenization(text)
+        } else {
+            text.to_string()
+        })
     }
 }
 
 fn is_language_token(token: &str) -> bool {
-    token.strip_prefix("__").and_then(|rest| rest.strip_suffix("__")).is_some_and(Tokenizer::knows)
+    token
+        .strip_prefix("__")
+        .and_then(|rest| rest.strip_suffix("__"))
+        .is_some_and(Tokenizer::knows)
 }
 
 /// `PreTrainedTokenizerBase.clean_up_tokenization`.

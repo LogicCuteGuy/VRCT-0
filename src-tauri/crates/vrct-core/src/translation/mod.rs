@@ -17,5 +17,6 @@ pub(crate) mod http;
 pub mod languages;
 pub mod llm;
 pub mod native;
+pub mod web;
 pub mod prompt;
 pub mod text;

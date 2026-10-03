@@ -65,7 +65,8 @@ impl LoggerSink {
         }
         let path = PathBuf::from(path);
         if let Some(parent) = path.parent().filter(|p| !p.as_os_str().is_empty()) {
-            std::fs::create_dir_all(parent).map_err(|e| format!("cannot create {}: {e}", parent.display()))?;
+            std::fs::create_dir_all(parent)
+                .map_err(|e| format!("cannot create {}: {e}", parent.display()))?;
         }
         *self.target.lock().unwrap() = Some(Target { path, file: None });
         Ok(())
@@ -115,13 +116,17 @@ mod tests {
     use chrono::Utc;
 
     fn at(ms: u32) -> DateTime<Utc> {
-        Utc.with_ymd_and_hms(2026, 10, 2, 3, 4, 5).unwrap() + chrono::Duration::milliseconds(ms as i64)
+        Utc.with_ymd_and_hms(2026, 10, 2, 3, 4, 5).unwrap()
+            + chrono::Duration::milliseconds(ms as i64)
     }
 
     #[test]
     fn record_layout_matches_the_python_formatter() {
         let record = format_record(at(7), "[SENT] hi");
-        assert_eq!(record, format!("2026-10-02 03:04:05,007 - log - INFO - [SENT] hi{EOL}"));
+        assert_eq!(
+            record,
+            format!("2026-10-02 03:04:05,007 - log - INFO - [SENT] hi{EOL}")
+        );
     }
 
     #[test]

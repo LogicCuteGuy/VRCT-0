@@ -31,6 +31,9 @@ pub trait Remote: Send + Sync {
     fn deepl(&self, auth_key: &str, text: &str, source: &str, target: &str) -> Result<String, String>;
     /// An LLM engine; the request carries the codes in `input_lang` and `output_lang`.
     fn llm(&self, request: llm::Request) -> Result<String, String>;
+    fn web(&self, _request: super::web::Request) -> Result<String, String> {
+        Err("web translation transport is not configured".into())
+    }
 }
 
 /// The real thing: HTTP on a tokio runtime. Calls block the calling thread, so they must not be made from
@@ -58,6 +61,10 @@ impl Remote for HttpRemote {
 
     fn llm(&self, request: llm::Request) -> Result<String, String> {
         self.runtime.block_on(llm::translate(request))
+    }
+
+    fn web(&self, request: super::web::Request) -> Result<String, String> {
+        self.runtime.block_on(super::web::translate(request))
     }
 }
 
@@ -203,7 +210,9 @@ impl Translator for NativeTranslator {
                 };
                 self.answer(engine, self.remote.llm(call))
             }
-            name if WEB_ENGINES.contains(&name) => self.failed(name, "this engine is not available in this build"),
+            name if WEB_ENGINES.contains(&name) => self.answer(name, self.remote.web(super::web::Request {
+                engine: name.into(), text: request.message.into(), source, target, base_url: None,
+            })),
             // An engine with a language table and no branch: Python's `result` stayed "".
             _ => Reply::Text(String::new()),
         }

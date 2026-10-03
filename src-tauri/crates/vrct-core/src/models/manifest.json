@@ -1,0 +1,1121 @@
+[
+  {
+    "kind": "ctranslate2",
+    "weight": "m2m100_418M-ct2-int8",
+    "files": [
+      {
+        "path": "README.md",
+        "repo": "jncraton/m2m100_418M-ct2-int8",
+        "revision": "7c1b2620a4e58dacecbd8bf89cfd6da7eb9eb7b0",
+        "file": "README.md",
+        "size": 4603,
+        "algorithm": "git-sha1",
+        "digest": "98b99edb1de68441bb0c87a9645c8f2e35ea34d0"
+      },
+      {
+        "path": "config.json",
+        "repo": "jncraton/m2m100_418M-ct2-int8",
+        "revision": "7c1b2620a4e58dacecbd8bf89cfd6da7eb9eb7b0",
+        "file": "config.json",
+        "size": 189,
+        "algorithm": "git-sha1",
+        "digest": "caabe03149031fc83c5c898c774f9a851ba91f1f"
+      },
+      {
+        "path": "generation_config.json",
+        "repo": "jncraton/m2m100_418M-ct2-int8",
+        "revision": "7c1b2620a4e58dacecbd8bf89cfd6da7eb9eb7b0",
+        "file": "generation_config.json",
+        "size": 233,
+        "algorithm": "git-sha1",
+        "digest": "ba941101cd3e90b113db16712f4a20372268e767"
+      },
+      {
+        "path": "model.bin",
+        "repo": "jncraton/m2m100_418M-ct2-int8",
+        "revision": "7c1b2620a4e58dacecbd8bf89cfd6da7eb9eb7b0",
+        "file": "model.bin",
+        "size": 490667713,
+        "algorithm": "sha256",
+        "digest": "d6703dd9f920ff896e45c3d97b490761bed5944937b90bbe6a7245f5652542d4"
+      },
+      {
+        "path": "sentencepiece.bpe.model",
+        "repo": "jncraton/m2m100_418M-ct2-int8",
+        "revision": "7c1b2620a4e58dacecbd8bf89cfd6da7eb9eb7b0",
+        "file": "sentencepiece.bpe.model",
+        "size": 2423393,
+        "algorithm": "sha256",
+        "digest": "d8f7c76ed2a5e0822be39f0a4f95a55eb19c78f4593ce609e2edbc2aea4d380a"
+      },
+      {
+        "path": "shared_vocabulary.json",
+        "repo": "jncraton/m2m100_418M-ct2-int8",
+        "revision": "7c1b2620a4e58dacecbd8bf89cfd6da7eb9eb7b0",
+        "file": "shared_vocabulary.json",
+        "size": 2796509,
+        "algorithm": "git-sha1",
+        "digest": "7fbe484413e3a8b90e20dade34d3519a8a324255"
+      },
+      {
+        "path": "special_tokens_map.json",
+        "repo": "jncraton/m2m100_418M-ct2-int8",
+        "revision": "7c1b2620a4e58dacecbd8bf89cfd6da7eb9eb7b0",
+        "file": "special_tokens_map.json",
+        "size": 1140,
+        "algorithm": "git-sha1",
+        "digest": "c6c3195f9bb7856df9a3fdd0252bcf99ff209f5d"
+      },
+      {
+        "path": "tokenizer_config.json",
+        "repo": "jncraton/m2m100_418M-ct2-int8",
+        "revision": "7c1b2620a4e58dacecbd8bf89cfd6da7eb9eb7b0",
+        "file": "tokenizer_config.json",
+        "size": 272,
+        "algorithm": "git-sha1",
+        "digest": "6584fc74f646afb2a408f08e244219bd1434000a"
+      },
+      {
+        "path": "vocab.json",
+        "repo": "jncraton/m2m100_418M-ct2-int8",
+        "revision": "7c1b2620a4e58dacecbd8bf89cfd6da7eb9eb7b0",
+        "file": "vocab.json",
+        "size": 3708092,
+        "algorithm": "git-sha1",
+        "digest": "380e263bf4efc45fa72251fb19336a9593307bc4"
+      },
+      {
+        "path": "tokenizer/README.md",
+        "repo": "facebook/m2m100_418M",
+        "revision": "55c2e61bbf05dfb8d7abccdc3fae6fc8512fd636",
+        "file": "README.md",
+        "size": 4603,
+        "algorithm": "git-sha1",
+        "digest": "98b99edb1de68441bb0c87a9645c8f2e35ea34d0"
+      },
+      {
+        "path": "tokenizer/sentencepiece.bpe.model",
+        "repo": "facebook/m2m100_418M",
+        "revision": "55c2e61bbf05dfb8d7abccdc3fae6fc8512fd636",
+        "file": "sentencepiece.bpe.model",
+        "size": 2423393,
+        "algorithm": "sha256",
+        "digest": "d8f7c76ed2a5e0822be39f0a4f95a55eb19c78f4593ce609e2edbc2aea4d380a"
+      },
+      {
+        "path": "tokenizer/special_tokens_map.json",
+        "repo": "facebook/m2m100_418M",
+        "revision": "55c2e61bbf05dfb8d7abccdc3fae6fc8512fd636",
+        "file": "special_tokens_map.json",
+        "size": 1140,
+        "algorithm": "git-sha1",
+        "digest": "c6c3195f9bb7856df9a3fdd0252bcf99ff209f5d"
+      },
+      {
+        "path": "tokenizer/tokenizer_config.json",
+        "repo": "facebook/m2m100_418M",
+        "revision": "55c2e61bbf05dfb8d7abccdc3fae6fc8512fd636",
+        "file": "tokenizer_config.json",
+        "size": 298,
+        "algorithm": "git-sha1",
+        "digest": "c0acb40bd22d2a992d273bb6a2b1c99c37613e4f"
+      },
+      {
+        "path": "tokenizer/vocab.json",
+        "repo": "facebook/m2m100_418M",
+        "revision": "55c2e61bbf05dfb8d7abccdc3fae6fc8512fd636",
+        "file": "vocab.json",
+        "size": 3708092,
+        "algorithm": "git-sha1",
+        "digest": "380e263bf4efc45fa72251fb19336a9593307bc4"
+      }
+    ]
+  },
+  {
+    "kind": "ctranslate2",
+    "weight": "m2m100_1.2B-ct2-int8",
+    "files": [
+      {
+        "path": "README.md",
+        "repo": "jncraton/m2m100_1.2B-ct2-int8",
+        "revision": "e50078df6be13a88592b70ea42f4d74c2082e448",
+        "file": "README.md",
+        "size": 4603,
+        "algorithm": "git-sha1",
+        "digest": "11b126a4d5fd67f99f4037adf715a23edce628c3"
+      },
+      {
+        "path": "config.json",
+        "repo": "jncraton/m2m100_1.2B-ct2-int8",
+        "revision": "e50078df6be13a88592b70ea42f4d74c2082e448",
+        "file": "config.json",
+        "size": 189,
+        "algorithm": "git-sha1",
+        "digest": "caabe03149031fc83c5c898c774f9a851ba91f1f"
+      },
+      {
+        "path": "generation_config.json",
+        "repo": "jncraton/m2m100_1.2B-ct2-int8",
+        "revision": "e50078df6be13a88592b70ea42f4d74c2082e448",
+        "file": "generation_config.json",
+        "size": 233,
+        "algorithm": "git-sha1",
+        "digest": "ba941101cd3e90b113db16712f4a20372268e767"
+      },
+      {
+        "path": "model.bin",
+        "repo": "jncraton/m2m100_1.2B-ct2-int8",
+        "revision": "e50078df6be13a88592b70ea42f4d74c2082e448",
+        "file": "model.bin",
+        "size": 1249655149,
+        "algorithm": "sha256",
+        "digest": "c97df052a558895317312470e1ff7cb8eae5416f7ae16214a2983c6853dd3ce5"
+      },
+      {
+        "path": "sentencepiece.bpe.model",
+        "repo": "jncraton/m2m100_1.2B-ct2-int8",
+        "revision": "e50078df6be13a88592b70ea42f4d74c2082e448",
+        "file": "sentencepiece.bpe.model",
+        "size": 2423393,
+        "algorithm": "sha256",
+        "digest": "d8f7c76ed2a5e0822be39f0a4f95a55eb19c78f4593ce609e2edbc2aea4d380a"
+      },
+      {
+        "path": "shared_vocabulary.json",
+        "repo": "jncraton/m2m100_1.2B-ct2-int8",
+        "revision": "e50078df6be13a88592b70ea42f4d74c2082e448",
+        "file": "shared_vocabulary.json",
+        "size": 2796509,
+        "algorithm": "git-sha1",
+        "digest": "7fbe484413e3a8b90e20dade34d3519a8a324255"
+      },
+      {
+        "path": "special_tokens_map.json",
+        "repo": "jncraton/m2m100_1.2B-ct2-int8",
+        "revision": "e50078df6be13a88592b70ea42f4d74c2082e448",
+        "file": "special_tokens_map.json",
+        "size": 1140,
+        "algorithm": "git-sha1",
+        "digest": "c6c3195f9bb7856df9a3fdd0252bcf99ff209f5d"
+      },
+      {
+        "path": "tokenizer_config.json",
+        "repo": "jncraton/m2m100_1.2B-ct2-int8",
+        "revision": "e50078df6be13a88592b70ea42f4d74c2082e448",
+        "file": "tokenizer_config.json",
+        "size": 271,
+        "algorithm": "git-sha1",
+        "digest": "855fffc4cd7e8e7f863f0be3e929a9c828beaf1b"
+      },
+      {
+        "path": "vocab.json",
+        "repo": "jncraton/m2m100_1.2B-ct2-int8",
+        "revision": "e50078df6be13a88592b70ea42f4d74c2082e448",
+        "file": "vocab.json",
+        "size": 3708092,
+        "algorithm": "git-sha1",
+        "digest": "380e263bf4efc45fa72251fb19336a9593307bc4"
+      },
+      {
+        "path": "tokenizer/README.md",
+        "repo": "facebook/m2m100_1.2B",
+        "revision": "7b36184180524c1a1bbfa37f120a608046250b98",
+        "file": "README.md",
+        "size": 4603,
+        "algorithm": "git-sha1",
+        "digest": "11b126a4d5fd67f99f4037adf715a23edce628c3"
+      },
+      {
+        "path": "tokenizer/sentencepiece.bpe.model",
+        "repo": "facebook/m2m100_1.2B",
+        "revision": "7b36184180524c1a1bbfa37f120a608046250b98",
+        "file": "sentencepiece.bpe.model",
+        "size": 2423393,
+        "algorithm": "sha256",
+        "digest": "d8f7c76ed2a5e0822be39f0a4f95a55eb19c78f4593ce609e2edbc2aea4d380a"
+      },
+      {
+        "path": "tokenizer/special_tokens_map.json",
+        "repo": "facebook/m2m100_1.2B",
+        "revision": "7b36184180524c1a1bbfa37f120a608046250b98",
+        "file": "special_tokens_map.json",
+        "size": 1140,
+        "algorithm": "git-sha1",
+        "digest": "c6c3195f9bb7856df9a3fdd0252bcf99ff209f5d"
+      },
+      {
+        "path": "tokenizer/tokenizer_config.json",
+        "repo": "facebook/m2m100_1.2B",
+        "revision": "7b36184180524c1a1bbfa37f120a608046250b98",
+        "file": "tokenizer_config.json",
+        "size": 271,
+        "algorithm": "git-sha1",
+        "digest": "855fffc4cd7e8e7f863f0be3e929a9c828beaf1b"
+      },
+      {
+        "path": "tokenizer/vocab.json",
+        "repo": "facebook/m2m100_1.2B",
+        "revision": "7b36184180524c1a1bbfa37f120a608046250b98",
+        "file": "vocab.json",
+        "size": 3708092,
+        "algorithm": "git-sha1",
+        "digest": "380e263bf4efc45fa72251fb19336a9593307bc4"
+      }
+    ]
+  },
+  {
+    "kind": "ctranslate2",
+    "weight": "nllb-200-distilled-600M-ct2-int8",
+    "files": [
+      {
+        "path": "README.md",
+        "repo": "JustFrederik/nllb-200-distilled-600M-ct2-int8",
+        "revision": "302d78f00e6fdb50a1064059df7c392b735e9d05",
+        "file": "README.md",
+        "size": 3435,
+        "algorithm": "git-sha1",
+        "digest": "15da307d1705e12c9b00fdb3f0de5be250036680"
+      },
+      {
+        "path": "config.json",
+        "repo": "JustFrederik/nllb-200-distilled-600M-ct2-int8",
+        "revision": "302d78f00e6fdb50a1064059df7c392b735e9d05",
+        "file": "config.json",
+        "size": 159,
+        "algorithm": "git-sha1",
+        "digest": "338d32248dd94e6268192c8354c41c0eca5eeb62"
+      },
+      {
+        "path": "model.bin",
+        "repo": "JustFrederik/nllb-200-distilled-600M-ct2-int8",
+        "revision": "302d78f00e6fdb50a1064059df7c392b735e9d05",
+        "file": "model.bin",
+        "size": 622595991,
+        "algorithm": "sha256",
+        "digest": "ed1beaf75134de7505315a5223162f56acff397eff6b50638a500d3936fe707b"
+      },
+      {
+        "path": "sentencepiece.bpe.model",
+        "repo": "JustFrederik/nllb-200-distilled-600M-ct2-int8",
+        "revision": "302d78f00e6fdb50a1064059df7c392b735e9d05",
+        "file": "sentencepiece.bpe.model",
+        "size": 4852054,
+        "algorithm": "sha256",
+        "digest": "14bb8dfb35c0ffdea7bc01e56cea38b9e3d5efcdcb9c251d6b40538e1aab555a"
+      },
+      {
+        "path": "shared_vocabulary.txt",
+        "repo": "JustFrederik/nllb-200-distilled-600M-ct2-int8",
+        "revision": "302d78f00e6fdb50a1064059df7c392b735e9d05",
+        "file": "shared_vocabulary.txt",
+        "size": 2568098,
+        "algorithm": "git-sha1",
+        "digest": "1f831354dfc504f6b866ad05aa8efd94919badf9"
+      },
+      {
+        "path": "special_tokens_map.json",
+        "repo": "JustFrederik/nllb-200-distilled-600M-ct2-int8",
+        "revision": "302d78f00e6fdb50a1064059df7c392b735e9d05",
+        "file": "special_tokens_map.json",
+        "size": 3548,
+        "algorithm": "git-sha1",
+        "digest": "02fba84e401dd2017999a39cac2c1278591c3a03"
+      },
+      {
+        "path": "tokenizer.json",
+        "repo": "JustFrederik/nllb-200-distilled-600M-ct2-int8",
+        "revision": "302d78f00e6fdb50a1064059df7c392b735e9d05",
+        "file": "tokenizer.json",
+        "size": 17331176,
+        "algorithm": "sha256",
+        "digest": "e316b82de11d0f951f370943b3c438311629547285129b0b81dadabd01bca665"
+      },
+      {
+        "path": "tokenizer_config.json",
+        "repo": "JustFrederik/nllb-200-distilled-600M-ct2-int8",
+        "revision": "302d78f00e6fdb50a1064059df7c392b735e9d05",
+        "file": "tokenizer_config.json",
+        "size": 564,
+        "algorithm": "git-sha1",
+        "digest": "742aa330eae62f661fe28ff3fdd1d216d1481294"
+      },
+      {
+        "path": "tokenizer/README.md",
+        "repo": "facebook/nllb-200-distilled-600M",
+        "revision": "f8d333a098d19b4fd9a8b18f94170487ad3f821d",
+        "file": "README.md",
+        "size": 7667,
+        "algorithm": "git-sha1",
+        "digest": "489890f6973db2448e698120b132fc8e2fcfb304"
+      },
+      {
+        "path": "tokenizer/sentencepiece.bpe.model",
+        "repo": "facebook/nllb-200-distilled-600M",
+        "revision": "f8d333a098d19b4fd9a8b18f94170487ad3f821d",
+        "file": "sentencepiece.bpe.model",
+        "size": 4852054,
+        "algorithm": "sha256",
+        "digest": "14bb8dfb35c0ffdea7bc01e56cea38b9e3d5efcdcb9c251d6b40538e1aab555a"
+      },
+      {
+        "path": "tokenizer/special_tokens_map.json",
+        "repo": "facebook/nllb-200-distilled-600M",
+        "revision": "f8d333a098d19b4fd9a8b18f94170487ad3f821d",
+        "file": "special_tokens_map.json",
+        "size": 3548,
+        "algorithm": "git-sha1",
+        "digest": "02fba84e401dd2017999a39cac2c1278591c3a03"
+      },
+      {
+        "path": "tokenizer/tokenizer.json",
+        "repo": "facebook/nllb-200-distilled-600M",
+        "revision": "f8d333a098d19b4fd9a8b18f94170487ad3f821d",
+        "file": "tokenizer.json",
+        "size": 17331176,
+        "algorithm": "sha256",
+        "digest": "e316b82de11d0f951f370943b3c438311629547285129b0b81dadabd01bca665"
+      },
+      {
+        "path": "tokenizer/tokenizer_config.json",
+        "repo": "facebook/nllb-200-distilled-600M",
+        "revision": "f8d333a098d19b4fd9a8b18f94170487ad3f821d",
+        "file": "tokenizer_config.json",
+        "size": 564,
+        "algorithm": "git-sha1",
+        "digest": "742aa330eae62f661fe28ff3fdd1d216d1481294"
+      }
+    ]
+  },
+  {
+    "kind": "ctranslate2",
+    "weight": "nllb-200-distilled-1.3B-ct2-int8",
+    "files": [
+      {
+        "path": "README.md",
+        "repo": "OpenNMT/nllb-200-distilled-1.3B-ct2-int8",
+        "revision": "70f572adafa4794890ce7826156a4209717855af",
+        "file": "README.md",
+        "size": 8872,
+        "algorithm": "git-sha1",
+        "digest": "68044d7ecfdbbd6769b5e8c5d2ab381d2e4cc473"
+      },
+      {
+        "path": "config.json",
+        "repo": "OpenNMT/nllb-200-distilled-1.3B-ct2-int8",
+        "revision": "70f572adafa4794890ce7826156a4209717855af",
+        "file": "config.json",
+        "size": 1071,
+        "algorithm": "git-sha1",
+        "digest": "271637a3e98b0a2ac4795865d58b67e0b640d5a7"
+      },
+      {
+        "path": "generation_config.json",
+        "repo": "OpenNMT/nllb-200-distilled-1.3B-ct2-int8",
+        "revision": "70f572adafa4794890ce7826156a4209717855af",
+        "file": "generation_config.json",
+        "size": 189,
+        "algorithm": "git-sha1",
+        "digest": "4c6d168201607a22255bee55a6ed092b0e3ed7a1"
+      },
+      {
+        "path": "model.bin",
+        "repo": "OpenNMT/nllb-200-distilled-1.3B-ct2-int8",
+        "revision": "70f572adafa4794890ce7826156a4209717855af",
+        "file": "model.bin",
+        "size": 1377755738,
+        "algorithm": "sha256",
+        "digest": "89dc4b9eb7f4dcd3ff36023c9b1c55fcecb47ddc0df97ab31b068ef9cf194940"
+      },
+      {
+        "path": "shared_vocabulary.json",
+        "repo": "OpenNMT/nllb-200-distilled-1.3B-ct2-int8",
+        "revision": "70f572adafa4794890ce7826156a4209717855af",
+        "file": "shared_vocabulary.json",
+        "size": 5921176,
+        "algorithm": "git-sha1",
+        "digest": "af6771314c673db7660640e91062e5fee96eeb2a"
+      },
+      {
+        "path": "special_tokens_map.json",
+        "repo": "OpenNMT/nllb-200-distilled-1.3B-ct2-int8",
+        "revision": "70f572adafa4794890ce7826156a4209717855af",
+        "file": "special_tokens_map.json",
+        "size": 3548,
+        "algorithm": "git-sha1",
+        "digest": "02fba84e401dd2017999a39cac2c1278591c3a03"
+      },
+      {
+        "path": "tokenizer.json",
+        "repo": "OpenNMT/nllb-200-distilled-1.3B-ct2-int8",
+        "revision": "70f572adafa4794890ce7826156a4209717855af",
+        "file": "tokenizer.json",
+        "size": 17331176,
+        "algorithm": "sha256",
+        "digest": "e316b82de11d0f951f370943b3c438311629547285129b0b81dadabd01bca665"
+      },
+      {
+        "path": "tokenizer_config.json",
+        "repo": "OpenNMT/nllb-200-distilled-1.3B-ct2-int8",
+        "revision": "70f572adafa4794890ce7826156a4209717855af",
+        "file": "tokenizer_config.json",
+        "size": 564,
+        "algorithm": "git-sha1",
+        "digest": "742aa330eae62f661fe28ff3fdd1d216d1481294"
+      },
+      {
+        "path": "tokenizer/README.md",
+        "repo": "facebook/nllb-200-distilled-1.3B",
+        "revision": "7be3e24664b38ce1cac29b8aeed6911aa0cf0576",
+        "file": "README.md",
+        "size": 7653,
+        "algorithm": "git-sha1",
+        "digest": "70cdd10e467d07f6c47995bbf71ded8ae67162ea"
+      },
+      {
+        "path": "tokenizer/sentencepiece.bpe.model",
+        "repo": "facebook/nllb-200-distilled-1.3B",
+        "revision": "7be3e24664b38ce1cac29b8aeed6911aa0cf0576",
+        "file": "sentencepiece.bpe.model",
+        "size": 4852054,
+        "algorithm": "sha256",
+        "digest": "14bb8dfb35c0ffdea7bc01e56cea38b9e3d5efcdcb9c251d6b40538e1aab555a"
+      },
+      {
+        "path": "tokenizer/special_tokens_map.json",
+        "repo": "facebook/nllb-200-distilled-1.3B",
+        "revision": "7be3e24664b38ce1cac29b8aeed6911aa0cf0576",
+        "file": "special_tokens_map.json",
+        "size": 3548,
+        "algorithm": "git-sha1",
+        "digest": "02fba84e401dd2017999a39cac2c1278591c3a03"
+      },
+      {
+        "path": "tokenizer/tokenizer.json",
+        "repo": "facebook/nllb-200-distilled-1.3B",
+        "revision": "7be3e24664b38ce1cac29b8aeed6911aa0cf0576",
+        "file": "tokenizer.json",
+        "size": 17331176,
+        "algorithm": "sha256",
+        "digest": "e316b82de11d0f951f370943b3c438311629547285129b0b81dadabd01bca665"
+      },
+      {
+        "path": "tokenizer/tokenizer_config.json",
+        "repo": "facebook/nllb-200-distilled-1.3B",
+        "revision": "7be3e24664b38ce1cac29b8aeed6911aa0cf0576",
+        "file": "tokenizer_config.json",
+        "size": 564,
+        "algorithm": "git-sha1",
+        "digest": "742aa330eae62f661fe28ff3fdd1d216d1481294"
+      }
+    ]
+  },
+  {
+    "kind": "ctranslate2",
+    "weight": "nllb-200-3.3B-ct2-int8",
+    "files": [
+      {
+        "path": "README.md",
+        "repo": "OpenNMT/nllb-200-3.3B-ct2-int8",
+        "revision": "28d998cc8548ad62f4f98cf8860928c3af99b97b",
+        "file": "README.md",
+        "size": 8888,
+        "algorithm": "git-sha1",
+        "digest": "9c817ddef449dcc25975749210e1d5707f7c13e1"
+      },
+      {
+        "path": "config.json",
+        "repo": "OpenNMT/nllb-200-3.3B-ct2-int8",
+        "revision": "28d998cc8548ad62f4f98cf8860928c3af99b97b",
+        "file": "config.json",
+        "size": 1071,
+        "algorithm": "git-sha1",
+        "digest": "02fa5ed61ce3f1ac1980f76d1adae2698d614d4b"
+      },
+      {
+        "path": "generation_config.json",
+        "repo": "OpenNMT/nllb-200-3.3B-ct2-int8",
+        "revision": "28d998cc8548ad62f4f98cf8860928c3af99b97b",
+        "file": "generation_config.json",
+        "size": 189,
+        "algorithm": "git-sha1",
+        "digest": "4c6d168201607a22255bee55a6ed092b0e3ed7a1"
+      },
+      {
+        "path": "model.bin",
+        "repo": "OpenNMT/nllb-200-3.3B-ct2-int8",
+        "revision": "28d998cc8548ad62f4f98cf8860928c3af99b97b",
+        "file": "model.bin",
+        "size": 3356047962,
+        "algorithm": "sha256",
+        "digest": "b7540c4e19aa2a5079c89241ffccb49711705ca8b1d255cea00c3216dc7d5165"
+      },
+      {
+        "path": "shared_vocabulary.json",
+        "repo": "OpenNMT/nllb-200-3.3B-ct2-int8",
+        "revision": "28d998cc8548ad62f4f98cf8860928c3af99b97b",
+        "file": "shared_vocabulary.json",
+        "size": 5921176,
+        "algorithm": "git-sha1",
+        "digest": "af6771314c673db7660640e91062e5fee96eeb2a"
+      },
+      {
+        "path": "special_tokens_map.json",
+        "repo": "OpenNMT/nllb-200-3.3B-ct2-int8",
+        "revision": "28d998cc8548ad62f4f98cf8860928c3af99b97b",
+        "file": "special_tokens_map.json",
+        "size": 3548,
+        "algorithm": "git-sha1",
+        "digest": "02fba84e401dd2017999a39cac2c1278591c3a03"
+      },
+      {
+        "path": "tokenizer.json",
+        "repo": "OpenNMT/nllb-200-3.3B-ct2-int8",
+        "revision": "28d998cc8548ad62f4f98cf8860928c3af99b97b",
+        "file": "tokenizer.json",
+        "size": 17331176,
+        "algorithm": "sha256",
+        "digest": "e316b82de11d0f951f370943b3c438311629547285129b0b81dadabd01bca665"
+      },
+      {
+        "path": "tokenizer_config.json",
+        "repo": "OpenNMT/nllb-200-3.3B-ct2-int8",
+        "revision": "28d998cc8548ad62f4f98cf8860928c3af99b97b",
+        "file": "tokenizer_config.json",
+        "size": 564,
+        "algorithm": "git-sha1",
+        "digest": "742aa330eae62f661fe28ff3fdd1d216d1481294"
+      },
+      {
+        "path": "tokenizer/README.md",
+        "repo": "facebook/nllb-200-3.3B",
+        "revision": "1a07f7d195896b2114afcb79b7b57ab512e7b43e",
+        "file": "README.md",
+        "size": 7640,
+        "algorithm": "git-sha1",
+        "digest": "94f27287e90baa5b37fa62bb6dd23273e2c6844a"
+      },
+      {
+        "path": "tokenizer/sentencepiece.bpe.model",
+        "repo": "facebook/nllb-200-3.3B",
+        "revision": "1a07f7d195896b2114afcb79b7b57ab512e7b43e",
+        "file": "sentencepiece.bpe.model",
+        "size": 4852054,
+        "algorithm": "sha256",
+        "digest": "14bb8dfb35c0ffdea7bc01e56cea38b9e3d5efcdcb9c251d6b40538e1aab555a"
+      },
+      {
+        "path": "tokenizer/special_tokens_map.json",
+        "repo": "facebook/nllb-200-3.3B",
+        "revision": "1a07f7d195896b2114afcb79b7b57ab512e7b43e",
+        "file": "special_tokens_map.json",
+        "size": 3548,
+        "algorithm": "git-sha1",
+        "digest": "02fba84e401dd2017999a39cac2c1278591c3a03"
+      },
+      {
+        "path": "tokenizer/tokenizer.json",
+        "repo": "facebook/nllb-200-3.3B",
+        "revision": "1a07f7d195896b2114afcb79b7b57ab512e7b43e",
+        "file": "tokenizer.json",
+        "size": 17331176,
+        "algorithm": "sha256",
+        "digest": "e316b82de11d0f951f370943b3c438311629547285129b0b81dadabd01bca665"
+      },
+      {
+        "path": "tokenizer/tokenizer_config.json",
+        "repo": "facebook/nllb-200-3.3B",
+        "revision": "1a07f7d195896b2114afcb79b7b57ab512e7b43e",
+        "file": "tokenizer_config.json",
+        "size": 564,
+        "algorithm": "git-sha1",
+        "digest": "742aa330eae62f661fe28ff3fdd1d216d1481294"
+      }
+    ]
+  },
+  {
+    "kind": "whisper",
+    "weight": "tiny",
+    "files": [
+      {
+        "path": "README.md",
+        "repo": "Systran/faster-whisper-tiny",
+        "revision": "d90ca5fe260221311c53c58e660288d3deb8d356",
+        "file": "README.md",
+        "size": 1991,
+        "algorithm": "git-sha1",
+        "digest": "7e9bc5761a3e88762273fb1011479f2e501266c4"
+      },
+      {
+        "path": "config.json",
+        "repo": "Systran/faster-whisper-tiny",
+        "revision": "d90ca5fe260221311c53c58e660288d3deb8d356",
+        "file": "config.json",
+        "size": 2249,
+        "algorithm": "git-sha1",
+        "digest": "3baa18e2b321a2f489614607852a729fcd516480"
+      },
+      {
+        "path": "model.bin",
+        "repo": "Systran/faster-whisper-tiny",
+        "revision": "d90ca5fe260221311c53c58e660288d3deb8d356",
+        "file": "model.bin",
+        "size": 75538270,
+        "algorithm": "sha256",
+        "digest": "dcb76c6586fc06cbdac6dd21f14cfd129cc4cdd9dce19bf4ffa62e59cbe6e6d1"
+      },
+      {
+        "path": "tokenizer.json",
+        "repo": "Systran/faster-whisper-tiny",
+        "revision": "d90ca5fe260221311c53c58e660288d3deb8d356",
+        "file": "tokenizer.json",
+        "size": 2203239,
+        "algorithm": "git-sha1",
+        "digest": "7818adb6de9fa3064d3ff81226fdd675be1f6344"
+      },
+      {
+        "path": "vocabulary.txt",
+        "repo": "Systran/faster-whisper-tiny",
+        "revision": "d90ca5fe260221311c53c58e660288d3deb8d356",
+        "file": "vocabulary.txt",
+        "size": 459861,
+        "algorithm": "git-sha1",
+        "digest": "c9074644d9d1205686f16d411564729461324b75"
+      }
+    ]
+  },
+  {
+    "kind": "whisper",
+    "weight": "base",
+    "files": [
+      {
+        "path": "README.md",
+        "repo": "Systran/faster-whisper-base",
+        "revision": "ebe41f70d5b6dfa9166e2c581c45c9c0cfc57b66",
+        "file": "README.md",
+        "size": 1991,
+        "algorithm": "git-sha1",
+        "digest": "cddfec65ffb3e3df45d2234f09f3d261bf9a9c0a"
+      },
+      {
+        "path": "config.json",
+        "repo": "Systran/faster-whisper-base",
+        "revision": "ebe41f70d5b6dfa9166e2c581c45c9c0cfc57b66",
+        "file": "config.json",
+        "size": 2309,
+        "algorithm": "git-sha1",
+        "digest": "867cf1a0fece1394e01d55e287ba2f09a577c046"
+      },
+      {
+        "path": "model.bin",
+        "repo": "Systran/faster-whisper-base",
+        "revision": "ebe41f70d5b6dfa9166e2c581c45c9c0cfc57b66",
+        "file": "model.bin",
+        "size": 145217532,
+        "algorithm": "sha256",
+        "digest": "d01c3014881c9c6f3133c182f3d2887eb6ca1c789a7538c5c007196857a0a6a9"
+      },
+      {
+        "path": "tokenizer.json",
+        "repo": "Systran/faster-whisper-base",
+        "revision": "ebe41f70d5b6dfa9166e2c581c45c9c0cfc57b66",
+        "file": "tokenizer.json",
+        "size": 2203239,
+        "algorithm": "git-sha1",
+        "digest": "7818adb6de9fa3064d3ff81226fdd675be1f6344"
+      },
+      {
+        "path": "vocabulary.txt",
+        "repo": "Systran/faster-whisper-base",
+        "revision": "ebe41f70d5b6dfa9166e2c581c45c9c0cfc57b66",
+        "file": "vocabulary.txt",
+        "size": 459861,
+        "algorithm": "git-sha1",
+        "digest": "c9074644d9d1205686f16d411564729461324b75"
+      }
+    ]
+  },
+  {
+    "kind": "whisper",
+    "weight": "small",
+    "files": [
+      {
+        "path": "README.md",
+        "repo": "Systran/faster-whisper-small",
+        "revision": "536b0662742c02347bc0e980a01041f333bce120",
+        "file": "README.md",
+        "size": 1998,
+        "algorithm": "git-sha1",
+        "digest": "16511f6106ead2fbc3a1480957a217c2661a5a98"
+      },
+      {
+        "path": "config.json",
+        "repo": "Systran/faster-whisper-small",
+        "revision": "536b0662742c02347bc0e980a01041f333bce120",
+        "file": "config.json",
+        "size": 2370,
+        "algorithm": "git-sha1",
+        "digest": "e5047537059bd8f182d9ca64c470201585015187"
+      },
+      {
+        "path": "model.bin",
+        "repo": "Systran/faster-whisper-small",
+        "revision": "536b0662742c02347bc0e980a01041f333bce120",
+        "file": "model.bin",
+        "size": 483546902,
+        "algorithm": "sha256",
+        "digest": "3e305921506d8872816023e4c273e75d2419fb89b24da97b4fe7bce14170d671"
+      },
+      {
+        "path": "tokenizer.json",
+        "repo": "Systran/faster-whisper-small",
+        "revision": "536b0662742c02347bc0e980a01041f333bce120",
+        "file": "tokenizer.json",
+        "size": 2203239,
+        "algorithm": "git-sha1",
+        "digest": "7818adb6de9fa3064d3ff81226fdd675be1f6344"
+      },
+      {
+        "path": "vocabulary.txt",
+        "repo": "Systran/faster-whisper-small",
+        "revision": "536b0662742c02347bc0e980a01041f333bce120",
+        "file": "vocabulary.txt",
+        "size": 459861,
+        "algorithm": "git-sha1",
+        "digest": "c9074644d9d1205686f16d411564729461324b75"
+      }
+    ]
+  },
+  {
+    "kind": "whisper",
+    "weight": "medium",
+    "files": [
+      {
+        "path": "README.md",
+        "repo": "Systran/faster-whisper-medium",
+        "revision": "08e178d48790749d25932bbc082711ddcfdfbc4f",
+        "file": "README.md",
+        "size": 2005,
+        "algorithm": "git-sha1",
+        "digest": "68a6ff5e20f337a8b4e27e4ea4cca73afb9a40fb"
+      },
+      {
+        "path": "config.json",
+        "repo": "Systran/faster-whisper-medium",
+        "revision": "08e178d48790749d25932bbc082711ddcfdfbc4f",
+        "file": "config.json",
+        "size": 2257,
+        "algorithm": "git-sha1",
+        "digest": "242aa06a480a7b5509375c645097e87af5136774"
+      },
+      {
+        "path": "model.bin",
+        "repo": "Systran/faster-whisper-medium",
+        "revision": "08e178d48790749d25932bbc082711ddcfdfbc4f",
+        "file": "model.bin",
+        "size": 1527906378,
+        "algorithm": "sha256",
+        "digest": "9b45e1009dcc4ab601eff815b61d80e60ce3fd8c74c1a14f4a282258286b51ae"
+      },
+      {
+        "path": "tokenizer.json",
+        "repo": "Systran/faster-whisper-medium",
+        "revision": "08e178d48790749d25932bbc082711ddcfdfbc4f",
+        "file": "tokenizer.json",
+        "size": 2203239,
+        "algorithm": "git-sha1",
+        "digest": "7818adb6de9fa3064d3ff81226fdd675be1f6344"
+      },
+      {
+        "path": "vocabulary.txt",
+        "repo": "Systran/faster-whisper-medium",
+        "revision": "08e178d48790749d25932bbc082711ddcfdfbc4f",
+        "file": "vocabulary.txt",
+        "size": 459861,
+        "algorithm": "git-sha1",
+        "digest": "c9074644d9d1205686f16d411564729461324b75"
+      }
+    ]
+  },
+  {
+    "kind": "whisper",
+    "weight": "large-v1",
+    "files": [
+      {
+        "path": "README.md",
+        "repo": "Systran/faster-whisper-large-v1",
+        "revision": "b07c8d4be0be90092aa01a29c975077acb8d15c9",
+        "file": "README.md",
+        "size": 2007,
+        "algorithm": "git-sha1",
+        "digest": "91d57961581f265dec12e7e4ff5687ea51e3e19f"
+      },
+      {
+        "path": "config.json",
+        "repo": "Systran/faster-whisper-large-v1",
+        "revision": "b07c8d4be0be90092aa01a29c975077acb8d15c9",
+        "file": "config.json",
+        "size": 2352,
+        "algorithm": "git-sha1",
+        "digest": "d657955d91d1f2bb02b73da6715a54b409a63022"
+      },
+      {
+        "path": "model.bin",
+        "repo": "Systran/faster-whisper-large-v1",
+        "revision": "b07c8d4be0be90092aa01a29c975077acb8d15c9",
+        "file": "model.bin",
+        "size": 3086912962,
+        "algorithm": "sha256",
+        "digest": "a3cce8081a5414206ab09a80aa410ebf9965feef52adafeead13f4a83398b1d1"
+      },
+      {
+        "path": "tokenizer.json",
+        "repo": "Systran/faster-whisper-large-v1",
+        "revision": "b07c8d4be0be90092aa01a29c975077acb8d15c9",
+        "file": "tokenizer.json",
+        "size": 2203239,
+        "algorithm": "git-sha1",
+        "digest": "7818adb6de9fa3064d3ff81226fdd675be1f6344"
+      },
+      {
+        "path": "vocabulary.txt",
+        "repo": "Systran/faster-whisper-large-v1",
+        "revision": "b07c8d4be0be90092aa01a29c975077acb8d15c9",
+        "file": "vocabulary.txt",
+        "size": 459861,
+        "algorithm": "git-sha1",
+        "digest": "c9074644d9d1205686f16d411564729461324b75"
+      }
+    ]
+  },
+  {
+    "kind": "whisper",
+    "weight": "large-v2",
+    "files": [
+      {
+        "path": "README.md",
+        "repo": "Systran/faster-whisper-large-v2",
+        "revision": "f0fe81560cb8b68660e564f55dd99207059c092e",
+        "file": "README.md",
+        "size": 2019,
+        "algorithm": "git-sha1",
+        "digest": "7f318da4d83500b49baa7e26917e96294dc449e5"
+      },
+      {
+        "path": "config.json",
+        "repo": "Systran/faster-whisper-large-v2",
+        "revision": "f0fe81560cb8b68660e564f55dd99207059c092e",
+        "file": "config.json",
+        "size": 2796,
+        "algorithm": "git-sha1",
+        "digest": "346bb8684801a61c15ce82bcb80c29a63c2d1f94"
+      },
+      {
+        "path": "model.bin",
+        "repo": "Systran/faster-whisper-large-v2",
+        "revision": "f0fe81560cb8b68660e564f55dd99207059c092e",
+        "file": "model.bin",
+        "size": 3086912962,
+        "algorithm": "sha256",
+        "digest": "bf2a9746382e1aa7ffff6b3a0d137ed9edbd9670c3b87e5d35f5e85e70d0333a"
+      },
+      {
+        "path": "tokenizer.json",
+        "repo": "Systran/faster-whisper-large-v2",
+        "revision": "f0fe81560cb8b68660e564f55dd99207059c092e",
+        "file": "tokenizer.json",
+        "size": 2203239,
+        "algorithm": "git-sha1",
+        "digest": "7818adb6de9fa3064d3ff81226fdd675be1f6344"
+      },
+      {
+        "path": "vocabulary.txt",
+        "repo": "Systran/faster-whisper-large-v2",
+        "revision": "f0fe81560cb8b68660e564f55dd99207059c092e",
+        "file": "vocabulary.txt",
+        "size": 459861,
+        "algorithm": "git-sha1",
+        "digest": "c9074644d9d1205686f16d411564729461324b75"
+      }
+    ]
+  },
+  {
+    "kind": "whisper",
+    "weight": "large-v3",
+    "files": [
+      {
+        "path": "README.md",
+        "repo": "Systran/faster-whisper-large-v3",
+        "revision": "edaa852ec7e145841d8ffdb056a99866b5f0a478",
+        "file": "README.md",
+        "size": 2052,
+        "algorithm": "git-sha1",
+        "digest": "a84bfa7f20cac02ea5a99efa5eaf687ad58c1caf"
+      },
+      {
+        "path": "config.json",
+        "repo": "Systran/faster-whisper-large-v3",
+        "revision": "edaa852ec7e145841d8ffdb056a99866b5f0a478",
+        "file": "config.json",
+        "size": 2394,
+        "algorithm": "git-sha1",
+        "digest": "75336feae814999bae6ccccdecf177639ffc6f9d"
+      },
+      {
+        "path": "model.bin",
+        "repo": "Systran/faster-whisper-large-v3",
+        "revision": "edaa852ec7e145841d8ffdb056a99866b5f0a478",
+        "file": "model.bin",
+        "size": 3087284237,
+        "algorithm": "sha256",
+        "digest": "69f74147e3334731bc3a76048724833325d2ec74642fb52620eda87352e3d4f1"
+      },
+      {
+        "path": "preprocessor_config.json",
+        "repo": "Systran/faster-whisper-large-v3",
+        "revision": "edaa852ec7e145841d8ffdb056a99866b5f0a478",
+        "file": "preprocessor_config.json",
+        "size": 340,
+        "algorithm": "git-sha1",
+        "digest": "931c77a740890c46365c7ae0c9d350ba3cca908f"
+      },
+      {
+        "path": "tokenizer.json",
+        "repo": "Systran/faster-whisper-large-v3",
+        "revision": "edaa852ec7e145841d8ffdb056a99866b5f0a478",
+        "file": "tokenizer.json",
+        "size": 2480617,
+        "algorithm": "git-sha1",
+        "digest": "3a5e2ba63acdcac9a19ba56cf9bd27f185bfff61"
+      },
+      {
+        "path": "vocabulary.json",
+        "repo": "Systran/faster-whisper-large-v3",
+        "revision": "edaa852ec7e145841d8ffdb056a99866b5f0a478",
+        "file": "vocabulary.json",
+        "size": 1068114,
+        "algorithm": "git-sha1",
+        "digest": "0adcd01e7c237205d593b707e66dd5d7bc785d2d"
+      }
+    ]
+  },
+  {
+    "kind": "whisper",
+    "weight": "large-v3-turbo-int8",
+    "files": [
+      {
+        "path": "README.md",
+        "repo": "Zoont/faster-whisper-large-v3-turbo-int8-ct2",
+        "revision": "846f74797293e5f605d509a6ab5395a1f2f2874e",
+        "file": "README.md",
+        "size": 1453,
+        "algorithm": "git-sha1",
+        "digest": "c164f6eeaf645f7d7f08a630d96becbf4cc9329a"
+      },
+      {
+        "path": "config.json",
+        "repo": "Zoont/faster-whisper-large-v3-turbo-int8-ct2",
+        "revision": "846f74797293e5f605d509a6ab5395a1f2f2874e",
+        "file": "config.json",
+        "size": 2487,
+        "algorithm": "git-sha1",
+        "digest": "b5e724a376adfa3963f10311fa3d6697f3fe08b4"
+      },
+      {
+        "path": "model.bin",
+        "repo": "Zoont/faster-whisper-large-v3-turbo-int8-ct2",
+        "revision": "846f74797293e5f605d509a6ab5395a1f2f2874e",
+        "file": "model.bin",
+        "size": 814054531,
+        "algorithm": "sha256",
+        "digest": "7482f978f9493b93b3d0bf68a148a1a62ca02547e8ee981358ff8ef2de8a9418"
+      },
+      {
+        "path": "preprocessor_config.json",
+        "repo": "Zoont/faster-whisper-large-v3-turbo-int8-ct2",
+        "revision": "846f74797293e5f605d509a6ab5395a1f2f2874e",
+        "file": "preprocessor_config.json",
+        "size": 340,
+        "algorithm": "git-sha1",
+        "digest": "931c77a740890c46365c7ae0c9d350ba3cca908f"
+      },
+      {
+        "path": "tokenizer.json",
+        "repo": "Zoont/faster-whisper-large-v3-turbo-int8-ct2",
+        "revision": "846f74797293e5f605d509a6ab5395a1f2f2874e",
+        "file": "tokenizer.json",
+        "size": 2710337,
+        "algorithm": "git-sha1",
+        "digest": "17456db595adc78a973f97d69d8cb50bc87c0b1c"
+      },
+      {
+        "path": "vocabulary.json",
+        "repo": "Zoont/faster-whisper-large-v3-turbo-int8-ct2",
+        "revision": "846f74797293e5f605d509a6ab5395a1f2f2874e",
+        "file": "vocabulary.json",
+        "size": 1119981,
+        "algorithm": "git-sha1",
+        "digest": "3cf6cc295d51a207eef72bbc43cbf24c1fa80630"
+      }
+    ]
+  },
+  {
+    "kind": "whisper",
+    "weight": "large-v3-turbo",
+    "files": [
+      {
+        "path": "README.md",
+        "repo": "deepdml/faster-whisper-large-v3-turbo-ct2",
+        "revision": "4df90f75321148c3a29a9e2351b7ddf8f5b115a8",
+        "file": "README.md",
+        "size": 2454,
+        "algorithm": "git-sha1",
+        "digest": "fb53844bcca20e84e58c86859351b0af33771b87"
+      },
+      {
+        "path": "config.json",
+        "repo": "deepdml/faster-whisper-large-v3-turbo-ct2",
+        "revision": "4df90f75321148c3a29a9e2351b7ddf8f5b115a8",
+        "file": "config.json",
+        "size": 2263,
+        "algorithm": "git-sha1",
+        "digest": "0351d1d6870005e865747b781b5d7c23ea0459cd"
+      },
+      {
+        "path": "model.bin",
+        "repo": "deepdml/faster-whisper-large-v3-turbo-ct2",
+        "revision": "4df90f75321148c3a29a9e2351b7ddf8f5b115a8",
+        "file": "model.bin",
+        "size": 1617884929,
+        "algorithm": "sha256",
+        "digest": "e76620f83d5f5b69efd3d87e3dc180c1bd21df9fbebacfd4335e5e1efcc018da"
+      },
+      {
+        "path": "preprocessor_config.json",
+        "repo": "deepdml/faster-whisper-large-v3-turbo-ct2",
+        "revision": "4df90f75321148c3a29a9e2351b7ddf8f5b115a8",
+        "file": "preprocessor_config.json",
+        "size": 340,
+        "algorithm": "git-sha1",
+        "digest": "931c77a740890c46365c7ae0c9d350ba3cca908f"
+      },
+      {
+        "path": "tokenizer.json",
+        "repo": "deepdml/faster-whisper-large-v3-turbo-ct2",
+        "revision": "4df90f75321148c3a29a9e2351b7ddf8f5b115a8",
+        "file": "tokenizer.json",
+        "size": 2710337,
+        "algorithm": "git-sha1",
+        "digest": "17456db595adc78a973f97d69d8cb50bc87c0b1c"
+      },
+      {
+        "path": "vocabulary.json",
+        "repo": "deepdml/faster-whisper-large-v3-turbo-ct2",
+        "revision": "4df90f75321148c3a29a9e2351b7ddf8f5b115a8",
+        "file": "vocabulary.json",
+        "size": 1068114,
+        "algorithm": "git-sha1",
+        "digest": "0adcd01e7c237205d593b707e66dd5d7bc785d2d"
+      }
+    ]
+  }
+]

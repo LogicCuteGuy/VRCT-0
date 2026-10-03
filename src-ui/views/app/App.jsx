@@ -2,7 +2,7 @@ import { useI18n } from "@useI18n";
 
 import {
     KeyEventController,
-    StartPythonController,
+    StartBackendController,
     GlobalHotKeyController,
     UiLanguageController,
     ConfigPageCloseTriggerController,
@@ -37,7 +37,7 @@ export const App = () => {
         <div className={styles.container}>
             <AppErrorBoundary >
                 <KeyEventController />
-                <StartPythonController />
+                <StartBackendController />
                 <GlobalHotKeyController />
                 <UiLanguageController />
                 <ConfigPageCloseTriggerController />

@@ -36,7 +36,11 @@ impl Tokenizer {
         let clean_up = fs::read_to_string(dir.join(CONFIG_FILE))
             .ok()
             .and_then(|text| serde_json::from_str::<Value>(&text).ok())
-            .and_then(|config| config.get("clean_up_tokenization_spaces").and_then(Value::as_bool))
+            .and_then(|config| {
+                config
+                    .get("clean_up_tokenization_spaces")
+                    .and_then(Value::as_bool)
+            })
             .unwrap_or(true);
         Ok(Self { inner, clean_up })
     }
@@ -48,7 +52,10 @@ impl Tokenizer {
 
     /// `convert_ids_to_tokens(encode(text))` with `src_lang = source`.
     pub fn source_tokens(&self, text: &str, source: &str) -> Result<Vec<String>, String> {
-        let encoding = self.inner.encode(text, false).map_err(|e| format!("cannot tokenise: {e}"))?;
+        let encoding = self
+            .inner
+            .encode(text, false)
+            .map_err(|e| format!("cannot tokenise: {e}"))?;
         let mut tokens = vec![source.to_string()];
         tokens.extend(encoding.get_tokens().iter().cloned());
         tokens.push(EOS.to_string());
@@ -61,9 +68,22 @@ impl Tokenizer {
 
     /// `decode(convert_tokens_to_ids(tokens))`.
     pub fn decode(&self, tokens: &[String]) -> Result<String, String> {
-        let unk = self.inner.token_to_id(UNK).ok_or_else(|| format!("the vocabulary has no {UNK}"))?;
-        let ids: Vec<u32> = tokens.iter().map(|token| self.inner.token_to_id(token).unwrap_or(unk)).collect();
-        let text = self.inner.decode(&ids, false).map_err(|e| format!("cannot decode: {e}"))?;
-        Ok(if self.clean_up { clean_up_tokenization(&text) } else { text })
+        let unk = self
+            .inner
+            .token_to_id(UNK)
+            .ok_or_else(|| format!("the vocabulary has no {UNK}"))?;
+        let ids: Vec<u32> = tokens
+            .iter()
+            .map(|token| self.inner.token_to_id(token).unwrap_or(unk))
+            .collect();
+        let text = self
+            .inner
+            .decode(&ids, false)
+            .map_err(|e| format!("cannot decode: {e}"))?;
+        Ok(if self.clean_up {
+            clean_up_tokenization(&text)
+        } else {
+            text
+        })
     }
 }

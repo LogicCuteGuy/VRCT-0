@@ -26,12 +26,27 @@ const CHANGED_ENDPOINT: &str = "/internal/config/changed";
 pub struct ConfigReplica {
     values: RwLock<HashMap<String, Value>>,
     settings: Option<Arc<Settings>>,
+    host_owned: Vec<&'static str>,
 }
 
 impl ConfigReplica {
     /// A view over the host's settings: reads come from them, sidecar reports are adopted into them.
     pub fn over(settings: Arc<Settings>) -> Self {
-        Self { values: RwLock::default(), settings: Some(settings) }
+        Self { values: RwLock::default(), settings: Some(settings), host_owned: Vec::new() }
+    }
+
+    /// Migrated runtime flags must not be overwritten by a stale sidecar snapshot.
+    pub fn with_host_owned(mut self, names: &[&'static str]) -> Self {
+        self.host_owned = names.to_vec();
+        self
+    }
+
+    fn adopt_setting(&self, settings: &Settings, key: &str, value: Value) {
+        if self.host_owned.contains(&key) { return; }
+        if let Some(prop) = crate::settings::schema::find(key) {
+            if prop.persisted { let _ = settings.adopt(key, value); }
+            else if !prop.is_read_only() { let _ = settings.set(key, value); }
+        }
     }
 
     /// Apply a bridge message from the sidecar. Returns true when the line was
@@ -50,7 +65,7 @@ impl ConfigReplica {
                     match &self.settings {
                         Some(settings) => {
                             for (key, value) in map {
-                                let _ = settings.adopt(key, value.clone());
+                                self.adopt_setting(settings, key, value.clone());
                             }
                         }
                         None => {
@@ -66,7 +81,7 @@ impl ConfigReplica {
                 {
                     match &self.settings {
                         Some(settings) => {
-                            let _ = settings.adopt(key, value.clone());
+                            self.adopt_setting(settings, key, value.clone());
                         }
                         None => {
                             self.values.write().unwrap().insert(key.clone(), value.clone());

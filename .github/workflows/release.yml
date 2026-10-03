@@ -51,15 +51,6 @@ jobs:
             $failed = $true
           }
 
-          $configContent = Get-Content src-python/config.py -Raw
-          if ($configContent -notmatch 'self\._VERSION\s*=\s*"([^"]+)"') {
-            Write-Host "::error::could not find self._VERSION in src-python/config.py"
-            $failed = $true
-          } elseif ($Matches[1] -ne $expected) {
-            Write-Host "::error::src-python/config.py VERSION ($($Matches[1])) does not match tag version ($expected)"
-            $failed = $true
-          }
-
           if ($failed) {
             Write-Host "::error::Version mismatch detected. Bump every version field to $expected before tagging."
             exit 1
@@ -71,15 +62,11 @@ jobs:
           $isBeta = "${{ steps.channel.outputs.is_beta }}" -eq "true"
           $expectedChannel = if ($isBeta) { "beta" } else { "stable" }
 
-          $content = Get-Content src-python/build_channel.py -Raw
-          if ($content -notmatch 'BUILD_CHANNEL\s*=\s*"([^"]+)"') {
-            Write-Host "::error::could not find BUILD_CHANNEL in src-python/build_channel.py"
-            exit 1
-          }
-          $actualChannel = $Matches[1]
+          $version = (Get-Content package.json -Raw | ConvertFrom-Json).version
+          $actualChannel = if ($version -match "-(beta|rc)") { "beta" } else { "stable" }
 
           if ($actualChannel -ne $expectedChannel) {
-            Write-Host "::error::BUILD_CHANNEL is '$actualChannel' but tag '${{ github.ref_name }}' implies '$expectedChannel'. Fix src-python/build_channel.py before tagging."
+            Write-Host "::error::package.json version implies '$actualChannel' but tag '${{ github.ref_name }}' implies '$expectedChannel'."
             exit 1
           }
 
@@ -87,11 +74,6 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: '22.15.0'
-
-      - name: Set up Python
-        uses: actions/setup-python@v5
-        with:
-          python-version: '3.11'
 
       - name: Set up Rust
         uses: actions-rs/toolchain@v1
@@ -105,19 +87,19 @@ jobs:
         run: cmake --version
 
       - name: Install dependencies
-        run: npm install
+        run: npm ci
 
-      - name: Setup Python environment
-        run: npm run setup-python
+      - name: Prepare verified native resources
+        run: npm run native:prepare-release
 
-      - name: Install Python script dependencies
-        run: pip install tqdm
+      - name: Test native backend and release tooling
+        run: cargo test --manifest-path src-tauri/Cargo.toml -p vrct-core -p xtask --locked -j1 --config 'profile.test.package.vrct-core.debug=0' --config 'profile.test.package.vrct-core.codegen-units=16'
 
       - name: Build and package
         run: npm run release
 
       - name: Check the package contains no non-redistributable model
-        run: python utils/check_release_package.py ./VRCT.zip
+        run: npm run native:verify
 
       - name: Check the package fits in a GitHub release asset
         shell: pwsh

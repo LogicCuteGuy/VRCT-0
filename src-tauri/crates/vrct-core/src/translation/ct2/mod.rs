@@ -20,8 +20,11 @@ use serde::Deserialize;
 
 /// Weight types this build runs; the directory is named after the type.
 const M2M100_WEIGHTS: [&str; 2] = ["m2m100_418M-ct2-int8", "m2m100_1.2B-ct2-int8"];
-const NLLB_WEIGHTS: [&str; 3] =
-    ["nllb-200-distilled-600M-ct2-int8", "nllb-200-distilled-1.3B-ct2-int8", "nllb-200-3.3B-ct2-int8"];
+const NLLB_WEIGHTS: [&str; 3] = [
+    "nllb-200-distilled-600M-ct2-int8",
+    "nllb-200-distilled-1.3B-ct2-int8",
+    "nllb-200-3.3B-ct2-int8",
+];
 
 /// The tokenizer of the loaded model; which one follows from its weight type.
 enum Tokenizer {
@@ -74,7 +77,12 @@ fn find_files(dir: &Path, files: &[&str]) -> Option<PathBuf> {
         return Some(dir.to_path_buf());
     }
     let children = |path: &Path| -> Vec<PathBuf> {
-        let mut found: Vec<PathBuf> = fs::read_dir(path).into_iter().flatten().flatten().map(|entry| entry.path()).collect();
+        let mut found: Vec<PathBuf> = fs::read_dir(path)
+            .into_iter()
+            .flatten()
+            .flatten()
+            .map(|entry| entry.path())
+            .collect();
         found.sort();
         found
     };
@@ -85,7 +93,7 @@ fn find_files(dir: &Path, files: &[&str]) -> Option<PathBuf> {
         .find(|snapshot| complete(snapshot))
 }
 
-#[derive(Debug, Clone, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Eq, Deserialize)]
 pub struct LoadRequest {
     /// VRCT's local data root (`config.PATH_LOCAL`).
     pub path: PathBuf,
@@ -119,6 +127,7 @@ pub struct TranslateRequest {
 }
 
 struct Loaded {
+    request: LoadRequest,
     weight_type: String,
     translator: Translator,
     tokenizer: Tokenizer,
@@ -133,28 +142,49 @@ pub struct Engine {
 
 impl Engine {
     pub fn load(&self, request: &LoadRequest) -> Result<(), String> {
-        let mut loaded = self.loaded.lock().map_err(|_| "model lock poisoned".to_string())?;
+        let mut loaded = self
+            .loaded
+            .lock()
+            .map_err(|_| "model lock poisoned".to_string())?;
         *loaded = None;
 
         let config = config(request)?;
-        let directory = request.path.join("weights").join("ctranslate2").join(&request.weight_type);
+        let directory = request
+            .path
+            .join("weights")
+            .join("ctranslate2")
+            .join(&request.weight_type);
         let tokenizer = Tokenizer::open(&request.weight_type, &directory.join("tokenizer"))?;
-        let translator = Translator::new(&directory, &config).map_err(|e| format!("cannot load the model: {e}"))?;
-        *loaded = Some(Loaded { weight_type: request.weight_type.clone(), translator, tokenizer });
+        let translator = Translator::new(&directory, &config)
+            .map_err(|e| format!("cannot load the model: {e}"))?;
+        *loaded = Some(Loaded {
+            request: request.clone(),
+            weight_type: request.weight_type.clone(),
+            translator,
+            tokenizer,
+        });
         Ok(())
     }
 
     /// `Translator.translateCTranslate2`, with a failure as an error instead of `False`.
     pub fn translate(&self, request: &TranslateRequest) -> Result<String, String> {
-        let loaded = self.loaded.lock().map_err(|_| "model lock poisoned".to_string())?;
+        let loaded = self
+            .loaded
+            .lock()
+            .map_err(|_| "model lock poisoned".to_string())?;
         let Some(loaded) = loaded.as_ref() else {
             return Err("no model is loaded".into());
         };
         if loaded.weight_type != request.weight_type {
-            return Err(format!("{} is loaded, not {}", loaded.weight_type, request.weight_type));
+            return Err(format!(
+                "{} is loaded, not {}",
+                loaded.weight_type, request.weight_type
+            ));
         }
 
-        let source = loaded.tokenizer.source_tokens(&request.message, &request.source_language)?;
+        let source = loaded
+            .tokenizer
+            .source_tokens(&request.message, &request.source_language)?;
         let prefix = loaded.tokenizer.target_prefix(&request.target_language)?;
         let mut options = TranslationOptions::default();
         if let Some(length) = request.max_decoding_length {
@@ -170,17 +200,33 @@ impl Engine {
             .and_then(|result| result.hypotheses.into_iter().next())
             .ok_or_else(|| "no hypothesis returned".to_string())?;
         // The first token is the target-language prefix itself.
-        loaded.tokenizer.decode(hypothesis.get(1..).unwrap_or_default())
+        loaded
+            .tokenizer
+            .decode(hypothesis.get(1..).unwrap_or_default())
     }
 
     pub fn is_loaded(&self, weight_type: &str) -> bool {
-        self.loaded.lock().is_ok_and(|loaded| loaded.as_ref().is_some_and(|model| model.weight_type == weight_type))
+        self.loaded.lock().is_ok_and(|loaded| {
+            loaded
+                .as_ref()
+                .is_some_and(|model| model.weight_type == weight_type)
+        })
+    }
+    pub fn is_configured(&self, request: &LoadRequest) -> bool {
+        self.loaded.lock().is_ok_and(|loaded| {
+            loaded
+                .as_ref()
+                .is_some_and(|model| model.request == *request)
+        })
     }
 }
 
 fn config(request: &LoadRequest) -> Result<Config, String> {
     if request.device != "cpu" {
-        return Err(format!("device {:?} is not supported by this build (CPU only)", request.device));
+        return Err(format!(
+            "device {:?} is not supported by this build (CPU only)",
+            request.device
+        ));
     }
     Ok(Config {
         device: Device::CPU,

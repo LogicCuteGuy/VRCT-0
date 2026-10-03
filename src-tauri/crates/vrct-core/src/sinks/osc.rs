@@ -57,7 +57,10 @@ pub fn typing_packet(flag: bool) -> Vec<u8> {
 }
 
 pub fn message_packet(message: &str, notification: bool) -> Vec<u8> {
-    encode(INPUT_ADDRESS, &[Arg::Str(message), Arg::Bool(true), Arg::Bool(notification)])
+    encode(
+        INPUT_ADDRESS,
+        &[Arg::Str(message), Arg::Bool(true), Arg::Bool(notification)],
+    )
 }
 
 /// Resolve `host:port`, IPv4 first. `localhost` can resolve to `::1` before
@@ -84,7 +87,11 @@ pub struct OscSink {
 
 impl OscSink {
     pub fn new(replica: Arc<ConfigReplica>) -> Self {
-        Self { replica, v4: Mutex::new(None), v6: Mutex::new(None) }
+        Self {
+            replica,
+            v4: Mutex::new(None),
+            v6: Mutex::new(None),
+        }
     }
 
     pub fn typing(&self, flag: bool) -> Result<(), String> {

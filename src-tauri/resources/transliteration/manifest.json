@@ -1,0 +1,15 @@
+{
+  "name": "SudachiDict-full",
+  "version": "20250825",
+  "tokenizer_version": "0.6.10",
+  "tokenizer_revision": "7e2f287bbfffc036421cf960802e41a696727747",
+  "tokenizer_source": "https://github.com/WorksApplications/sudachi.rs",
+  "dictionary_source": "https://github.com/WorksApplications/SudachiDict",
+  "archive_url": "https://d2ej7fkh96fzlu.cloudfront.net/sudachidict/sudachi-dictionary-20250825-full.zip",
+  "archive_sha256": "7ce16d45e9ff0ccb70a3c8ba70346240ef246e6ad499cfab033fc2c1da4d19b4",
+  "archive_bytes": 126591740,
+  "dictionary_entry": "sudachi-dictionary-20250825/system_full.dic",
+  "dictionary_sha256": "08eac653b59c4ad579e38fcf64ce338fd3edab87c28a1ad97449f5fe2a9bcf87",
+  "dictionary_bytes": 359725440,
+  "license": "Apache-2.0 with third-party notices in LEGAL"
+}

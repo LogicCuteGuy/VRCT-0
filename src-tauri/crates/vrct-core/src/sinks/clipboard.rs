@@ -1,9 +1,8 @@
 //! "Copy the message to the clipboard and paste it into the VR game"
 //! (`ENABLE_CLIPBOARD`).
 //!
-//! Python still owns the SteamVR app name (it comes from OpenVR) and sends it
-//! with each request; Rust does the focus, copy and Ctrl+V. Same order and
-//! rules as `models/clipboard/clipboard.py`:
+//! Bridge requests carry Python's app name; native requests resolve the name
+//! through OpenVR on this worker. Same output order and rules as Python:
 //!
 //! 1. with a window name, try to focus a window whose title contains it, then
 //!    one whose process is called that;
@@ -15,6 +14,7 @@
 //! to Python on Windows (`sinks::IMPLEMENTED`); elsewhere Python's own
 //! clipboard code keeps running.
 
+mod vr;
 #[cfg(windows)]
 mod win;
 
@@ -34,6 +34,18 @@ pub trait Desktop: Send + 'static {
     fn copy(&self, text: &str) -> bool;
     /// Press Ctrl+V in the focused window.
     fn paste(&self) -> bool;
+}
+
+/// The VR app name is resolved on the clipboard worker, never on the UI thread.
+pub trait WindowTarget: Send + 'static {
+    fn window_name(&self) -> Result<Option<String>, String>;
+}
+
+struct NoTarget;
+impl WindowTarget for NoTarget {
+    fn window_name(&self) -> Result<Option<String>, String> {
+        Ok(None)
+    }
 }
 
 /// Real desktop on Windows; elsewhere nothing works and every step reports so.
@@ -57,7 +69,12 @@ impl Desktop for SystemDesktop {
 }
 
 /// True when the text was pasted (not merely copied).
-pub fn copy_and_paste(desktop: &impl Desktop, text: &str, window: Option<&str>, settle: Duration) -> bool {
+pub fn copy_and_paste(
+    desktop: &impl Desktop,
+    text: &str,
+    window: Option<&str>,
+    settle: Duration,
+) -> bool {
     let focused = match window {
         Some(name) => {
             let focused = desktop.focus_window(name);
@@ -77,7 +94,12 @@ pub fn copy_and_paste(desktop: &impl Desktop, text: &str, window: Option<&str>, 
 
 struct Job {
     text: String,
-    window: Option<String>,
+    window: Target,
+}
+
+enum Target {
+    Explicit(Option<String>),
+    SteamVr,
 }
 
 /// Runs requests one at a time on a worker thread: focusing waits for the
@@ -88,21 +110,37 @@ pub struct ClipboardSink {
 
 impl ClipboardSink {
     pub fn new() -> Self {
-        Self::with_desktop(SystemDesktop, FOCUS_SETTLE)
+        Self::with_target(SystemDesktop, vr::OpenVr, FOCUS_SETTLE)
     }
 
     pub fn with_desktop(desktop: impl Desktop, settle: Duration) -> Self {
+        Self::with_target(desktop, NoTarget, settle)
+    }
+
+    pub fn with_target(desktop: impl Desktop, target: impl WindowTarget, settle: Duration) -> Self {
         let (jobs, queue) = channel::<Job>();
         thread::Builder::new()
             .name("vrct-clipboard".into())
             .spawn(move || {
                 // Ends when the sink is dropped and the queue closes.
                 for job in queue {
-                    copy_and_paste(&desktop, &job.text, job.window.as_deref(), settle);
+                    let window = match job.window {
+                        Target::Explicit(window) => window,
+                        Target::SteamVr => match target.window_name() {
+                            Ok(window) => window.filter(|name| !name.is_empty()),
+                            Err(error) => {
+                                eprintln!("[sinks] clipboard: {error}; copying only");
+                                None
+                            }
+                        },
+                    };
+                    copy_and_paste(&desktop, &job.text, window.as_deref(), settle);
                 }
             })
             .expect("spawn clipboard thread");
-        Self { jobs: Mutex::new(jobs) }
+        Self {
+            jobs: Mutex::new(jobs),
+        }
     }
 
     /// Queue a copy (and paste into `window`, when given). An empty window
@@ -110,12 +148,24 @@ impl ClipboardSink {
     pub fn copy_and_paste(&self, text: &str, window: Option<&str>) -> Result<(), String> {
         let job = Job {
             text: text.to_string(),
-            window: window.filter(|name| !name.is_empty()).map(str::to_string),
+            window: Target::Explicit(window.filter(|name| !name.is_empty()).map(str::to_string)),
         };
         self.jobs
             .lock()
             .unwrap()
             .send(job)
+            .map_err(|_| "clipboard worker is gone".to_string())
+    }
+
+    /// Native pipeline output. Discovery failure still queues a manual copy.
+    pub fn copy_into_vr(&self, text: &str) -> Result<(), String> {
+        self.jobs
+            .lock()
+            .unwrap()
+            .send(Job {
+                text: text.to_string(),
+                window: Target::SteamVr,
+            })
             .map_err(|_| "clipboard worker is gone".to_string())
     }
 }
@@ -140,7 +190,11 @@ mod tests {
 
     impl Fake {
         fn new(focus_works: bool, copy_works: bool) -> Self {
-            Self { focus_works, copy_works, ..Self::default() }
+            Self {
+                focus_works,
+                copy_works,
+                ..Self::default()
+            }
         }
         fn calls(&self) -> Vec<String> {
             self.calls.lock().unwrap().clone()
@@ -206,6 +260,60 @@ mod tests {
         while fake.calls().len() < 4 && std::time::Instant::now() < deadline {
             thread::sleep(Duration::from_millis(5));
         }
-        assert_eq!(fake.calls(), ["copy one", "focus Game", "copy two", "paste"]);
+        assert_eq!(
+            fake.calls(),
+            ["copy one", "focus Game", "copy two", "paste"]
+        );
+    }
+
+    #[test]
+    fn native_worker_resolves_each_target_and_falls_back_to_copy_only() {
+        use std::collections::VecDeque;
+        use std::sync::atomic::{AtomicUsize, Ordering};
+        struct TargetSource {
+            results: Mutex<VecDeque<Result<Option<String>, String>>>,
+            calls: Arc<AtomicUsize>,
+        }
+        impl WindowTarget for TargetSource {
+            fn window_name(&self) -> Result<Option<String>, String> {
+                self.calls.fetch_add(1, Ordering::SeqCst);
+                self.results.lock().unwrap().pop_front().unwrap()
+            }
+        }
+        let fake = Fake::new(true, true);
+        let calls = Arc::new(AtomicUsize::new(0));
+        let source = TargetSource {
+            results: Mutex::new(VecDeque::from([
+                Ok(Some("ゲーム ไทย".into())),
+                Ok(None),
+                Err("No OpenVR".into()),
+                Ok(Some(String::new())),
+            ])),
+            calls: calls.clone(),
+        };
+        let sink = ClipboardSink::with_target(fake.clone(), source, Duration::ZERO);
+        // Legacy requests keep their explicit target and never query OpenVR.
+        sink.copy_and_paste("bridge", None).unwrap();
+        for text in ["one", "two", "three", "four"] {
+            sink.copy_into_vr(text).unwrap();
+        }
+        drop(sink);
+        let deadline = std::time::Instant::now() + Duration::from_secs(2);
+        while fake.calls().len() < 7 && std::time::Instant::now() < deadline {
+            thread::sleep(Duration::from_millis(5));
+        }
+        assert_eq!(calls.load(Ordering::SeqCst), 4);
+        assert_eq!(
+            fake.calls(),
+            [
+                "copy bridge",
+                "focus ゲーム ไทย",
+                "copy one",
+                "paste",
+                "copy two",
+                "copy three",
+                "copy four"
+            ]
+        );
     }
 }

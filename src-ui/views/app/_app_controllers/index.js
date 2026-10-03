@@ -1,5 +1,5 @@
 export { KeyEventController } from "./KeyEventController";
-export { StartPythonController } from "./StartPythonController";
+export { StartBackendController } from "./StartBackendController";
 export { GlobalHotKeyController } from "./GlobalHotKeyController";
 export { UiLanguageController } from "./UiLanguageController";
 export { ConfigPageCloseTriggerController } from "./ConfigPageCloseTriggerController";

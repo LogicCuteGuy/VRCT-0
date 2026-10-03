@@ -1,0 +1,56 @@
+{
+  "runtime": {
+    "version": "1.26.0",
+    "archive_url": "https://github.com/microsoft/onnxruntime/releases/download/v1.26.0/onnxruntime-win-x64-1.26.0.zip",
+    "archive_bytes": 75675381,
+    "archive_sha256": "6ebe99b5564bf4d029b6e93eac9ff423682b6212eade769e9ca3f685eaf500b4",
+    "entries": [
+      {
+        "entry": "onnxruntime-win-x64-1.26.0/lib/onnxruntime.dll",
+        "file": "onnxruntime.dll",
+        "bytes": 14897976,
+        "sha256": "b2ba7ca16e0e4fe71ad5148744ab885a2f5809e52a0c3de4d9ba3853a03977f9"
+      },
+      {
+        "entry": "onnxruntime-win-x64-1.26.0/lib/onnxruntime_providers_shared.dll",
+        "file": "onnxruntime_providers_shared.dll",
+        "bytes": 21816,
+        "sha256": "679ca9a81354d15e150f885a3ce1b52e08e05d2f7e8d8cb5fab32be1f1f9eecb"
+      },
+      {
+        "entry": "onnxruntime-win-x64-1.26.0/LICENSE",
+        "file": "LICENSE",
+        "bytes": 1094,
+        "sha256": "c250d6278f0b47a6439fb7592b08b58a55eb9f535aa49a1db63211c3f982b674"
+      },
+      {
+        "entry": "onnxruntime-win-x64-1.26.0/ThirdPartyNotices.txt",
+        "file": "ThirdPartyNotices.txt",
+        "bytes": 331175,
+        "sha256": "fb0af774b4d7cffc5b9d046f2aaeade2f37df2f80abf8033c95dfffcc77a8866"
+      }
+    ]
+  },
+  "files": [
+    {
+      "path": "openvr/openvr_api.dll",
+      "sha256": "bab8ac6ef64e68a9ca53315b0014d131088584b2efdfa6db511d67ec03cfcb4a"
+    },
+    {
+      "path": "fonts/NotoSansJP-Regular.ttf",
+      "sha256": "fb3df01b4182734d021d79ec5bac17903bb681e926a059c59ed81a373d612241"
+    },
+    {
+      "path": "fonts/NotoSansKR-Regular.ttf",
+      "sha256": "9db318b65ee9c575a43e7efd273dbdd1afef26e467eea3e1073a50e1a6595f6d"
+    },
+    {
+      "path": "fonts/NotoSansSC-Regular.ttf",
+      "sha256": "ae82f4e2a55e1316a55bcc1d05e9555ce08d8bda07e893b486896b626fd852ff"
+    },
+    {
+      "path": "fonts/NotoSansTC-Regular.ttf",
+      "sha256": "6b137e2eb57a2d1e4cf391c886ab1b783a0e5ddb5c75254748bde00c15cb8ff5"
+    }
+  ]
+}

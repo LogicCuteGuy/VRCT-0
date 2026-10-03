@@ -91,15 +91,14 @@ impl Rpc {
             catalog::models(target).await.map(|ids| json!(ids))
         });
         #[cfg(feature = "ct2")]
-        let rpc = rpc.ct2_methods();
+        let rpc = rpc.with_ct2_engine(Arc::new(ct2::Engine::default()));
         rpc
     }
 
     /// The local model is loaded and run on blocking threads: loading reads
     /// hundreds of MB and a translation keeps the CPU busy for a while.
     #[cfg(feature = "ct2")]
-    fn ct2_methods(self) -> Self {
-        let engine = Arc::new(ct2::Engine::default());
+    pub fn with_ct2_engine(self, engine: Arc<ct2::Engine>) -> Self {
         let loader = Arc::clone(&engine);
         self.method("ct2.load", move |params| {
             let engine = Arc::clone(&loader);

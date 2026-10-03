@@ -1,0 +1,2224 @@
+[
+  {
+    "endpoint": "/set/enable/translation",
+    "method": "setEnableTranslation",
+    "setting": null,
+    "references": [
+      "ENABLE_TRANSLATION"
+    ]
+  },
+  {
+    "endpoint": "/set/disable/translation",
+    "method": "setDisableTranslation",
+    "setting": null,
+    "references": [
+      "ENABLE_TRANSLATION"
+    ]
+  },
+  {
+    "endpoint": "/set/enable/transcription_send",
+    "method": "setEnableTranscriptionSend",
+    "setting": null,
+    "references": [
+      "ENABLE_TRANSCRIPTION_SEND"
+    ]
+  },
+  {
+    "endpoint": "/set/disable/transcription_send",
+    "method": "setDisableTranscriptionSend",
+    "setting": null,
+    "references": [
+      "ENABLE_TRANSCRIPTION_SEND"
+    ]
+  },
+  {
+    "endpoint": "/set/enable/transcription_receive",
+    "method": "setEnableTranscriptionReceive",
+    "setting": null,
+    "references": [
+      "ENABLE_TRANSCRIPTION_RECEIVE"
+    ]
+  },
+  {
+    "endpoint": "/set/disable/transcription_receive",
+    "method": "setDisableTranscriptionReceive",
+    "setting": null,
+    "references": [
+      "ENABLE_TRANSCRIPTION_RECEIVE"
+    ]
+  },
+  {
+    "endpoint": "/set/enable/ocr_capture",
+    "method": "setEnableOcrCapture",
+    "setting": null,
+    "references": [
+      "ENABLE_OCR_CAPTURE"
+    ]
+  },
+  {
+    "endpoint": "/set/disable/ocr_capture",
+    "method": "setDisableOcrCapture",
+    "setting": null,
+    "references": [
+      "ENABLE_OCR_CAPTURE"
+    ]
+  },
+  {
+    "endpoint": "/set/enable/foreground",
+    "method": "setEnableForeground",
+    "setting": null,
+    "references": [
+      "ENABLE_FOREGROUND"
+    ]
+  },
+  {
+    "endpoint": "/set/disable/foreground",
+    "method": "setDisableForeground",
+    "setting": null,
+    "references": [
+      "ENABLE_FOREGROUND"
+    ]
+  },
+  {
+    "endpoint": "/get/data/selected_tab_no",
+    "method": "getSelectedTabNo",
+    "setting": "SELECTED_TAB_NO",
+    "references": []
+  },
+  {
+    "endpoint": "/set/data/selected_tab_no",
+    "method": "setSelectedTabNo",
+    "setting": null,
+    "references": [
+      "SELECTED_TAB_NO"
+    ]
+  },
+  {
+    "endpoint": "/get/data/main_window_sidebar_compact_mode",
+    "method": "getMainWindowSidebarCompactMode",
+    "setting": "MAIN_WINDOW_SIDEBAR_COMPACT_MODE",
+    "references": []
+  },
+  {
+    "endpoint": "/set/enable/main_window_sidebar_compact_mode",
+    "method": "setEnableMainWindowSidebarCompactMode",
+    "setting": null,
+    "references": [
+      "MAIN_WINDOW_SIDEBAR_COMPACT_MODE"
+    ]
+  },
+  {
+    "endpoint": "/set/disable/main_window_sidebar_compact_mode",
+    "method": "setDisableMainWindowSidebarCompactMode",
+    "setting": null,
+    "references": [
+      "MAIN_WINDOW_SIDEBAR_COMPACT_MODE"
+    ]
+  },
+  {
+    "endpoint": "/get/data/selectable_translation_engines",
+    "method": "getTranslationEngines",
+    "setting": null,
+    "references": [
+      "SELECTABLE_TRANSLATION_ENGINE_STATUS",
+      "SELECTED_YOUR_LANGUAGES",
+      "SELECTED_TAB_NO",
+      "SELECTED_TARGET_LANGUAGES"
+    ]
+  },
+  {
+    "endpoint": "/get/data/selectable_language_list",
+    "method": "getListLanguageAndCountry",
+    "setting": null,
+    "references": []
+  },
+  {
+    "endpoint": "/get/data/selected_translation_engines",
+    "method": "getSelectedTranslationEngines",
+    "setting": "SELECTED_TRANSLATION_ENGINES",
+    "references": []
+  },
+  {
+    "endpoint": "/set/data/selected_translation_engines",
+    "method": "setSelectedTranslationEngines",
+    "setting": null,
+    "references": [
+      "SELECTED_TRANSLATION_ENGINES"
+    ]
+  },
+  {
+    "endpoint": "/get/data/selected_your_languages",
+    "method": "getSelectedYourLanguages",
+    "setting": "SELECTED_YOUR_LANGUAGES",
+    "references": []
+  },
+  {
+    "endpoint": "/set/data/selected_your_languages",
+    "method": "setSelectedYourLanguages",
+    "setting": null,
+    "references": [
+      "SELECTED_YOUR_LANGUAGES"
+    ]
+  },
+  {
+    "endpoint": "/get/data/selected_target_languages",
+    "method": "getSelectedTargetLanguages",
+    "setting": "SELECTED_TARGET_LANGUAGES",
+    "references": []
+  },
+  {
+    "endpoint": "/set/data/selected_target_languages",
+    "method": "setSelectedTargetLanguages",
+    "setting": null,
+    "references": [
+      "SELECTED_TARGET_LANGUAGES"
+    ]
+  },
+  {
+    "endpoint": "/get/data/selectable_transcription_engines",
+    "method": "getTranscriptionEngines",
+    "setting": null,
+    "references": [
+      "SELECTABLE_TRANSCRIPTION_ENGINE_STATUS"
+    ]
+  },
+  {
+    "endpoint": "/get/data/selected_transcription_engine",
+    "method": "getSelectedTranscriptionEngine",
+    "setting": "SELECTED_TRANSCRIPTION_ENGINE",
+    "references": []
+  },
+  {
+    "endpoint": "/set/data/selected_transcription_engine",
+    "method": "setSelectedTranscriptionEngine",
+    "setting": null,
+    "references": [
+      "SELECTED_TRANSCRIPTION_ENGINE"
+    ]
+  },
+  {
+    "endpoint": "/get/data/groq_whisper_auth_key",
+    "method": "getGroqWhisperAuthKey",
+    "setting": null,
+    "references": [
+      "TRANSCRIPTION_AUTH_KEYS"
+    ]
+  },
+  {
+    "endpoint": "/set/data/groq_whisper_auth_key",
+    "method": "setGroqWhisperAuthKey",
+    "setting": null,
+    "references": [
+      "GROQ_WHISPER_BASE_URL",
+      "TRANSCRIPTION_AUTH_KEYS",
+      "SELECTABLE_GROQ_WHISPER_MODEL_LIST",
+      "SELECTABLE_TRANSCRIPTION_ENGINE_STATUS",
+      "SELECTED_GROQ_WHISPER_MODEL"
+    ]
+  },
+  {
+    "endpoint": "/delete/data/groq_whisper_auth_key",
+    "method": "delGroqWhisperAuthKey",
+    "setting": null,
+    "references": [
+      "TRANSCRIPTION_AUTH_KEYS",
+      "SELECTABLE_GROQ_WHISPER_MODEL_LIST",
+      "SELECTED_GROQ_WHISPER_MODEL",
+      "SELECTABLE_TRANSCRIPTION_ENGINE_STATUS"
+    ]
+  },
+  {
+    "endpoint": "/get/data/selectable_groq_whisper_model_list",
+    "method": "getGroqWhisperModelList",
+    "setting": "SELECTABLE_GROQ_WHISPER_MODEL_LIST",
+    "references": []
+  },
+  {
+    "endpoint": "/get/data/selected_groq_whisper_model",
+    "method": "getGroqWhisperModel",
+    "setting": "SELECTED_GROQ_WHISPER_MODEL",
+    "references": []
+  },
+  {
+    "endpoint": "/set/data/selected_groq_whisper_model",
+    "method": "setGroqWhisperModel",
+    "setting": null,
+    "references": [
+      "SELECTABLE_GROQ_WHISPER_MODEL_LIST",
+      "SELECTED_GROQ_WHISPER_MODEL"
+    ]
+  },
+  {
+    "endpoint": "/get/data/openai_whisper_auth_key",
+    "method": "getOpenAIWhisperAuthKey",
+    "setting": null,
+    "references": [
+      "TRANSCRIPTION_AUTH_KEYS"
+    ]
+  },
+  {
+    "endpoint": "/set/data/openai_whisper_auth_key",
+    "method": "setOpenAIWhisperAuthKey",
+    "setting": null,
+    "references": [
+      "OPENAI_WHISPER_BASE_URL",
+      "TRANSCRIPTION_AUTH_KEYS",
+      "SELECTABLE_OPENAI_WHISPER_MODEL_LIST",
+      "SELECTABLE_TRANSCRIPTION_ENGINE_STATUS",
+      "SELECTED_OPENAI_WHISPER_MODEL"
+    ]
+  },
+  {
+    "endpoint": "/delete/data/openai_whisper_auth_key",
+    "method": "delOpenAIWhisperAuthKey",
+    "setting": null,
+    "references": [
+      "TRANSCRIPTION_AUTH_KEYS",
+      "SELECTABLE_OPENAI_WHISPER_MODEL_LIST",
+      "SELECTED_OPENAI_WHISPER_MODEL",
+      "SELECTABLE_TRANSCRIPTION_ENGINE_STATUS"
+    ]
+  },
+  {
+    "endpoint": "/get/data/selectable_openai_whisper_model_list",
+    "method": "getOpenAIWhisperModelList",
+    "setting": "SELECTABLE_OPENAI_WHISPER_MODEL_LIST",
+    "references": []
+  },
+  {
+    "endpoint": "/get/data/selected_openai_whisper_model",
+    "method": "getOpenAIWhisperModel",
+    "setting": "SELECTED_OPENAI_WHISPER_MODEL",
+    "references": []
+  },
+  {
+    "endpoint": "/set/data/selected_openai_whisper_model",
+    "method": "setOpenAIWhisperModel",
+    "setting": null,
+    "references": [
+      "SELECTABLE_OPENAI_WHISPER_MODEL_LIST",
+      "SELECTED_OPENAI_WHISPER_MODEL"
+    ]
+  },
+  {
+    "endpoint": "/get/data/custom_whisper_auth_key",
+    "method": "getCustomWhisperAuthKey",
+    "setting": null,
+    "references": [
+      "TRANSCRIPTION_AUTH_KEYS"
+    ]
+  },
+  {
+    "endpoint": "/set/data/custom_whisper_auth_key",
+    "method": "setCustomWhisperAuthKey",
+    "setting": null,
+    "references": [
+      "TRANSCRIPTION_CUSTOM_URL",
+      "TRANSCRIPTION_AUTH_KEYS",
+      "SELECTABLE_CUSTOM_WHISPER_MODEL_LIST",
+      "SELECTABLE_TRANSCRIPTION_ENGINE_STATUS",
+      "SELECTED_CUSTOM_WHISPER_MODEL"
+    ]
+  },
+  {
+    "endpoint": "/delete/data/custom_whisper_auth_key",
+    "method": "delCustomWhisperAuthKey",
+    "setting": null,
+    "references": [
+      "TRANSCRIPTION_AUTH_KEYS",
+      "SELECTABLE_CUSTOM_WHISPER_MODEL_LIST",
+      "SELECTED_CUSTOM_WHISPER_MODEL",
+      "SELECTABLE_TRANSCRIPTION_ENGINE_STATUS"
+    ]
+  },
+  {
+    "endpoint": "/get/data/custom_whisper_url",
+    "method": "getCustomWhisperURL",
+    "setting": "TRANSCRIPTION_CUSTOM_URL",
+    "references": []
+  },
+  {
+    "endpoint": "/set/data/custom_whisper_url",
+    "method": "setCustomWhisperURL",
+    "setting": null,
+    "references": [
+      "TRANSCRIPTION_AUTH_KEYS",
+      "TRANSCRIPTION_CUSTOM_URL",
+      "SELECTABLE_CUSTOM_WHISPER_MODEL_LIST",
+      "SELECTED_CUSTOM_WHISPER_MODEL",
+      "SELECTABLE_TRANSCRIPTION_ENGINE_STATUS"
+    ]
+  },
+  {
+    "endpoint": "/get/data/selectable_custom_whisper_model_list",
+    "method": "getCustomWhisperModelList",
+    "setting": "SELECTABLE_CUSTOM_WHISPER_MODEL_LIST",
+    "references": []
+  },
+  {
+    "endpoint": "/get/data/selected_custom_whisper_model",
+    "method": "getCustomWhisperModel",
+    "setting": "SELECTED_CUSTOM_WHISPER_MODEL",
+    "references": []
+  },
+  {
+    "endpoint": "/set/data/selected_custom_whisper_model",
+    "method": "setCustomWhisperModel",
+    "setting": null,
+    "references": [
+      "SELECTABLE_CUSTOM_WHISPER_MODEL_LIST",
+      "SELECTED_CUSTOM_WHISPER_MODEL"
+    ]
+  },
+  {
+    "endpoint": "/get/data/deepgram_auth_key",
+    "method": "getDeepgramAuthKey",
+    "setting": null,
+    "references": [
+      "TRANSCRIPTION_AUTH_KEYS"
+    ]
+  },
+  {
+    "endpoint": "/set/data/deepgram_auth_key",
+    "method": "setDeepgramAuthKey",
+    "setting": null,
+    "references": [
+      "TRANSCRIPTION_AUTH_KEYS",
+      "SELECTABLE_DEEPGRAM_MODEL_LIST",
+      "DEEPGRAM_MODEL_LANGUAGES",
+      "SELECTABLE_TRANSCRIPTION_ENGINE_STATUS",
+      "SELECTED_DEEPGRAM_MODEL"
+    ]
+  },
+  {
+    "endpoint": "/delete/data/deepgram_auth_key",
+    "method": "delDeepgramAuthKey",
+    "setting": null,
+    "references": [
+      "TRANSCRIPTION_AUTH_KEYS",
+      "SELECTABLE_DEEPGRAM_MODEL_LIST",
+      "DEEPGRAM_MODEL_LANGUAGES",
+      "SELECTED_DEEPGRAM_MODEL",
+      "SELECTABLE_TRANSCRIPTION_ENGINE_STATUS"
+    ]
+  },
+  {
+    "endpoint": "/get/data/selectable_deepgram_model_list",
+    "method": "getDeepgramModelList",
+    "setting": "SELECTABLE_DEEPGRAM_MODEL_LIST",
+    "references": []
+  },
+  {
+    "endpoint": "/get/data/selected_deepgram_model",
+    "method": "getDeepgramModel",
+    "setting": "SELECTED_DEEPGRAM_MODEL",
+    "references": []
+  },
+  {
+    "endpoint": "/set/data/selected_deepgram_model",
+    "method": "setDeepgramModel",
+    "setting": null,
+    "references": [
+      "SELECTABLE_DEEPGRAM_MODEL_LIST",
+      "SELECTED_DEEPGRAM_MODEL",
+      "SELECTED_TRANSCRIPTION_ENGINE"
+    ]
+  },
+  {
+    "endpoint": "/get/data/selectable_release_channels",
+    "method": "getSelectableReleaseChannels",
+    "setting": "SELECTABLE_RELEASE_CHANNEL_LIST",
+    "references": []
+  },
+  {
+    "endpoint": "/get/data/release_channel",
+    "method": "getSelectedReleaseChannel",
+    "setting": "SELECTED_RELEASE_CHANNEL",
+    "references": []
+  },
+  {
+    "endpoint": "/set/data/release_channel",
+    "method": "setSelectedReleaseChannel",
+    "setting": null,
+    "references": [
+      "SELECTED_RELEASE_CHANNEL"
+    ]
+  },
+  {
+    "endpoint": "/get/data/available_releases",
+    "method": "listAvailableReleases",
+    "setting": null,
+    "references": []
+  },
+  {
+    "endpoint": "/run/send_message_box",
+    "method": "sendMessageBox",
+    "setting": null,
+    "references": []
+  },
+  {
+    "endpoint": "/run/typing_message_box",
+    "method": "typingMessageBox",
+    "setting": null,
+    "references": [
+      "SEND_MESSAGE_TO_VRC"
+    ]
+  },
+  {
+    "endpoint": "/run/stop_typing_message_box",
+    "method": "stopTypingMessageBox",
+    "setting": null,
+    "references": [
+      "SEND_MESSAGE_TO_VRC"
+    ]
+  },
+  {
+    "endpoint": "/run/send_text_overlay",
+    "method": "sendTextOverlay",
+    "setting": null,
+    "references": [
+      "OVERLAY_SMALL_LOG",
+      "OVERLAY_LARGE_LOG"
+    ]
+  },
+  {
+    "endpoint": "/get/data/telemetry",
+    "method": "getTelemetry",
+    "setting": "ENABLE_TELEMETRY",
+    "references": []
+  },
+  {
+    "endpoint": "/set/enable/telemetry",
+    "method": "setEnableTelemetry",
+    "setting": null,
+    "references": [
+      "ENABLE_TELEMETRY",
+      "VERSION"
+    ]
+  },
+  {
+    "endpoint": "/set/disable/telemetry",
+    "method": "setDisableTelemetry",
+    "setting": null,
+    "references": [
+      "ENABLE_TELEMETRY"
+    ]
+  },
+  {
+    "endpoint": "/run/shutdown",
+    "method": "shutdown",
+    "setting": null,
+    "references": []
+  },
+  {
+    "endpoint": "/run/swap_your_language_and_target_language",
+    "method": "swapYourLanguageAndTargetLanguage",
+    "setting": null,
+    "references": [
+      "SELECTED_YOUR_LANGUAGES",
+      "SELECTED_TARGET_LANGUAGES",
+      "SELECTED_TAB_NO"
+    ]
+  },
+  {
+    "endpoint": "/run/update_software",
+    "method": "updateSoftware",
+    "setting": null,
+    "references": []
+  },
+  {
+    "endpoint": "/run/update_cuda_software",
+    "method": "updateCudaSoftware",
+    "setting": null,
+    "references": []
+  },
+  {
+    "endpoint": "/get/data/version",
+    "method": "getVersion",
+    "setting": "VERSION",
+    "references": []
+  },
+  {
+    "endpoint": "/get/data/transparency",
+    "method": "getTransparency",
+    "setting": "TRANSPARENCY",
+    "references": []
+  },
+  {
+    "endpoint": "/set/data/transparency",
+    "method": "setTransparency",
+    "setting": null,
+    "references": [
+      "TRANSPARENCY"
+    ]
+  },
+  {
+    "endpoint": "/get/data/ui_scaling",
+    "method": "getUiScaling",
+    "setting": "UI_SCALING",
+    "references": []
+  },
+  {
+    "endpoint": "/set/data/ui_scaling",
+    "method": "setUiScaling",
+    "setting": null,
+    "references": [
+      "UI_SCALING"
+    ]
+  },
+  {
+    "endpoint": "/get/data/textbox_ui_scaling",
+    "method": "getTextboxUiScaling",
+    "setting": "TEXTBOX_UI_SCALING",
+    "references": []
+  },
+  {
+    "endpoint": "/set/data/textbox_ui_scaling",
+    "method": "setTextboxUiScaling",
+    "setting": null,
+    "references": [
+      "TEXTBOX_UI_SCALING"
+    ]
+  },
+  {
+    "endpoint": "/get/data/message_box_ratio",
+    "method": "getMessageBoxRatio",
+    "setting": "MESSAGE_BOX_RATIO",
+    "references": []
+  },
+  {
+    "endpoint": "/set/data/message_box_ratio",
+    "method": "setMessageBoxRatio",
+    "setting": null,
+    "references": [
+      "MESSAGE_BOX_RATIO"
+    ]
+  },
+  {
+    "endpoint": "/get/data/send_message_button_type",
+    "method": "getSendMessageButtonType",
+    "setting": "SEND_MESSAGE_BUTTON_TYPE",
+    "references": []
+  },
+  {
+    "endpoint": "/set/data/send_message_button_type",
+    "method": "setSendMessageButtonType",
+    "setting": null,
+    "references": [
+      "SEND_MESSAGE_BUTTON_TYPE"
+    ]
+  },
+  {
+    "endpoint": "/get/data/show_resend_button",
+    "method": "getShowResendButton",
+    "setting": "SHOW_RESEND_BUTTON",
+    "references": []
+  },
+  {
+    "endpoint": "/set/enable/show_resend_button",
+    "method": "setEnableShowResendButton",
+    "setting": null,
+    "references": [
+      "SHOW_RESEND_BUTTON"
+    ]
+  },
+  {
+    "endpoint": "/set/disable/show_resend_button",
+    "method": "setDisableShowResendButton",
+    "setting": null,
+    "references": [
+      "SHOW_RESEND_BUTTON"
+    ]
+  },
+  {
+    "endpoint": "/get/data/font_family",
+    "method": "getFontFamily",
+    "setting": "FONT_FAMILY",
+    "references": []
+  },
+  {
+    "endpoint": "/set/data/font_family",
+    "method": "setFontFamily",
+    "setting": null,
+    "references": [
+      "FONT_FAMILY"
+    ]
+  },
+  {
+    "endpoint": "/get/data/ui_language",
+    "method": "getUiLanguage",
+    "setting": "UI_LANGUAGE",
+    "references": []
+  },
+  {
+    "endpoint": "/set/data/ui_language",
+    "method": "setUiLanguage",
+    "setting": null,
+    "references": [
+      "UI_LANGUAGE"
+    ]
+  },
+  {
+    "endpoint": "/get/data/main_window_geometry",
+    "method": "getMainWindowGeometry",
+    "setting": "MAIN_WINDOW_GEOMETRY",
+    "references": []
+  },
+  {
+    "endpoint": "/set/data/main_window_geometry",
+    "method": "setMainWindowGeometry",
+    "setting": null,
+    "references": [
+      "MAIN_WINDOW_GEOMETRY"
+    ]
+  },
+  {
+    "endpoint": "/get/data/compute_mode",
+    "method": "getComputeMode",
+    "setting": "COMPUTE_MODE",
+    "references": []
+  },
+  {
+    "endpoint": "/get/data/selectable_translation_compute_device_list",
+    "method": "getComputeDeviceList",
+    "setting": "SELECTABLE_COMPUTE_DEVICE_LIST",
+    "references": []
+  },
+  {
+    "endpoint": "/get/data/selected_translation_compute_device",
+    "method": "getSelectedTranslationComputeDevice",
+    "setting": "SELECTED_TRANSLATION_COMPUTE_DEVICE",
+    "references": []
+  },
+  {
+    "endpoint": "/set/data/selected_translation_compute_device",
+    "method": "setSelectedTranslationComputeDevice",
+    "setting": null,
+    "references": [
+      "SELECTED_TRANSLATION_COMPUTE_DEVICE",
+      "SELECTED_TRANSLATION_COMPUTE_TYPE"
+    ]
+  },
+  {
+    "endpoint": "/get/data/selectable_transcription_compute_device_list",
+    "method": "getComputeDeviceList",
+    "setting": "SELECTABLE_COMPUTE_DEVICE_LIST",
+    "references": []
+  },
+  {
+    "endpoint": "/get/data/selected_transcription_compute_device",
+    "method": "getSelectedTranscriptionComputeDevice",
+    "setting": "SELECTED_TRANSCRIPTION_COMPUTE_DEVICE",
+    "references": []
+  },
+  {
+    "endpoint": "/set/data/selected_transcription_compute_device",
+    "method": "setSelectedTranscriptionComputeDevice",
+    "setting": null,
+    "references": [
+      "SELECTED_TRANSCRIPTION_COMPUTE_DEVICE",
+      "SELECTED_TRANSCRIPTION_COMPUTE_TYPE"
+    ]
+  },
+  {
+    "endpoint": "/get/data/selectable_ctranslate2_weight_type_dict",
+    "method": "getSelectableCtranslate2WeightTypeDict",
+    "setting": "SELECTABLE_CTRANSLATE2_WEIGHT_TYPE_DICT",
+    "references": []
+  },
+  {
+    "endpoint": "/get/data/selected_ctranslate2_weight_type",
+    "method": "getCtranslate2WeightType",
+    "setting": "CTRANSLATE2_WEIGHT_TYPE",
+    "references": []
+  },
+  {
+    "endpoint": "/set/data/selected_ctranslate2_weight_type",
+    "method": "setCtranslate2WeightType",
+    "setting": null,
+    "references": [
+      "CTRANSLATE2_WEIGHT_TYPE"
+    ]
+  },
+  {
+    "endpoint": "/get/data/selected_translation_compute_type",
+    "method": "getSelectedTranslationComputeType",
+    "setting": "SELECTED_TRANSLATION_COMPUTE_TYPE",
+    "references": []
+  },
+  {
+    "endpoint": "/set/data/selected_translation_compute_type",
+    "method": "setSelectedTranslationComputeType",
+    "setting": null,
+    "references": [
+      "SELECTED_TRANSLATION_COMPUTE_TYPE"
+    ]
+  },
+  {
+    "endpoint": "/run/download_ctranslate2_weight",
+    "method": "downloadCtranslate2Weight",
+    "setting": null,
+    "references": []
+  },
+  {
+    "endpoint": "/get/data/deepl_auth_key",
+    "method": "getDeepLAuthKey",
+    "setting": null,
+    "references": [
+      "AUTH_KEYS"
+    ]
+  },
+  {
+    "endpoint": "/set/data/deepl_auth_key",
+    "method": "setDeeplAuthKey",
+    "setting": null,
+    "references": [
+      "AUTH_KEYS",
+      "SELECTABLE_TRANSLATION_ENGINE_STATUS"
+    ]
+  },
+  {
+    "endpoint": "/delete/data/deepl_auth_key",
+    "method": "delDeeplAuthKey",
+    "setting": null,
+    "references": [
+      "AUTH_KEYS",
+      "SELECTABLE_TRANSLATION_ENGINE_STATUS"
+    ]
+  },
+  {
+    "endpoint": "/get/data/selectable_plamo_model_list",
+    "method": "getPlamoModelList",
+    "setting": null,
+    "references": []
+  },
+  {
+    "endpoint": "/get/data/selected_plamo_model",
+    "method": "getPlamoModel",
+    "setting": null,
+    "references": []
+  },
+  {
+    "endpoint": "/set/data/selected_plamo_model",
+    "method": "setPlamoModel",
+    "setting": null,
+    "references": []
+  },
+  {
+    "endpoint": "/get/data/plamo_auth_key",
+    "method": "getPlamoAuthKey",
+    "setting": null,
+    "references": []
+  },
+  {
+    "endpoint": "/set/data/plamo_auth_key",
+    "method": "setPlamoAuthKey",
+    "setting": null,
+    "references": []
+  },
+  {
+    "endpoint": "/delete/data/plamo_auth_key",
+    "method": "delPlamoAuthKey",
+    "setting": null,
+    "references": []
+  },
+  {
+    "endpoint": "/get/data/selectable_gemini_model_list",
+    "method": "getGeminiModelList",
+    "setting": null,
+    "references": []
+  },
+  {
+    "endpoint": "/get/data/selected_gemini_model",
+    "method": "getGeminiModel",
+    "setting": null,
+    "references": []
+  },
+  {
+    "endpoint": "/set/data/selected_gemini_model",
+    "method": "setGeminiModel",
+    "setting": null,
+    "references": []
+  },
+  {
+    "endpoint": "/get/data/gemini_auth_key",
+    "method": "getGeminiAuthKey",
+    "setting": null,
+    "references": []
+  },
+  {
+    "endpoint": "/set/data/gemini_auth_key",
+    "method": "setGeminiAuthKey",
+    "setting": null,
+    "references": []
+  },
+  {
+    "endpoint": "/delete/data/gemini_auth_key",
+    "method": "delGeminiAuthKey",
+    "setting": null,
+    "references": []
+  },
+  {
+    "endpoint": "/get/data/selectable_openai_model_list",
+    "method": "getOpenAIModelList",
+    "setting": null,
+    "references": []
+  },
+  {
+    "endpoint": "/get/data/selected_openai_model",
+    "method": "getOpenAIModel",
+    "setting": null,
+    "references": []
+  },
+  {
+    "endpoint": "/set/data/selected_openai_model",
+    "method": "setOpenAIModel",
+    "setting": null,
+    "references": []
+  },
+  {
+    "endpoint": "/get/data/openai_auth_key",
+    "method": "getOpenAIAuthKey",
+    "setting": null,
+    "references": []
+  },
+  {
+    "endpoint": "/set/data/openai_auth_key",
+    "method": "setOpenAIAuthKey",
+    "setting": null,
+    "references": []
+  },
+  {
+    "endpoint": "/delete/data/openai_auth_key",
+    "method": "delOpenAIAuthKey",
+    "setting": null,
+    "references": []
+  },
+  {
+    "endpoint": "/get/data/selectable_groq_model_list",
+    "method": "getGroqModelList",
+    "setting": null,
+    "references": []
+  },
+  {
+    "endpoint": "/get/data/selected_groq_model",
+    "method": "getGroqModel",
+    "setting": null,
+    "references": []
+  },
+  {
+    "endpoint": "/set/data/selected_groq_model",
+    "method": "setGroqModel",
+    "setting": null,
+    "references": []
+  },
+  {
+    "endpoint": "/get/data/groq_auth_key",
+    "method": "getGroqAuthKey",
+    "setting": null,
+    "references": []
+  },
+  {
+    "endpoint": "/set/data/groq_auth_key",
+    "method": "setGroqAuthKey",
+    "setting": null,
+    "references": []
+  },
+  {
+    "endpoint": "/delete/data/groq_auth_key",
+    "method": "delGroqAuthKey",
+    "setting": null,
+    "references": []
+  },
+  {
+    "endpoint": "/get/data/selectable_openrouter_model_list",
+    "method": "getOpenRouterModelList",
+    "setting": null,
+    "references": []
+  },
+  {
+    "endpoint": "/get/data/selected_openrouter_model",
+    "method": "getOpenRouterModel",
+    "setting": null,
+    "references": []
+  },
+  {
+    "endpoint": "/set/data/selected_openrouter_model",
+    "method": "setOpenRouterModel",
+    "setting": null,
+    "references": []
+  },
+  {
+    "endpoint": "/get/data/openrouter_auth_key",
+    "method": "getOpenRouterAuthKey",
+    "setting": null,
+    "references": []
+  },
+  {
+    "endpoint": "/set/data/openrouter_auth_key",
+    "method": "setOpenRouterAuthKey",
+    "setting": null,
+    "references": []
+  },
+  {
+    "endpoint": "/delete/data/openrouter_auth_key",
+    "method": "delOpenRouterAuthKey",
+    "setting": null,
+    "references": []
+  },
+  {
+    "endpoint": "/get/data/connected_lmstudio",
+    "method": "getTranslatorLMStudioConnection",
+    "setting": null,
+    "references": []
+  },
+  {
+    "endpoint": "/run/lmstudio_connection",
+    "method": "checkTranslatorLMStudioConnection",
+    "setting": null,
+    "references": [
+      "LMSTUDIO_URL"
+    ]
+  },
+  {
+    "endpoint": "/get/data/selectable_lmstudio_model_list",
+    "method": "getTranslatorLMStudioModelList",
+    "setting": null,
+    "references": []
+  },
+  {
+    "endpoint": "/get/data/selected_lmstudio_model",
+    "method": "getTranslatorLMStudioModel",
+    "setting": null,
+    "references": []
+  },
+  {
+    "endpoint": "/set/data/selected_lmstudio_model",
+    "method": "setTranslatorLMStudioModel",
+    "setting": null,
+    "references": []
+  },
+  {
+    "endpoint": "/get/data/lmstudio_url",
+    "method": "getTranslatorLMStudioURL",
+    "setting": "LMSTUDIO_URL",
+    "references": []
+  },
+  {
+    "endpoint": "/set/data/lmstudio_url",
+    "method": "setTranslatorLMStudioURL",
+    "setting": null,
+    "references": [
+      "LMSTUDIO_URL",
+      "SELECTABLE_LMSTUDIO_MODEL_LIST",
+      "SELECTED_LMSTUDIO_MODEL",
+      "SELECTABLE_TRANSLATION_ENGINE_STATUS"
+    ]
+  },
+  {
+    "endpoint": "/get/data/openai_compatible_auth_key",
+    "method": "getOpenAICompatibleAuthKey",
+    "setting": null,
+    "references": [
+      "AUTH_KEYS"
+    ]
+  },
+  {
+    "endpoint": "/set/data/openai_compatible_auth_key",
+    "method": "setOpenAICompatibleAuthKey",
+    "setting": null,
+    "references": [
+      "OPENAI_COMPATIBLE_URL",
+      "AUTH_KEYS",
+      "SELECTABLE_OPENAI_COMPATIBLE_MODEL_LIST",
+      "SELECTABLE_TRANSLATION_ENGINE_STATUS",
+      "SELECTED_OPENAI_COMPATIBLE_MODEL"
+    ]
+  },
+  {
+    "endpoint": "/delete/data/openai_compatible_auth_key",
+    "method": "delOpenAICompatibleAuthKey",
+    "setting": null,
+    "references": [
+      "AUTH_KEYS",
+      "SELECTABLE_OPENAI_COMPATIBLE_MODEL_LIST",
+      "SELECTED_OPENAI_COMPATIBLE_MODEL",
+      "SELECTABLE_TRANSLATION_ENGINE_STATUS"
+    ]
+  },
+  {
+    "endpoint": "/get/data/openai_compatible_url",
+    "method": "getOpenAICompatibleURL",
+    "setting": "OPENAI_COMPATIBLE_URL",
+    "references": []
+  },
+  {
+    "endpoint": "/set/data/openai_compatible_url",
+    "method": "setOpenAICompatibleURL",
+    "setting": null,
+    "references": [
+      "AUTH_KEYS",
+      "OPENAI_COMPATIBLE_URL",
+      "SELECTABLE_OPENAI_COMPATIBLE_MODEL_LIST",
+      "SELECTED_OPENAI_COMPATIBLE_MODEL",
+      "SELECTABLE_TRANSLATION_ENGINE_STATUS"
+    ]
+  },
+  {
+    "endpoint": "/get/data/selectable_openai_compatible_model_list",
+    "method": "getOpenAICompatibleModelList",
+    "setting": "SELECTABLE_OPENAI_COMPATIBLE_MODEL_LIST",
+    "references": []
+  },
+  {
+    "endpoint": "/get/data/selected_openai_compatible_model",
+    "method": "getOpenAICompatibleModel",
+    "setting": "SELECTED_OPENAI_COMPATIBLE_MODEL",
+    "references": []
+  },
+  {
+    "endpoint": "/set/data/selected_openai_compatible_model",
+    "method": "setOpenAICompatibleModel",
+    "setting": null,
+    "references": [
+      "SELECTED_OPENAI_COMPATIBLE_MODEL"
+    ]
+  },
+  {
+    "endpoint": "/get/data/connected_ollama",
+    "method": "getTranslatorOllamaConnection",
+    "setting": null,
+    "references": []
+  },
+  {
+    "endpoint": "/run/ollama_connection",
+    "method": "checkTranslatorOllamaConnection",
+    "setting": null,
+    "references": []
+  },
+  {
+    "endpoint": "/get/data/selectable_ollama_model_list",
+    "method": "getTranslatorOllamaModelList",
+    "setting": null,
+    "references": []
+  },
+  {
+    "endpoint": "/get/data/selected_ollama_model",
+    "method": "getTranslatorOllamaModel",
+    "setting": null,
+    "references": []
+  },
+  {
+    "endpoint": "/set/data/selected_ollama_model",
+    "method": "setTranslatorOllamaModel",
+    "setting": null,
+    "references": []
+  },
+  {
+    "endpoint": "/get/data/convert_message_to_romaji",
+    "method": "getConvertMessageToRomaji",
+    "setting": "CONVERT_MESSAGE_TO_ROMAJI",
+    "references": []
+  },
+  {
+    "endpoint": "/set/enable/convert_message_to_romaji",
+    "method": "setEnableConvertMessageToRomaji",
+    "setting": null,
+    "references": [
+      "CONVERT_MESSAGE_TO_ROMAJI",
+      "CONVERT_MESSAGE_TO_HIRAGANA"
+    ]
+  },
+  {
+    "endpoint": "/set/disable/convert_message_to_romaji",
+    "method": "setDisableConvertMessageToRomaji",
+    "setting": null,
+    "references": [
+      "CONVERT_MESSAGE_TO_ROMAJI",
+      "CONVERT_MESSAGE_TO_HIRAGANA"
+    ]
+  },
+  {
+    "endpoint": "/get/data/convert_message_to_hiragana",
+    "method": "getConvertMessageToHiragana",
+    "setting": "CONVERT_MESSAGE_TO_HIRAGANA",
+    "references": []
+  },
+  {
+    "endpoint": "/set/enable/convert_message_to_hiragana",
+    "method": "setEnableConvertMessageToHiragana",
+    "setting": null,
+    "references": [
+      "CONVERT_MESSAGE_TO_HIRAGANA",
+      "CONVERT_MESSAGE_TO_ROMAJI"
+    ]
+  },
+  {
+    "endpoint": "/set/disable/convert_message_to_hiragana",
+    "method": "setDisableConvertMessageToHiragana",
+    "setting": null,
+    "references": [
+      "CONVERT_MESSAGE_TO_HIRAGANA",
+      "CONVERT_MESSAGE_TO_ROMAJI"
+    ]
+  },
+  {
+    "endpoint": "/get/data/selectable_mic_host_list",
+    "method": "getMicHostList",
+    "setting": null,
+    "references": []
+  },
+  {
+    "endpoint": "/get/data/selectable_mic_device_list",
+    "method": "getMicDeviceList",
+    "setting": null,
+    "references": []
+  },
+  {
+    "endpoint": "/get/data/selectable_speaker_device_list",
+    "method": "getSpeakerDeviceList",
+    "setting": null,
+    "references": []
+  },
+  {
+    "endpoint": "/get/data/auto_mic_select",
+    "method": "getAutoMicSelect",
+    "setting": "AUTO_MIC_SELECT",
+    "references": []
+  },
+  {
+    "endpoint": "/set/enable/auto_mic_select",
+    "method": "setEnableAutoMicSelect",
+    "setting": null,
+    "references": [
+      "AUTO_MIC_SELECT"
+    ]
+  },
+  {
+    "endpoint": "/set/disable/auto_mic_select",
+    "method": "setDisableAutoMicSelect",
+    "setting": null,
+    "references": [
+      "AUTO_MIC_SELECT"
+    ]
+  },
+  {
+    "endpoint": "/get/data/selected_mic_host",
+    "method": "getSelectedMicHost",
+    "setting": "SELECTED_MIC_HOST",
+    "references": []
+  },
+  {
+    "endpoint": "/set/data/selected_mic_host",
+    "method": "setSelectedMicHost",
+    "setting": null,
+    "references": [
+      "SELECTED_MIC_DEVICE",
+      "SELECTED_MIC_HOST"
+    ]
+  },
+  {
+    "endpoint": "/get/data/selected_mic_device",
+    "method": "getSelectedMicDevice",
+    "setting": "SELECTED_MIC_DEVICE",
+    "references": []
+  },
+  {
+    "endpoint": "/set/data/selected_mic_device",
+    "method": "setSelectedMicDevice",
+    "setting": null,
+    "references": [
+      "SELECTED_MIC_DEVICE"
+    ]
+  },
+  {
+    "endpoint": "/get/data/mic_threshold",
+    "method": "getMicThreshold",
+    "setting": "MIC_THRESHOLD",
+    "references": []
+  },
+  {
+    "endpoint": "/set/data/mic_threshold",
+    "method": "setMicThreshold",
+    "setting": null,
+    "references": [
+      "MAX_MIC_THRESHOLD",
+      "MIC_THRESHOLD"
+    ]
+  },
+  {
+    "endpoint": "/get/data/mic_automatic_threshold",
+    "method": "getMicAutomaticThreshold",
+    "setting": "MIC_AUTOMATIC_THRESHOLD",
+    "references": []
+  },
+  {
+    "endpoint": "/set/enable/mic_automatic_threshold",
+    "method": "setEnableMicAutomaticThreshold",
+    "setting": null,
+    "references": [
+      "MIC_AUTOMATIC_THRESHOLD"
+    ]
+  },
+  {
+    "endpoint": "/set/disable/mic_automatic_threshold",
+    "method": "setDisableMicAutomaticThreshold",
+    "setting": null,
+    "references": [
+      "MIC_AUTOMATIC_THRESHOLD"
+    ]
+  },
+  {
+    "endpoint": "/get/data/mic_record_timeout",
+    "method": "getMicRecordTimeout",
+    "setting": "MIC_RECORD_TIMEOUT",
+    "references": []
+  },
+  {
+    "endpoint": "/set/data/mic_record_timeout",
+    "method": "setMicRecordTimeout",
+    "setting": null,
+    "references": [
+      "MIC_PHRASE_TIMEOUT",
+      "MIC_RECORD_TIMEOUT"
+    ]
+  },
+  {
+    "endpoint": "/get/data/mic_phrase_timeout",
+    "method": "getMicPhraseTimeout",
+    "setting": "MIC_PHRASE_TIMEOUT",
+    "references": []
+  },
+  {
+    "endpoint": "/set/data/mic_phrase_timeout",
+    "method": "setMicPhraseTimeout",
+    "setting": null,
+    "references": [
+      "MIC_RECORD_TIMEOUT",
+      "MIC_PHRASE_TIMEOUT"
+    ]
+  },
+  {
+    "endpoint": "/get/data/mic_max_phrases",
+    "method": "getMicMaxPhrases",
+    "setting": "MIC_MAX_PHRASES",
+    "references": []
+  },
+  {
+    "endpoint": "/set/data/mic_max_phrases",
+    "method": "setMicMaxPhrases",
+    "setting": null,
+    "references": [
+      "MIC_MAX_PHRASES"
+    ]
+  },
+  {
+    "endpoint": "/get/data/hotkeys",
+    "method": "getHotkeys",
+    "setting": "HOTKEYS",
+    "references": []
+  },
+  {
+    "endpoint": "/set/data/hotkeys",
+    "method": "setHotkeys",
+    "setting": null,
+    "references": [
+      "HOTKEYS"
+    ]
+  },
+  {
+    "endpoint": "/get/data/mic_avg_logprob",
+    "method": "getMicAvgLogprob",
+    "setting": "MIC_AVG_LOGPROB",
+    "references": []
+  },
+  {
+    "endpoint": "/set/data/mic_avg_logprob",
+    "method": "setMicAvgLogprob",
+    "setting": null,
+    "references": [
+      "MIC_AVG_LOGPROB"
+    ]
+  },
+  {
+    "endpoint": "/get/data/mic_no_speech_prob",
+    "method": "getMicNoSpeechProb",
+    "setting": "MIC_NO_SPEECH_PROB",
+    "references": []
+  },
+  {
+    "endpoint": "/set/data/mic_no_speech_prob",
+    "method": "setMicNoSpeechProb",
+    "setting": null,
+    "references": [
+      "MIC_NO_SPEECH_PROB"
+    ]
+  },
+  {
+    "endpoint": "/set/enable/check_mic_threshold",
+    "method": "setEnableCheckMicThreshold",
+    "setting": null,
+    "references": [
+      "ENABLE_CHECK_ENERGY_SEND"
+    ]
+  },
+  {
+    "endpoint": "/set/disable/check_mic_threshold",
+    "method": "setDisableCheckMicThreshold",
+    "setting": null,
+    "references": [
+      "ENABLE_CHECK_ENERGY_SEND"
+    ]
+  },
+  {
+    "endpoint": "/get/data/mic_word_filter",
+    "method": "getMicWordFilter",
+    "setting": "MIC_WORD_FILTER",
+    "references": []
+  },
+  {
+    "endpoint": "/set/data/mic_word_filter",
+    "method": "setMicWordFilter",
+    "setting": null,
+    "references": [
+      "MIC_WORD_FILTER"
+    ]
+  },
+  {
+    "endpoint": "/get/data/auto_speaker_select",
+    "method": "getAutoSpeakerSelect",
+    "setting": "AUTO_SPEAKER_SELECT",
+    "references": []
+  },
+  {
+    "endpoint": "/set/enable/auto_speaker_select",
+    "method": "setEnableAutoSpeakerSelect",
+    "setting": null,
+    "references": [
+      "AUTO_SPEAKER_SELECT"
+    ]
+  },
+  {
+    "endpoint": "/set/disable/auto_speaker_select",
+    "method": "setDisableAutoSpeakerSelect",
+    "setting": null,
+    "references": [
+      "AUTO_SPEAKER_SELECT"
+    ]
+  },
+  {
+    "endpoint": "/get/data/selected_speaker_device",
+    "method": "getSelectedSpeakerDevice",
+    "setting": "SELECTED_SPEAKER_DEVICE",
+    "references": []
+  },
+  {
+    "endpoint": "/set/data/selected_speaker_device",
+    "method": "setSelectedSpeakerDevice",
+    "setting": null,
+    "references": [
+      "SELECTED_SPEAKER_DEVICE"
+    ]
+  },
+  {
+    "endpoint": "/get/data/speaker_threshold",
+    "method": "getSpeakerThreshold",
+    "setting": "SPEAKER_THRESHOLD",
+    "references": []
+  },
+  {
+    "endpoint": "/set/data/speaker_threshold",
+    "method": "setSpeakerThreshold",
+    "setting": null,
+    "references": [
+      "MAX_SPEAKER_THRESHOLD",
+      "SPEAKER_THRESHOLD"
+    ]
+  },
+  {
+    "endpoint": "/get/data/speaker_automatic_threshold",
+    "method": "getSpeakerAutomaticThreshold",
+    "setting": "SPEAKER_AUTOMATIC_THRESHOLD",
+    "references": []
+  },
+  {
+    "endpoint": "/set/enable/speaker_automatic_threshold",
+    "method": "setEnableSpeakerAutomaticThreshold",
+    "setting": null,
+    "references": [
+      "SPEAKER_AUTOMATIC_THRESHOLD"
+    ]
+  },
+  {
+    "endpoint": "/set/disable/speaker_automatic_threshold",
+    "method": "setDisableSpeakerAutomaticThreshold",
+    "setting": null,
+    "references": [
+      "SPEAKER_AUTOMATIC_THRESHOLD"
+    ]
+  },
+  {
+    "endpoint": "/get/data/speaker_record_timeout",
+    "method": "getSpeakerRecordTimeout",
+    "setting": "SPEAKER_RECORD_TIMEOUT",
+    "references": []
+  },
+  {
+    "endpoint": "/set/data/speaker_record_timeout",
+    "method": "setSpeakerRecordTimeout",
+    "setting": null,
+    "references": [
+      "SPEAKER_PHRASE_TIMEOUT",
+      "SPEAKER_RECORD_TIMEOUT"
+    ]
+  },
+  {
+    "endpoint": "/get/data/speaker_phrase_timeout",
+    "method": "getSpeakerPhraseTimeout",
+    "setting": "SPEAKER_PHRASE_TIMEOUT",
+    "references": []
+  },
+  {
+    "endpoint": "/set/data/speaker_phrase_timeout",
+    "method": "setSpeakerPhraseTimeout",
+    "setting": null,
+    "references": [
+      "SPEAKER_PHRASE_TIMEOUT",
+      "SPEAKER_RECORD_TIMEOUT"
+    ]
+  },
+  {
+    "endpoint": "/get/data/speaker_max_phrases",
+    "method": "getSpeakerMaxPhrases",
+    "setting": "SPEAKER_MAX_PHRASES",
+    "references": []
+  },
+  {
+    "endpoint": "/set/data/speaker_max_phrases",
+    "method": "setSpeakerMaxPhrases",
+    "setting": null,
+    "references": [
+      "SPEAKER_MAX_PHRASES"
+    ]
+  },
+  {
+    "endpoint": "/get/data/speaker_avg_logprob",
+    "method": "getSpeakerAvgLogprob",
+    "setting": "SPEAKER_AVG_LOGPROB",
+    "references": []
+  },
+  {
+    "endpoint": "/set/data/speaker_avg_logprob",
+    "method": "setSpeakerAvgLogprob",
+    "setting": null,
+    "references": [
+      "SPEAKER_AVG_LOGPROB"
+    ]
+  },
+  {
+    "endpoint": "/get/data/speaker_no_speech_prob",
+    "method": "getSpeakerNoSpeechProb",
+    "setting": "SPEAKER_NO_SPEECH_PROB",
+    "references": []
+  },
+  {
+    "endpoint": "/set/data/speaker_no_speech_prob",
+    "method": "setSpeakerNoSpeechProb",
+    "setting": null,
+    "references": [
+      "SPEAKER_NO_SPEECH_PROB"
+    ]
+  },
+  {
+    "endpoint": "/set/enable/check_speaker_threshold",
+    "method": "setEnableCheckSpeakerThreshold",
+    "setting": null,
+    "references": [
+      "ENABLE_CHECK_ENERGY_RECEIVE"
+    ]
+  },
+  {
+    "endpoint": "/set/disable/check_speaker_threshold",
+    "method": "setDisableCheckSpeakerThreshold",
+    "setting": null,
+    "references": [
+      "ENABLE_CHECK_ENERGY_RECEIVE"
+    ]
+  },
+  {
+    "endpoint": "/get/data/selectable_whisper_weight_type_dict",
+    "method": "getSelectableWhisperWeightTypeDict",
+    "setting": null,
+    "references": [
+      "SELECTABLE_WHISPER_WEIGHT_TYPE_DICT"
+    ]
+  },
+  {
+    "endpoint": "/get/data/selected_whisper_weight_type",
+    "method": "getWhisperWeightType",
+    "setting": "WHISPER_WEIGHT_TYPE",
+    "references": []
+  },
+  {
+    "endpoint": "/set/data/selected_whisper_weight_type",
+    "method": "setWhisperWeightType",
+    "setting": null,
+    "references": [
+      "WHISPER_WEIGHT_TYPE"
+    ]
+  },
+  {
+    "endpoint": "/get/data/selected_transcription_compute_type",
+    "method": "getSelectedTranscriptionComputeType",
+    "setting": "SELECTED_TRANSCRIPTION_COMPUTE_TYPE",
+    "references": []
+  },
+  {
+    "endpoint": "/set/data/selected_transcription_compute_type",
+    "method": "setSelectedTranscriptionComputeType",
+    "setting": null,
+    "references": [
+      "SELECTED_TRANSCRIPTION_COMPUTE_TYPE"
+    ]
+  },
+  {
+    "endpoint": "/run/download_whisper_weight",
+    "method": "downloadWhisperWeight",
+    "setting": null,
+    "references": []
+  },
+  {
+    "endpoint": "/get/data/overlay_small_log",
+    "method": "getOverlaySmallLog",
+    "setting": "OVERLAY_SMALL_LOG",
+    "references": []
+  },
+  {
+    "endpoint": "/set/enable/overlay_small_log",
+    "method": "setEnableOverlaySmallLog",
+    "setting": null,
+    "references": [
+      "OVERLAY_SMALL_LOG",
+      "OVERLAY_LARGE_LOG"
+    ]
+  },
+  {
+    "endpoint": "/set/disable/overlay_small_log",
+    "method": "setDisableOverlaySmallLog",
+    "setting": null,
+    "references": [
+      "OVERLAY_SMALL_LOG",
+      "OVERLAY_LARGE_LOG"
+    ]
+  },
+  {
+    "endpoint": "/get/data/overlay_small_log_settings",
+    "method": "getOverlaySmallLogSettings",
+    "setting": "OVERLAY_SMALL_LOG_SETTINGS",
+    "references": []
+  },
+  {
+    "endpoint": "/set/data/overlay_small_log_settings",
+    "method": "setOverlaySmallLogSettings",
+    "setting": null,
+    "references": [
+      "OVERLAY_SMALL_LOG_SETTINGS"
+    ]
+  },
+  {
+    "endpoint": "/get/data/overlay_large_log",
+    "method": "getOverlayLargeLog",
+    "setting": "OVERLAY_LARGE_LOG",
+    "references": []
+  },
+  {
+    "endpoint": "/set/enable/overlay_large_log",
+    "method": "setEnableOverlayLargeLog",
+    "setting": null,
+    "references": [
+      "OVERLAY_LARGE_LOG",
+      "OVERLAY_SMALL_LOG"
+    ]
+  },
+  {
+    "endpoint": "/set/disable/overlay_large_log",
+    "method": "setDisableOverlayLargeLog",
+    "setting": null,
+    "references": [
+      "OVERLAY_LARGE_LOG",
+      "OVERLAY_SMALL_LOG"
+    ]
+  },
+  {
+    "endpoint": "/get/data/overlay_large_log_settings",
+    "method": "getOverlayLargeLogSettings",
+    "setting": "OVERLAY_LARGE_LOG_SETTINGS",
+    "references": []
+  },
+  {
+    "endpoint": "/set/data/overlay_large_log_settings",
+    "method": "setOverlayLargeLogSettings",
+    "setting": null,
+    "references": [
+      "OVERLAY_LARGE_LOG_SETTINGS"
+    ]
+  },
+  {
+    "endpoint": "/get/data/overlay_show_only_translated_messages",
+    "method": "getOverlayShowOnlyTranslatedMessages",
+    "setting": "OVERLAY_SHOW_ONLY_TRANSLATED_MESSAGES",
+    "references": []
+  },
+  {
+    "endpoint": "/set/enable/overlay_show_only_translated_messages",
+    "method": "setEnableOverlayShowOnlyTranslatedMessages",
+    "setting": null,
+    "references": [
+      "OVERLAY_SHOW_ONLY_TRANSLATED_MESSAGES"
+    ]
+  },
+  {
+    "endpoint": "/set/disable/overlay_show_only_translated_messages",
+    "method": "setDisableOverlayShowOnlyTranslatedMessages",
+    "setting": null,
+    "references": [
+      "OVERLAY_SHOW_ONLY_TRANSLATED_MESSAGES"
+    ]
+  },
+  {
+    "endpoint": "/get/data/send_message_format_parts",
+    "method": "getSendMessageFormatParts",
+    "setting": "SEND_MESSAGE_FORMAT_PARTS",
+    "references": []
+  },
+  {
+    "endpoint": "/set/data/send_message_format_parts",
+    "method": "setSendMessageFormatParts",
+    "setting": null,
+    "references": [
+      "SEND_MESSAGE_FORMAT_PARTS"
+    ]
+  },
+  {
+    "endpoint": "/get/data/received_message_format_parts",
+    "method": "getReceivedMessageFormatParts",
+    "setting": "RECEIVED_MESSAGE_FORMAT_PARTS",
+    "references": []
+  },
+  {
+    "endpoint": "/set/data/received_message_format_parts",
+    "method": "setReceivedMessageFormatParts",
+    "setting": null,
+    "references": [
+      "RECEIVED_MESSAGE_FORMAT_PARTS"
+    ]
+  },
+  {
+    "endpoint": "/get/data/auto_clear_message_box",
+    "method": "getAutoClearMessageBox",
+    "setting": "AUTO_CLEAR_MESSAGE_BOX",
+    "references": []
+  },
+  {
+    "endpoint": "/set/enable/auto_clear_message_box",
+    "method": "setEnableAutoClearMessageBox",
+    "setting": null,
+    "references": [
+      "AUTO_CLEAR_MESSAGE_BOX"
+    ]
+  },
+  {
+    "endpoint": "/set/disable/auto_clear_message_box",
+    "method": "setDisableAutoClearMessageBox",
+    "setting": null,
+    "references": [
+      "AUTO_CLEAR_MESSAGE_BOX"
+    ]
+  },
+  {
+    "endpoint": "/get/data/send_only_translated_messages",
+    "method": "getSendOnlyTranslatedMessages",
+    "setting": "SEND_ONLY_TRANSLATED_MESSAGES",
+    "references": []
+  },
+  {
+    "endpoint": "/set/enable/send_only_translated_messages",
+    "method": "setEnableSendOnlyTranslatedMessages",
+    "setting": null,
+    "references": [
+      "SEND_ONLY_TRANSLATED_MESSAGES"
+    ]
+  },
+  {
+    "endpoint": "/set/disable/send_only_translated_messages",
+    "method": "setDisableSendOnlyTranslatedMessages",
+    "setting": null,
+    "references": [
+      "SEND_ONLY_TRANSLATED_MESSAGES"
+    ]
+  },
+  {
+    "endpoint": "/get/data/logger_feature",
+    "method": "getLoggerFeature",
+    "setting": "LOGGER_FEATURE",
+    "references": []
+  },
+  {
+    "endpoint": "/set/enable/logger_feature",
+    "method": "setEnableLoggerFeature",
+    "setting": null,
+    "references": [
+      "LOGGER_FEATURE"
+    ]
+  },
+  {
+    "endpoint": "/set/disable/logger_feature",
+    "method": "setDisableLoggerFeature",
+    "setting": null,
+    "references": [
+      "LOGGER_FEATURE"
+    ]
+  },
+  {
+    "endpoint": "/run/open_filepath_logs",
+    "method": "openFilepathLogs",
+    "setting": null,
+    "references": [
+      "PATH_LOGS"
+    ]
+  },
+  {
+    "endpoint": "/get/data/vrc_mic_mute_sync",
+    "method": "getVrcMicMuteSync",
+    "setting": "VRC_MIC_MUTE_SYNC",
+    "references": []
+  },
+  {
+    "endpoint": "/set/enable/vrc_mic_mute_sync",
+    "method": "setEnableVrcMicMuteSync",
+    "setting": null,
+    "references": [
+      "VRC_MIC_MUTE_SYNC"
+    ]
+  },
+  {
+    "endpoint": "/set/disable/vrc_mic_mute_sync",
+    "method": "setDisableVrcMicMuteSync",
+    "setting": null,
+    "references": [
+      "VRC_MIC_MUTE_SYNC"
+    ]
+  },
+  {
+    "endpoint": "/get/data/send_message_to_vrc",
+    "method": "getSendMessageToVrc",
+    "setting": "SEND_MESSAGE_TO_VRC",
+    "references": []
+  },
+  {
+    "endpoint": "/set/enable/send_message_to_vrc",
+    "method": "setEnableSendMessageToVrc",
+    "setting": null,
+    "references": [
+      "SEND_MESSAGE_TO_VRC"
+    ]
+  },
+  {
+    "endpoint": "/set/disable/send_message_to_vrc",
+    "method": "setDisableSendMessageToVrc",
+    "setting": null,
+    "references": [
+      "SEND_MESSAGE_TO_VRC"
+    ]
+  },
+  {
+    "endpoint": "/get/data/send_received_message_to_vrc",
+    "method": "getSendReceivedMessageToVrc",
+    "setting": "SEND_RECEIVED_MESSAGE_TO_VRC",
+    "references": []
+  },
+  {
+    "endpoint": "/set/enable/send_received_message_to_vrc",
+    "method": "setEnableSendReceivedMessageToVrc",
+    "setting": null,
+    "references": [
+      "SEND_RECEIVED_MESSAGE_TO_VRC"
+    ]
+  },
+  {
+    "endpoint": "/set/disable/send_received_message_to_vrc",
+    "method": "setDisableSendReceivedMessageToVrc",
+    "setting": null,
+    "references": [
+      "SEND_RECEIVED_MESSAGE_TO_VRC"
+    ]
+  },
+  {
+    "endpoint": "/get/data/websocket_host",
+    "method": "getWebSocketHost",
+    "setting": "WEBSOCKET_HOST",
+    "references": []
+  },
+  {
+    "endpoint": "/set/data/websocket_host",
+    "method": "setWebSocketHost",
+    "setting": null,
+    "references": [
+      "WEBSOCKET_HOST",
+      "WEBSOCKET_PORT",
+      "OBS_BROWSER_SOURCE",
+      "OBS_BROWSER_SOURCE_PORT"
+    ]
+  },
+  {
+    "endpoint": "/get/data/websocket_port",
+    "method": "getWebSocketPort",
+    "setting": "WEBSOCKET_PORT",
+    "references": []
+  },
+  {
+    "endpoint": "/set/data/websocket_port",
+    "method": "setWebSocketPort",
+    "setting": null,
+    "references": [
+      "WEBSOCKET_PORT",
+      "WEBSOCKET_HOST"
+    ]
+  },
+  {
+    "endpoint": "/get/data/websocket_auth_token",
+    "method": "getWebSocketAuthToken",
+    "setting": null,
+    "references": [
+      "WEBSOCKET_AUTH_TOKEN"
+    ]
+  },
+  {
+    "endpoint": "/get/data/websocket_server",
+    "method": "getWebSocketServer",
+    "setting": "WEBSOCKET_SERVER",
+    "references": []
+  },
+  {
+    "endpoint": "/set/enable/websocket_server",
+    "method": "setEnableWebSocketServer",
+    "setting": null,
+    "references": [
+      "WEBSOCKET_SERVER",
+      "WEBSOCKET_HOST",
+      "WEBSOCKET_PORT"
+    ]
+  },
+  {
+    "endpoint": "/set/disable/websocket_server",
+    "method": "setDisableWebSocketServer",
+    "setting": null,
+    "references": [
+      "WEBSOCKET_SERVER",
+      "OBS_BROWSER_SOURCE"
+    ]
+  },
+  {
+    "endpoint": "/get/data/obs_browser_source",
+    "method": "getObsBrowserSource",
+    "setting": "OBS_BROWSER_SOURCE",
+    "references": []
+  },
+  {
+    "endpoint": "/set/enable/obs_browser_source",
+    "method": "setEnableObsBrowserSource",
+    "setting": null,
+    "references": [
+      "WEBSOCKET_HOST",
+      "OBS_BROWSER_SOURCE",
+      "OBS_BROWSER_SOURCE_PORT",
+      "WEBSOCKET_SERVER",
+      "WEBSOCKET_PORT"
+    ]
+  },
+  {
+    "endpoint": "/set/disable/obs_browser_source",
+    "method": "setDisableObsBrowserSource",
+    "setting": null,
+    "references": [
+      "OBS_BROWSER_SOURCE"
+    ]
+  },
+  {
+    "endpoint": "/get/data/obs_browser_source_port",
+    "method": "getObsBrowserSourcePort",
+    "setting": "OBS_BROWSER_SOURCE_PORT",
+    "references": []
+  },
+  {
+    "endpoint": "/set/data/obs_browser_source_port",
+    "method": "setObsBrowserSourcePort",
+    "setting": null,
+    "references": [
+      "OBS_BROWSER_SOURCE_PORT",
+      "WEBSOCKET_HOST",
+      "OBS_BROWSER_SOURCE"
+    ]
+  },
+  {
+    "endpoint": "/get/data/obs_browser_source_max_messages",
+    "method": "getObsBrowserSourceMaxMessages",
+    "setting": "OBS_BROWSER_SOURCE_MAX_MESSAGES",
+    "references": []
+  },
+  {
+    "endpoint": "/set/data/obs_browser_source_max_messages",
+    "method": "setObsBrowserSourceMaxMessages",
+    "setting": null,
+    "references": [
+      "OBS_BROWSER_SOURCE_MAX_MESSAGES"
+    ]
+  },
+  {
+    "endpoint": "/get/data/obs_browser_source_display_duration",
+    "method": "getObsBrowserSourceDisplayDuration",
+    "setting": "OBS_BROWSER_SOURCE_DISPLAY_DURATION",
+    "references": []
+  },
+  {
+    "endpoint": "/set/data/obs_browser_source_display_duration",
+    "method": "setObsBrowserSourceDisplayDuration",
+    "setting": null,
+    "references": [
+      "OBS_BROWSER_SOURCE_DISPLAY_DURATION"
+    ]
+  },
+  {
+    "endpoint": "/get/data/obs_browser_source_fadeout_duration",
+    "method": "getObsBrowserSourceFadeoutDuration",
+    "setting": "OBS_BROWSER_SOURCE_FADEOUT_DURATION",
+    "references": []
+  },
+  {
+    "endpoint": "/set/data/obs_browser_source_fadeout_duration",
+    "method": "setObsBrowserSourceFadeoutDuration",
+    "setting": null,
+    "references": [
+      "OBS_BROWSER_SOURCE_FADEOUT_DURATION"
+    ]
+  },
+  {
+    "endpoint": "/get/data/obs_browser_source_font_size",
+    "method": "getObsBrowserSourceFontSize",
+    "setting": "OBS_BROWSER_SOURCE_FONT_SIZE",
+    "references": []
+  },
+  {
+    "endpoint": "/set/data/obs_browser_source_font_size",
+    "method": "setObsBrowserSourceFontSize",
+    "setting": null,
+    "references": [
+      "OBS_BROWSER_SOURCE_FONT_SIZE"
+    ]
+  },
+  {
+    "endpoint": "/get/data/obs_browser_source_font_color",
+    "method": "getObsBrowserSourceFontColor",
+    "setting": "OBS_BROWSER_SOURCE_FONT_COLOR",
+    "references": []
+  },
+  {
+    "endpoint": "/set/data/obs_browser_source_font_color",
+    "method": "setObsBrowserSourceFontColor",
+    "setting": null,
+    "references": [
+      "OBS_BROWSER_SOURCE_FONT_COLOR"
+    ]
+  },
+  {
+    "endpoint": "/get/data/obs_browser_source_font_outline_thickness",
+    "method": "getObsBrowserSourceFontOutlineThickness",
+    "setting": "OBS_BROWSER_SOURCE_FONT_OUTLINE_THICKNESS",
+    "references": []
+  },
+  {
+    "endpoint": "/set/data/obs_browser_source_font_outline_thickness",
+    "method": "setObsBrowserSourceFontOutlineThickness",
+    "setting": null,
+    "references": [
+      "OBS_BROWSER_SOURCE_FONT_OUTLINE_THICKNESS"
+    ]
+  },
+  {
+    "endpoint": "/get/data/obs_browser_source_font_outline_color",
+    "method": "getObsBrowserSourceFontOutlineColor",
+    "setting": "OBS_BROWSER_SOURCE_FONT_OUTLINE_COLOR",
+    "references": []
+  },
+  {
+    "endpoint": "/set/data/obs_browser_source_font_outline_color",
+    "method": "setObsBrowserSourceFontOutlineColor",
+    "setting": null,
+    "references": [
+      "OBS_BROWSER_SOURCE_FONT_OUTLINE_COLOR"
+    ]
+  },
+  {
+    "endpoint": "/get/data/clipboard",
+    "method": "getClipboard",
+    "setting": "ENABLE_CLIPBOARD",
+    "references": []
+  },
+  {
+    "endpoint": "/set/enable/clipboard",
+    "method": "setEnableClipboard",
+    "setting": null,
+    "references": [
+      "ENABLE_CLIPBOARD"
+    ]
+  },
+  {
+    "endpoint": "/set/disable/clipboard",
+    "method": "setDisableClipboard",
+    "setting": null,
+    "references": [
+      "ENABLE_CLIPBOARD"
+    ]
+  },
+  {
+    "endpoint": "/get/data/selectable_ocr_source_languages",
+    "method": "getSelectableOcrSourceLanguages",
+    "setting": "SELECTABLE_OCR_SOURCE_LANGUAGE_LIST",
+    "references": []
+  },
+  {
+    "endpoint": "/get/data/ocr_source_language",
+    "method": "getOcrSourceLanguage",
+    "setting": "OCR_SOURCE_LANGUAGE",
+    "references": []
+  },
+  {
+    "endpoint": "/set/data/ocr_source_language",
+    "method": "setOcrSourceLanguage",
+    "setting": null,
+    "references": [
+      "OCR_SOURCE_LANGUAGE"
+    ]
+  },
+  {
+    "endpoint": "/get/data/ocr_window_title",
+    "method": "getOcrWindowTitle",
+    "setting": "OCR_WINDOW_TITLE",
+    "references": []
+  },
+  {
+    "endpoint": "/set/data/ocr_window_title",
+    "method": "setOcrWindowTitle",
+    "setting": null,
+    "references": [
+      "OCR_WINDOW_TITLE"
+    ]
+  },
+  {
+    "endpoint": "/get/data/ocr_poll_interval_ms",
+    "method": "getOcrPollIntervalMs",
+    "setting": "OCR_POLL_INTERVAL_MS",
+    "references": []
+  },
+  {
+    "endpoint": "/set/data/ocr_poll_interval_ms",
+    "method": "setOcrPollIntervalMs",
+    "setting": null,
+    "references": [
+      "OCR_POLL_INTERVAL_MS"
+    ]
+  },
+  {
+    "endpoint": "/get/data/ocr_min_confidence",
+    "method": "getOcrMinConfidence",
+    "setting": "OCR_MIN_CONFIDENCE",
+    "references": []
+  },
+  {
+    "endpoint": "/set/data/ocr_min_confidence",
+    "method": "setOcrMinConfidence",
+    "setting": null,
+    "references": [
+      "OCR_MIN_CONFIDENCE"
+    ]
+  },
+  {
+    "endpoint": "/get/data/ocr_bubble_min_text_length",
+    "method": "getOcrBubbleMinTextLength",
+    "setting": "OCR_BUBBLE_MIN_TEXT_LENGTH",
+    "references": []
+  },
+  {
+    "endpoint": "/set/data/ocr_bubble_min_text_length",
+    "method": "setOcrBubbleMinTextLength",
+    "setting": null,
+    "references": [
+      "OCR_BUBBLE_MIN_TEXT_LENGTH"
+    ]
+  },
+  {
+    "endpoint": "/get/data/osc_ip_address",
+    "method": "getOscIpAddress",
+    "setting": "OSC_IP_ADDRESS",
+    "references": []
+  },
+  {
+    "endpoint": "/set/data/osc_ip_address",
+    "method": "setOscIpAddress",
+    "setting": null,
+    "references": [
+      "OSC_IP_ADDRESS",
+      "VRC_MIC_MUTE_SYNC"
+    ]
+  },
+  {
+    "endpoint": "/get/data/osc_port",
+    "method": "getOscPort",
+    "setting": "OSC_PORT",
+    "references": []
+  },
+  {
+    "endpoint": "/set/data/osc_port",
+    "method": "setOscPort",
+    "setting": null,
+    "references": [
+      "OSC_PORT"
+    ]
+  },
+  {
+    "endpoint": "/get/data/notification_vrc_sfx",
+    "method": "getNotificationVrcSfx",
+    "setting": "NOTIFICATION_VRC_SFX",
+    "references": []
+  },
+  {
+    "endpoint": "/set/enable/notification_vrc_sfx",
+    "method": "setEnableNotificationVrcSfx",
+    "setting": null,
+    "references": [
+      "NOTIFICATION_VRC_SFX"
+    ]
+  },
+  {
+    "endpoint": "/set/disable/notification_vrc_sfx",
+    "method": "setDisableNotificationVrcSfx",
+    "setting": null,
+    "references": [
+      "NOTIFICATION_VRC_SFX"
+    ]
+  },
+  {
+    "endpoint": "/run/open_filepath_config_file",
+    "method": "openFilepathConfigFile",
+    "setting": null,
+    "references": [
+      "PATH_LOCAL"
+    ]
+  },
+  {
+    "endpoint": "/run/feed_watchdog",
+    "method": "feedWatchdog",
+    "setting": null,
+    "references": []
+  }
+]
