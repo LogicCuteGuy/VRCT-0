@@ -14,7 +14,7 @@ use serde_json::{json, Map, Value};
 
 use super::errors::{TRANSLATION_DISABLED_VRAM, TRANSLATION_ENGINE_LIMIT};
 use super::format::message_formatter;
-use super::history::{isoformat_now, History};
+use super::history::SharedHistory;
 use super::host::{Host, LargeLog, SmallLog};
 use super::keywords::KeywordFilter;
 use super::spec::{self, endpoints, Delivery, OwnTransliteration, Repeat, Spec};
@@ -39,12 +39,12 @@ struct State {
     keywords: KeywordFilter,
     previous_send: String,
     previous_receive: String,
-    history: History,
 }
 
 pub struct Pipeline {
     config: Arc<dyn Config>,
     host: Arc<dyn Host>,
+    history: SharedHistory,
     state: Mutex<State>,
 }
 
@@ -82,7 +82,12 @@ fn rounded_ms(started: Instant) -> i64 {
 
 impl Pipeline {
     pub fn new(config: Arc<dyn Config>, host: Arc<dyn Host>) -> Self {
-        Self { config, host, state: Mutex::new(State::default()) }
+        Self::with_history(config, host, SharedHistory::default())
+    }
+
+    /// With a history the translator also reads (see `translation::flow`).
+    pub fn with_history(config: Arc<dyn Config>, host: Arc<dyn Host>, history: SharedHistory) -> Self {
+        Self { config, host, history, state: Mutex::new(State::default()) }
     }
 
     fn state(&self) -> MutexGuard<'_, State> {
@@ -100,11 +105,11 @@ impl Pipeline {
 
     /// The translation context so far (`getTranslationHistory`).
     pub fn history(&self) -> Vec<Value> {
-        self.state().history.to_values()
+        self.history.snapshot()
     }
 
     pub fn clear_history(&self) {
-        self.state().history.clear();
+        self.history.clear();
     }
 
     fn check_keywords(&self, message: &str) -> bool {
@@ -124,7 +129,7 @@ impl Pipeline {
     }
 
     fn add_history(&self, source: &str, message: &str) {
-        self.state().history.add(source, message, isoformat_now);
+        self.history.add(source, message);
     }
 
     // ---- the entry points ----------------------------------------------------------------------------------

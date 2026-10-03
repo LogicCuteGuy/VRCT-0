@@ -1,5 +1,7 @@
 //! The messages the LLM translators get as context: `Model.addTranslationHistory` and its list.
 
+use std::sync::{Arc, Mutex, MutexGuard};
+
 use chrono::{Local, NaiveDateTime, Timelike};
 use serde_json::{json, Value};
 
@@ -47,6 +49,30 @@ impl History {
             .iter()
             .map(|item| json!({"source": item.source, "text": item.text, "timestamp": item.timestamp}))
             .collect()
+    }
+}
+
+/// The history the pipeline writes and the translator reads, from different threads.
+#[derive(Debug, Clone, Default)]
+pub struct SharedHistory(Arc<Mutex<History>>);
+
+impl SharedHistory {
+    fn lock(&self) -> MutexGuard<'_, History> {
+        self.0.lock().unwrap_or_else(|poisoned| poisoned.into_inner())
+    }
+
+    /// Adds a message stamped with the current local time.
+    pub fn add(&self, source: &str, text: &str) {
+        self.lock().add(source, text, isoformat_now);
+    }
+
+    pub fn clear(&self) {
+        self.lock().clear();
+    }
+
+    /// `getTranslationHistory`: a copy of the list as the translators take it.
+    pub fn snapshot(&self) -> Vec<Value> {
+        self.lock().to_values()
     }
 }
 

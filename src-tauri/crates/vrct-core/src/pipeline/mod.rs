@@ -13,5 +13,6 @@ pub mod keywords;
 pub mod process;
 pub mod spec;
 
+pub use history::SharedHistory;
 pub use host::{Host, LargeLog, SmallLog, TranslateError, Translated};
 pub use process::{Pipeline, PipelineError};
