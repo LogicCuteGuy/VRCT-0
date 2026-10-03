@@ -3,3 +3,13 @@
 # An explicit RUSTFLAGS environment variable still overrides this.
 [target.x86_64-pc-windows-msvc]
 rustflags = ["-C", "target-feature=+crt-static"]
+
+# The cmake crate replaces the Visual Studio generator's Release flags with the C compiler's minus every
+# `/O` option (see its `skip_arg`), so CTranslate2 and ruy would be compiled without any optimisation,
+# at every opt-level: Whisper then runs about 100 times too slowly. `cl.exe` itself reads `CL` and puts it
+# in front of its command line, which that filter cannot reach. Only Windows has a `cl.exe` to read it.
+[env]
+CL = "/O2 /Ob2"
+# Optimised, CTranslate2's heaviest sources need more than the 32-bit compiler's 4 GB (C1060); MSBuild
+# reads this variable to pick the 64-bit compiler.
+PreferredToolArchitecture = "x64"
