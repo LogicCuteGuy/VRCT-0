@@ -16,5 +16,6 @@ pub mod flow;
 pub(crate) mod http;
 pub mod languages;
 pub mod llm;
+pub mod native;
 pub mod prompt;
 pub mod text;
