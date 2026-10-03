@@ -85,14 +85,10 @@ impl Drop for Capture {
     }
 }
 
-fn open(
-    source: Source,
-    name: &str,
-    mut sink: impl FnMut(&[u8]) + Send + 'static,
-    on_error: Arc<dyn Fn(String) + Send + Sync>,
-) -> Result<cpal::Stream, String> {
+/// The device called `name` (as `DeviceList` shows it) and the format it delivers.
+pub(super) fn find_device(source: Source, name: &str) -> Result<(cpal::Device, cpal::SupportedStreamConfig), String> {
     let host = cpal::default_host();
-    let (device, supported) = match source {
+    match source {
         Source::Microphone => {
             let device = host
                 .input_devices()
@@ -100,7 +96,7 @@ fn open(
                 .find(|device| name_of(device).as_deref() == Some(name))
                 .ok_or_else(|| format!("no microphone named {name:?}"))?;
             let supported = device.default_input_config().map_err(|e| format!("{name}: {e}"))?;
-            (device, supported)
+            Ok((device, supported))
         }
         Source::Speaker => {
             let playback = name.strip_suffix(LOOPBACK_SUFFIX).unwrap_or(name);
@@ -110,9 +106,18 @@ fn open(
                 .find(|device| name_of(device).as_deref() == Some(playback))
                 .ok_or_else(|| format!("no playback device named {playback:?}"))?;
             let supported = device.default_output_config().map_err(|e| format!("{name}: {e}"))?;
-            (device, supported)
+            Ok((device, supported))
         }
-    };
+    }
+}
+
+fn open(
+    source: Source,
+    name: &str,
+    mut sink: impl FnMut(&[u8]) + Send + 'static,
+    on_error: Arc<dyn Fn(String) + Send + Sync>,
+) -> Result<cpal::Stream, String> {
+    let (device, supported) = find_device(source, name)?;
 
     let format = raw_format(supported.sample_format())
         .ok_or_else(|| format!("{name}: sample format {:?} is not supported", supported.sample_format()))?;
@@ -138,7 +143,7 @@ fn open(
     Ok(stream)
 }
 
-fn raw_format(format: cpal::SampleFormat) -> Option<RawFormat> {
+pub(super) fn raw_format(format: cpal::SampleFormat) -> Option<RawFormat> {
     use cpal::SampleFormat as F;
     Some(match format {
         F::U8 => RawFormat::U8,

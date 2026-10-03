@@ -1,0 +1,7019 @@
+{
+ "python": "3.12.0",
+ "scenarios": [
+  {
+   "name": "defaults",
+   "config": {
+    "SELECTED_MIC_HOST": "Windows WASAPI",
+    "SELECTED_MIC_DEVICE": "Mic A",
+    "SELECTED_SPEAKER_DEVICE": "Speaker A [Loopback]",
+    "MIC_RECORD_TIMEOUT": 3,
+    "MIC_PHRASE_TIMEOUT": 3,
+    "MIC_THRESHOLD": 300,
+    "MIC_AUTOMATIC_THRESHOLD": true,
+    "MIC_MAX_PHRASES": 10,
+    "MIC_ENABLE_VAD": false,
+    "MIC_AVG_LOGPROB": -0.8,
+    "MIC_NO_SPEECH_PROB": 0.6,
+    "MIC_NO_REPEAT_NGRAM_SIZE": 0,
+    "SPEAKER_RECORD_TIMEOUT": 3,
+    "SPEAKER_PHRASE_TIMEOUT": 3,
+    "SPEAKER_THRESHOLD": 300,
+    "SPEAKER_AUTOMATIC_THRESHOLD": true,
+    "SPEAKER_MAX_PHRASES": 10,
+    "SPEAKER_ENABLE_VAD": false,
+    "SPEAKER_AVG_LOGPROB": -0.8,
+    "SPEAKER_NO_SPEECH_PROB": 0.6,
+    "SPEAKER_NO_REPEAT_NGRAM_SIZE": 0,
+    "SELECTED_TRANSCRIPTION_ENGINE": "Google",
+    "PATH_LOCAL": "C:/vrct",
+    "WHISPER_WEIGHT_TYPE": "base",
+    "SELECTED_TRANSCRIPTION_COMPUTE_DEVICE": {
+     "device": "cpu",
+     "device_index": 0
+    },
+    "SELECTED_TRANSCRIPTION_COMPUTE_TYPE": "auto",
+    "TRANSCRIPTION_AUTH_KEYS": {
+     "Groq_Whisper": "gsk-1",
+     "OpenAI_Whisper": "sk-2",
+     "Custom_Whisper": "custom-3",
+     "Deepgram": "dg-4"
+    },
+    "GROQ_WHISPER_BASE_URL": "https://api.groq.com/openai/v1",
+    "OPENAI_WHISPER_BASE_URL": "https://api.openai.com/v1",
+    "SELECTED_GROQ_WHISPER_MODEL": "whisper-large-v3",
+    "SELECTED_OPENAI_WHISPER_MODEL": "whisper-1",
+    "TRANSCRIPTION_CUSTOM_URL": "http://localhost:8080/v1",
+    "SELECTED_CUSTOM_WHISPER_MODEL": "my-whisper",
+    "SELECTED_DEEPGRAM_MODEL": "nova-3",
+    "DEEPGRAM_MODEL_LANGUAGES": {
+     "nova-3": [
+      "en",
+      "ja",
+      "multi"
+     ],
+     "nova-2": [
+      "en"
+     ]
+    },
+    "SELECTED_TAB_NO": "1",
+    "SELECTED_YOUR_LANGUAGES": {
+     "1": {
+      "1": {
+       "language": "Japanese",
+       "country": "Japan",
+       "enable": true
+      },
+      "2": {
+       "language": "English",
+       "country": "United States",
+       "enable": false
+      },
+      "3": {
+       "language": "Korean",
+       "country": "South Korea",
+       "enable": false
+      }
+     },
+     "2": {
+      "1": {
+       "language": "French",
+       "country": "France",
+       "enable": true
+      },
+      "2": {
+       "language": "German",
+       "country": "Germany",
+       "enable": true
+      },
+      "3": {
+       "language": "Thai",
+       "country": "Thailand",
+       "enable": false
+      }
+     },
+     "3": {
+      "1": {
+       "language": "English",
+       "country": "United States",
+       "enable": false
+      },
+      "2": {
+       "language": "English",
+       "country": "United States",
+       "enable": false
+      },
+      "3": {
+       "language": "English",
+       "country": "United States",
+       "enable": false
+      }
+     }
+    },
+    "SELECTED_TARGET_LANGUAGES": {
+     "1": {
+      "1": {
+       "language": "English",
+       "country": "United States",
+       "enable": true
+      },
+      "2": {
+       "language": "Chinese Simplified",
+       "country": "China",
+       "enable": true
+      },
+      "3": {
+       "language": "Korean",
+       "country": "South Korea",
+       "enable": false
+      }
+     },
+     "2": {
+      "1": {
+       "language": "Spanish",
+       "country": "Spain",
+       "enable": true
+      },
+      "2": {
+       "language": "English",
+       "country": "United States",
+       "enable": false
+      },
+      "3": {
+       "language": "English",
+       "country": "United States",
+       "enable": false
+      }
+     },
+     "3": {
+      "1": {
+       "language": "English",
+       "country": "United States",
+       "enable": false
+      },
+      "2": {
+       "language": "English",
+       "country": "United States",
+       "enable": false
+      },
+      "3": {
+       "language": "English",
+       "country": "United States",
+       "enable": false
+      }
+     }
+    }
+   },
+   "devices": {
+    "mics": {
+     "Windows WASAPI": [
+      {
+       "name": "Mic A",
+       "index": 3
+      },
+      {
+       "name": "Mic B",
+       "index": 4
+      }
+     ]
+    },
+    "speakers": [
+     {
+      "name": "Speaker A [Loopback]",
+      "index": 7
+     },
+     {
+      "name": "Speaker B [Loopback]",
+      "index": 8
+     }
+    ]
+   },
+   "whisper_available": false,
+   "expected": {
+    "mic": {
+     "device": "Mic A",
+     "recorder": {
+      "class": "SelectedMicEnergyAndAudioRecorder",
+      "kwargs": {
+       "device": "Mic A",
+       "energy_threshold": 300,
+       "dynamic_energy_threshold": true,
+       "phrase_time_limit": 3,
+       "record_timeout": 3
+      }
+     },
+     "transcriber": {
+      "engine": "Google",
+      "provider": null,
+      "speaker": false,
+      "phrase_timeout": 3,
+      "max_phrases": 10,
+      "vad_segmented": false,
+      "source": "mic"
+     },
+     "ask": {
+      "languages": [
+       "Japanese"
+      ],
+      "countries": [
+       "Japan"
+      ],
+      "avg_logprob": -0.8,
+      "no_speech_prob": 0.6,
+      "no_repeat_ngram_size": 0
+     }
+    },
+    "speaker": {
+     "device": "Speaker A [Loopback]",
+     "recorder": {
+      "class": "SelectedSpeakerEnergyAndAudioRecorder",
+      "kwargs": {
+       "device": "Speaker A [Loopback]",
+       "energy_threshold": 300,
+       "dynamic_energy_threshold": true,
+       "phrase_time_limit": 3,
+       "record_timeout": 3
+      }
+     },
+     "transcriber": {
+      "engine": "Google",
+      "provider": null,
+      "speaker": true,
+      "phrase_timeout": 3,
+      "max_phrases": 10,
+      "vad_segmented": false,
+      "source": "speaker"
+     },
+     "ask": {
+      "languages": [
+       "English",
+       "Chinese Simplified"
+      ],
+      "countries": [
+       "United States",
+       "China"
+      ],
+      "avg_logprob": -0.8,
+      "no_speech_prob": 0.6,
+      "no_repeat_ngram_size": 0
+     }
+    }
+   }
+  },
+  {
+   "name": "vad_on_both",
+   "config": {
+    "SELECTED_MIC_HOST": "Windows WASAPI",
+    "SELECTED_MIC_DEVICE": "Mic A",
+    "SELECTED_SPEAKER_DEVICE": "Speaker A [Loopback]",
+    "MIC_RECORD_TIMEOUT": 3,
+    "MIC_PHRASE_TIMEOUT": 3,
+    "MIC_THRESHOLD": 300,
+    "MIC_AUTOMATIC_THRESHOLD": true,
+    "MIC_MAX_PHRASES": 10,
+    "MIC_ENABLE_VAD": true,
+    "MIC_AVG_LOGPROB": -0.8,
+    "MIC_NO_SPEECH_PROB": 0.6,
+    "MIC_NO_REPEAT_NGRAM_SIZE": 0,
+    "SPEAKER_RECORD_TIMEOUT": 3,
+    "SPEAKER_PHRASE_TIMEOUT": 3,
+    "SPEAKER_THRESHOLD": 300,
+    "SPEAKER_AUTOMATIC_THRESHOLD": true,
+    "SPEAKER_MAX_PHRASES": 10,
+    "SPEAKER_ENABLE_VAD": true,
+    "SPEAKER_AVG_LOGPROB": -0.8,
+    "SPEAKER_NO_SPEECH_PROB": 0.6,
+    "SPEAKER_NO_REPEAT_NGRAM_SIZE": 0,
+    "SELECTED_TRANSCRIPTION_ENGINE": "Google",
+    "PATH_LOCAL": "C:/vrct",
+    "WHISPER_WEIGHT_TYPE": "base",
+    "SELECTED_TRANSCRIPTION_COMPUTE_DEVICE": {
+     "device": "cpu",
+     "device_index": 0
+    },
+    "SELECTED_TRANSCRIPTION_COMPUTE_TYPE": "auto",
+    "TRANSCRIPTION_AUTH_KEYS": {
+     "Groq_Whisper": "gsk-1",
+     "OpenAI_Whisper": "sk-2",
+     "Custom_Whisper": "custom-3",
+     "Deepgram": "dg-4"
+    },
+    "GROQ_WHISPER_BASE_URL": "https://api.groq.com/openai/v1",
+    "OPENAI_WHISPER_BASE_URL": "https://api.openai.com/v1",
+    "SELECTED_GROQ_WHISPER_MODEL": "whisper-large-v3",
+    "SELECTED_OPENAI_WHISPER_MODEL": "whisper-1",
+    "TRANSCRIPTION_CUSTOM_URL": "http://localhost:8080/v1",
+    "SELECTED_CUSTOM_WHISPER_MODEL": "my-whisper",
+    "SELECTED_DEEPGRAM_MODEL": "nova-3",
+    "DEEPGRAM_MODEL_LANGUAGES": {
+     "nova-3": [
+      "en",
+      "ja",
+      "multi"
+     ],
+     "nova-2": [
+      "en"
+     ]
+    },
+    "SELECTED_TAB_NO": "1",
+    "SELECTED_YOUR_LANGUAGES": {
+     "1": {
+      "1": {
+       "language": "Japanese",
+       "country": "Japan",
+       "enable": true
+      },
+      "2": {
+       "language": "English",
+       "country": "United States",
+       "enable": false
+      },
+      "3": {
+       "language": "Korean",
+       "country": "South Korea",
+       "enable": false
+      }
+     },
+     "2": {
+      "1": {
+       "language": "French",
+       "country": "France",
+       "enable": true
+      },
+      "2": {
+       "language": "German",
+       "country": "Germany",
+       "enable": true
+      },
+      "3": {
+       "language": "Thai",
+       "country": "Thailand",
+       "enable": false
+      }
+     },
+     "3": {
+      "1": {
+       "language": "English",
+       "country": "United States",
+       "enable": false
+      },
+      "2": {
+       "language": "English",
+       "country": "United States",
+       "enable": false
+      },
+      "3": {
+       "language": "English",
+       "country": "United States",
+       "enable": false
+      }
+     }
+    },
+    "SELECTED_TARGET_LANGUAGES": {
+     "1": {
+      "1": {
+       "language": "English",
+       "country": "United States",
+       "enable": true
+      },
+      "2": {
+       "language": "Chinese Simplified",
+       "country": "China",
+       "enable": true
+      },
+      "3": {
+       "language": "Korean",
+       "country": "South Korea",
+       "enable": false
+      }
+     },
+     "2": {
+      "1": {
+       "language": "Spanish",
+       "country": "Spain",
+       "enable": true
+      },
+      "2": {
+       "language": "English",
+       "country": "United States",
+       "enable": false
+      },
+      "3": {
+       "language": "English",
+       "country": "United States",
+       "enable": false
+      }
+     },
+     "3": {
+      "1": {
+       "language": "English",
+       "country": "United States",
+       "enable": false
+      },
+      "2": {
+       "language": "English",
+       "country": "United States",
+       "enable": false
+      },
+      "3": {
+       "language": "English",
+       "country": "United States",
+       "enable": false
+      }
+     }
+    }
+   },
+   "devices": {
+    "mics": {
+     "Windows WASAPI": [
+      {
+       "name": "Mic A",
+       "index": 3
+      },
+      {
+       "name": "Mic B",
+       "index": 4
+      }
+     ]
+    },
+    "speakers": [
+     {
+      "name": "Speaker A [Loopback]",
+      "index": 7
+     },
+     {
+      "name": "Speaker B [Loopback]",
+      "index": 8
+     }
+    ]
+   },
+   "whisper_available": false,
+   "expected": {
+    "mic": {
+     "device": "Mic A",
+     "recorder": {
+      "class": "SelectedMicVadRecorder",
+      "kwargs": {
+       "device": "Mic A",
+       "record_timeout": 3
+      }
+     },
+     "transcriber": {
+      "engine": "Google",
+      "provider": null,
+      "speaker": false,
+      "phrase_timeout": 3,
+      "max_phrases": 10,
+      "vad_segmented": true,
+      "source": "mic"
+     },
+     "ask": {
+      "languages": [
+       "Japanese"
+      ],
+      "countries": [
+       "Japan"
+      ],
+      "avg_logprob": -0.8,
+      "no_speech_prob": 0.6,
+      "no_repeat_ngram_size": 0
+     }
+    },
+    "speaker": {
+     "device": "Speaker A [Loopback]",
+     "recorder": {
+      "class": "SelectedSpeakerVadRecorder",
+      "kwargs": {
+       "device": "Speaker A [Loopback]",
+       "record_timeout": 3
+      }
+     },
+     "transcriber": {
+      "engine": "Google",
+      "provider": null,
+      "speaker": true,
+      "phrase_timeout": 3,
+      "max_phrases": 10,
+      "vad_segmented": true,
+      "source": "speaker"
+     },
+     "ask": {
+      "languages": [
+       "English",
+       "Chinese Simplified"
+      ],
+      "countries": [
+       "United States",
+       "China"
+      ],
+      "avg_logprob": -0.8,
+      "no_speech_prob": 0.6,
+      "no_repeat_ngram_size": 0
+     }
+    }
+   }
+  },
+  {
+   "name": "vad_on_mic_only",
+   "config": {
+    "SELECTED_MIC_HOST": "Windows WASAPI",
+    "SELECTED_MIC_DEVICE": "Mic A",
+    "SELECTED_SPEAKER_DEVICE": "Speaker A [Loopback]",
+    "MIC_RECORD_TIMEOUT": 3,
+    "MIC_PHRASE_TIMEOUT": 3,
+    "MIC_THRESHOLD": 300,
+    "MIC_AUTOMATIC_THRESHOLD": true,
+    "MIC_MAX_PHRASES": 10,
+    "MIC_ENABLE_VAD": true,
+    "MIC_AVG_LOGPROB": -0.8,
+    "MIC_NO_SPEECH_PROB": 0.6,
+    "MIC_NO_REPEAT_NGRAM_SIZE": 0,
+    "SPEAKER_RECORD_TIMEOUT": 3,
+    "SPEAKER_PHRASE_TIMEOUT": 3,
+    "SPEAKER_THRESHOLD": 300,
+    "SPEAKER_AUTOMATIC_THRESHOLD": true,
+    "SPEAKER_MAX_PHRASES": 10,
+    "SPEAKER_ENABLE_VAD": false,
+    "SPEAKER_AVG_LOGPROB": -0.8,
+    "SPEAKER_NO_SPEECH_PROB": 0.6,
+    "SPEAKER_NO_REPEAT_NGRAM_SIZE": 0,
+    "SELECTED_TRANSCRIPTION_ENGINE": "Google",
+    "PATH_LOCAL": "C:/vrct",
+    "WHISPER_WEIGHT_TYPE": "base",
+    "SELECTED_TRANSCRIPTION_COMPUTE_DEVICE": {
+     "device": "cpu",
+     "device_index": 0
+    },
+    "SELECTED_TRANSCRIPTION_COMPUTE_TYPE": "auto",
+    "TRANSCRIPTION_AUTH_KEYS": {
+     "Groq_Whisper": "gsk-1",
+     "OpenAI_Whisper": "sk-2",
+     "Custom_Whisper": "custom-3",
+     "Deepgram": "dg-4"
+    },
+    "GROQ_WHISPER_BASE_URL": "https://api.groq.com/openai/v1",
+    "OPENAI_WHISPER_BASE_URL": "https://api.openai.com/v1",
+    "SELECTED_GROQ_WHISPER_MODEL": "whisper-large-v3",
+    "SELECTED_OPENAI_WHISPER_MODEL": "whisper-1",
+    "TRANSCRIPTION_CUSTOM_URL": "http://localhost:8080/v1",
+    "SELECTED_CUSTOM_WHISPER_MODEL": "my-whisper",
+    "SELECTED_DEEPGRAM_MODEL": "nova-3",
+    "DEEPGRAM_MODEL_LANGUAGES": {
+     "nova-3": [
+      "en",
+      "ja",
+      "multi"
+     ],
+     "nova-2": [
+      "en"
+     ]
+    },
+    "SELECTED_TAB_NO": "1",
+    "SELECTED_YOUR_LANGUAGES": {
+     "1": {
+      "1": {
+       "language": "Japanese",
+       "country": "Japan",
+       "enable": true
+      },
+      "2": {
+       "language": "English",
+       "country": "United States",
+       "enable": false
+      },
+      "3": {
+       "language": "Korean",
+       "country": "South Korea",
+       "enable": false
+      }
+     },
+     "2": {
+      "1": {
+       "language": "French",
+       "country": "France",
+       "enable": true
+      },
+      "2": {
+       "language": "German",
+       "country": "Germany",
+       "enable": true
+      },
+      "3": {
+       "language": "Thai",
+       "country": "Thailand",
+       "enable": false
+      }
+     },
+     "3": {
+      "1": {
+       "language": "English",
+       "country": "United States",
+       "enable": false
+      },
+      "2": {
+       "language": "English",
+       "country": "United States",
+       "enable": false
+      },
+      "3": {
+       "language": "English",
+       "country": "United States",
+       "enable": false
+      }
+     }
+    },
+    "SELECTED_TARGET_LANGUAGES": {
+     "1": {
+      "1": {
+       "language": "English",
+       "country": "United States",
+       "enable": true
+      },
+      "2": {
+       "language": "Chinese Simplified",
+       "country": "China",
+       "enable": true
+      },
+      "3": {
+       "language": "Korean",
+       "country": "South Korea",
+       "enable": false
+      }
+     },
+     "2": {
+      "1": {
+       "language": "Spanish",
+       "country": "Spain",
+       "enable": true
+      },
+      "2": {
+       "language": "English",
+       "country": "United States",
+       "enable": false
+      },
+      "3": {
+       "language": "English",
+       "country": "United States",
+       "enable": false
+      }
+     },
+     "3": {
+      "1": {
+       "language": "English",
+       "country": "United States",
+       "enable": false
+      },
+      "2": {
+       "language": "English",
+       "country": "United States",
+       "enable": false
+      },
+      "3": {
+       "language": "English",
+       "country": "United States",
+       "enable": false
+      }
+     }
+    }
+   },
+   "devices": {
+    "mics": {
+     "Windows WASAPI": [
+      {
+       "name": "Mic A",
+       "index": 3
+      },
+      {
+       "name": "Mic B",
+       "index": 4
+      }
+     ]
+    },
+    "speakers": [
+     {
+      "name": "Speaker A [Loopback]",
+      "index": 7
+     },
+     {
+      "name": "Speaker B [Loopback]",
+      "index": 8
+     }
+    ]
+   },
+   "whisper_available": false,
+   "expected": {
+    "mic": {
+     "device": "Mic A",
+     "recorder": {
+      "class": "SelectedMicVadRecorder",
+      "kwargs": {
+       "device": "Mic A",
+       "record_timeout": 3
+      }
+     },
+     "transcriber": {
+      "engine": "Google",
+      "provider": null,
+      "speaker": false,
+      "phrase_timeout": 3,
+      "max_phrases": 10,
+      "vad_segmented": true,
+      "source": "mic"
+     },
+     "ask": {
+      "languages": [
+       "Japanese"
+      ],
+      "countries": [
+       "Japan"
+      ],
+      "avg_logprob": -0.8,
+      "no_speech_prob": 0.6,
+      "no_repeat_ngram_size": 0
+     }
+    },
+    "speaker": {
+     "device": "Speaker A [Loopback]",
+     "recorder": {
+      "class": "SelectedSpeakerEnergyAndAudioRecorder",
+      "kwargs": {
+       "device": "Speaker A [Loopback]",
+       "energy_threshold": 300,
+       "dynamic_energy_threshold": true,
+       "phrase_time_limit": 3,
+       "record_timeout": 3
+      }
+     },
+     "transcriber": {
+      "engine": "Google",
+      "provider": null,
+      "speaker": true,
+      "phrase_timeout": 3,
+      "max_phrases": 10,
+      "vad_segmented": false,
+      "source": "speaker"
+     },
+     "ask": {
+      "languages": [
+       "English",
+       "Chinese Simplified"
+      ],
+      "countries": [
+       "United States",
+       "China"
+      ],
+      "avg_logprob": -0.8,
+      "no_speech_prob": 0.6,
+      "no_repeat_ngram_size": 0
+     }
+    }
+   }
+  },
+  {
+   "name": "vad_flag_must_be_true",
+   "config": {
+    "SELECTED_MIC_HOST": "Windows WASAPI",
+    "SELECTED_MIC_DEVICE": "Mic A",
+    "SELECTED_SPEAKER_DEVICE": "Speaker A [Loopback]",
+    "MIC_RECORD_TIMEOUT": 3,
+    "MIC_PHRASE_TIMEOUT": 3,
+    "MIC_THRESHOLD": 300,
+    "MIC_AUTOMATIC_THRESHOLD": true,
+    "MIC_MAX_PHRASES": 10,
+    "MIC_ENABLE_VAD": 1,
+    "MIC_AVG_LOGPROB": -0.8,
+    "MIC_NO_SPEECH_PROB": 0.6,
+    "MIC_NO_REPEAT_NGRAM_SIZE": 0,
+    "SPEAKER_RECORD_TIMEOUT": 3,
+    "SPEAKER_PHRASE_TIMEOUT": 3,
+    "SPEAKER_THRESHOLD": 300,
+    "SPEAKER_AUTOMATIC_THRESHOLD": true,
+    "SPEAKER_MAX_PHRASES": 10,
+    "SPEAKER_ENABLE_VAD": "true",
+    "SPEAKER_AVG_LOGPROB": -0.8,
+    "SPEAKER_NO_SPEECH_PROB": 0.6,
+    "SPEAKER_NO_REPEAT_NGRAM_SIZE": 0,
+    "SELECTED_TRANSCRIPTION_ENGINE": "Google",
+    "PATH_LOCAL": "C:/vrct",
+    "WHISPER_WEIGHT_TYPE": "base",
+    "SELECTED_TRANSCRIPTION_COMPUTE_DEVICE": {
+     "device": "cpu",
+     "device_index": 0
+    },
+    "SELECTED_TRANSCRIPTION_COMPUTE_TYPE": "auto",
+    "TRANSCRIPTION_AUTH_KEYS": {
+     "Groq_Whisper": "gsk-1",
+     "OpenAI_Whisper": "sk-2",
+     "Custom_Whisper": "custom-3",
+     "Deepgram": "dg-4"
+    },
+    "GROQ_WHISPER_BASE_URL": "https://api.groq.com/openai/v1",
+    "OPENAI_WHISPER_BASE_URL": "https://api.openai.com/v1",
+    "SELECTED_GROQ_WHISPER_MODEL": "whisper-large-v3",
+    "SELECTED_OPENAI_WHISPER_MODEL": "whisper-1",
+    "TRANSCRIPTION_CUSTOM_URL": "http://localhost:8080/v1",
+    "SELECTED_CUSTOM_WHISPER_MODEL": "my-whisper",
+    "SELECTED_DEEPGRAM_MODEL": "nova-3",
+    "DEEPGRAM_MODEL_LANGUAGES": {
+     "nova-3": [
+      "en",
+      "ja",
+      "multi"
+     ],
+     "nova-2": [
+      "en"
+     ]
+    },
+    "SELECTED_TAB_NO": "1",
+    "SELECTED_YOUR_LANGUAGES": {
+     "1": {
+      "1": {
+       "language": "Japanese",
+       "country": "Japan",
+       "enable": true
+      },
+      "2": {
+       "language": "English",
+       "country": "United States",
+       "enable": false
+      },
+      "3": {
+       "language": "Korean",
+       "country": "South Korea",
+       "enable": false
+      }
+     },
+     "2": {
+      "1": {
+       "language": "French",
+       "country": "France",
+       "enable": true
+      },
+      "2": {
+       "language": "German",
+       "country": "Germany",
+       "enable": true
+      },
+      "3": {
+       "language": "Thai",
+       "country": "Thailand",
+       "enable": false
+      }
+     },
+     "3": {
+      "1": {
+       "language": "English",
+       "country": "United States",
+       "enable": false
+      },
+      "2": {
+       "language": "English",
+       "country": "United States",
+       "enable": false
+      },
+      "3": {
+       "language": "English",
+       "country": "United States",
+       "enable": false
+      }
+     }
+    },
+    "SELECTED_TARGET_LANGUAGES": {
+     "1": {
+      "1": {
+       "language": "English",
+       "country": "United States",
+       "enable": true
+      },
+      "2": {
+       "language": "Chinese Simplified",
+       "country": "China",
+       "enable": true
+      },
+      "3": {
+       "language": "Korean",
+       "country": "South Korea",
+       "enable": false
+      }
+     },
+     "2": {
+      "1": {
+       "language": "Spanish",
+       "country": "Spain",
+       "enable": true
+      },
+      "2": {
+       "language": "English",
+       "country": "United States",
+       "enable": false
+      },
+      "3": {
+       "language": "English",
+       "country": "United States",
+       "enable": false
+      }
+     },
+     "3": {
+      "1": {
+       "language": "English",
+       "country": "United States",
+       "enable": false
+      },
+      "2": {
+       "language": "English",
+       "country": "United States",
+       "enable": false
+      },
+      "3": {
+       "language": "English",
+       "country": "United States",
+       "enable": false
+      }
+     }
+    }
+   },
+   "devices": {
+    "mics": {
+     "Windows WASAPI": [
+      {
+       "name": "Mic A",
+       "index": 3
+      },
+      {
+       "name": "Mic B",
+       "index": 4
+      }
+     ]
+    },
+    "speakers": [
+     {
+      "name": "Speaker A [Loopback]",
+      "index": 7
+     },
+     {
+      "name": "Speaker B [Loopback]",
+      "index": 8
+     }
+    ]
+   },
+   "whisper_available": false,
+   "expected": {
+    "mic": {
+     "device": "Mic A",
+     "recorder": {
+      "class": "SelectedMicEnergyAndAudioRecorder",
+      "kwargs": {
+       "device": "Mic A",
+       "energy_threshold": 300,
+       "dynamic_energy_threshold": true,
+       "phrase_time_limit": 3,
+       "record_timeout": 3
+      }
+     },
+     "transcriber": {
+      "engine": "Google",
+      "provider": null,
+      "speaker": false,
+      "phrase_timeout": 3,
+      "max_phrases": 10,
+      "vad_segmented": false,
+      "source": "mic"
+     },
+     "ask": {
+      "languages": [
+       "Japanese"
+      ],
+      "countries": [
+       "Japan"
+      ],
+      "avg_logprob": -0.8,
+      "no_speech_prob": 0.6,
+      "no_repeat_ngram_size": 0
+     }
+    },
+    "speaker": {
+     "device": "Speaker A [Loopback]",
+     "recorder": {
+      "class": "SelectedSpeakerEnergyAndAudioRecorder",
+      "kwargs": {
+       "device": "Speaker A [Loopback]",
+       "energy_threshold": 300,
+       "dynamic_energy_threshold": true,
+       "phrase_time_limit": 3,
+       "record_timeout": 3
+      }
+     },
+     "transcriber": {
+      "engine": "Google",
+      "provider": null,
+      "speaker": true,
+      "phrase_timeout": 3,
+      "max_phrases": 10,
+      "vad_segmented": false,
+      "source": "speaker"
+     },
+     "ask": {
+      "languages": [
+       "English",
+       "Chinese Simplified"
+      ],
+      "countries": [
+       "United States",
+       "China"
+      ],
+      "avg_logprob": -0.8,
+      "no_speech_prob": 0.6,
+      "no_repeat_ngram_size": 0
+     }
+    }
+   }
+  },
+  {
+   "name": "record_timeout_longer_than_phrase_timeout",
+   "config": {
+    "SELECTED_MIC_HOST": "Windows WASAPI",
+    "SELECTED_MIC_DEVICE": "Mic A",
+    "SELECTED_SPEAKER_DEVICE": "Speaker A [Loopback]",
+    "MIC_RECORD_TIMEOUT": 8,
+    "MIC_PHRASE_TIMEOUT": 3,
+    "MIC_THRESHOLD": 300,
+    "MIC_AUTOMATIC_THRESHOLD": true,
+    "MIC_MAX_PHRASES": 10,
+    "MIC_ENABLE_VAD": false,
+    "MIC_AVG_LOGPROB": -0.8,
+    "MIC_NO_SPEECH_PROB": 0.6,
+    "MIC_NO_REPEAT_NGRAM_SIZE": 0,
+    "SPEAKER_RECORD_TIMEOUT": 9,
+    "SPEAKER_PHRASE_TIMEOUT": 4,
+    "SPEAKER_THRESHOLD": 300,
+    "SPEAKER_AUTOMATIC_THRESHOLD": true,
+    "SPEAKER_MAX_PHRASES": 10,
+    "SPEAKER_ENABLE_VAD": false,
+    "SPEAKER_AVG_LOGPROB": -0.8,
+    "SPEAKER_NO_SPEECH_PROB": 0.6,
+    "SPEAKER_NO_REPEAT_NGRAM_SIZE": 0,
+    "SELECTED_TRANSCRIPTION_ENGINE": "Google",
+    "PATH_LOCAL": "C:/vrct",
+    "WHISPER_WEIGHT_TYPE": "base",
+    "SELECTED_TRANSCRIPTION_COMPUTE_DEVICE": {
+     "device": "cpu",
+     "device_index": 0
+    },
+    "SELECTED_TRANSCRIPTION_COMPUTE_TYPE": "auto",
+    "TRANSCRIPTION_AUTH_KEYS": {
+     "Groq_Whisper": "gsk-1",
+     "OpenAI_Whisper": "sk-2",
+     "Custom_Whisper": "custom-3",
+     "Deepgram": "dg-4"
+    },
+    "GROQ_WHISPER_BASE_URL": "https://api.groq.com/openai/v1",
+    "OPENAI_WHISPER_BASE_URL": "https://api.openai.com/v1",
+    "SELECTED_GROQ_WHISPER_MODEL": "whisper-large-v3",
+    "SELECTED_OPENAI_WHISPER_MODEL": "whisper-1",
+    "TRANSCRIPTION_CUSTOM_URL": "http://localhost:8080/v1",
+    "SELECTED_CUSTOM_WHISPER_MODEL": "my-whisper",
+    "SELECTED_DEEPGRAM_MODEL": "nova-3",
+    "DEEPGRAM_MODEL_LANGUAGES": {
+     "nova-3": [
+      "en",
+      "ja",
+      "multi"
+     ],
+     "nova-2": [
+      "en"
+     ]
+    },
+    "SELECTED_TAB_NO": "1",
+    "SELECTED_YOUR_LANGUAGES": {
+     "1": {
+      "1": {
+       "language": "Japanese",
+       "country": "Japan",
+       "enable": true
+      },
+      "2": {
+       "language": "English",
+       "country": "United States",
+       "enable": false
+      },
+      "3": {
+       "language": "Korean",
+       "country": "South Korea",
+       "enable": false
+      }
+     },
+     "2": {
+      "1": {
+       "language": "French",
+       "country": "France",
+       "enable": true
+      },
+      "2": {
+       "language": "German",
+       "country": "Germany",
+       "enable": true
+      },
+      "3": {
+       "language": "Thai",
+       "country": "Thailand",
+       "enable": false
+      }
+     },
+     "3": {
+      "1": {
+       "language": "English",
+       "country": "United States",
+       "enable": false
+      },
+      "2": {
+       "language": "English",
+       "country": "United States",
+       "enable": false
+      },
+      "3": {
+       "language": "English",
+       "country": "United States",
+       "enable": false
+      }
+     }
+    },
+    "SELECTED_TARGET_LANGUAGES": {
+     "1": {
+      "1": {
+       "language": "English",
+       "country": "United States",
+       "enable": true
+      },
+      "2": {
+       "language": "Chinese Simplified",
+       "country": "China",
+       "enable": true
+      },
+      "3": {
+       "language": "Korean",
+       "country": "South Korea",
+       "enable": false
+      }
+     },
+     "2": {
+      "1": {
+       "language": "Spanish",
+       "country": "Spain",
+       "enable": true
+      },
+      "2": {
+       "language": "English",
+       "country": "United States",
+       "enable": false
+      },
+      "3": {
+       "language": "English",
+       "country": "United States",
+       "enable": false
+      }
+     },
+     "3": {
+      "1": {
+       "language": "English",
+       "country": "United States",
+       "enable": false
+      },
+      "2": {
+       "language": "English",
+       "country": "United States",
+       "enable": false
+      },
+      "3": {
+       "language": "English",
+       "country": "United States",
+       "enable": false
+      }
+     }
+    }
+   },
+   "devices": {
+    "mics": {
+     "Windows WASAPI": [
+      {
+       "name": "Mic A",
+       "index": 3
+      },
+      {
+       "name": "Mic B",
+       "index": 4
+      }
+     ]
+    },
+    "speakers": [
+     {
+      "name": "Speaker A [Loopback]",
+      "index": 7
+     },
+     {
+      "name": "Speaker B [Loopback]",
+      "index": 8
+     }
+    ]
+   },
+   "whisper_available": false,
+   "expected": {
+    "mic": {
+     "device": "Mic A",
+     "recorder": {
+      "class": "SelectedMicEnergyAndAudioRecorder",
+      "kwargs": {
+       "device": "Mic A",
+       "energy_threshold": 300,
+       "dynamic_energy_threshold": true,
+       "phrase_time_limit": 3,
+       "record_timeout": 3
+      }
+     },
+     "transcriber": {
+      "engine": "Google",
+      "provider": null,
+      "speaker": false,
+      "phrase_timeout": 3,
+      "max_phrases": 10,
+      "vad_segmented": false,
+      "source": "mic"
+     },
+     "ask": {
+      "languages": [
+       "Japanese"
+      ],
+      "countries": [
+       "Japan"
+      ],
+      "avg_logprob": -0.8,
+      "no_speech_prob": 0.6,
+      "no_repeat_ngram_size": 0
+     }
+    },
+    "speaker": {
+     "device": "Speaker A [Loopback]",
+     "recorder": {
+      "class": "SelectedSpeakerEnergyAndAudioRecorder",
+      "kwargs": {
+       "device": "Speaker A [Loopback]",
+       "energy_threshold": 300,
+       "dynamic_energy_threshold": true,
+       "phrase_time_limit": 4,
+       "record_timeout": 4
+      }
+     },
+     "transcriber": {
+      "engine": "Google",
+      "provider": null,
+      "speaker": true,
+      "phrase_timeout": 4,
+      "max_phrases": 10,
+      "vad_segmented": false,
+      "source": "speaker"
+     },
+     "ask": {
+      "languages": [
+       "English",
+       "Chinese Simplified"
+      ],
+      "countries": [
+       "United States",
+       "China"
+      ],
+      "avg_logprob": -0.8,
+      "no_speech_prob": 0.6,
+      "no_repeat_ngram_size": 0
+     }
+    }
+   }
+  },
+  {
+   "name": "record_timeout_shorter",
+   "config": {
+    "SELECTED_MIC_HOST": "Windows WASAPI",
+    "SELECTED_MIC_DEVICE": "Mic A",
+    "SELECTED_SPEAKER_DEVICE": "Speaker A [Loopback]",
+    "MIC_RECORD_TIMEOUT": 2,
+    "MIC_PHRASE_TIMEOUT": 6,
+    "MIC_THRESHOLD": 300,
+    "MIC_AUTOMATIC_THRESHOLD": true,
+    "MIC_MAX_PHRASES": 10,
+    "MIC_ENABLE_VAD": false,
+    "MIC_AVG_LOGPROB": -0.8,
+    "MIC_NO_SPEECH_PROB": 0.6,
+    "MIC_NO_REPEAT_NGRAM_SIZE": 0,
+    "SPEAKER_RECORD_TIMEOUT": 1,
+    "SPEAKER_PHRASE_TIMEOUT": 2,
+    "SPEAKER_THRESHOLD": 300,
+    "SPEAKER_AUTOMATIC_THRESHOLD": true,
+    "SPEAKER_MAX_PHRASES": 10,
+    "SPEAKER_ENABLE_VAD": false,
+    "SPEAKER_AVG_LOGPROB": -0.8,
+    "SPEAKER_NO_SPEECH_PROB": 0.6,
+    "SPEAKER_NO_REPEAT_NGRAM_SIZE": 0,
+    "SELECTED_TRANSCRIPTION_ENGINE": "Google",
+    "PATH_LOCAL": "C:/vrct",
+    "WHISPER_WEIGHT_TYPE": "base",
+    "SELECTED_TRANSCRIPTION_COMPUTE_DEVICE": {
+     "device": "cpu",
+     "device_index": 0
+    },
+    "SELECTED_TRANSCRIPTION_COMPUTE_TYPE": "auto",
+    "TRANSCRIPTION_AUTH_KEYS": {
+     "Groq_Whisper": "gsk-1",
+     "OpenAI_Whisper": "sk-2",
+     "Custom_Whisper": "custom-3",
+     "Deepgram": "dg-4"
+    },
+    "GROQ_WHISPER_BASE_URL": "https://api.groq.com/openai/v1",
+    "OPENAI_WHISPER_BASE_URL": "https://api.openai.com/v1",
+    "SELECTED_GROQ_WHISPER_MODEL": "whisper-large-v3",
+    "SELECTED_OPENAI_WHISPER_MODEL": "whisper-1",
+    "TRANSCRIPTION_CUSTOM_URL": "http://localhost:8080/v1",
+    "SELECTED_CUSTOM_WHISPER_MODEL": "my-whisper",
+    "SELECTED_DEEPGRAM_MODEL": "nova-3",
+    "DEEPGRAM_MODEL_LANGUAGES": {
+     "nova-3": [
+      "en",
+      "ja",
+      "multi"
+     ],
+     "nova-2": [
+      "en"
+     ]
+    },
+    "SELECTED_TAB_NO": "1",
+    "SELECTED_YOUR_LANGUAGES": {
+     "1": {
+      "1": {
+       "language": "Japanese",
+       "country": "Japan",
+       "enable": true
+      },
+      "2": {
+       "language": "English",
+       "country": "United States",
+       "enable": false
+      },
+      "3": {
+       "language": "Korean",
+       "country": "South Korea",
+       "enable": false
+      }
+     },
+     "2": {
+      "1": {
+       "language": "French",
+       "country": "France",
+       "enable": true
+      },
+      "2": {
+       "language": "German",
+       "country": "Germany",
+       "enable": true
+      },
+      "3": {
+       "language": "Thai",
+       "country": "Thailand",
+       "enable": false
+      }
+     },
+     "3": {
+      "1": {
+       "language": "English",
+       "country": "United States",
+       "enable": false
+      },
+      "2": {
+       "language": "English",
+       "country": "United States",
+       "enable": false
+      },
+      "3": {
+       "language": "English",
+       "country": "United States",
+       "enable": false
+      }
+     }
+    },
+    "SELECTED_TARGET_LANGUAGES": {
+     "1": {
+      "1": {
+       "language": "English",
+       "country": "United States",
+       "enable": true
+      },
+      "2": {
+       "language": "Chinese Simplified",
+       "country": "China",
+       "enable": true
+      },
+      "3": {
+       "language": "Korean",
+       "country": "South Korea",
+       "enable": false
+      }
+     },
+     "2": {
+      "1": {
+       "language": "Spanish",
+       "country": "Spain",
+       "enable": true
+      },
+      "2": {
+       "language": "English",
+       "country": "United States",
+       "enable": false
+      },
+      "3": {
+       "language": "English",
+       "country": "United States",
+       "enable": false
+      }
+     },
+     "3": {
+      "1": {
+       "language": "English",
+       "country": "United States",
+       "enable": false
+      },
+      "2": {
+       "language": "English",
+       "country": "United States",
+       "enable": false
+      },
+      "3": {
+       "language": "English",
+       "country": "United States",
+       "enable": false
+      }
+     }
+    }
+   },
+   "devices": {
+    "mics": {
+     "Windows WASAPI": [
+      {
+       "name": "Mic A",
+       "index": 3
+      },
+      {
+       "name": "Mic B",
+       "index": 4
+      }
+     ]
+    },
+    "speakers": [
+     {
+      "name": "Speaker A [Loopback]",
+      "index": 7
+     },
+     {
+      "name": "Speaker B [Loopback]",
+      "index": 8
+     }
+    ]
+   },
+   "whisper_available": false,
+   "expected": {
+    "mic": {
+     "device": "Mic A",
+     "recorder": {
+      "class": "SelectedMicEnergyAndAudioRecorder",
+      "kwargs": {
+       "device": "Mic A",
+       "energy_threshold": 300,
+       "dynamic_energy_threshold": true,
+       "phrase_time_limit": 2,
+       "record_timeout": 2
+      }
+     },
+     "transcriber": {
+      "engine": "Google",
+      "provider": null,
+      "speaker": false,
+      "phrase_timeout": 6,
+      "max_phrases": 10,
+      "vad_segmented": false,
+      "source": "mic"
+     },
+     "ask": {
+      "languages": [
+       "Japanese"
+      ],
+      "countries": [
+       "Japan"
+      ],
+      "avg_logprob": -0.8,
+      "no_speech_prob": 0.6,
+      "no_repeat_ngram_size": 0
+     }
+    },
+    "speaker": {
+     "device": "Speaker A [Loopback]",
+     "recorder": {
+      "class": "SelectedSpeakerEnergyAndAudioRecorder",
+      "kwargs": {
+       "device": "Speaker A [Loopback]",
+       "energy_threshold": 300,
+       "dynamic_energy_threshold": true,
+       "phrase_time_limit": 1,
+       "record_timeout": 1
+      }
+     },
+     "transcriber": {
+      "engine": "Google",
+      "provider": null,
+      "speaker": true,
+      "phrase_timeout": 2,
+      "max_phrases": 10,
+      "vad_segmented": false,
+      "source": "speaker"
+     },
+     "ask": {
+      "languages": [
+       "English",
+       "Chinese Simplified"
+      ],
+      "countries": [
+       "United States",
+       "China"
+      ],
+      "avg_logprob": -0.8,
+      "no_speech_prob": 0.6,
+      "no_repeat_ngram_size": 0
+     }
+    }
+   }
+  },
+  {
+   "name": "record_timeout_zero",
+   "config": {
+    "SELECTED_MIC_HOST": "Windows WASAPI",
+    "SELECTED_MIC_DEVICE": "Mic A",
+    "SELECTED_SPEAKER_DEVICE": "Speaker A [Loopback]",
+    "MIC_RECORD_TIMEOUT": 0,
+    "MIC_PHRASE_TIMEOUT": 3,
+    "MIC_THRESHOLD": 300,
+    "MIC_AUTOMATIC_THRESHOLD": true,
+    "MIC_MAX_PHRASES": 10,
+    "MIC_ENABLE_VAD": false,
+    "MIC_AVG_LOGPROB": -0.8,
+    "MIC_NO_SPEECH_PROB": 0.6,
+    "MIC_NO_REPEAT_NGRAM_SIZE": 0,
+    "SPEAKER_RECORD_TIMEOUT": 0,
+    "SPEAKER_PHRASE_TIMEOUT": 3,
+    "SPEAKER_THRESHOLD": 300,
+    "SPEAKER_AUTOMATIC_THRESHOLD": true,
+    "SPEAKER_MAX_PHRASES": 10,
+    "SPEAKER_ENABLE_VAD": false,
+    "SPEAKER_AVG_LOGPROB": -0.8,
+    "SPEAKER_NO_SPEECH_PROB": 0.6,
+    "SPEAKER_NO_REPEAT_NGRAM_SIZE": 0,
+    "SELECTED_TRANSCRIPTION_ENGINE": "Google",
+    "PATH_LOCAL": "C:/vrct",
+    "WHISPER_WEIGHT_TYPE": "base",
+    "SELECTED_TRANSCRIPTION_COMPUTE_DEVICE": {
+     "device": "cpu",
+     "device_index": 0
+    },
+    "SELECTED_TRANSCRIPTION_COMPUTE_TYPE": "auto",
+    "TRANSCRIPTION_AUTH_KEYS": {
+     "Groq_Whisper": "gsk-1",
+     "OpenAI_Whisper": "sk-2",
+     "Custom_Whisper": "custom-3",
+     "Deepgram": "dg-4"
+    },
+    "GROQ_WHISPER_BASE_URL": "https://api.groq.com/openai/v1",
+    "OPENAI_WHISPER_BASE_URL": "https://api.openai.com/v1",
+    "SELECTED_GROQ_WHISPER_MODEL": "whisper-large-v3",
+    "SELECTED_OPENAI_WHISPER_MODEL": "whisper-1",
+    "TRANSCRIPTION_CUSTOM_URL": "http://localhost:8080/v1",
+    "SELECTED_CUSTOM_WHISPER_MODEL": "my-whisper",
+    "SELECTED_DEEPGRAM_MODEL": "nova-3",
+    "DEEPGRAM_MODEL_LANGUAGES": {
+     "nova-3": [
+      "en",
+      "ja",
+      "multi"
+     ],
+     "nova-2": [
+      "en"
+     ]
+    },
+    "SELECTED_TAB_NO": "1",
+    "SELECTED_YOUR_LANGUAGES": {
+     "1": {
+      "1": {
+       "language": "Japanese",
+       "country": "Japan",
+       "enable": true
+      },
+      "2": {
+       "language": "English",
+       "country": "United States",
+       "enable": false
+      },
+      "3": {
+       "language": "Korean",
+       "country": "South Korea",
+       "enable": false
+      }
+     },
+     "2": {
+      "1": {
+       "language": "French",
+       "country": "France",
+       "enable": true
+      },
+      "2": {
+       "language": "German",
+       "country": "Germany",
+       "enable": true
+      },
+      "3": {
+       "language": "Thai",
+       "country": "Thailand",
+       "enable": false
+      }
+     },
+     "3": {
+      "1": {
+       "language": "English",
+       "country": "United States",
+       "enable": false
+      },
+      "2": {
+       "language": "English",
+       "country": "United States",
+       "enable": false
+      },
+      "3": {
+       "language": "English",
+       "country": "United States",
+       "enable": false
+      }
+     }
+    },
+    "SELECTED_TARGET_LANGUAGES": {
+     "1": {
+      "1": {
+       "language": "English",
+       "country": "United States",
+       "enable": true
+      },
+      "2": {
+       "language": "Chinese Simplified",
+       "country": "China",
+       "enable": true
+      },
+      "3": {
+       "language": "Korean",
+       "country": "South Korea",
+       "enable": false
+      }
+     },
+     "2": {
+      "1": {
+       "language": "Spanish",
+       "country": "Spain",
+       "enable": true
+      },
+      "2": {
+       "language": "English",
+       "country": "United States",
+       "enable": false
+      },
+      "3": {
+       "language": "English",
+       "country": "United States",
+       "enable": false
+      }
+     },
+     "3": {
+      "1": {
+       "language": "English",
+       "country": "United States",
+       "enable": false
+      },
+      "2": {
+       "language": "English",
+       "country": "United States",
+       "enable": false
+      },
+      "3": {
+       "language": "English",
+       "country": "United States",
+       "enable": false
+      }
+     }
+    }
+   },
+   "devices": {
+    "mics": {
+     "Windows WASAPI": [
+      {
+       "name": "Mic A",
+       "index": 3
+      },
+      {
+       "name": "Mic B",
+       "index": 4
+      }
+     ]
+    },
+    "speakers": [
+     {
+      "name": "Speaker A [Loopback]",
+      "index": 7
+     },
+     {
+      "name": "Speaker B [Loopback]",
+      "index": 8
+     }
+    ]
+   },
+   "whisper_available": false,
+   "expected": {
+    "mic": {
+     "device": "Mic A",
+     "recorder": {
+      "class": "SelectedMicEnergyAndAudioRecorder",
+      "kwargs": {
+       "device": "Mic A",
+       "energy_threshold": 300,
+       "dynamic_energy_threshold": true,
+       "phrase_time_limit": 0,
+       "record_timeout": 0
+      }
+     },
+     "transcriber": {
+      "engine": "Google",
+      "provider": null,
+      "speaker": false,
+      "phrase_timeout": 3,
+      "max_phrases": 10,
+      "vad_segmented": false,
+      "source": "mic"
+     },
+     "ask": {
+      "languages": [
+       "Japanese"
+      ],
+      "countries": [
+       "Japan"
+      ],
+      "avg_logprob": -0.8,
+      "no_speech_prob": 0.6,
+      "no_repeat_ngram_size": 0
+     }
+    },
+    "speaker": {
+     "device": "Speaker A [Loopback]",
+     "recorder": {
+      "class": "SelectedSpeakerEnergyAndAudioRecorder",
+      "kwargs": {
+       "device": "Speaker A [Loopback]",
+       "energy_threshold": 300,
+       "dynamic_energy_threshold": true,
+       "phrase_time_limit": 0,
+       "record_timeout": 0
+      }
+     },
+     "transcriber": {
+      "engine": "Google",
+      "provider": null,
+      "speaker": true,
+      "phrase_timeout": 3,
+      "max_phrases": 10,
+      "vad_segmented": false,
+      "source": "speaker"
+     },
+     "ask": {
+      "languages": [
+       "English",
+       "Chinese Simplified"
+      ],
+      "countries": [
+       "United States",
+       "China"
+      ],
+      "avg_logprob": -0.8,
+      "no_speech_prob": 0.6,
+      "no_repeat_ngram_size": 0
+     }
+    }
+   }
+  },
+  {
+   "name": "fixed_threshold",
+   "config": {
+    "SELECTED_MIC_HOST": "Windows WASAPI",
+    "SELECTED_MIC_DEVICE": "Mic A",
+    "SELECTED_SPEAKER_DEVICE": "Speaker A [Loopback]",
+    "MIC_RECORD_TIMEOUT": 3,
+    "MIC_PHRASE_TIMEOUT": 3,
+    "MIC_THRESHOLD": 1200,
+    "MIC_AUTOMATIC_THRESHOLD": false,
+    "MIC_MAX_PHRASES": 10,
+    "MIC_ENABLE_VAD": false,
+    "MIC_AVG_LOGPROB": -0.8,
+    "MIC_NO_SPEECH_PROB": 0.6,
+    "MIC_NO_REPEAT_NGRAM_SIZE": 0,
+    "SPEAKER_RECORD_TIMEOUT": 3,
+    "SPEAKER_PHRASE_TIMEOUT": 3,
+    "SPEAKER_THRESHOLD": 75,
+    "SPEAKER_AUTOMATIC_THRESHOLD": false,
+    "SPEAKER_MAX_PHRASES": 10,
+    "SPEAKER_ENABLE_VAD": false,
+    "SPEAKER_AVG_LOGPROB": -0.8,
+    "SPEAKER_NO_SPEECH_PROB": 0.6,
+    "SPEAKER_NO_REPEAT_NGRAM_SIZE": 0,
+    "SELECTED_TRANSCRIPTION_ENGINE": "Google",
+    "PATH_LOCAL": "C:/vrct",
+    "WHISPER_WEIGHT_TYPE": "base",
+    "SELECTED_TRANSCRIPTION_COMPUTE_DEVICE": {
+     "device": "cpu",
+     "device_index": 0
+    },
+    "SELECTED_TRANSCRIPTION_COMPUTE_TYPE": "auto",
+    "TRANSCRIPTION_AUTH_KEYS": {
+     "Groq_Whisper": "gsk-1",
+     "OpenAI_Whisper": "sk-2",
+     "Custom_Whisper": "custom-3",
+     "Deepgram": "dg-4"
+    },
+    "GROQ_WHISPER_BASE_URL": "https://api.groq.com/openai/v1",
+    "OPENAI_WHISPER_BASE_URL": "https://api.openai.com/v1",
+    "SELECTED_GROQ_WHISPER_MODEL": "whisper-large-v3",
+    "SELECTED_OPENAI_WHISPER_MODEL": "whisper-1",
+    "TRANSCRIPTION_CUSTOM_URL": "http://localhost:8080/v1",
+    "SELECTED_CUSTOM_WHISPER_MODEL": "my-whisper",
+    "SELECTED_DEEPGRAM_MODEL": "nova-3",
+    "DEEPGRAM_MODEL_LANGUAGES": {
+     "nova-3": [
+      "en",
+      "ja",
+      "multi"
+     ],
+     "nova-2": [
+      "en"
+     ]
+    },
+    "SELECTED_TAB_NO": "1",
+    "SELECTED_YOUR_LANGUAGES": {
+     "1": {
+      "1": {
+       "language": "Japanese",
+       "country": "Japan",
+       "enable": true
+      },
+      "2": {
+       "language": "English",
+       "country": "United States",
+       "enable": false
+      },
+      "3": {
+       "language": "Korean",
+       "country": "South Korea",
+       "enable": false
+      }
+     },
+     "2": {
+      "1": {
+       "language": "French",
+       "country": "France",
+       "enable": true
+      },
+      "2": {
+       "language": "German",
+       "country": "Germany",
+       "enable": true
+      },
+      "3": {
+       "language": "Thai",
+       "country": "Thailand",
+       "enable": false
+      }
+     },
+     "3": {
+      "1": {
+       "language": "English",
+       "country": "United States",
+       "enable": false
+      },
+      "2": {
+       "language": "English",
+       "country": "United States",
+       "enable": false
+      },
+      "3": {
+       "language": "English",
+       "country": "United States",
+       "enable": false
+      }
+     }
+    },
+    "SELECTED_TARGET_LANGUAGES": {
+     "1": {
+      "1": {
+       "language": "English",
+       "country": "United States",
+       "enable": true
+      },
+      "2": {
+       "language": "Chinese Simplified",
+       "country": "China",
+       "enable": true
+      },
+      "3": {
+       "language": "Korean",
+       "country": "South Korea",
+       "enable": false
+      }
+     },
+     "2": {
+      "1": {
+       "language": "Spanish",
+       "country": "Spain",
+       "enable": true
+      },
+      "2": {
+       "language": "English",
+       "country": "United States",
+       "enable": false
+      },
+      "3": {
+       "language": "English",
+       "country": "United States",
+       "enable": false
+      }
+     },
+     "3": {
+      "1": {
+       "language": "English",
+       "country": "United States",
+       "enable": false
+      },
+      "2": {
+       "language": "English",
+       "country": "United States",
+       "enable": false
+      },
+      "3": {
+       "language": "English",
+       "country": "United States",
+       "enable": false
+      }
+     }
+    }
+   },
+   "devices": {
+    "mics": {
+     "Windows WASAPI": [
+      {
+       "name": "Mic A",
+       "index": 3
+      },
+      {
+       "name": "Mic B",
+       "index": 4
+      }
+     ]
+    },
+    "speakers": [
+     {
+      "name": "Speaker A [Loopback]",
+      "index": 7
+     },
+     {
+      "name": "Speaker B [Loopback]",
+      "index": 8
+     }
+    ]
+   },
+   "whisper_available": false,
+   "expected": {
+    "mic": {
+     "device": "Mic A",
+     "recorder": {
+      "class": "SelectedMicEnergyAndAudioRecorder",
+      "kwargs": {
+       "device": "Mic A",
+       "energy_threshold": 1200,
+       "dynamic_energy_threshold": false,
+       "phrase_time_limit": 3,
+       "record_timeout": 3
+      }
+     },
+     "transcriber": {
+      "engine": "Google",
+      "provider": null,
+      "speaker": false,
+      "phrase_timeout": 3,
+      "max_phrases": 10,
+      "vad_segmented": false,
+      "source": "mic"
+     },
+     "ask": {
+      "languages": [
+       "Japanese"
+      ],
+      "countries": [
+       "Japan"
+      ],
+      "avg_logprob": -0.8,
+      "no_speech_prob": 0.6,
+      "no_repeat_ngram_size": 0
+     }
+    },
+    "speaker": {
+     "device": "Speaker A [Loopback]",
+     "recorder": {
+      "class": "SelectedSpeakerEnergyAndAudioRecorder",
+      "kwargs": {
+       "device": "Speaker A [Loopback]",
+       "energy_threshold": 75,
+       "dynamic_energy_threshold": false,
+       "phrase_time_limit": 3,
+       "record_timeout": 3
+      }
+     },
+     "transcriber": {
+      "engine": "Google",
+      "provider": null,
+      "speaker": true,
+      "phrase_timeout": 3,
+      "max_phrases": 10,
+      "vad_segmented": false,
+      "source": "speaker"
+     },
+     "ask": {
+      "languages": [
+       "English",
+       "Chinese Simplified"
+      ],
+      "countries": [
+       "United States",
+       "China"
+      ],
+      "avg_logprob": -0.8,
+      "no_speech_prob": 0.6,
+      "no_repeat_ngram_size": 0
+     }
+    }
+   }
+  },
+  {
+   "name": "whisper_files_present",
+   "config": {
+    "SELECTED_MIC_HOST": "Windows WASAPI",
+    "SELECTED_MIC_DEVICE": "Mic A",
+    "SELECTED_SPEAKER_DEVICE": "Speaker A [Loopback]",
+    "MIC_RECORD_TIMEOUT": 3,
+    "MIC_PHRASE_TIMEOUT": 3,
+    "MIC_THRESHOLD": 300,
+    "MIC_AUTOMATIC_THRESHOLD": true,
+    "MIC_MAX_PHRASES": 10,
+    "MIC_ENABLE_VAD": false,
+    "MIC_AVG_LOGPROB": -0.8,
+    "MIC_NO_SPEECH_PROB": 0.6,
+    "MIC_NO_REPEAT_NGRAM_SIZE": 0,
+    "SPEAKER_RECORD_TIMEOUT": 3,
+    "SPEAKER_PHRASE_TIMEOUT": 3,
+    "SPEAKER_THRESHOLD": 300,
+    "SPEAKER_AUTOMATIC_THRESHOLD": true,
+    "SPEAKER_MAX_PHRASES": 10,
+    "SPEAKER_ENABLE_VAD": false,
+    "SPEAKER_AVG_LOGPROB": -0.8,
+    "SPEAKER_NO_SPEECH_PROB": 0.6,
+    "SPEAKER_NO_REPEAT_NGRAM_SIZE": 0,
+    "SELECTED_TRANSCRIPTION_ENGINE": "Whisper",
+    "PATH_LOCAL": "C:/vrct",
+    "WHISPER_WEIGHT_TYPE": "base",
+    "SELECTED_TRANSCRIPTION_COMPUTE_DEVICE": {
+     "device": "cpu",
+     "device_index": 0
+    },
+    "SELECTED_TRANSCRIPTION_COMPUTE_TYPE": "auto",
+    "TRANSCRIPTION_AUTH_KEYS": {
+     "Groq_Whisper": "gsk-1",
+     "OpenAI_Whisper": "sk-2",
+     "Custom_Whisper": "custom-3",
+     "Deepgram": "dg-4"
+    },
+    "GROQ_WHISPER_BASE_URL": "https://api.groq.com/openai/v1",
+    "OPENAI_WHISPER_BASE_URL": "https://api.openai.com/v1",
+    "SELECTED_GROQ_WHISPER_MODEL": "whisper-large-v3",
+    "SELECTED_OPENAI_WHISPER_MODEL": "whisper-1",
+    "TRANSCRIPTION_CUSTOM_URL": "http://localhost:8080/v1",
+    "SELECTED_CUSTOM_WHISPER_MODEL": "my-whisper",
+    "SELECTED_DEEPGRAM_MODEL": "nova-3",
+    "DEEPGRAM_MODEL_LANGUAGES": {
+     "nova-3": [
+      "en",
+      "ja",
+      "multi"
+     ],
+     "nova-2": [
+      "en"
+     ]
+    },
+    "SELECTED_TAB_NO": "1",
+    "SELECTED_YOUR_LANGUAGES": {
+     "1": {
+      "1": {
+       "language": "Japanese",
+       "country": "Japan",
+       "enable": true
+      },
+      "2": {
+       "language": "English",
+       "country": "United States",
+       "enable": false
+      },
+      "3": {
+       "language": "Korean",
+       "country": "South Korea",
+       "enable": false
+      }
+     },
+     "2": {
+      "1": {
+       "language": "French",
+       "country": "France",
+       "enable": true
+      },
+      "2": {
+       "language": "German",
+       "country": "Germany",
+       "enable": true
+      },
+      "3": {
+       "language": "Thai",
+       "country": "Thailand",
+       "enable": false
+      }
+     },
+     "3": {
+      "1": {
+       "language": "English",
+       "country": "United States",
+       "enable": false
+      },
+      "2": {
+       "language": "English",
+       "country": "United States",
+       "enable": false
+      },
+      "3": {
+       "language": "English",
+       "country": "United States",
+       "enable": false
+      }
+     }
+    },
+    "SELECTED_TARGET_LANGUAGES": {
+     "1": {
+      "1": {
+       "language": "English",
+       "country": "United States",
+       "enable": true
+      },
+      "2": {
+       "language": "Chinese Simplified",
+       "country": "China",
+       "enable": true
+      },
+      "3": {
+       "language": "Korean",
+       "country": "South Korea",
+       "enable": false
+      }
+     },
+     "2": {
+      "1": {
+       "language": "Spanish",
+       "country": "Spain",
+       "enable": true
+      },
+      "2": {
+       "language": "English",
+       "country": "United States",
+       "enable": false
+      },
+      "3": {
+       "language": "English",
+       "country": "United States",
+       "enable": false
+      }
+     },
+     "3": {
+      "1": {
+       "language": "English",
+       "country": "United States",
+       "enable": false
+      },
+      "2": {
+       "language": "English",
+       "country": "United States",
+       "enable": false
+      },
+      "3": {
+       "language": "English",
+       "country": "United States",
+       "enable": false
+      }
+     }
+    }
+   },
+   "devices": {
+    "mics": {
+     "Windows WASAPI": [
+      {
+       "name": "Mic A",
+       "index": 3
+      },
+      {
+       "name": "Mic B",
+       "index": 4
+      }
+     ]
+    },
+    "speakers": [
+     {
+      "name": "Speaker A [Loopback]",
+      "index": 7
+     },
+     {
+      "name": "Speaker B [Loopback]",
+      "index": 8
+     }
+    ]
+   },
+   "whisper_available": true,
+   "expected": {
+    "mic": {
+     "device": "Mic A",
+     "recorder": {
+      "class": "SelectedMicEnergyAndAudioRecorder",
+      "kwargs": {
+       "device": "Mic A",
+       "energy_threshold": 300,
+       "dynamic_energy_threshold": true,
+       "phrase_time_limit": 3,
+       "record_timeout": 3
+      }
+     },
+     "transcriber": {
+      "engine": "Whisper",
+      "provider": {
+       "kind": "whisper",
+       "dir": "C:/vrct\\weights\\whisper\\base",
+       "device": "cpu",
+       "device_index": 0,
+       "compute_type": "auto"
+      },
+      "speaker": false,
+      "phrase_timeout": 3,
+      "max_phrases": 10,
+      "vad_segmented": false,
+      "source": "mic"
+     },
+     "ask": {
+      "languages": [
+       "Japanese"
+      ],
+      "countries": [
+       "Japan"
+      ],
+      "avg_logprob": -0.8,
+      "no_speech_prob": 0.6,
+      "no_repeat_ngram_size": 0
+     }
+    },
+    "speaker": {
+     "device": "Speaker A [Loopback]",
+     "recorder": {
+      "class": "SelectedSpeakerEnergyAndAudioRecorder",
+      "kwargs": {
+       "device": "Speaker A [Loopback]",
+       "energy_threshold": 300,
+       "dynamic_energy_threshold": true,
+       "phrase_time_limit": 3,
+       "record_timeout": 3
+      }
+     },
+     "transcriber": {
+      "engine": "Whisper",
+      "provider": {
+       "kind": "whisper",
+       "dir": "C:/vrct\\weights\\whisper\\base",
+       "device": "cpu",
+       "device_index": 0,
+       "compute_type": "auto"
+      },
+      "speaker": true,
+      "phrase_timeout": 3,
+      "max_phrases": 10,
+      "vad_segmented": false,
+      "source": "speaker"
+     },
+     "ask": {
+      "languages": [
+       "English",
+       "Chinese Simplified"
+      ],
+      "countries": [
+       "United States",
+       "China"
+      ],
+      "avg_logprob": -0.8,
+      "no_speech_prob": 0.6,
+      "no_repeat_ngram_size": 0
+     }
+    }
+   }
+  },
+  {
+   "name": "whisper_files_missing_falls_back_to_google",
+   "config": {
+    "SELECTED_MIC_HOST": "Windows WASAPI",
+    "SELECTED_MIC_DEVICE": "Mic A",
+    "SELECTED_SPEAKER_DEVICE": "Speaker A [Loopback]",
+    "MIC_RECORD_TIMEOUT": 3,
+    "MIC_PHRASE_TIMEOUT": 3,
+    "MIC_THRESHOLD": 300,
+    "MIC_AUTOMATIC_THRESHOLD": true,
+    "MIC_MAX_PHRASES": 10,
+    "MIC_ENABLE_VAD": false,
+    "MIC_AVG_LOGPROB": -0.8,
+    "MIC_NO_SPEECH_PROB": 0.6,
+    "MIC_NO_REPEAT_NGRAM_SIZE": 0,
+    "SPEAKER_RECORD_TIMEOUT": 3,
+    "SPEAKER_PHRASE_TIMEOUT": 3,
+    "SPEAKER_THRESHOLD": 300,
+    "SPEAKER_AUTOMATIC_THRESHOLD": true,
+    "SPEAKER_MAX_PHRASES": 10,
+    "SPEAKER_ENABLE_VAD": false,
+    "SPEAKER_AVG_LOGPROB": -0.8,
+    "SPEAKER_NO_SPEECH_PROB": 0.6,
+    "SPEAKER_NO_REPEAT_NGRAM_SIZE": 0,
+    "SELECTED_TRANSCRIPTION_ENGINE": "Whisper",
+    "PATH_LOCAL": "C:/vrct",
+    "WHISPER_WEIGHT_TYPE": "base",
+    "SELECTED_TRANSCRIPTION_COMPUTE_DEVICE": {
+     "device": "cpu",
+     "device_index": 0
+    },
+    "SELECTED_TRANSCRIPTION_COMPUTE_TYPE": "auto",
+    "TRANSCRIPTION_AUTH_KEYS": {
+     "Groq_Whisper": "gsk-1",
+     "OpenAI_Whisper": "sk-2",
+     "Custom_Whisper": "custom-3",
+     "Deepgram": "dg-4"
+    },
+    "GROQ_WHISPER_BASE_URL": "https://api.groq.com/openai/v1",
+    "OPENAI_WHISPER_BASE_URL": "https://api.openai.com/v1",
+    "SELECTED_GROQ_WHISPER_MODEL": "whisper-large-v3",
+    "SELECTED_OPENAI_WHISPER_MODEL": "whisper-1",
+    "TRANSCRIPTION_CUSTOM_URL": "http://localhost:8080/v1",
+    "SELECTED_CUSTOM_WHISPER_MODEL": "my-whisper",
+    "SELECTED_DEEPGRAM_MODEL": "nova-3",
+    "DEEPGRAM_MODEL_LANGUAGES": {
+     "nova-3": [
+      "en",
+      "ja",
+      "multi"
+     ],
+     "nova-2": [
+      "en"
+     ]
+    },
+    "SELECTED_TAB_NO": "1",
+    "SELECTED_YOUR_LANGUAGES": {
+     "1": {
+      "1": {
+       "language": "Japanese",
+       "country": "Japan",
+       "enable": true
+      },
+      "2": {
+       "language": "English",
+       "country": "United States",
+       "enable": false
+      },
+      "3": {
+       "language": "Korean",
+       "country": "South Korea",
+       "enable": false
+      }
+     },
+     "2": {
+      "1": {
+       "language": "French",
+       "country": "France",
+       "enable": true
+      },
+      "2": {
+       "language": "German",
+       "country": "Germany",
+       "enable": true
+      },
+      "3": {
+       "language": "Thai",
+       "country": "Thailand",
+       "enable": false
+      }
+     },
+     "3": {
+      "1": {
+       "language": "English",
+       "country": "United States",
+       "enable": false
+      },
+      "2": {
+       "language": "English",
+       "country": "United States",
+       "enable": false
+      },
+      "3": {
+       "language": "English",
+       "country": "United States",
+       "enable": false
+      }
+     }
+    },
+    "SELECTED_TARGET_LANGUAGES": {
+     "1": {
+      "1": {
+       "language": "English",
+       "country": "United States",
+       "enable": true
+      },
+      "2": {
+       "language": "Chinese Simplified",
+       "country": "China",
+       "enable": true
+      },
+      "3": {
+       "language": "Korean",
+       "country": "South Korea",
+       "enable": false
+      }
+     },
+     "2": {
+      "1": {
+       "language": "Spanish",
+       "country": "Spain",
+       "enable": true
+      },
+      "2": {
+       "language": "English",
+       "country": "United States",
+       "enable": false
+      },
+      "3": {
+       "language": "English",
+       "country": "United States",
+       "enable": false
+      }
+     },
+     "3": {
+      "1": {
+       "language": "English",
+       "country": "United States",
+       "enable": false
+      },
+      "2": {
+       "language": "English",
+       "country": "United States",
+       "enable": false
+      },
+      "3": {
+       "language": "English",
+       "country": "United States",
+       "enable": false
+      }
+     }
+    }
+   },
+   "devices": {
+    "mics": {
+     "Windows WASAPI": [
+      {
+       "name": "Mic A",
+       "index": 3
+      },
+      {
+       "name": "Mic B",
+       "index": 4
+      }
+     ]
+    },
+    "speakers": [
+     {
+      "name": "Speaker A [Loopback]",
+      "index": 7
+     },
+     {
+      "name": "Speaker B [Loopback]",
+      "index": 8
+     }
+    ]
+   },
+   "whisper_available": false,
+   "expected": {
+    "mic": {
+     "device": "Mic A",
+     "recorder": {
+      "class": "SelectedMicEnergyAndAudioRecorder",
+      "kwargs": {
+       "device": "Mic A",
+       "energy_threshold": 300,
+       "dynamic_energy_threshold": true,
+       "phrase_time_limit": 3,
+       "record_timeout": 3
+      }
+     },
+     "transcriber": {
+      "engine": "Google",
+      "provider": null,
+      "speaker": false,
+      "phrase_timeout": 3,
+      "max_phrases": 10,
+      "vad_segmented": false,
+      "source": "mic"
+     },
+     "ask": {
+      "languages": [
+       "Japanese"
+      ],
+      "countries": [
+       "Japan"
+      ],
+      "avg_logprob": -0.8,
+      "no_speech_prob": 0.6,
+      "no_repeat_ngram_size": 0
+     }
+    },
+    "speaker": {
+     "device": "Speaker A [Loopback]",
+     "recorder": {
+      "class": "SelectedSpeakerEnergyAndAudioRecorder",
+      "kwargs": {
+       "device": "Speaker A [Loopback]",
+       "energy_threshold": 300,
+       "dynamic_energy_threshold": true,
+       "phrase_time_limit": 3,
+       "record_timeout": 3
+      }
+     },
+     "transcriber": {
+      "engine": "Google",
+      "provider": null,
+      "speaker": true,
+      "phrase_timeout": 3,
+      "max_phrases": 10,
+      "vad_segmented": false,
+      "source": "speaker"
+     },
+     "ask": {
+      "languages": [
+       "English",
+       "Chinese Simplified"
+      ],
+      "countries": [
+       "United States",
+       "China"
+      ],
+      "avg_logprob": -0.8,
+      "no_speech_prob": 0.6,
+      "no_repeat_ngram_size": 0
+     }
+    }
+   }
+  },
+  {
+   "name": "whisper_on_gpu",
+   "config": {
+    "SELECTED_MIC_HOST": "Windows WASAPI",
+    "SELECTED_MIC_DEVICE": "Mic A",
+    "SELECTED_SPEAKER_DEVICE": "Speaker A [Loopback]",
+    "MIC_RECORD_TIMEOUT": 3,
+    "MIC_PHRASE_TIMEOUT": 3,
+    "MIC_THRESHOLD": 300,
+    "MIC_AUTOMATIC_THRESHOLD": true,
+    "MIC_MAX_PHRASES": 10,
+    "MIC_ENABLE_VAD": false,
+    "MIC_AVG_LOGPROB": -0.8,
+    "MIC_NO_SPEECH_PROB": 0.6,
+    "MIC_NO_REPEAT_NGRAM_SIZE": 0,
+    "SPEAKER_RECORD_TIMEOUT": 3,
+    "SPEAKER_PHRASE_TIMEOUT": 3,
+    "SPEAKER_THRESHOLD": 300,
+    "SPEAKER_AUTOMATIC_THRESHOLD": true,
+    "SPEAKER_MAX_PHRASES": 10,
+    "SPEAKER_ENABLE_VAD": false,
+    "SPEAKER_AVG_LOGPROB": -0.8,
+    "SPEAKER_NO_SPEECH_PROB": 0.6,
+    "SPEAKER_NO_REPEAT_NGRAM_SIZE": 0,
+    "SELECTED_TRANSCRIPTION_ENGINE": "Whisper",
+    "PATH_LOCAL": "C:/vrct",
+    "WHISPER_WEIGHT_TYPE": "large-v3",
+    "SELECTED_TRANSCRIPTION_COMPUTE_DEVICE": {
+     "device": "cuda",
+     "device_index": 1
+    },
+    "SELECTED_TRANSCRIPTION_COMPUTE_TYPE": "float16",
+    "TRANSCRIPTION_AUTH_KEYS": {
+     "Groq_Whisper": "gsk-1",
+     "OpenAI_Whisper": "sk-2",
+     "Custom_Whisper": "custom-3",
+     "Deepgram": "dg-4"
+    },
+    "GROQ_WHISPER_BASE_URL": "https://api.groq.com/openai/v1",
+    "OPENAI_WHISPER_BASE_URL": "https://api.openai.com/v1",
+    "SELECTED_GROQ_WHISPER_MODEL": "whisper-large-v3",
+    "SELECTED_OPENAI_WHISPER_MODEL": "whisper-1",
+    "TRANSCRIPTION_CUSTOM_URL": "http://localhost:8080/v1",
+    "SELECTED_CUSTOM_WHISPER_MODEL": "my-whisper",
+    "SELECTED_DEEPGRAM_MODEL": "nova-3",
+    "DEEPGRAM_MODEL_LANGUAGES": {
+     "nova-3": [
+      "en",
+      "ja",
+      "multi"
+     ],
+     "nova-2": [
+      "en"
+     ]
+    },
+    "SELECTED_TAB_NO": "1",
+    "SELECTED_YOUR_LANGUAGES": {
+     "1": {
+      "1": {
+       "language": "Japanese",
+       "country": "Japan",
+       "enable": true
+      },
+      "2": {
+       "language": "English",
+       "country": "United States",
+       "enable": false
+      },
+      "3": {
+       "language": "Korean",
+       "country": "South Korea",
+       "enable": false
+      }
+     },
+     "2": {
+      "1": {
+       "language": "French",
+       "country": "France",
+       "enable": true
+      },
+      "2": {
+       "language": "German",
+       "country": "Germany",
+       "enable": true
+      },
+      "3": {
+       "language": "Thai",
+       "country": "Thailand",
+       "enable": false
+      }
+     },
+     "3": {
+      "1": {
+       "language": "English",
+       "country": "United States",
+       "enable": false
+      },
+      "2": {
+       "language": "English",
+       "country": "United States",
+       "enable": false
+      },
+      "3": {
+       "language": "English",
+       "country": "United States",
+       "enable": false
+      }
+     }
+    },
+    "SELECTED_TARGET_LANGUAGES": {
+     "1": {
+      "1": {
+       "language": "English",
+       "country": "United States",
+       "enable": true
+      },
+      "2": {
+       "language": "Chinese Simplified",
+       "country": "China",
+       "enable": true
+      },
+      "3": {
+       "language": "Korean",
+       "country": "South Korea",
+       "enable": false
+      }
+     },
+     "2": {
+      "1": {
+       "language": "Spanish",
+       "country": "Spain",
+       "enable": true
+      },
+      "2": {
+       "language": "English",
+       "country": "United States",
+       "enable": false
+      },
+      "3": {
+       "language": "English",
+       "country": "United States",
+       "enable": false
+      }
+     },
+     "3": {
+      "1": {
+       "language": "English",
+       "country": "United States",
+       "enable": false
+      },
+      "2": {
+       "language": "English",
+       "country": "United States",
+       "enable": false
+      },
+      "3": {
+       "language": "English",
+       "country": "United States",
+       "enable": false
+      }
+     }
+    }
+   },
+   "devices": {
+    "mics": {
+     "Windows WASAPI": [
+      {
+       "name": "Mic A",
+       "index": 3
+      },
+      {
+       "name": "Mic B",
+       "index": 4
+      }
+     ]
+    },
+    "speakers": [
+     {
+      "name": "Speaker A [Loopback]",
+      "index": 7
+     },
+     {
+      "name": "Speaker B [Loopback]",
+      "index": 8
+     }
+    ]
+   },
+   "whisper_available": true,
+   "expected": {
+    "mic": {
+     "device": "Mic A",
+     "recorder": {
+      "class": "SelectedMicEnergyAndAudioRecorder",
+      "kwargs": {
+       "device": "Mic A",
+       "energy_threshold": 300,
+       "dynamic_energy_threshold": true,
+       "phrase_time_limit": 3,
+       "record_timeout": 3
+      }
+     },
+     "transcriber": {
+      "engine": "Whisper",
+      "provider": {
+       "kind": "whisper",
+       "dir": "C:/vrct\\weights\\whisper\\large-v3",
+       "device": "cuda",
+       "device_index": 1,
+       "compute_type": "float16"
+      },
+      "speaker": false,
+      "phrase_timeout": 3,
+      "max_phrases": 10,
+      "vad_segmented": false,
+      "source": "mic"
+     },
+     "ask": {
+      "languages": [
+       "Japanese"
+      ],
+      "countries": [
+       "Japan"
+      ],
+      "avg_logprob": -0.8,
+      "no_speech_prob": 0.6,
+      "no_repeat_ngram_size": 0
+     }
+    },
+    "speaker": {
+     "device": "Speaker A [Loopback]",
+     "recorder": {
+      "class": "SelectedSpeakerEnergyAndAudioRecorder",
+      "kwargs": {
+       "device": "Speaker A [Loopback]",
+       "energy_threshold": 300,
+       "dynamic_energy_threshold": true,
+       "phrase_time_limit": 3,
+       "record_timeout": 3
+      }
+     },
+     "transcriber": {
+      "engine": "Whisper",
+      "provider": {
+       "kind": "whisper",
+       "dir": "C:/vrct\\weights\\whisper\\large-v3",
+       "device": "cuda",
+       "device_index": 1,
+       "compute_type": "float16"
+      },
+      "speaker": true,
+      "phrase_timeout": 3,
+      "max_phrases": 10,
+      "vad_segmented": false,
+      "source": "speaker"
+     },
+     "ask": {
+      "languages": [
+       "English",
+       "Chinese Simplified"
+      ],
+      "countries": [
+       "United States",
+       "China"
+      ],
+      "avg_logprob": -0.8,
+      "no_speech_prob": 0.6,
+      "no_repeat_ngram_size": 0
+     }
+    }
+   }
+  },
+  {
+   "name": "groq",
+   "config": {
+    "SELECTED_MIC_HOST": "Windows WASAPI",
+    "SELECTED_MIC_DEVICE": "Mic A",
+    "SELECTED_SPEAKER_DEVICE": "Speaker A [Loopback]",
+    "MIC_RECORD_TIMEOUT": 3,
+    "MIC_PHRASE_TIMEOUT": 3,
+    "MIC_THRESHOLD": 300,
+    "MIC_AUTOMATIC_THRESHOLD": true,
+    "MIC_MAX_PHRASES": 10,
+    "MIC_ENABLE_VAD": false,
+    "MIC_AVG_LOGPROB": -0.8,
+    "MIC_NO_SPEECH_PROB": 0.6,
+    "MIC_NO_REPEAT_NGRAM_SIZE": 0,
+    "SPEAKER_RECORD_TIMEOUT": 3,
+    "SPEAKER_PHRASE_TIMEOUT": 3,
+    "SPEAKER_THRESHOLD": 300,
+    "SPEAKER_AUTOMATIC_THRESHOLD": true,
+    "SPEAKER_MAX_PHRASES": 10,
+    "SPEAKER_ENABLE_VAD": false,
+    "SPEAKER_AVG_LOGPROB": -0.8,
+    "SPEAKER_NO_SPEECH_PROB": 0.6,
+    "SPEAKER_NO_REPEAT_NGRAM_SIZE": 0,
+    "SELECTED_TRANSCRIPTION_ENGINE": "Groq_Whisper",
+    "PATH_LOCAL": "C:/vrct",
+    "WHISPER_WEIGHT_TYPE": "base",
+    "SELECTED_TRANSCRIPTION_COMPUTE_DEVICE": {
+     "device": "cpu",
+     "device_index": 0
+    },
+    "SELECTED_TRANSCRIPTION_COMPUTE_TYPE": "auto",
+    "TRANSCRIPTION_AUTH_KEYS": {
+     "Groq_Whisper": "gsk-1",
+     "OpenAI_Whisper": "sk-2",
+     "Custom_Whisper": "custom-3",
+     "Deepgram": "dg-4"
+    },
+    "GROQ_WHISPER_BASE_URL": "https://api.groq.com/openai/v1",
+    "OPENAI_WHISPER_BASE_URL": "https://api.openai.com/v1",
+    "SELECTED_GROQ_WHISPER_MODEL": "whisper-large-v3",
+    "SELECTED_OPENAI_WHISPER_MODEL": "whisper-1",
+    "TRANSCRIPTION_CUSTOM_URL": "http://localhost:8080/v1",
+    "SELECTED_CUSTOM_WHISPER_MODEL": "my-whisper",
+    "SELECTED_DEEPGRAM_MODEL": "nova-3",
+    "DEEPGRAM_MODEL_LANGUAGES": {
+     "nova-3": [
+      "en",
+      "ja",
+      "multi"
+     ],
+     "nova-2": [
+      "en"
+     ]
+    },
+    "SELECTED_TAB_NO": "1",
+    "SELECTED_YOUR_LANGUAGES": {
+     "1": {
+      "1": {
+       "language": "Japanese",
+       "country": "Japan",
+       "enable": true
+      },
+      "2": {
+       "language": "English",
+       "country": "United States",
+       "enable": false
+      },
+      "3": {
+       "language": "Korean",
+       "country": "South Korea",
+       "enable": false
+      }
+     },
+     "2": {
+      "1": {
+       "language": "French",
+       "country": "France",
+       "enable": true
+      },
+      "2": {
+       "language": "German",
+       "country": "Germany",
+       "enable": true
+      },
+      "3": {
+       "language": "Thai",
+       "country": "Thailand",
+       "enable": false
+      }
+     },
+     "3": {
+      "1": {
+       "language": "English",
+       "country": "United States",
+       "enable": false
+      },
+      "2": {
+       "language": "English",
+       "country": "United States",
+       "enable": false
+      },
+      "3": {
+       "language": "English",
+       "country": "United States",
+       "enable": false
+      }
+     }
+    },
+    "SELECTED_TARGET_LANGUAGES": {
+     "1": {
+      "1": {
+       "language": "English",
+       "country": "United States",
+       "enable": true
+      },
+      "2": {
+       "language": "Chinese Simplified",
+       "country": "China",
+       "enable": true
+      },
+      "3": {
+       "language": "Korean",
+       "country": "South Korea",
+       "enable": false
+      }
+     },
+     "2": {
+      "1": {
+       "language": "Spanish",
+       "country": "Spain",
+       "enable": true
+      },
+      "2": {
+       "language": "English",
+       "country": "United States",
+       "enable": false
+      },
+      "3": {
+       "language": "English",
+       "country": "United States",
+       "enable": false
+      }
+     },
+     "3": {
+      "1": {
+       "language": "English",
+       "country": "United States",
+       "enable": false
+      },
+      "2": {
+       "language": "English",
+       "country": "United States",
+       "enable": false
+      },
+      "3": {
+       "language": "English",
+       "country": "United States",
+       "enable": false
+      }
+     }
+    }
+   },
+   "devices": {
+    "mics": {
+     "Windows WASAPI": [
+      {
+       "name": "Mic A",
+       "index": 3
+      },
+      {
+       "name": "Mic B",
+       "index": 4
+      }
+     ]
+    },
+    "speakers": [
+     {
+      "name": "Speaker A [Loopback]",
+      "index": 7
+     },
+     {
+      "name": "Speaker B [Loopback]",
+      "index": 8
+     }
+    ]
+   },
+   "whisper_available": false,
+   "expected": {
+    "mic": {
+     "device": "Mic A",
+     "recorder": {
+      "class": "SelectedMicEnergyAndAudioRecorder",
+      "kwargs": {
+       "device": "Mic A",
+       "energy_threshold": 300,
+       "dynamic_energy_threshold": true,
+       "phrase_time_limit": 3,
+       "record_timeout": 3
+      }
+     },
+     "transcriber": {
+      "engine": "Groq_Whisper",
+      "provider": {
+       "kind": "provider",
+       "api_key": "gsk-1",
+       "base_url": "https://api.groq.com/openai/v1",
+       "model": "whisper-large-v3",
+       "engine_name": "Groq_Whisper"
+      },
+      "speaker": false,
+      "phrase_timeout": 3,
+      "max_phrases": 10,
+      "vad_segmented": false,
+      "source": "mic"
+     },
+     "ask": {
+      "languages": [
+       "Japanese"
+      ],
+      "countries": [
+       "Japan"
+      ],
+      "avg_logprob": -0.8,
+      "no_speech_prob": 0.6,
+      "no_repeat_ngram_size": 0
+     }
+    },
+    "speaker": {
+     "device": "Speaker A [Loopback]",
+     "recorder": {
+      "class": "SelectedSpeakerEnergyAndAudioRecorder",
+      "kwargs": {
+       "device": "Speaker A [Loopback]",
+       "energy_threshold": 300,
+       "dynamic_energy_threshold": true,
+       "phrase_time_limit": 3,
+       "record_timeout": 3
+      }
+     },
+     "transcriber": {
+      "engine": "Groq_Whisper",
+      "provider": {
+       "kind": "provider",
+       "api_key": "gsk-1",
+       "base_url": "https://api.groq.com/openai/v1",
+       "model": "whisper-large-v3",
+       "engine_name": "Groq_Whisper"
+      },
+      "speaker": true,
+      "phrase_timeout": 3,
+      "max_phrases": 10,
+      "vad_segmented": false,
+      "source": "speaker"
+     },
+     "ask": {
+      "languages": [
+       "English",
+       "Chinese Simplified"
+      ],
+      "countries": [
+       "United States",
+       "China"
+      ],
+      "avg_logprob": -0.8,
+      "no_speech_prob": 0.6,
+      "no_repeat_ngram_size": 0
+     }
+    }
+   }
+  },
+  {
+   "name": "openai",
+   "config": {
+    "SELECTED_MIC_HOST": "Windows WASAPI",
+    "SELECTED_MIC_DEVICE": "Mic A",
+    "SELECTED_SPEAKER_DEVICE": "Speaker A [Loopback]",
+    "MIC_RECORD_TIMEOUT": 3,
+    "MIC_PHRASE_TIMEOUT": 3,
+    "MIC_THRESHOLD": 300,
+    "MIC_AUTOMATIC_THRESHOLD": true,
+    "MIC_MAX_PHRASES": 10,
+    "MIC_ENABLE_VAD": false,
+    "MIC_AVG_LOGPROB": -0.8,
+    "MIC_NO_SPEECH_PROB": 0.6,
+    "MIC_NO_REPEAT_NGRAM_SIZE": 0,
+    "SPEAKER_RECORD_TIMEOUT": 3,
+    "SPEAKER_PHRASE_TIMEOUT": 3,
+    "SPEAKER_THRESHOLD": 300,
+    "SPEAKER_AUTOMATIC_THRESHOLD": true,
+    "SPEAKER_MAX_PHRASES": 10,
+    "SPEAKER_ENABLE_VAD": false,
+    "SPEAKER_AVG_LOGPROB": -0.8,
+    "SPEAKER_NO_SPEECH_PROB": 0.6,
+    "SPEAKER_NO_REPEAT_NGRAM_SIZE": 0,
+    "SELECTED_TRANSCRIPTION_ENGINE": "OpenAI_Whisper",
+    "PATH_LOCAL": "C:/vrct",
+    "WHISPER_WEIGHT_TYPE": "base",
+    "SELECTED_TRANSCRIPTION_COMPUTE_DEVICE": {
+     "device": "cpu",
+     "device_index": 0
+    },
+    "SELECTED_TRANSCRIPTION_COMPUTE_TYPE": "auto",
+    "TRANSCRIPTION_AUTH_KEYS": {
+     "Groq_Whisper": "gsk-1",
+     "OpenAI_Whisper": "sk-2",
+     "Custom_Whisper": "custom-3",
+     "Deepgram": "dg-4"
+    },
+    "GROQ_WHISPER_BASE_URL": "https://api.groq.com/openai/v1",
+    "OPENAI_WHISPER_BASE_URL": "https://api.openai.com/v1",
+    "SELECTED_GROQ_WHISPER_MODEL": "whisper-large-v3",
+    "SELECTED_OPENAI_WHISPER_MODEL": "whisper-1",
+    "TRANSCRIPTION_CUSTOM_URL": "http://localhost:8080/v1",
+    "SELECTED_CUSTOM_WHISPER_MODEL": "my-whisper",
+    "SELECTED_DEEPGRAM_MODEL": "nova-3",
+    "DEEPGRAM_MODEL_LANGUAGES": {
+     "nova-3": [
+      "en",
+      "ja",
+      "multi"
+     ],
+     "nova-2": [
+      "en"
+     ]
+    },
+    "SELECTED_TAB_NO": "1",
+    "SELECTED_YOUR_LANGUAGES": {
+     "1": {
+      "1": {
+       "language": "Japanese",
+       "country": "Japan",
+       "enable": true
+      },
+      "2": {
+       "language": "English",
+       "country": "United States",
+       "enable": false
+      },
+      "3": {
+       "language": "Korean",
+       "country": "South Korea",
+       "enable": false
+      }
+     },
+     "2": {
+      "1": {
+       "language": "French",
+       "country": "France",
+       "enable": true
+      },
+      "2": {
+       "language": "German",
+       "country": "Germany",
+       "enable": true
+      },
+      "3": {
+       "language": "Thai",
+       "country": "Thailand",
+       "enable": false
+      }
+     },
+     "3": {
+      "1": {
+       "language": "English",
+       "country": "United States",
+       "enable": false
+      },
+      "2": {
+       "language": "English",
+       "country": "United States",
+       "enable": false
+      },
+      "3": {
+       "language": "English",
+       "country": "United States",
+       "enable": false
+      }
+     }
+    },
+    "SELECTED_TARGET_LANGUAGES": {
+     "1": {
+      "1": {
+       "language": "English",
+       "country": "United States",
+       "enable": true
+      },
+      "2": {
+       "language": "Chinese Simplified",
+       "country": "China",
+       "enable": true
+      },
+      "3": {
+       "language": "Korean",
+       "country": "South Korea",
+       "enable": false
+      }
+     },
+     "2": {
+      "1": {
+       "language": "Spanish",
+       "country": "Spain",
+       "enable": true
+      },
+      "2": {
+       "language": "English",
+       "country": "United States",
+       "enable": false
+      },
+      "3": {
+       "language": "English",
+       "country": "United States",
+       "enable": false
+      }
+     },
+     "3": {
+      "1": {
+       "language": "English",
+       "country": "United States",
+       "enable": false
+      },
+      "2": {
+       "language": "English",
+       "country": "United States",
+       "enable": false
+      },
+      "3": {
+       "language": "English",
+       "country": "United States",
+       "enable": false
+      }
+     }
+    }
+   },
+   "devices": {
+    "mics": {
+     "Windows WASAPI": [
+      {
+       "name": "Mic A",
+       "index": 3
+      },
+      {
+       "name": "Mic B",
+       "index": 4
+      }
+     ]
+    },
+    "speakers": [
+     {
+      "name": "Speaker A [Loopback]",
+      "index": 7
+     },
+     {
+      "name": "Speaker B [Loopback]",
+      "index": 8
+     }
+    ]
+   },
+   "whisper_available": false,
+   "expected": {
+    "mic": {
+     "device": "Mic A",
+     "recorder": {
+      "class": "SelectedMicEnergyAndAudioRecorder",
+      "kwargs": {
+       "device": "Mic A",
+       "energy_threshold": 300,
+       "dynamic_energy_threshold": true,
+       "phrase_time_limit": 3,
+       "record_timeout": 3
+      }
+     },
+     "transcriber": {
+      "engine": "OpenAI_Whisper",
+      "provider": {
+       "kind": "provider",
+       "api_key": "sk-2",
+       "base_url": "https://api.openai.com/v1",
+       "model": "whisper-1",
+       "engine_name": "OpenAI_Whisper"
+      },
+      "speaker": false,
+      "phrase_timeout": 3,
+      "max_phrases": 10,
+      "vad_segmented": false,
+      "source": "mic"
+     },
+     "ask": {
+      "languages": [
+       "Japanese"
+      ],
+      "countries": [
+       "Japan"
+      ],
+      "avg_logprob": -0.8,
+      "no_speech_prob": 0.6,
+      "no_repeat_ngram_size": 0
+     }
+    },
+    "speaker": {
+     "device": "Speaker A [Loopback]",
+     "recorder": {
+      "class": "SelectedSpeakerEnergyAndAudioRecorder",
+      "kwargs": {
+       "device": "Speaker A [Loopback]",
+       "energy_threshold": 300,
+       "dynamic_energy_threshold": true,
+       "phrase_time_limit": 3,
+       "record_timeout": 3
+      }
+     },
+     "transcriber": {
+      "engine": "OpenAI_Whisper",
+      "provider": {
+       "kind": "provider",
+       "api_key": "sk-2",
+       "base_url": "https://api.openai.com/v1",
+       "model": "whisper-1",
+       "engine_name": "OpenAI_Whisper"
+      },
+      "speaker": true,
+      "phrase_timeout": 3,
+      "max_phrases": 10,
+      "vad_segmented": false,
+      "source": "speaker"
+     },
+     "ask": {
+      "languages": [
+       "English",
+       "Chinese Simplified"
+      ],
+      "countries": [
+       "United States",
+       "China"
+      ],
+      "avg_logprob": -0.8,
+      "no_speech_prob": 0.6,
+      "no_repeat_ngram_size": 0
+     }
+    }
+   }
+  },
+  {
+   "name": "custom_server",
+   "config": {
+    "SELECTED_MIC_HOST": "Windows WASAPI",
+    "SELECTED_MIC_DEVICE": "Mic A",
+    "SELECTED_SPEAKER_DEVICE": "Speaker A [Loopback]",
+    "MIC_RECORD_TIMEOUT": 3,
+    "MIC_PHRASE_TIMEOUT": 3,
+    "MIC_THRESHOLD": 300,
+    "MIC_AUTOMATIC_THRESHOLD": true,
+    "MIC_MAX_PHRASES": 10,
+    "MIC_ENABLE_VAD": false,
+    "MIC_AVG_LOGPROB": -0.8,
+    "MIC_NO_SPEECH_PROB": 0.6,
+    "MIC_NO_REPEAT_NGRAM_SIZE": 0,
+    "SPEAKER_RECORD_TIMEOUT": 3,
+    "SPEAKER_PHRASE_TIMEOUT": 3,
+    "SPEAKER_THRESHOLD": 300,
+    "SPEAKER_AUTOMATIC_THRESHOLD": true,
+    "SPEAKER_MAX_PHRASES": 10,
+    "SPEAKER_ENABLE_VAD": false,
+    "SPEAKER_AVG_LOGPROB": -0.8,
+    "SPEAKER_NO_SPEECH_PROB": 0.6,
+    "SPEAKER_NO_REPEAT_NGRAM_SIZE": 0,
+    "SELECTED_TRANSCRIPTION_ENGINE": "Custom_Whisper",
+    "PATH_LOCAL": "C:/vrct",
+    "WHISPER_WEIGHT_TYPE": "base",
+    "SELECTED_TRANSCRIPTION_COMPUTE_DEVICE": {
+     "device": "cpu",
+     "device_index": 0
+    },
+    "SELECTED_TRANSCRIPTION_COMPUTE_TYPE": "auto",
+    "TRANSCRIPTION_AUTH_KEYS": {
+     "Groq_Whisper": "gsk-1",
+     "OpenAI_Whisper": "sk-2",
+     "Custom_Whisper": "custom-3",
+     "Deepgram": "dg-4"
+    },
+    "GROQ_WHISPER_BASE_URL": "https://api.groq.com/openai/v1",
+    "OPENAI_WHISPER_BASE_URL": "https://api.openai.com/v1",
+    "SELECTED_GROQ_WHISPER_MODEL": "whisper-large-v3",
+    "SELECTED_OPENAI_WHISPER_MODEL": "whisper-1",
+    "TRANSCRIPTION_CUSTOM_URL": "http://localhost:8080/v1",
+    "SELECTED_CUSTOM_WHISPER_MODEL": "my-whisper",
+    "SELECTED_DEEPGRAM_MODEL": "nova-3",
+    "DEEPGRAM_MODEL_LANGUAGES": {
+     "nova-3": [
+      "en",
+      "ja",
+      "multi"
+     ],
+     "nova-2": [
+      "en"
+     ]
+    },
+    "SELECTED_TAB_NO": "1",
+    "SELECTED_YOUR_LANGUAGES": {
+     "1": {
+      "1": {
+       "language": "Japanese",
+       "country": "Japan",
+       "enable": true
+      },
+      "2": {
+       "language": "English",
+       "country": "United States",
+       "enable": false
+      },
+      "3": {
+       "language": "Korean",
+       "country": "South Korea",
+       "enable": false
+      }
+     },
+     "2": {
+      "1": {
+       "language": "French",
+       "country": "France",
+       "enable": true
+      },
+      "2": {
+       "language": "German",
+       "country": "Germany",
+       "enable": true
+      },
+      "3": {
+       "language": "Thai",
+       "country": "Thailand",
+       "enable": false
+      }
+     },
+     "3": {
+      "1": {
+       "language": "English",
+       "country": "United States",
+       "enable": false
+      },
+      "2": {
+       "language": "English",
+       "country": "United States",
+       "enable": false
+      },
+      "3": {
+       "language": "English",
+       "country": "United States",
+       "enable": false
+      }
+     }
+    },
+    "SELECTED_TARGET_LANGUAGES": {
+     "1": {
+      "1": {
+       "language": "English",
+       "country": "United States",
+       "enable": true
+      },
+      "2": {
+       "language": "Chinese Simplified",
+       "country": "China",
+       "enable": true
+      },
+      "3": {
+       "language": "Korean",
+       "country": "South Korea",
+       "enable": false
+      }
+     },
+     "2": {
+      "1": {
+       "language": "Spanish",
+       "country": "Spain",
+       "enable": true
+      },
+      "2": {
+       "language": "English",
+       "country": "United States",
+       "enable": false
+      },
+      "3": {
+       "language": "English",
+       "country": "United States",
+       "enable": false
+      }
+     },
+     "3": {
+      "1": {
+       "language": "English",
+       "country": "United States",
+       "enable": false
+      },
+      "2": {
+       "language": "English",
+       "country": "United States",
+       "enable": false
+      },
+      "3": {
+       "language": "English",
+       "country": "United States",
+       "enable": false
+      }
+     }
+    }
+   },
+   "devices": {
+    "mics": {
+     "Windows WASAPI": [
+      {
+       "name": "Mic A",
+       "index": 3
+      },
+      {
+       "name": "Mic B",
+       "index": 4
+      }
+     ]
+    },
+    "speakers": [
+     {
+      "name": "Speaker A [Loopback]",
+      "index": 7
+     },
+     {
+      "name": "Speaker B [Loopback]",
+      "index": 8
+     }
+    ]
+   },
+   "whisper_available": false,
+   "expected": {
+    "mic": {
+     "device": "Mic A",
+     "recorder": {
+      "class": "SelectedMicEnergyAndAudioRecorder",
+      "kwargs": {
+       "device": "Mic A",
+       "energy_threshold": 300,
+       "dynamic_energy_threshold": true,
+       "phrase_time_limit": 3,
+       "record_timeout": 3
+      }
+     },
+     "transcriber": {
+      "engine": "Custom_Whisper",
+      "provider": {
+       "kind": "provider",
+       "api_key": "custom-3",
+       "base_url": "http://localhost:8080/v1",
+       "model": "my-whisper",
+       "engine_name": "Custom_Whisper"
+      },
+      "speaker": false,
+      "phrase_timeout": 3,
+      "max_phrases": 10,
+      "vad_segmented": false,
+      "source": "mic"
+     },
+     "ask": {
+      "languages": [
+       "Japanese"
+      ],
+      "countries": [
+       "Japan"
+      ],
+      "avg_logprob": -0.8,
+      "no_speech_prob": 0.6,
+      "no_repeat_ngram_size": 0
+     }
+    },
+    "speaker": {
+     "device": "Speaker A [Loopback]",
+     "recorder": {
+      "class": "SelectedSpeakerEnergyAndAudioRecorder",
+      "kwargs": {
+       "device": "Speaker A [Loopback]",
+       "energy_threshold": 300,
+       "dynamic_energy_threshold": true,
+       "phrase_time_limit": 3,
+       "record_timeout": 3
+      }
+     },
+     "transcriber": {
+      "engine": "Custom_Whisper",
+      "provider": {
+       "kind": "provider",
+       "api_key": "custom-3",
+       "base_url": "http://localhost:8080/v1",
+       "model": "my-whisper",
+       "engine_name": "Custom_Whisper"
+      },
+      "speaker": true,
+      "phrase_timeout": 3,
+      "max_phrases": 10,
+      "vad_segmented": false,
+      "source": "speaker"
+     },
+     "ask": {
+      "languages": [
+       "English",
+       "Chinese Simplified"
+      ],
+      "countries": [
+       "United States",
+       "China"
+      ],
+      "avg_logprob": -0.8,
+      "no_speech_prob": 0.6,
+      "no_repeat_ngram_size": 0
+     }
+    }
+   }
+  },
+  {
+   "name": "api_engine_without_key",
+   "config": {
+    "SELECTED_MIC_HOST": "Windows WASAPI",
+    "SELECTED_MIC_DEVICE": "Mic A",
+    "SELECTED_SPEAKER_DEVICE": "Speaker A [Loopback]",
+    "MIC_RECORD_TIMEOUT": 3,
+    "MIC_PHRASE_TIMEOUT": 3,
+    "MIC_THRESHOLD": 300,
+    "MIC_AUTOMATIC_THRESHOLD": true,
+    "MIC_MAX_PHRASES": 10,
+    "MIC_ENABLE_VAD": false,
+    "MIC_AVG_LOGPROB": -0.8,
+    "MIC_NO_SPEECH_PROB": 0.6,
+    "MIC_NO_REPEAT_NGRAM_SIZE": 0,
+    "SPEAKER_RECORD_TIMEOUT": 3,
+    "SPEAKER_PHRASE_TIMEOUT": 3,
+    "SPEAKER_THRESHOLD": 300,
+    "SPEAKER_AUTOMATIC_THRESHOLD": true,
+    "SPEAKER_MAX_PHRASES": 10,
+    "SPEAKER_ENABLE_VAD": false,
+    "SPEAKER_AVG_LOGPROB": -0.8,
+    "SPEAKER_NO_SPEECH_PROB": 0.6,
+    "SPEAKER_NO_REPEAT_NGRAM_SIZE": 0,
+    "SELECTED_TRANSCRIPTION_ENGINE": "Groq_Whisper",
+    "PATH_LOCAL": "C:/vrct",
+    "WHISPER_WEIGHT_TYPE": "base",
+    "SELECTED_TRANSCRIPTION_COMPUTE_DEVICE": {
+     "device": "cpu",
+     "device_index": 0
+    },
+    "SELECTED_TRANSCRIPTION_COMPUTE_TYPE": "auto",
+    "TRANSCRIPTION_AUTH_KEYS": {
+     "Deepgram": "dg-4"
+    },
+    "GROQ_WHISPER_BASE_URL": "https://api.groq.com/openai/v1",
+    "OPENAI_WHISPER_BASE_URL": "https://api.openai.com/v1",
+    "SELECTED_GROQ_WHISPER_MODEL": "whisper-large-v3",
+    "SELECTED_OPENAI_WHISPER_MODEL": "whisper-1",
+    "TRANSCRIPTION_CUSTOM_URL": "http://localhost:8080/v1",
+    "SELECTED_CUSTOM_WHISPER_MODEL": "my-whisper",
+    "SELECTED_DEEPGRAM_MODEL": "nova-3",
+    "DEEPGRAM_MODEL_LANGUAGES": {
+     "nova-3": [
+      "en",
+      "ja",
+      "multi"
+     ],
+     "nova-2": [
+      "en"
+     ]
+    },
+    "SELECTED_TAB_NO": "1",
+    "SELECTED_YOUR_LANGUAGES": {
+     "1": {
+      "1": {
+       "language": "Japanese",
+       "country": "Japan",
+       "enable": true
+      },
+      "2": {
+       "language": "English",
+       "country": "United States",
+       "enable": false
+      },
+      "3": {
+       "language": "Korean",
+       "country": "South Korea",
+       "enable": false
+      }
+     },
+     "2": {
+      "1": {
+       "language": "French",
+       "country": "France",
+       "enable": true
+      },
+      "2": {
+       "language": "German",
+       "country": "Germany",
+       "enable": true
+      },
+      "3": {
+       "language": "Thai",
+       "country": "Thailand",
+       "enable": false
+      }
+     },
+     "3": {
+      "1": {
+       "language": "English",
+       "country": "United States",
+       "enable": false
+      },
+      "2": {
+       "language": "English",
+       "country": "United States",
+       "enable": false
+      },
+      "3": {
+       "language": "English",
+       "country": "United States",
+       "enable": false
+      }
+     }
+    },
+    "SELECTED_TARGET_LANGUAGES": {
+     "1": {
+      "1": {
+       "language": "English",
+       "country": "United States",
+       "enable": true
+      },
+      "2": {
+       "language": "Chinese Simplified",
+       "country": "China",
+       "enable": true
+      },
+      "3": {
+       "language": "Korean",
+       "country": "South Korea",
+       "enable": false
+      }
+     },
+     "2": {
+      "1": {
+       "language": "Spanish",
+       "country": "Spain",
+       "enable": true
+      },
+      "2": {
+       "language": "English",
+       "country": "United States",
+       "enable": false
+      },
+      "3": {
+       "language": "English",
+       "country": "United States",
+       "enable": false
+      }
+     },
+     "3": {
+      "1": {
+       "language": "English",
+       "country": "United States",
+       "enable": false
+      },
+      "2": {
+       "language": "English",
+       "country": "United States",
+       "enable": false
+      },
+      "3": {
+       "language": "English",
+       "country": "United States",
+       "enable": false
+      }
+     }
+    }
+   },
+   "devices": {
+    "mics": {
+     "Windows WASAPI": [
+      {
+       "name": "Mic A",
+       "index": 3
+      },
+      {
+       "name": "Mic B",
+       "index": 4
+      }
+     ]
+    },
+    "speakers": [
+     {
+      "name": "Speaker A [Loopback]",
+      "index": 7
+     },
+     {
+      "name": "Speaker B [Loopback]",
+      "index": 8
+     }
+    ]
+   },
+   "whisper_available": false,
+   "expected": {
+    "mic": {
+     "device": "Mic A",
+     "recorder": {
+      "class": "SelectedMicEnergyAndAudioRecorder",
+      "kwargs": {
+       "device": "Mic A",
+       "energy_threshold": 300,
+       "dynamic_energy_threshold": true,
+       "phrase_time_limit": 3,
+       "record_timeout": 3
+      }
+     },
+     "transcriber": {
+      "engine": "Groq_Whisper",
+      "provider": {
+       "kind": "provider",
+       "api_key": "",
+       "base_url": "https://api.groq.com/openai/v1",
+       "model": "whisper-large-v3",
+       "engine_name": "Groq_Whisper"
+      },
+      "speaker": false,
+      "phrase_timeout": 3,
+      "max_phrases": 10,
+      "vad_segmented": false,
+      "source": "mic"
+     },
+     "ask": {
+      "languages": [
+       "Japanese"
+      ],
+      "countries": [
+       "Japan"
+      ],
+      "avg_logprob": -0.8,
+      "no_speech_prob": 0.6,
+      "no_repeat_ngram_size": 0
+     }
+    },
+    "speaker": {
+     "device": "Speaker A [Loopback]",
+     "recorder": {
+      "class": "SelectedSpeakerEnergyAndAudioRecorder",
+      "kwargs": {
+       "device": "Speaker A [Loopback]",
+       "energy_threshold": 300,
+       "dynamic_energy_threshold": true,
+       "phrase_time_limit": 3,
+       "record_timeout": 3
+      }
+     },
+     "transcriber": {
+      "engine": "Groq_Whisper",
+      "provider": {
+       "kind": "provider",
+       "api_key": "",
+       "base_url": "https://api.groq.com/openai/v1",
+       "model": "whisper-large-v3",
+       "engine_name": "Groq_Whisper"
+      },
+      "speaker": true,
+      "phrase_timeout": 3,
+      "max_phrases": 10,
+      "vad_segmented": false,
+      "source": "speaker"
+     },
+     "ask": {
+      "languages": [
+       "English",
+       "Chinese Simplified"
+      ],
+      "countries": [
+       "United States",
+       "China"
+      ],
+      "avg_logprob": -0.8,
+      "no_speech_prob": 0.6,
+      "no_repeat_ngram_size": 0
+     }
+    }
+   }
+  },
+  {
+   "name": "deepgram",
+   "config": {
+    "SELECTED_MIC_HOST": "Windows WASAPI",
+    "SELECTED_MIC_DEVICE": "Mic A",
+    "SELECTED_SPEAKER_DEVICE": "Speaker A [Loopback]",
+    "MIC_RECORD_TIMEOUT": 3,
+    "MIC_PHRASE_TIMEOUT": 3,
+    "MIC_THRESHOLD": 300,
+    "MIC_AUTOMATIC_THRESHOLD": true,
+    "MIC_MAX_PHRASES": 10,
+    "MIC_ENABLE_VAD": false,
+    "MIC_AVG_LOGPROB": -0.8,
+    "MIC_NO_SPEECH_PROB": 0.6,
+    "MIC_NO_REPEAT_NGRAM_SIZE": 0,
+    "SPEAKER_RECORD_TIMEOUT": 3,
+    "SPEAKER_PHRASE_TIMEOUT": 3,
+    "SPEAKER_THRESHOLD": 300,
+    "SPEAKER_AUTOMATIC_THRESHOLD": true,
+    "SPEAKER_MAX_PHRASES": 10,
+    "SPEAKER_ENABLE_VAD": false,
+    "SPEAKER_AVG_LOGPROB": -0.8,
+    "SPEAKER_NO_SPEECH_PROB": 0.6,
+    "SPEAKER_NO_REPEAT_NGRAM_SIZE": 0,
+    "SELECTED_TRANSCRIPTION_ENGINE": "Deepgram",
+    "PATH_LOCAL": "C:/vrct",
+    "WHISPER_WEIGHT_TYPE": "base",
+    "SELECTED_TRANSCRIPTION_COMPUTE_DEVICE": {
+     "device": "cpu",
+     "device_index": 0
+    },
+    "SELECTED_TRANSCRIPTION_COMPUTE_TYPE": "auto",
+    "TRANSCRIPTION_AUTH_KEYS": {
+     "Groq_Whisper": "gsk-1",
+     "OpenAI_Whisper": "sk-2",
+     "Custom_Whisper": "custom-3",
+     "Deepgram": "dg-4"
+    },
+    "GROQ_WHISPER_BASE_URL": "https://api.groq.com/openai/v1",
+    "OPENAI_WHISPER_BASE_URL": "https://api.openai.com/v1",
+    "SELECTED_GROQ_WHISPER_MODEL": "whisper-large-v3",
+    "SELECTED_OPENAI_WHISPER_MODEL": "whisper-1",
+    "TRANSCRIPTION_CUSTOM_URL": "http://localhost:8080/v1",
+    "SELECTED_CUSTOM_WHISPER_MODEL": "my-whisper",
+    "SELECTED_DEEPGRAM_MODEL": "nova-3",
+    "DEEPGRAM_MODEL_LANGUAGES": {
+     "nova-3": [
+      "en",
+      "ja",
+      "multi"
+     ],
+     "nova-2": [
+      "en"
+     ]
+    },
+    "SELECTED_TAB_NO": "1",
+    "SELECTED_YOUR_LANGUAGES": {
+     "1": {
+      "1": {
+       "language": "Japanese",
+       "country": "Japan",
+       "enable": true
+      },
+      "2": {
+       "language": "English",
+       "country": "United States",
+       "enable": false
+      },
+      "3": {
+       "language": "Korean",
+       "country": "South Korea",
+       "enable": false
+      }
+     },
+     "2": {
+      "1": {
+       "language": "French",
+       "country": "France",
+       "enable": true
+      },
+      "2": {
+       "language": "German",
+       "country": "Germany",
+       "enable": true
+      },
+      "3": {
+       "language": "Thai",
+       "country": "Thailand",
+       "enable": false
+      }
+     },
+     "3": {
+      "1": {
+       "language": "English",
+       "country": "United States",
+       "enable": false
+      },
+      "2": {
+       "language": "English",
+       "country": "United States",
+       "enable": false
+      },
+      "3": {
+       "language": "English",
+       "country": "United States",
+       "enable": false
+      }
+     }
+    },
+    "SELECTED_TARGET_LANGUAGES": {
+     "1": {
+      "1": {
+       "language": "English",
+       "country": "United States",
+       "enable": true
+      },
+      "2": {
+       "language": "Chinese Simplified",
+       "country": "China",
+       "enable": true
+      },
+      "3": {
+       "language": "Korean",
+       "country": "South Korea",
+       "enable": false
+      }
+     },
+     "2": {
+      "1": {
+       "language": "Spanish",
+       "country": "Spain",
+       "enable": true
+      },
+      "2": {
+       "language": "English",
+       "country": "United States",
+       "enable": false
+      },
+      "3": {
+       "language": "English",
+       "country": "United States",
+       "enable": false
+      }
+     },
+     "3": {
+      "1": {
+       "language": "English",
+       "country": "United States",
+       "enable": false
+      },
+      "2": {
+       "language": "English",
+       "country": "United States",
+       "enable": false
+      },
+      "3": {
+       "language": "English",
+       "country": "United States",
+       "enable": false
+      }
+     }
+    }
+   },
+   "devices": {
+    "mics": {
+     "Windows WASAPI": [
+      {
+       "name": "Mic A",
+       "index": 3
+      },
+      {
+       "name": "Mic B",
+       "index": 4
+      }
+     ]
+    },
+    "speakers": [
+     {
+      "name": "Speaker A [Loopback]",
+      "index": 7
+     },
+     {
+      "name": "Speaker B [Loopback]",
+      "index": 8
+     }
+    ]
+   },
+   "whisper_available": false,
+   "expected": {
+    "mic": {
+     "device": "Mic A",
+     "recorder": {
+      "class": "SelectedMicEnergyAndAudioRecorder",
+      "kwargs": {
+       "device": "Mic A",
+       "energy_threshold": 300,
+       "dynamic_energy_threshold": true,
+       "phrase_time_limit": 3,
+       "record_timeout": 3
+      }
+     },
+     "transcriber": {
+      "engine": "Deepgram",
+      "provider": {
+       "kind": "provider",
+       "api_key": "dg-4",
+       "model": "nova-3",
+       "model_languages": [
+        "en",
+        "ja",
+        "multi"
+       ]
+      },
+      "speaker": false,
+      "phrase_timeout": 3,
+      "max_phrases": 10,
+      "vad_segmented": false,
+      "source": "mic"
+     },
+     "ask": {
+      "languages": [
+       "Japanese"
+      ],
+      "countries": [
+       "Japan"
+      ],
+      "avg_logprob": -0.8,
+      "no_speech_prob": 0.6,
+      "no_repeat_ngram_size": 0
+     }
+    },
+    "speaker": {
+     "device": "Speaker A [Loopback]",
+     "recorder": {
+      "class": "SelectedSpeakerEnergyAndAudioRecorder",
+      "kwargs": {
+       "device": "Speaker A [Loopback]",
+       "energy_threshold": 300,
+       "dynamic_energy_threshold": true,
+       "phrase_time_limit": 3,
+       "record_timeout": 3
+      }
+     },
+     "transcriber": {
+      "engine": "Deepgram",
+      "provider": {
+       "kind": "provider",
+       "api_key": "dg-4",
+       "model": "nova-3",
+       "model_languages": [
+        "en",
+        "ja",
+        "multi"
+       ]
+      },
+      "speaker": true,
+      "phrase_timeout": 3,
+      "max_phrases": 10,
+      "vad_segmented": false,
+      "source": "speaker"
+     },
+     "ask": {
+      "languages": [
+       "English",
+       "Chinese Simplified"
+      ],
+      "countries": [
+       "United States",
+       "China"
+      ],
+      "avg_logprob": -0.8,
+      "no_speech_prob": 0.6,
+      "no_repeat_ngram_size": 0
+     }
+    }
+   }
+  },
+  {
+   "name": "deepgram_model_without_languages",
+   "config": {
+    "SELECTED_MIC_HOST": "Windows WASAPI",
+    "SELECTED_MIC_DEVICE": "Mic A",
+    "SELECTED_SPEAKER_DEVICE": "Speaker A [Loopback]",
+    "MIC_RECORD_TIMEOUT": 3,
+    "MIC_PHRASE_TIMEOUT": 3,
+    "MIC_THRESHOLD": 300,
+    "MIC_AUTOMATIC_THRESHOLD": true,
+    "MIC_MAX_PHRASES": 10,
+    "MIC_ENABLE_VAD": false,
+    "MIC_AVG_LOGPROB": -0.8,
+    "MIC_NO_SPEECH_PROB": 0.6,
+    "MIC_NO_REPEAT_NGRAM_SIZE": 0,
+    "SPEAKER_RECORD_TIMEOUT": 3,
+    "SPEAKER_PHRASE_TIMEOUT": 3,
+    "SPEAKER_THRESHOLD": 300,
+    "SPEAKER_AUTOMATIC_THRESHOLD": true,
+    "SPEAKER_MAX_PHRASES": 10,
+    "SPEAKER_ENABLE_VAD": false,
+    "SPEAKER_AVG_LOGPROB": -0.8,
+    "SPEAKER_NO_SPEECH_PROB": 0.6,
+    "SPEAKER_NO_REPEAT_NGRAM_SIZE": 0,
+    "SELECTED_TRANSCRIPTION_ENGINE": "Deepgram",
+    "PATH_LOCAL": "C:/vrct",
+    "WHISPER_WEIGHT_TYPE": "base",
+    "SELECTED_TRANSCRIPTION_COMPUTE_DEVICE": {
+     "device": "cpu",
+     "device_index": 0
+    },
+    "SELECTED_TRANSCRIPTION_COMPUTE_TYPE": "auto",
+    "TRANSCRIPTION_AUTH_KEYS": {
+     "Groq_Whisper": "gsk-1",
+     "OpenAI_Whisper": "sk-2",
+     "Custom_Whisper": "custom-3",
+     "Deepgram": "dg-4"
+    },
+    "GROQ_WHISPER_BASE_URL": "https://api.groq.com/openai/v1",
+    "OPENAI_WHISPER_BASE_URL": "https://api.openai.com/v1",
+    "SELECTED_GROQ_WHISPER_MODEL": "whisper-large-v3",
+    "SELECTED_OPENAI_WHISPER_MODEL": "whisper-1",
+    "TRANSCRIPTION_CUSTOM_URL": "http://localhost:8080/v1",
+    "SELECTED_CUSTOM_WHISPER_MODEL": "my-whisper",
+    "SELECTED_DEEPGRAM_MODEL": "nova-9",
+    "DEEPGRAM_MODEL_LANGUAGES": {
+     "nova-3": [
+      "en",
+      "ja",
+      "multi"
+     ],
+     "nova-2": [
+      "en"
+     ]
+    },
+    "SELECTED_TAB_NO": "1",
+    "SELECTED_YOUR_LANGUAGES": {
+     "1": {
+      "1": {
+       "language": "Japanese",
+       "country": "Japan",
+       "enable": true
+      },
+      "2": {
+       "language": "English",
+       "country": "United States",
+       "enable": false
+      },
+      "3": {
+       "language": "Korean",
+       "country": "South Korea",
+       "enable": false
+      }
+     },
+     "2": {
+      "1": {
+       "language": "French",
+       "country": "France",
+       "enable": true
+      },
+      "2": {
+       "language": "German",
+       "country": "Germany",
+       "enable": true
+      },
+      "3": {
+       "language": "Thai",
+       "country": "Thailand",
+       "enable": false
+      }
+     },
+     "3": {
+      "1": {
+       "language": "English",
+       "country": "United States",
+       "enable": false
+      },
+      "2": {
+       "language": "English",
+       "country": "United States",
+       "enable": false
+      },
+      "3": {
+       "language": "English",
+       "country": "United States",
+       "enable": false
+      }
+     }
+    },
+    "SELECTED_TARGET_LANGUAGES": {
+     "1": {
+      "1": {
+       "language": "English",
+       "country": "United States",
+       "enable": true
+      },
+      "2": {
+       "language": "Chinese Simplified",
+       "country": "China",
+       "enable": true
+      },
+      "3": {
+       "language": "Korean",
+       "country": "South Korea",
+       "enable": false
+      }
+     },
+     "2": {
+      "1": {
+       "language": "Spanish",
+       "country": "Spain",
+       "enable": true
+      },
+      "2": {
+       "language": "English",
+       "country": "United States",
+       "enable": false
+      },
+      "3": {
+       "language": "English",
+       "country": "United States",
+       "enable": false
+      }
+     },
+     "3": {
+      "1": {
+       "language": "English",
+       "country": "United States",
+       "enable": false
+      },
+      "2": {
+       "language": "English",
+       "country": "United States",
+       "enable": false
+      },
+      "3": {
+       "language": "English",
+       "country": "United States",
+       "enable": false
+      }
+     }
+    }
+   },
+   "devices": {
+    "mics": {
+     "Windows WASAPI": [
+      {
+       "name": "Mic A",
+       "index": 3
+      },
+      {
+       "name": "Mic B",
+       "index": 4
+      }
+     ]
+    },
+    "speakers": [
+     {
+      "name": "Speaker A [Loopback]",
+      "index": 7
+     },
+     {
+      "name": "Speaker B [Loopback]",
+      "index": 8
+     }
+    ]
+   },
+   "whisper_available": false,
+   "expected": {
+    "mic": {
+     "device": "Mic A",
+     "recorder": {
+      "class": "SelectedMicEnergyAndAudioRecorder",
+      "kwargs": {
+       "device": "Mic A",
+       "energy_threshold": 300,
+       "dynamic_energy_threshold": true,
+       "phrase_time_limit": 3,
+       "record_timeout": 3
+      }
+     },
+     "transcriber": {
+      "engine": "Deepgram",
+      "provider": {
+       "kind": "provider",
+       "api_key": "dg-4",
+       "model": "nova-9",
+       "model_languages": []
+      },
+      "speaker": false,
+      "phrase_timeout": 3,
+      "max_phrases": 10,
+      "vad_segmented": false,
+      "source": "mic"
+     },
+     "ask": {
+      "languages": [
+       "Japanese"
+      ],
+      "countries": [
+       "Japan"
+      ],
+      "avg_logprob": -0.8,
+      "no_speech_prob": 0.6,
+      "no_repeat_ngram_size": 0
+     }
+    },
+    "speaker": {
+     "device": "Speaker A [Loopback]",
+     "recorder": {
+      "class": "SelectedSpeakerEnergyAndAudioRecorder",
+      "kwargs": {
+       "device": "Speaker A [Loopback]",
+       "energy_threshold": 300,
+       "dynamic_energy_threshold": true,
+       "phrase_time_limit": 3,
+       "record_timeout": 3
+      }
+     },
+     "transcriber": {
+      "engine": "Deepgram",
+      "provider": {
+       "kind": "provider",
+       "api_key": "dg-4",
+       "model": "nova-9",
+       "model_languages": []
+      },
+      "speaker": true,
+      "phrase_timeout": 3,
+      "max_phrases": 10,
+      "vad_segmented": false,
+      "source": "speaker"
+     },
+     "ask": {
+      "languages": [
+       "English",
+       "Chinese Simplified"
+      ],
+      "countries": [
+       "United States",
+       "China"
+      ],
+      "avg_logprob": -0.8,
+      "no_speech_prob": 0.6,
+      "no_repeat_ngram_size": 0
+     }
+    }
+   }
+  },
+  {
+   "name": "deepgram_without_key",
+   "config": {
+    "SELECTED_MIC_HOST": "Windows WASAPI",
+    "SELECTED_MIC_DEVICE": "Mic A",
+    "SELECTED_SPEAKER_DEVICE": "Speaker A [Loopback]",
+    "MIC_RECORD_TIMEOUT": 3,
+    "MIC_PHRASE_TIMEOUT": 3,
+    "MIC_THRESHOLD": 300,
+    "MIC_AUTOMATIC_THRESHOLD": true,
+    "MIC_MAX_PHRASES": 10,
+    "MIC_ENABLE_VAD": false,
+    "MIC_AVG_LOGPROB": -0.8,
+    "MIC_NO_SPEECH_PROB": 0.6,
+    "MIC_NO_REPEAT_NGRAM_SIZE": 0,
+    "SPEAKER_RECORD_TIMEOUT": 3,
+    "SPEAKER_PHRASE_TIMEOUT": 3,
+    "SPEAKER_THRESHOLD": 300,
+    "SPEAKER_AUTOMATIC_THRESHOLD": true,
+    "SPEAKER_MAX_PHRASES": 10,
+    "SPEAKER_ENABLE_VAD": false,
+    "SPEAKER_AVG_LOGPROB": -0.8,
+    "SPEAKER_NO_SPEECH_PROB": 0.6,
+    "SPEAKER_NO_REPEAT_NGRAM_SIZE": 0,
+    "SELECTED_TRANSCRIPTION_ENGINE": "Deepgram",
+    "PATH_LOCAL": "C:/vrct",
+    "WHISPER_WEIGHT_TYPE": "base",
+    "SELECTED_TRANSCRIPTION_COMPUTE_DEVICE": {
+     "device": "cpu",
+     "device_index": 0
+    },
+    "SELECTED_TRANSCRIPTION_COMPUTE_TYPE": "auto",
+    "TRANSCRIPTION_AUTH_KEYS": {},
+    "GROQ_WHISPER_BASE_URL": "https://api.groq.com/openai/v1",
+    "OPENAI_WHISPER_BASE_URL": "https://api.openai.com/v1",
+    "SELECTED_GROQ_WHISPER_MODEL": "whisper-large-v3",
+    "SELECTED_OPENAI_WHISPER_MODEL": "whisper-1",
+    "TRANSCRIPTION_CUSTOM_URL": "http://localhost:8080/v1",
+    "SELECTED_CUSTOM_WHISPER_MODEL": "my-whisper",
+    "SELECTED_DEEPGRAM_MODEL": "nova-3",
+    "DEEPGRAM_MODEL_LANGUAGES": {
+     "nova-3": [
+      "en",
+      "ja",
+      "multi"
+     ],
+     "nova-2": [
+      "en"
+     ]
+    },
+    "SELECTED_TAB_NO": "1",
+    "SELECTED_YOUR_LANGUAGES": {
+     "1": {
+      "1": {
+       "language": "Japanese",
+       "country": "Japan",
+       "enable": true
+      },
+      "2": {
+       "language": "English",
+       "country": "United States",
+       "enable": false
+      },
+      "3": {
+       "language": "Korean",
+       "country": "South Korea",
+       "enable": false
+      }
+     },
+     "2": {
+      "1": {
+       "language": "French",
+       "country": "France",
+       "enable": true
+      },
+      "2": {
+       "language": "German",
+       "country": "Germany",
+       "enable": true
+      },
+      "3": {
+       "language": "Thai",
+       "country": "Thailand",
+       "enable": false
+      }
+     },
+     "3": {
+      "1": {
+       "language": "English",
+       "country": "United States",
+       "enable": false
+      },
+      "2": {
+       "language": "English",
+       "country": "United States",
+       "enable": false
+      },
+      "3": {
+       "language": "English",
+       "country": "United States",
+       "enable": false
+      }
+     }
+    },
+    "SELECTED_TARGET_LANGUAGES": {
+     "1": {
+      "1": {
+       "language": "English",
+       "country": "United States",
+       "enable": true
+      },
+      "2": {
+       "language": "Chinese Simplified",
+       "country": "China",
+       "enable": true
+      },
+      "3": {
+       "language": "Korean",
+       "country": "South Korea",
+       "enable": false
+      }
+     },
+     "2": {
+      "1": {
+       "language": "Spanish",
+       "country": "Spain",
+       "enable": true
+      },
+      "2": {
+       "language": "English",
+       "country": "United States",
+       "enable": false
+      },
+      "3": {
+       "language": "English",
+       "country": "United States",
+       "enable": false
+      }
+     },
+     "3": {
+      "1": {
+       "language": "English",
+       "country": "United States",
+       "enable": false
+      },
+      "2": {
+       "language": "English",
+       "country": "United States",
+       "enable": false
+      },
+      "3": {
+       "language": "English",
+       "country": "United States",
+       "enable": false
+      }
+     }
+    }
+   },
+   "devices": {
+    "mics": {
+     "Windows WASAPI": [
+      {
+       "name": "Mic A",
+       "index": 3
+      },
+      {
+       "name": "Mic B",
+       "index": 4
+      }
+     ]
+    },
+    "speakers": [
+     {
+      "name": "Speaker A [Loopback]",
+      "index": 7
+     },
+     {
+      "name": "Speaker B [Loopback]",
+      "index": 8
+     }
+    ]
+   },
+   "whisper_available": false,
+   "expected": {
+    "mic": {
+     "device": "Mic A",
+     "recorder": {
+      "class": "SelectedMicEnergyAndAudioRecorder",
+      "kwargs": {
+       "device": "Mic A",
+       "energy_threshold": 300,
+       "dynamic_energy_threshold": true,
+       "phrase_time_limit": 3,
+       "record_timeout": 3
+      }
+     },
+     "transcriber": {
+      "engine": "Deepgram",
+      "provider": {
+       "kind": "provider",
+       "api_key": "",
+       "model": "nova-3",
+       "model_languages": [
+        "en",
+        "ja",
+        "multi"
+       ]
+      },
+      "speaker": false,
+      "phrase_timeout": 3,
+      "max_phrases": 10,
+      "vad_segmented": false,
+      "source": "mic"
+     },
+     "ask": {
+      "languages": [
+       "Japanese"
+      ],
+      "countries": [
+       "Japan"
+      ],
+      "avg_logprob": -0.8,
+      "no_speech_prob": 0.6,
+      "no_repeat_ngram_size": 0
+     }
+    },
+    "speaker": {
+     "device": "Speaker A [Loopback]",
+     "recorder": {
+      "class": "SelectedSpeakerEnergyAndAudioRecorder",
+      "kwargs": {
+       "device": "Speaker A [Loopback]",
+       "energy_threshold": 300,
+       "dynamic_energy_threshold": true,
+       "phrase_time_limit": 3,
+       "record_timeout": 3
+      }
+     },
+     "transcriber": {
+      "engine": "Deepgram",
+      "provider": {
+       "kind": "provider",
+       "api_key": "",
+       "model": "nova-3",
+       "model_languages": [
+        "en",
+        "ja",
+        "multi"
+       ]
+      },
+      "speaker": true,
+      "phrase_timeout": 3,
+      "max_phrases": 10,
+      "vad_segmented": false,
+      "source": "speaker"
+     },
+     "ask": {
+      "languages": [
+       "English",
+       "Chinese Simplified"
+      ],
+      "countries": [
+       "United States",
+       "China"
+      ],
+      "avg_logprob": -0.8,
+      "no_speech_prob": 0.6,
+      "no_repeat_ngram_size": 0
+     }
+    }
+   }
+  },
+  {
+   "name": "unknown_engine_is_google",
+   "config": {
+    "SELECTED_MIC_HOST": "Windows WASAPI",
+    "SELECTED_MIC_DEVICE": "Mic A",
+    "SELECTED_SPEAKER_DEVICE": "Speaker A [Loopback]",
+    "MIC_RECORD_TIMEOUT": 3,
+    "MIC_PHRASE_TIMEOUT": 3,
+    "MIC_THRESHOLD": 300,
+    "MIC_AUTOMATIC_THRESHOLD": true,
+    "MIC_MAX_PHRASES": 10,
+    "MIC_ENABLE_VAD": false,
+    "MIC_AVG_LOGPROB": -0.8,
+    "MIC_NO_SPEECH_PROB": 0.6,
+    "MIC_NO_REPEAT_NGRAM_SIZE": 0,
+    "SPEAKER_RECORD_TIMEOUT": 3,
+    "SPEAKER_PHRASE_TIMEOUT": 3,
+    "SPEAKER_THRESHOLD": 300,
+    "SPEAKER_AUTOMATIC_THRESHOLD": true,
+    "SPEAKER_MAX_PHRASES": 10,
+    "SPEAKER_ENABLE_VAD": false,
+    "SPEAKER_AVG_LOGPROB": -0.8,
+    "SPEAKER_NO_SPEECH_PROB": 0.6,
+    "SPEAKER_NO_REPEAT_NGRAM_SIZE": 0,
+    "SELECTED_TRANSCRIPTION_ENGINE": "Something_Else",
+    "PATH_LOCAL": "C:/vrct",
+    "WHISPER_WEIGHT_TYPE": "base",
+    "SELECTED_TRANSCRIPTION_COMPUTE_DEVICE": {
+     "device": "cpu",
+     "device_index": 0
+    },
+    "SELECTED_TRANSCRIPTION_COMPUTE_TYPE": "auto",
+    "TRANSCRIPTION_AUTH_KEYS": {
+     "Groq_Whisper": "gsk-1",
+     "OpenAI_Whisper": "sk-2",
+     "Custom_Whisper": "custom-3",
+     "Deepgram": "dg-4"
+    },
+    "GROQ_WHISPER_BASE_URL": "https://api.groq.com/openai/v1",
+    "OPENAI_WHISPER_BASE_URL": "https://api.openai.com/v1",
+    "SELECTED_GROQ_WHISPER_MODEL": "whisper-large-v3",
+    "SELECTED_OPENAI_WHISPER_MODEL": "whisper-1",
+    "TRANSCRIPTION_CUSTOM_URL": "http://localhost:8080/v1",
+    "SELECTED_CUSTOM_WHISPER_MODEL": "my-whisper",
+    "SELECTED_DEEPGRAM_MODEL": "nova-3",
+    "DEEPGRAM_MODEL_LANGUAGES": {
+     "nova-3": [
+      "en",
+      "ja",
+      "multi"
+     ],
+     "nova-2": [
+      "en"
+     ]
+    },
+    "SELECTED_TAB_NO": "1",
+    "SELECTED_YOUR_LANGUAGES": {
+     "1": {
+      "1": {
+       "language": "Japanese",
+       "country": "Japan",
+       "enable": true
+      },
+      "2": {
+       "language": "English",
+       "country": "United States",
+       "enable": false
+      },
+      "3": {
+       "language": "Korean",
+       "country": "South Korea",
+       "enable": false
+      }
+     },
+     "2": {
+      "1": {
+       "language": "French",
+       "country": "France",
+       "enable": true
+      },
+      "2": {
+       "language": "German",
+       "country": "Germany",
+       "enable": true
+      },
+      "3": {
+       "language": "Thai",
+       "country": "Thailand",
+       "enable": false
+      }
+     },
+     "3": {
+      "1": {
+       "language": "English",
+       "country": "United States",
+       "enable": false
+      },
+      "2": {
+       "language": "English",
+       "country": "United States",
+       "enable": false
+      },
+      "3": {
+       "language": "English",
+       "country": "United States",
+       "enable": false
+      }
+     }
+    },
+    "SELECTED_TARGET_LANGUAGES": {
+     "1": {
+      "1": {
+       "language": "English",
+       "country": "United States",
+       "enable": true
+      },
+      "2": {
+       "language": "Chinese Simplified",
+       "country": "China",
+       "enable": true
+      },
+      "3": {
+       "language": "Korean",
+       "country": "South Korea",
+       "enable": false
+      }
+     },
+     "2": {
+      "1": {
+       "language": "Spanish",
+       "country": "Spain",
+       "enable": true
+      },
+      "2": {
+       "language": "English",
+       "country": "United States",
+       "enable": false
+      },
+      "3": {
+       "language": "English",
+       "country": "United States",
+       "enable": false
+      }
+     },
+     "3": {
+      "1": {
+       "language": "English",
+       "country": "United States",
+       "enable": false
+      },
+      "2": {
+       "language": "English",
+       "country": "United States",
+       "enable": false
+      },
+      "3": {
+       "language": "English",
+       "country": "United States",
+       "enable": false
+      }
+     }
+    }
+   },
+   "devices": {
+    "mics": {
+     "Windows WASAPI": [
+      {
+       "name": "Mic A",
+       "index": 3
+      },
+      {
+       "name": "Mic B",
+       "index": 4
+      }
+     ]
+    },
+    "speakers": [
+     {
+      "name": "Speaker A [Loopback]",
+      "index": 7
+     },
+     {
+      "name": "Speaker B [Loopback]",
+      "index": 8
+     }
+    ]
+   },
+   "whisper_available": false,
+   "expected": {
+    "mic": {
+     "device": "Mic A",
+     "recorder": {
+      "class": "SelectedMicEnergyAndAudioRecorder",
+      "kwargs": {
+       "device": "Mic A",
+       "energy_threshold": 300,
+       "dynamic_energy_threshold": true,
+       "phrase_time_limit": 3,
+       "record_timeout": 3
+      }
+     },
+     "transcriber": {
+      "engine": "Google",
+      "provider": null,
+      "speaker": false,
+      "phrase_timeout": 3,
+      "max_phrases": 10,
+      "vad_segmented": false,
+      "source": "mic"
+     },
+     "ask": {
+      "languages": [
+       "Japanese"
+      ],
+      "countries": [
+       "Japan"
+      ],
+      "avg_logprob": -0.8,
+      "no_speech_prob": 0.6,
+      "no_repeat_ngram_size": 0
+     }
+    },
+    "speaker": {
+     "device": "Speaker A [Loopback]",
+     "recorder": {
+      "class": "SelectedSpeakerEnergyAndAudioRecorder",
+      "kwargs": {
+       "device": "Speaker A [Loopback]",
+       "energy_threshold": 300,
+       "dynamic_energy_threshold": true,
+       "phrase_time_limit": 3,
+       "record_timeout": 3
+      }
+     },
+     "transcriber": {
+      "engine": "Google",
+      "provider": null,
+      "speaker": true,
+      "phrase_timeout": 3,
+      "max_phrases": 10,
+      "vad_segmented": false,
+      "source": "speaker"
+     },
+     "ask": {
+      "languages": [
+       "English",
+       "Chinese Simplified"
+      ],
+      "countries": [
+       "United States",
+       "China"
+      ],
+      "avg_logprob": -0.8,
+      "no_speech_prob": 0.6,
+      "no_repeat_ngram_size": 0
+     }
+    }
+   }
+  },
+  {
+   "name": "second_tab",
+   "config": {
+    "SELECTED_MIC_HOST": "Windows WASAPI",
+    "SELECTED_MIC_DEVICE": "Mic A",
+    "SELECTED_SPEAKER_DEVICE": "Speaker A [Loopback]",
+    "MIC_RECORD_TIMEOUT": 3,
+    "MIC_PHRASE_TIMEOUT": 3,
+    "MIC_THRESHOLD": 300,
+    "MIC_AUTOMATIC_THRESHOLD": true,
+    "MIC_MAX_PHRASES": 10,
+    "MIC_ENABLE_VAD": false,
+    "MIC_AVG_LOGPROB": -0.8,
+    "MIC_NO_SPEECH_PROB": 0.6,
+    "MIC_NO_REPEAT_NGRAM_SIZE": 0,
+    "SPEAKER_RECORD_TIMEOUT": 3,
+    "SPEAKER_PHRASE_TIMEOUT": 3,
+    "SPEAKER_THRESHOLD": 300,
+    "SPEAKER_AUTOMATIC_THRESHOLD": true,
+    "SPEAKER_MAX_PHRASES": 10,
+    "SPEAKER_ENABLE_VAD": false,
+    "SPEAKER_AVG_LOGPROB": -0.8,
+    "SPEAKER_NO_SPEECH_PROB": 0.6,
+    "SPEAKER_NO_REPEAT_NGRAM_SIZE": 0,
+    "SELECTED_TRANSCRIPTION_ENGINE": "Google",
+    "PATH_LOCAL": "C:/vrct",
+    "WHISPER_WEIGHT_TYPE": "base",
+    "SELECTED_TRANSCRIPTION_COMPUTE_DEVICE": {
+     "device": "cpu",
+     "device_index": 0
+    },
+    "SELECTED_TRANSCRIPTION_COMPUTE_TYPE": "auto",
+    "TRANSCRIPTION_AUTH_KEYS": {
+     "Groq_Whisper": "gsk-1",
+     "OpenAI_Whisper": "sk-2",
+     "Custom_Whisper": "custom-3",
+     "Deepgram": "dg-4"
+    },
+    "GROQ_WHISPER_BASE_URL": "https://api.groq.com/openai/v1",
+    "OPENAI_WHISPER_BASE_URL": "https://api.openai.com/v1",
+    "SELECTED_GROQ_WHISPER_MODEL": "whisper-large-v3",
+    "SELECTED_OPENAI_WHISPER_MODEL": "whisper-1",
+    "TRANSCRIPTION_CUSTOM_URL": "http://localhost:8080/v1",
+    "SELECTED_CUSTOM_WHISPER_MODEL": "my-whisper",
+    "SELECTED_DEEPGRAM_MODEL": "nova-3",
+    "DEEPGRAM_MODEL_LANGUAGES": {
+     "nova-3": [
+      "en",
+      "ja",
+      "multi"
+     ],
+     "nova-2": [
+      "en"
+     ]
+    },
+    "SELECTED_TAB_NO": "2",
+    "SELECTED_YOUR_LANGUAGES": {
+     "1": {
+      "1": {
+       "language": "Japanese",
+       "country": "Japan",
+       "enable": true
+      },
+      "2": {
+       "language": "English",
+       "country": "United States",
+       "enable": false
+      },
+      "3": {
+       "language": "Korean",
+       "country": "South Korea",
+       "enable": false
+      }
+     },
+     "2": {
+      "1": {
+       "language": "French",
+       "country": "France",
+       "enable": true
+      },
+      "2": {
+       "language": "German",
+       "country": "Germany",
+       "enable": true
+      },
+      "3": {
+       "language": "Thai",
+       "country": "Thailand",
+       "enable": false
+      }
+     },
+     "3": {
+      "1": {
+       "language": "English",
+       "country": "United States",
+       "enable": false
+      },
+      "2": {
+       "language": "English",
+       "country": "United States",
+       "enable": false
+      },
+      "3": {
+       "language": "English",
+       "country": "United States",
+       "enable": false
+      }
+     }
+    },
+    "SELECTED_TARGET_LANGUAGES": {
+     "1": {
+      "1": {
+       "language": "English",
+       "country": "United States",
+       "enable": true
+      },
+      "2": {
+       "language": "Chinese Simplified",
+       "country": "China",
+       "enable": true
+      },
+      "3": {
+       "language": "Korean",
+       "country": "South Korea",
+       "enable": false
+      }
+     },
+     "2": {
+      "1": {
+       "language": "Spanish",
+       "country": "Spain",
+       "enable": true
+      },
+      "2": {
+       "language": "English",
+       "country": "United States",
+       "enable": false
+      },
+      "3": {
+       "language": "English",
+       "country": "United States",
+       "enable": false
+      }
+     },
+     "3": {
+      "1": {
+       "language": "English",
+       "country": "United States",
+       "enable": false
+      },
+      "2": {
+       "language": "English",
+       "country": "United States",
+       "enable": false
+      },
+      "3": {
+       "language": "English",
+       "country": "United States",
+       "enable": false
+      }
+     }
+    }
+   },
+   "devices": {
+    "mics": {
+     "Windows WASAPI": [
+      {
+       "name": "Mic A",
+       "index": 3
+      },
+      {
+       "name": "Mic B",
+       "index": 4
+      }
+     ]
+    },
+    "speakers": [
+     {
+      "name": "Speaker A [Loopback]",
+      "index": 7
+     },
+     {
+      "name": "Speaker B [Loopback]",
+      "index": 8
+     }
+    ]
+   },
+   "whisper_available": false,
+   "expected": {
+    "mic": {
+     "device": "Mic A",
+     "recorder": {
+      "class": "SelectedMicEnergyAndAudioRecorder",
+      "kwargs": {
+       "device": "Mic A",
+       "energy_threshold": 300,
+       "dynamic_energy_threshold": true,
+       "phrase_time_limit": 3,
+       "record_timeout": 3
+      }
+     },
+     "transcriber": {
+      "engine": "Google",
+      "provider": null,
+      "speaker": false,
+      "phrase_timeout": 3,
+      "max_phrases": 10,
+      "vad_segmented": false,
+      "source": "mic"
+     },
+     "ask": {
+      "languages": [
+       "French",
+       "German"
+      ],
+      "countries": [
+       "France",
+       "Germany"
+      ],
+      "avg_logprob": -0.8,
+      "no_speech_prob": 0.6,
+      "no_repeat_ngram_size": 0
+     }
+    },
+    "speaker": {
+     "device": "Speaker A [Loopback]",
+     "recorder": {
+      "class": "SelectedSpeakerEnergyAndAudioRecorder",
+      "kwargs": {
+       "device": "Speaker A [Loopback]",
+       "energy_threshold": 300,
+       "dynamic_energy_threshold": true,
+       "phrase_time_limit": 3,
+       "record_timeout": 3
+      }
+     },
+     "transcriber": {
+      "engine": "Google",
+      "provider": null,
+      "speaker": true,
+      "phrase_timeout": 3,
+      "max_phrases": 10,
+      "vad_segmented": false,
+      "source": "speaker"
+     },
+     "ask": {
+      "languages": [
+       "Spanish"
+      ],
+      "countries": [
+       "Spain"
+      ],
+      "avg_logprob": -0.8,
+      "no_speech_prob": 0.6,
+      "no_repeat_ngram_size": 0
+     }
+    }
+   }
+  },
+  {
+   "name": "tab_without_languages",
+   "config": {
+    "SELECTED_MIC_HOST": "Windows WASAPI",
+    "SELECTED_MIC_DEVICE": "Mic A",
+    "SELECTED_SPEAKER_DEVICE": "Speaker A [Loopback]",
+    "MIC_RECORD_TIMEOUT": 3,
+    "MIC_PHRASE_TIMEOUT": 3,
+    "MIC_THRESHOLD": 300,
+    "MIC_AUTOMATIC_THRESHOLD": true,
+    "MIC_MAX_PHRASES": 10,
+    "MIC_ENABLE_VAD": false,
+    "MIC_AVG_LOGPROB": -0.8,
+    "MIC_NO_SPEECH_PROB": 0.6,
+    "MIC_NO_REPEAT_NGRAM_SIZE": 0,
+    "SPEAKER_RECORD_TIMEOUT": 3,
+    "SPEAKER_PHRASE_TIMEOUT": 3,
+    "SPEAKER_THRESHOLD": 300,
+    "SPEAKER_AUTOMATIC_THRESHOLD": true,
+    "SPEAKER_MAX_PHRASES": 10,
+    "SPEAKER_ENABLE_VAD": false,
+    "SPEAKER_AVG_LOGPROB": -0.8,
+    "SPEAKER_NO_SPEECH_PROB": 0.6,
+    "SPEAKER_NO_REPEAT_NGRAM_SIZE": 0,
+    "SELECTED_TRANSCRIPTION_ENGINE": "Google",
+    "PATH_LOCAL": "C:/vrct",
+    "WHISPER_WEIGHT_TYPE": "base",
+    "SELECTED_TRANSCRIPTION_COMPUTE_DEVICE": {
+     "device": "cpu",
+     "device_index": 0
+    },
+    "SELECTED_TRANSCRIPTION_COMPUTE_TYPE": "auto",
+    "TRANSCRIPTION_AUTH_KEYS": {
+     "Groq_Whisper": "gsk-1",
+     "OpenAI_Whisper": "sk-2",
+     "Custom_Whisper": "custom-3",
+     "Deepgram": "dg-4"
+    },
+    "GROQ_WHISPER_BASE_URL": "https://api.groq.com/openai/v1",
+    "OPENAI_WHISPER_BASE_URL": "https://api.openai.com/v1",
+    "SELECTED_GROQ_WHISPER_MODEL": "whisper-large-v3",
+    "SELECTED_OPENAI_WHISPER_MODEL": "whisper-1",
+    "TRANSCRIPTION_CUSTOM_URL": "http://localhost:8080/v1",
+    "SELECTED_CUSTOM_WHISPER_MODEL": "my-whisper",
+    "SELECTED_DEEPGRAM_MODEL": "nova-3",
+    "DEEPGRAM_MODEL_LANGUAGES": {
+     "nova-3": [
+      "en",
+      "ja",
+      "multi"
+     ],
+     "nova-2": [
+      "en"
+     ]
+    },
+    "SELECTED_TAB_NO": "3",
+    "SELECTED_YOUR_LANGUAGES": {
+     "1": {
+      "1": {
+       "language": "Japanese",
+       "country": "Japan",
+       "enable": true
+      },
+      "2": {
+       "language": "English",
+       "country": "United States",
+       "enable": false
+      },
+      "3": {
+       "language": "Korean",
+       "country": "South Korea",
+       "enable": false
+      }
+     },
+     "2": {
+      "1": {
+       "language": "French",
+       "country": "France",
+       "enable": true
+      },
+      "2": {
+       "language": "German",
+       "country": "Germany",
+       "enable": true
+      },
+      "3": {
+       "language": "Thai",
+       "country": "Thailand",
+       "enable": false
+      }
+     },
+     "3": {
+      "1": {
+       "language": "English",
+       "country": "United States",
+       "enable": false
+      },
+      "2": {
+       "language": "English",
+       "country": "United States",
+       "enable": false
+      },
+      "3": {
+       "language": "English",
+       "country": "United States",
+       "enable": false
+      }
+     }
+    },
+    "SELECTED_TARGET_LANGUAGES": {
+     "1": {
+      "1": {
+       "language": "English",
+       "country": "United States",
+       "enable": true
+      },
+      "2": {
+       "language": "Chinese Simplified",
+       "country": "China",
+       "enable": true
+      },
+      "3": {
+       "language": "Korean",
+       "country": "South Korea",
+       "enable": false
+      }
+     },
+     "2": {
+      "1": {
+       "language": "Spanish",
+       "country": "Spain",
+       "enable": true
+      },
+      "2": {
+       "language": "English",
+       "country": "United States",
+       "enable": false
+      },
+      "3": {
+       "language": "English",
+       "country": "United States",
+       "enable": false
+      }
+     },
+     "3": {
+      "1": {
+       "language": "English",
+       "country": "United States",
+       "enable": false
+      },
+      "2": {
+       "language": "English",
+       "country": "United States",
+       "enable": false
+      },
+      "3": {
+       "language": "English",
+       "country": "United States",
+       "enable": false
+      }
+     }
+    }
+   },
+   "devices": {
+    "mics": {
+     "Windows WASAPI": [
+      {
+       "name": "Mic A",
+       "index": 3
+      },
+      {
+       "name": "Mic B",
+       "index": 4
+      }
+     ]
+    },
+    "speakers": [
+     {
+      "name": "Speaker A [Loopback]",
+      "index": 7
+     },
+     {
+      "name": "Speaker B [Loopback]",
+      "index": 8
+     }
+    ]
+   },
+   "whisper_available": false,
+   "expected": {
+    "mic": {
+     "device": "Mic A",
+     "recorder": {
+      "class": "SelectedMicEnergyAndAudioRecorder",
+      "kwargs": {
+       "device": "Mic A",
+       "energy_threshold": 300,
+       "dynamic_energy_threshold": true,
+       "phrase_time_limit": 3,
+       "record_timeout": 3
+      }
+     },
+     "transcriber": {
+      "engine": "Google",
+      "provider": null,
+      "speaker": false,
+      "phrase_timeout": 3,
+      "max_phrases": 10,
+      "vad_segmented": false,
+      "source": "mic"
+     },
+     "ask": {
+      "languages": [],
+      "countries": [],
+      "avg_logprob": -0.8,
+      "no_speech_prob": 0.6,
+      "no_repeat_ngram_size": 0
+     }
+    },
+    "speaker": {
+     "device": "Speaker A [Loopback]",
+     "recorder": {
+      "class": "SelectedSpeakerEnergyAndAudioRecorder",
+      "kwargs": {
+       "device": "Speaker A [Loopback]",
+       "energy_threshold": 300,
+       "dynamic_energy_threshold": true,
+       "phrase_time_limit": 3,
+       "record_timeout": 3
+      }
+     },
+     "transcriber": {
+      "engine": "Google",
+      "provider": null,
+      "speaker": true,
+      "phrase_timeout": 3,
+      "max_phrases": 10,
+      "vad_segmented": false,
+      "source": "speaker"
+     },
+     "ask": {
+      "languages": [],
+      "countries": [],
+      "avg_logprob": -0.8,
+      "no_speech_prob": 0.6,
+      "no_repeat_ngram_size": 0
+     }
+    }
+   }
+  },
+  {
+   "name": "thresholds",
+   "config": {
+    "SELECTED_MIC_HOST": "Windows WASAPI",
+    "SELECTED_MIC_DEVICE": "Mic A",
+    "SELECTED_SPEAKER_DEVICE": "Speaker A [Loopback]",
+    "MIC_RECORD_TIMEOUT": 3,
+    "MIC_PHRASE_TIMEOUT": 3,
+    "MIC_THRESHOLD": 300,
+    "MIC_AUTOMATIC_THRESHOLD": true,
+    "MIC_MAX_PHRASES": 10,
+    "MIC_ENABLE_VAD": false,
+    "MIC_AVG_LOGPROB": -1.25,
+    "MIC_NO_SPEECH_PROB": 0.45,
+    "MIC_NO_REPEAT_NGRAM_SIZE": 3,
+    "SPEAKER_RECORD_TIMEOUT": 3,
+    "SPEAKER_PHRASE_TIMEOUT": 3,
+    "SPEAKER_THRESHOLD": 300,
+    "SPEAKER_AUTOMATIC_THRESHOLD": true,
+    "SPEAKER_MAX_PHRASES": 10,
+    "SPEAKER_ENABLE_VAD": false,
+    "SPEAKER_AVG_LOGPROB": -0.5,
+    "SPEAKER_NO_SPEECH_PROB": 0.9,
+    "SPEAKER_NO_REPEAT_NGRAM_SIZE": 2,
+    "SELECTED_TRANSCRIPTION_ENGINE": "Google",
+    "PATH_LOCAL": "C:/vrct",
+    "WHISPER_WEIGHT_TYPE": "base",
+    "SELECTED_TRANSCRIPTION_COMPUTE_DEVICE": {
+     "device": "cpu",
+     "device_index": 0
+    },
+    "SELECTED_TRANSCRIPTION_COMPUTE_TYPE": "auto",
+    "TRANSCRIPTION_AUTH_KEYS": {
+     "Groq_Whisper": "gsk-1",
+     "OpenAI_Whisper": "sk-2",
+     "Custom_Whisper": "custom-3",
+     "Deepgram": "dg-4"
+    },
+    "GROQ_WHISPER_BASE_URL": "https://api.groq.com/openai/v1",
+    "OPENAI_WHISPER_BASE_URL": "https://api.openai.com/v1",
+    "SELECTED_GROQ_WHISPER_MODEL": "whisper-large-v3",
+    "SELECTED_OPENAI_WHISPER_MODEL": "whisper-1",
+    "TRANSCRIPTION_CUSTOM_URL": "http://localhost:8080/v1",
+    "SELECTED_CUSTOM_WHISPER_MODEL": "my-whisper",
+    "SELECTED_DEEPGRAM_MODEL": "nova-3",
+    "DEEPGRAM_MODEL_LANGUAGES": {
+     "nova-3": [
+      "en",
+      "ja",
+      "multi"
+     ],
+     "nova-2": [
+      "en"
+     ]
+    },
+    "SELECTED_TAB_NO": "1",
+    "SELECTED_YOUR_LANGUAGES": {
+     "1": {
+      "1": {
+       "language": "Japanese",
+       "country": "Japan",
+       "enable": true
+      },
+      "2": {
+       "language": "English",
+       "country": "United States",
+       "enable": false
+      },
+      "3": {
+       "language": "Korean",
+       "country": "South Korea",
+       "enable": false
+      }
+     },
+     "2": {
+      "1": {
+       "language": "French",
+       "country": "France",
+       "enable": true
+      },
+      "2": {
+       "language": "German",
+       "country": "Germany",
+       "enable": true
+      },
+      "3": {
+       "language": "Thai",
+       "country": "Thailand",
+       "enable": false
+      }
+     },
+     "3": {
+      "1": {
+       "language": "English",
+       "country": "United States",
+       "enable": false
+      },
+      "2": {
+       "language": "English",
+       "country": "United States",
+       "enable": false
+      },
+      "3": {
+       "language": "English",
+       "country": "United States",
+       "enable": false
+      }
+     }
+    },
+    "SELECTED_TARGET_LANGUAGES": {
+     "1": {
+      "1": {
+       "language": "English",
+       "country": "United States",
+       "enable": true
+      },
+      "2": {
+       "language": "Chinese Simplified",
+       "country": "China",
+       "enable": true
+      },
+      "3": {
+       "language": "Korean",
+       "country": "South Korea",
+       "enable": false
+      }
+     },
+     "2": {
+      "1": {
+       "language": "Spanish",
+       "country": "Spain",
+       "enable": true
+      },
+      "2": {
+       "language": "English",
+       "country": "United States",
+       "enable": false
+      },
+      "3": {
+       "language": "English",
+       "country": "United States",
+       "enable": false
+      }
+     },
+     "3": {
+      "1": {
+       "language": "English",
+       "country": "United States",
+       "enable": false
+      },
+      "2": {
+       "language": "English",
+       "country": "United States",
+       "enable": false
+      },
+      "3": {
+       "language": "English",
+       "country": "United States",
+       "enable": false
+      }
+     }
+    }
+   },
+   "devices": {
+    "mics": {
+     "Windows WASAPI": [
+      {
+       "name": "Mic A",
+       "index": 3
+      },
+      {
+       "name": "Mic B",
+       "index": 4
+      }
+     ]
+    },
+    "speakers": [
+     {
+      "name": "Speaker A [Loopback]",
+      "index": 7
+     },
+     {
+      "name": "Speaker B [Loopback]",
+      "index": 8
+     }
+    ]
+   },
+   "whisper_available": false,
+   "expected": {
+    "mic": {
+     "device": "Mic A",
+     "recorder": {
+      "class": "SelectedMicEnergyAndAudioRecorder",
+      "kwargs": {
+       "device": "Mic A",
+       "energy_threshold": 300,
+       "dynamic_energy_threshold": true,
+       "phrase_time_limit": 3,
+       "record_timeout": 3
+      }
+     },
+     "transcriber": {
+      "engine": "Google",
+      "provider": null,
+      "speaker": false,
+      "phrase_timeout": 3,
+      "max_phrases": 10,
+      "vad_segmented": false,
+      "source": "mic"
+     },
+     "ask": {
+      "languages": [
+       "Japanese"
+      ],
+      "countries": [
+       "Japan"
+      ],
+      "avg_logprob": -1.25,
+      "no_speech_prob": 0.45,
+      "no_repeat_ngram_size": 3
+     }
+    },
+    "speaker": {
+     "device": "Speaker A [Loopback]",
+     "recorder": {
+      "class": "SelectedSpeakerEnergyAndAudioRecorder",
+      "kwargs": {
+       "device": "Speaker A [Loopback]",
+       "energy_threshold": 300,
+       "dynamic_energy_threshold": true,
+       "phrase_time_limit": 3,
+       "record_timeout": 3
+      }
+     },
+     "transcriber": {
+      "engine": "Google",
+      "provider": null,
+      "speaker": true,
+      "phrase_timeout": 3,
+      "max_phrases": 10,
+      "vad_segmented": false,
+      "source": "speaker"
+     },
+     "ask": {
+      "languages": [
+       "English",
+       "Chinese Simplified"
+      ],
+      "countries": [
+       "United States",
+       "China"
+      ],
+      "avg_logprob": -0.5,
+      "no_speech_prob": 0.9,
+      "no_repeat_ngram_size": 2
+     }
+    }
+   }
+  },
+  {
+   "name": "max_phrases_and_timeouts",
+   "config": {
+    "SELECTED_MIC_HOST": "Windows WASAPI",
+    "SELECTED_MIC_DEVICE": "Mic A",
+    "SELECTED_SPEAKER_DEVICE": "Speaker A [Loopback]",
+    "MIC_RECORD_TIMEOUT": 3,
+    "MIC_PHRASE_TIMEOUT": 5,
+    "MIC_THRESHOLD": 300,
+    "MIC_AUTOMATIC_THRESHOLD": true,
+    "MIC_MAX_PHRASES": 4,
+    "MIC_ENABLE_VAD": false,
+    "MIC_AVG_LOGPROB": -0.8,
+    "MIC_NO_SPEECH_PROB": 0.6,
+    "MIC_NO_REPEAT_NGRAM_SIZE": 0,
+    "SPEAKER_RECORD_TIMEOUT": 3,
+    "SPEAKER_PHRASE_TIMEOUT": 7,
+    "SPEAKER_THRESHOLD": 300,
+    "SPEAKER_AUTOMATIC_THRESHOLD": true,
+    "SPEAKER_MAX_PHRASES": 20,
+    "SPEAKER_ENABLE_VAD": false,
+    "SPEAKER_AVG_LOGPROB": -0.8,
+    "SPEAKER_NO_SPEECH_PROB": 0.6,
+    "SPEAKER_NO_REPEAT_NGRAM_SIZE": 0,
+    "SELECTED_TRANSCRIPTION_ENGINE": "Google",
+    "PATH_LOCAL": "C:/vrct",
+    "WHISPER_WEIGHT_TYPE": "base",
+    "SELECTED_TRANSCRIPTION_COMPUTE_DEVICE": {
+     "device": "cpu",
+     "device_index": 0
+    },
+    "SELECTED_TRANSCRIPTION_COMPUTE_TYPE": "auto",
+    "TRANSCRIPTION_AUTH_KEYS": {
+     "Groq_Whisper": "gsk-1",
+     "OpenAI_Whisper": "sk-2",
+     "Custom_Whisper": "custom-3",
+     "Deepgram": "dg-4"
+    },
+    "GROQ_WHISPER_BASE_URL": "https://api.groq.com/openai/v1",
+    "OPENAI_WHISPER_BASE_URL": "https://api.openai.com/v1",
+    "SELECTED_GROQ_WHISPER_MODEL": "whisper-large-v3",
+    "SELECTED_OPENAI_WHISPER_MODEL": "whisper-1",
+    "TRANSCRIPTION_CUSTOM_URL": "http://localhost:8080/v1",
+    "SELECTED_CUSTOM_WHISPER_MODEL": "my-whisper",
+    "SELECTED_DEEPGRAM_MODEL": "nova-3",
+    "DEEPGRAM_MODEL_LANGUAGES": {
+     "nova-3": [
+      "en",
+      "ja",
+      "multi"
+     ],
+     "nova-2": [
+      "en"
+     ]
+    },
+    "SELECTED_TAB_NO": "1",
+    "SELECTED_YOUR_LANGUAGES": {
+     "1": {
+      "1": {
+       "language": "Japanese",
+       "country": "Japan",
+       "enable": true
+      },
+      "2": {
+       "language": "English",
+       "country": "United States",
+       "enable": false
+      },
+      "3": {
+       "language": "Korean",
+       "country": "South Korea",
+       "enable": false
+      }
+     },
+     "2": {
+      "1": {
+       "language": "French",
+       "country": "France",
+       "enable": true
+      },
+      "2": {
+       "language": "German",
+       "country": "Germany",
+       "enable": true
+      },
+      "3": {
+       "language": "Thai",
+       "country": "Thailand",
+       "enable": false
+      }
+     },
+     "3": {
+      "1": {
+       "language": "English",
+       "country": "United States",
+       "enable": false
+      },
+      "2": {
+       "language": "English",
+       "country": "United States",
+       "enable": false
+      },
+      "3": {
+       "language": "English",
+       "country": "United States",
+       "enable": false
+      }
+     }
+    },
+    "SELECTED_TARGET_LANGUAGES": {
+     "1": {
+      "1": {
+       "language": "English",
+       "country": "United States",
+       "enable": true
+      },
+      "2": {
+       "language": "Chinese Simplified",
+       "country": "China",
+       "enable": true
+      },
+      "3": {
+       "language": "Korean",
+       "country": "South Korea",
+       "enable": false
+      }
+     },
+     "2": {
+      "1": {
+       "language": "Spanish",
+       "country": "Spain",
+       "enable": true
+      },
+      "2": {
+       "language": "English",
+       "country": "United States",
+       "enable": false
+      },
+      "3": {
+       "language": "English",
+       "country": "United States",
+       "enable": false
+      }
+     },
+     "3": {
+      "1": {
+       "language": "English",
+       "country": "United States",
+       "enable": false
+      },
+      "2": {
+       "language": "English",
+       "country": "United States",
+       "enable": false
+      },
+      "3": {
+       "language": "English",
+       "country": "United States",
+       "enable": false
+      }
+     }
+    }
+   },
+   "devices": {
+    "mics": {
+     "Windows WASAPI": [
+      {
+       "name": "Mic A",
+       "index": 3
+      },
+      {
+       "name": "Mic B",
+       "index": 4
+      }
+     ]
+    },
+    "speakers": [
+     {
+      "name": "Speaker A [Loopback]",
+      "index": 7
+     },
+     {
+      "name": "Speaker B [Loopback]",
+      "index": 8
+     }
+    ]
+   },
+   "whisper_available": false,
+   "expected": {
+    "mic": {
+     "device": "Mic A",
+     "recorder": {
+      "class": "SelectedMicEnergyAndAudioRecorder",
+      "kwargs": {
+       "device": "Mic A",
+       "energy_threshold": 300,
+       "dynamic_energy_threshold": true,
+       "phrase_time_limit": 3,
+       "record_timeout": 3
+      }
+     },
+     "transcriber": {
+      "engine": "Google",
+      "provider": null,
+      "speaker": false,
+      "phrase_timeout": 5,
+      "max_phrases": 4,
+      "vad_segmented": false,
+      "source": "mic"
+     },
+     "ask": {
+      "languages": [
+       "Japanese"
+      ],
+      "countries": [
+       "Japan"
+      ],
+      "avg_logprob": -0.8,
+      "no_speech_prob": 0.6,
+      "no_repeat_ngram_size": 0
+     }
+    },
+    "speaker": {
+     "device": "Speaker A [Loopback]",
+     "recorder": {
+      "class": "SelectedSpeakerEnergyAndAudioRecorder",
+      "kwargs": {
+       "device": "Speaker A [Loopback]",
+       "energy_threshold": 300,
+       "dynamic_energy_threshold": true,
+       "phrase_time_limit": 3,
+       "record_timeout": 3
+      }
+     },
+     "transcriber": {
+      "engine": "Google",
+      "provider": null,
+      "speaker": true,
+      "phrase_timeout": 7,
+      "max_phrases": 20,
+      "vad_segmented": false,
+      "source": "speaker"
+     },
+     "ask": {
+      "languages": [
+       "English",
+       "Chinese Simplified"
+      ],
+      "countries": [
+       "United States",
+       "China"
+      ],
+      "avg_logprob": -0.8,
+      "no_speech_prob": 0.6,
+      "no_repeat_ngram_size": 0
+     }
+    }
+   }
+  },
+  {
+   "name": "other_device",
+   "config": {
+    "SELECTED_MIC_HOST": "Windows WASAPI",
+    "SELECTED_MIC_DEVICE": "Mic B",
+    "SELECTED_SPEAKER_DEVICE": "Speaker B [Loopback]",
+    "MIC_RECORD_TIMEOUT": 3,
+    "MIC_PHRASE_TIMEOUT": 3,
+    "MIC_THRESHOLD": 300,
+    "MIC_AUTOMATIC_THRESHOLD": true,
+    "MIC_MAX_PHRASES": 10,
+    "MIC_ENABLE_VAD": false,
+    "MIC_AVG_LOGPROB": -0.8,
+    "MIC_NO_SPEECH_PROB": 0.6,
+    "MIC_NO_REPEAT_NGRAM_SIZE": 0,
+    "SPEAKER_RECORD_TIMEOUT": 3,
+    "SPEAKER_PHRASE_TIMEOUT": 3,
+    "SPEAKER_THRESHOLD": 300,
+    "SPEAKER_AUTOMATIC_THRESHOLD": true,
+    "SPEAKER_MAX_PHRASES": 10,
+    "SPEAKER_ENABLE_VAD": false,
+    "SPEAKER_AVG_LOGPROB": -0.8,
+    "SPEAKER_NO_SPEECH_PROB": 0.6,
+    "SPEAKER_NO_REPEAT_NGRAM_SIZE": 0,
+    "SELECTED_TRANSCRIPTION_ENGINE": "Google",
+    "PATH_LOCAL": "C:/vrct",
+    "WHISPER_WEIGHT_TYPE": "base",
+    "SELECTED_TRANSCRIPTION_COMPUTE_DEVICE": {
+     "device": "cpu",
+     "device_index": 0
+    },
+    "SELECTED_TRANSCRIPTION_COMPUTE_TYPE": "auto",
+    "TRANSCRIPTION_AUTH_KEYS": {
+     "Groq_Whisper": "gsk-1",
+     "OpenAI_Whisper": "sk-2",
+     "Custom_Whisper": "custom-3",
+     "Deepgram": "dg-4"
+    },
+    "GROQ_WHISPER_BASE_URL": "https://api.groq.com/openai/v1",
+    "OPENAI_WHISPER_BASE_URL": "https://api.openai.com/v1",
+    "SELECTED_GROQ_WHISPER_MODEL": "whisper-large-v3",
+    "SELECTED_OPENAI_WHISPER_MODEL": "whisper-1",
+    "TRANSCRIPTION_CUSTOM_URL": "http://localhost:8080/v1",
+    "SELECTED_CUSTOM_WHISPER_MODEL": "my-whisper",
+    "SELECTED_DEEPGRAM_MODEL": "nova-3",
+    "DEEPGRAM_MODEL_LANGUAGES": {
+     "nova-3": [
+      "en",
+      "ja",
+      "multi"
+     ],
+     "nova-2": [
+      "en"
+     ]
+    },
+    "SELECTED_TAB_NO": "1",
+    "SELECTED_YOUR_LANGUAGES": {
+     "1": {
+      "1": {
+       "language": "Japanese",
+       "country": "Japan",
+       "enable": true
+      },
+      "2": {
+       "language": "English",
+       "country": "United States",
+       "enable": false
+      },
+      "3": {
+       "language": "Korean",
+       "country": "South Korea",
+       "enable": false
+      }
+     },
+     "2": {
+      "1": {
+       "language": "French",
+       "country": "France",
+       "enable": true
+      },
+      "2": {
+       "language": "German",
+       "country": "Germany",
+       "enable": true
+      },
+      "3": {
+       "language": "Thai",
+       "country": "Thailand",
+       "enable": false
+      }
+     },
+     "3": {
+      "1": {
+       "language": "English",
+       "country": "United States",
+       "enable": false
+      },
+      "2": {
+       "language": "English",
+       "country": "United States",
+       "enable": false
+      },
+      "3": {
+       "language": "English",
+       "country": "United States",
+       "enable": false
+      }
+     }
+    },
+    "SELECTED_TARGET_LANGUAGES": {
+     "1": {
+      "1": {
+       "language": "English",
+       "country": "United States",
+       "enable": true
+      },
+      "2": {
+       "language": "Chinese Simplified",
+       "country": "China",
+       "enable": true
+      },
+      "3": {
+       "language": "Korean",
+       "country": "South Korea",
+       "enable": false
+      }
+     },
+     "2": {
+      "1": {
+       "language": "Spanish",
+       "country": "Spain",
+       "enable": true
+      },
+      "2": {
+       "language": "English",
+       "country": "United States",
+       "enable": false
+      },
+      "3": {
+       "language": "English",
+       "country": "United States",
+       "enable": false
+      }
+     },
+     "3": {
+      "1": {
+       "language": "English",
+       "country": "United States",
+       "enable": false
+      },
+      "2": {
+       "language": "English",
+       "country": "United States",
+       "enable": false
+      },
+      "3": {
+       "language": "English",
+       "country": "United States",
+       "enable": false
+      }
+     }
+    }
+   },
+   "devices": {
+    "mics": {
+     "Windows WASAPI": [
+      {
+       "name": "Mic A",
+       "index": 3
+      },
+      {
+       "name": "Mic B",
+       "index": 4
+      }
+     ]
+    },
+    "speakers": [
+     {
+      "name": "Speaker A [Loopback]",
+      "index": 7
+     },
+     {
+      "name": "Speaker B [Loopback]",
+      "index": 8
+     }
+    ]
+   },
+   "whisper_available": false,
+   "expected": {
+    "mic": {
+     "device": "Mic B",
+     "recorder": {
+      "class": "SelectedMicEnergyAndAudioRecorder",
+      "kwargs": {
+       "device": "Mic B",
+       "energy_threshold": 300,
+       "dynamic_energy_threshold": true,
+       "phrase_time_limit": 3,
+       "record_timeout": 3
+      }
+     },
+     "transcriber": {
+      "engine": "Google",
+      "provider": null,
+      "speaker": false,
+      "phrase_timeout": 3,
+      "max_phrases": 10,
+      "vad_segmented": false,
+      "source": "mic"
+     },
+     "ask": {
+      "languages": [
+       "Japanese"
+      ],
+      "countries": [
+       "Japan"
+      ],
+      "avg_logprob": -0.8,
+      "no_speech_prob": 0.6,
+      "no_repeat_ngram_size": 0
+     }
+    },
+    "speaker": {
+     "device": "Speaker B [Loopback]",
+     "recorder": {
+      "class": "SelectedSpeakerEnergyAndAudioRecorder",
+      "kwargs": {
+       "device": "Speaker B [Loopback]",
+       "energy_threshold": 300,
+       "dynamic_energy_threshold": true,
+       "phrase_time_limit": 3,
+       "record_timeout": 3
+      }
+     },
+     "transcriber": {
+      "engine": "Google",
+      "provider": null,
+      "speaker": true,
+      "phrase_timeout": 3,
+      "max_phrases": 10,
+      "vad_segmented": false,
+      "source": "speaker"
+     },
+     "ask": {
+      "languages": [
+       "English",
+       "Chinese Simplified"
+      ],
+      "countries": [
+       "United States",
+       "China"
+      ],
+      "avg_logprob": -0.8,
+      "no_speech_prob": 0.6,
+      "no_repeat_ngram_size": 0
+     }
+    }
+   }
+  },
+  {
+   "name": "device_not_plugged_in",
+   "config": {
+    "SELECTED_MIC_HOST": "Windows WASAPI",
+    "SELECTED_MIC_DEVICE": "Mic Z",
+    "SELECTED_SPEAKER_DEVICE": "Speaker Z [Loopback]",
+    "MIC_RECORD_TIMEOUT": 3,
+    "MIC_PHRASE_TIMEOUT": 3,
+    "MIC_THRESHOLD": 300,
+    "MIC_AUTOMATIC_THRESHOLD": true,
+    "MIC_MAX_PHRASES": 10,
+    "MIC_ENABLE_VAD": false,
+    "MIC_AVG_LOGPROB": -0.8,
+    "MIC_NO_SPEECH_PROB": 0.6,
+    "MIC_NO_REPEAT_NGRAM_SIZE": 0,
+    "SPEAKER_RECORD_TIMEOUT": 3,
+    "SPEAKER_PHRASE_TIMEOUT": 3,
+    "SPEAKER_THRESHOLD": 300,
+    "SPEAKER_AUTOMATIC_THRESHOLD": true,
+    "SPEAKER_MAX_PHRASES": 10,
+    "SPEAKER_ENABLE_VAD": false,
+    "SPEAKER_AVG_LOGPROB": -0.8,
+    "SPEAKER_NO_SPEECH_PROB": 0.6,
+    "SPEAKER_NO_REPEAT_NGRAM_SIZE": 0,
+    "SELECTED_TRANSCRIPTION_ENGINE": "Google",
+    "PATH_LOCAL": "C:/vrct",
+    "WHISPER_WEIGHT_TYPE": "base",
+    "SELECTED_TRANSCRIPTION_COMPUTE_DEVICE": {
+     "device": "cpu",
+     "device_index": 0
+    },
+    "SELECTED_TRANSCRIPTION_COMPUTE_TYPE": "auto",
+    "TRANSCRIPTION_AUTH_KEYS": {
+     "Groq_Whisper": "gsk-1",
+     "OpenAI_Whisper": "sk-2",
+     "Custom_Whisper": "custom-3",
+     "Deepgram": "dg-4"
+    },
+    "GROQ_WHISPER_BASE_URL": "https://api.groq.com/openai/v1",
+    "OPENAI_WHISPER_BASE_URL": "https://api.openai.com/v1",
+    "SELECTED_GROQ_WHISPER_MODEL": "whisper-large-v3",
+    "SELECTED_OPENAI_WHISPER_MODEL": "whisper-1",
+    "TRANSCRIPTION_CUSTOM_URL": "http://localhost:8080/v1",
+    "SELECTED_CUSTOM_WHISPER_MODEL": "my-whisper",
+    "SELECTED_DEEPGRAM_MODEL": "nova-3",
+    "DEEPGRAM_MODEL_LANGUAGES": {
+     "nova-3": [
+      "en",
+      "ja",
+      "multi"
+     ],
+     "nova-2": [
+      "en"
+     ]
+    },
+    "SELECTED_TAB_NO": "1",
+    "SELECTED_YOUR_LANGUAGES": {
+     "1": {
+      "1": {
+       "language": "Japanese",
+       "country": "Japan",
+       "enable": true
+      },
+      "2": {
+       "language": "English",
+       "country": "United States",
+       "enable": false
+      },
+      "3": {
+       "language": "Korean",
+       "country": "South Korea",
+       "enable": false
+      }
+     },
+     "2": {
+      "1": {
+       "language": "French",
+       "country": "France",
+       "enable": true
+      },
+      "2": {
+       "language": "German",
+       "country": "Germany",
+       "enable": true
+      },
+      "3": {
+       "language": "Thai",
+       "country": "Thailand",
+       "enable": false
+      }
+     },
+     "3": {
+      "1": {
+       "language": "English",
+       "country": "United States",
+       "enable": false
+      },
+      "2": {
+       "language": "English",
+       "country": "United States",
+       "enable": false
+      },
+      "3": {
+       "language": "English",
+       "country": "United States",
+       "enable": false
+      }
+     }
+    },
+    "SELECTED_TARGET_LANGUAGES": {
+     "1": {
+      "1": {
+       "language": "English",
+       "country": "United States",
+       "enable": true
+      },
+      "2": {
+       "language": "Chinese Simplified",
+       "country": "China",
+       "enable": true
+      },
+      "3": {
+       "language": "Korean",
+       "country": "South Korea",
+       "enable": false
+      }
+     },
+     "2": {
+      "1": {
+       "language": "Spanish",
+       "country": "Spain",
+       "enable": true
+      },
+      "2": {
+       "language": "English",
+       "country": "United States",
+       "enable": false
+      },
+      "3": {
+       "language": "English",
+       "country": "United States",
+       "enable": false
+      }
+     },
+     "3": {
+      "1": {
+       "language": "English",
+       "country": "United States",
+       "enable": false
+      },
+      "2": {
+       "language": "English",
+       "country": "United States",
+       "enable": false
+      },
+      "3": {
+       "language": "English",
+       "country": "United States",
+       "enable": false
+      }
+     }
+    }
+   },
+   "devices": {
+    "mics": {
+     "Windows WASAPI": [
+      {
+       "name": "Mic A",
+       "index": 3
+      },
+      {
+       "name": "Mic B",
+       "index": 4
+      }
+     ]
+    },
+    "speakers": [
+     {
+      "name": "Speaker A [Loopback]",
+      "index": 7
+     },
+     {
+      "name": "Speaker B [Loopback]",
+      "index": 8
+     }
+    ]
+   },
+   "whisper_available": false,
+   "expected": {
+    "mic": {
+     "device": null,
+     "transcriber": {
+      "engine": "Google",
+      "provider": null,
+      "speaker": false,
+      "phrase_timeout": 3,
+      "max_phrases": 10,
+      "vad_segmented": false,
+      "source": "mic"
+     },
+     "ask": {
+      "languages": [
+       "Japanese"
+      ],
+      "countries": [
+       "Japan"
+      ],
+      "avg_logprob": -0.8,
+      "no_speech_prob": 0.6,
+      "no_repeat_ngram_size": 0
+     }
+    },
+    "speaker": {
+     "device": null,
+     "transcriber": {
+      "engine": "Google",
+      "provider": null,
+      "speaker": true,
+      "phrase_timeout": 3,
+      "max_phrases": 10,
+      "vad_segmented": false,
+      "source": "speaker"
+     },
+     "ask": {
+      "languages": [
+       "English",
+       "Chinese Simplified"
+      ],
+      "countries": [
+       "United States",
+       "China"
+      ],
+      "avg_logprob": -0.8,
+      "no_speech_prob": 0.6,
+      "no_repeat_ngram_size": 0
+     }
+    }
+   }
+  },
+  {
+   "name": "no_device_chosen",
+   "config": {
+    "SELECTED_MIC_HOST": "Windows WASAPI",
+    "SELECTED_MIC_DEVICE": "NoDevice",
+    "SELECTED_SPEAKER_DEVICE": "NoDevice",
+    "MIC_RECORD_TIMEOUT": 3,
+    "MIC_PHRASE_TIMEOUT": 3,
+    "MIC_THRESHOLD": 300,
+    "MIC_AUTOMATIC_THRESHOLD": true,
+    "MIC_MAX_PHRASES": 10,
+    "MIC_ENABLE_VAD": false,
+    "MIC_AVG_LOGPROB": -0.8,
+    "MIC_NO_SPEECH_PROB": 0.6,
+    "MIC_NO_REPEAT_NGRAM_SIZE": 0,
+    "SPEAKER_RECORD_TIMEOUT": 3,
+    "SPEAKER_PHRASE_TIMEOUT": 3,
+    "SPEAKER_THRESHOLD": 300,
+    "SPEAKER_AUTOMATIC_THRESHOLD": true,
+    "SPEAKER_MAX_PHRASES": 10,
+    "SPEAKER_ENABLE_VAD": false,
+    "SPEAKER_AVG_LOGPROB": -0.8,
+    "SPEAKER_NO_SPEECH_PROB": 0.6,
+    "SPEAKER_NO_REPEAT_NGRAM_SIZE": 0,
+    "SELECTED_TRANSCRIPTION_ENGINE": "Google",
+    "PATH_LOCAL": "C:/vrct",
+    "WHISPER_WEIGHT_TYPE": "base",
+    "SELECTED_TRANSCRIPTION_COMPUTE_DEVICE": {
+     "device": "cpu",
+     "device_index": 0
+    },
+    "SELECTED_TRANSCRIPTION_COMPUTE_TYPE": "auto",
+    "TRANSCRIPTION_AUTH_KEYS": {
+     "Groq_Whisper": "gsk-1",
+     "OpenAI_Whisper": "sk-2",
+     "Custom_Whisper": "custom-3",
+     "Deepgram": "dg-4"
+    },
+    "GROQ_WHISPER_BASE_URL": "https://api.groq.com/openai/v1",
+    "OPENAI_WHISPER_BASE_URL": "https://api.openai.com/v1",
+    "SELECTED_GROQ_WHISPER_MODEL": "whisper-large-v3",
+    "SELECTED_OPENAI_WHISPER_MODEL": "whisper-1",
+    "TRANSCRIPTION_CUSTOM_URL": "http://localhost:8080/v1",
+    "SELECTED_CUSTOM_WHISPER_MODEL": "my-whisper",
+    "SELECTED_DEEPGRAM_MODEL": "nova-3",
+    "DEEPGRAM_MODEL_LANGUAGES": {
+     "nova-3": [
+      "en",
+      "ja",
+      "multi"
+     ],
+     "nova-2": [
+      "en"
+     ]
+    },
+    "SELECTED_TAB_NO": "1",
+    "SELECTED_YOUR_LANGUAGES": {
+     "1": {
+      "1": {
+       "language": "Japanese",
+       "country": "Japan",
+       "enable": true
+      },
+      "2": {
+       "language": "English",
+       "country": "United States",
+       "enable": false
+      },
+      "3": {
+       "language": "Korean",
+       "country": "South Korea",
+       "enable": false
+      }
+     },
+     "2": {
+      "1": {
+       "language": "French",
+       "country": "France",
+       "enable": true
+      },
+      "2": {
+       "language": "German",
+       "country": "Germany",
+       "enable": true
+      },
+      "3": {
+       "language": "Thai",
+       "country": "Thailand",
+       "enable": false
+      }
+     },
+     "3": {
+      "1": {
+       "language": "English",
+       "country": "United States",
+       "enable": false
+      },
+      "2": {
+       "language": "English",
+       "country": "United States",
+       "enable": false
+      },
+      "3": {
+       "language": "English",
+       "country": "United States",
+       "enable": false
+      }
+     }
+    },
+    "SELECTED_TARGET_LANGUAGES": {
+     "1": {
+      "1": {
+       "language": "English",
+       "country": "United States",
+       "enable": true
+      },
+      "2": {
+       "language": "Chinese Simplified",
+       "country": "China",
+       "enable": true
+      },
+      "3": {
+       "language": "Korean",
+       "country": "South Korea",
+       "enable": false
+      }
+     },
+     "2": {
+      "1": {
+       "language": "Spanish",
+       "country": "Spain",
+       "enable": true
+      },
+      "2": {
+       "language": "English",
+       "country": "United States",
+       "enable": false
+      },
+      "3": {
+       "language": "English",
+       "country": "United States",
+       "enable": false
+      }
+     },
+     "3": {
+      "1": {
+       "language": "English",
+       "country": "United States",
+       "enable": false
+      },
+      "2": {
+       "language": "English",
+       "country": "United States",
+       "enable": false
+      },
+      "3": {
+       "language": "English",
+       "country": "United States",
+       "enable": false
+      }
+     }
+    }
+   },
+   "devices": {
+    "mics": {
+     "Windows WASAPI": [
+      {
+       "name": "Mic A",
+       "index": 3
+      },
+      {
+       "name": "Mic B",
+       "index": 4
+      }
+     ]
+    },
+    "speakers": [
+     {
+      "name": "Speaker A [Loopback]",
+      "index": 7
+     },
+     {
+      "name": "Speaker B [Loopback]",
+      "index": 8
+     }
+    ]
+   },
+   "whisper_available": false,
+   "expected": {
+    "mic": {
+     "device": null,
+     "transcriber": {
+      "engine": "Google",
+      "provider": null,
+      "speaker": false,
+      "phrase_timeout": 3,
+      "max_phrases": 10,
+      "vad_segmented": false,
+      "source": "mic"
+     },
+     "ask": {
+      "languages": [
+       "Japanese"
+      ],
+      "countries": [
+       "Japan"
+      ],
+      "avg_logprob": -0.8,
+      "no_speech_prob": 0.6,
+      "no_repeat_ngram_size": 0
+     }
+    },
+    "speaker": {
+     "device": null,
+     "transcriber": {
+      "engine": "Google",
+      "provider": null,
+      "speaker": true,
+      "phrase_timeout": 3,
+      "max_phrases": 10,
+      "vad_segmented": false,
+      "source": "speaker"
+     },
+     "ask": {
+      "languages": [
+       "English",
+       "Chinese Simplified"
+      ],
+      "countries": [
+       "United States",
+       "China"
+      ],
+      "avg_logprob": -0.8,
+      "no_speech_prob": 0.6,
+      "no_repeat_ngram_size": 0
+     }
+    }
+   }
+  },
+  {
+   "name": "no_devices_at_all",
+   "config": {
+    "SELECTED_MIC_HOST": "NoHost",
+    "SELECTED_MIC_DEVICE": "NoDevice",
+    "SELECTED_SPEAKER_DEVICE": "NoDevice",
+    "MIC_RECORD_TIMEOUT": 3,
+    "MIC_PHRASE_TIMEOUT": 3,
+    "MIC_THRESHOLD": 300,
+    "MIC_AUTOMATIC_THRESHOLD": true,
+    "MIC_MAX_PHRASES": 10,
+    "MIC_ENABLE_VAD": false,
+    "MIC_AVG_LOGPROB": -0.8,
+    "MIC_NO_SPEECH_PROB": 0.6,
+    "MIC_NO_REPEAT_NGRAM_SIZE": 0,
+    "SPEAKER_RECORD_TIMEOUT": 3,
+    "SPEAKER_PHRASE_TIMEOUT": 3,
+    "SPEAKER_THRESHOLD": 300,
+    "SPEAKER_AUTOMATIC_THRESHOLD": true,
+    "SPEAKER_MAX_PHRASES": 10,
+    "SPEAKER_ENABLE_VAD": false,
+    "SPEAKER_AVG_LOGPROB": -0.8,
+    "SPEAKER_NO_SPEECH_PROB": 0.6,
+    "SPEAKER_NO_REPEAT_NGRAM_SIZE": 0,
+    "SELECTED_TRANSCRIPTION_ENGINE": "Google",
+    "PATH_LOCAL": "C:/vrct",
+    "WHISPER_WEIGHT_TYPE": "base",
+    "SELECTED_TRANSCRIPTION_COMPUTE_DEVICE": {
+     "device": "cpu",
+     "device_index": 0
+    },
+    "SELECTED_TRANSCRIPTION_COMPUTE_TYPE": "auto",
+    "TRANSCRIPTION_AUTH_KEYS": {
+     "Groq_Whisper": "gsk-1",
+     "OpenAI_Whisper": "sk-2",
+     "Custom_Whisper": "custom-3",
+     "Deepgram": "dg-4"
+    },
+    "GROQ_WHISPER_BASE_URL": "https://api.groq.com/openai/v1",
+    "OPENAI_WHISPER_BASE_URL": "https://api.openai.com/v1",
+    "SELECTED_GROQ_WHISPER_MODEL": "whisper-large-v3",
+    "SELECTED_OPENAI_WHISPER_MODEL": "whisper-1",
+    "TRANSCRIPTION_CUSTOM_URL": "http://localhost:8080/v1",
+    "SELECTED_CUSTOM_WHISPER_MODEL": "my-whisper",
+    "SELECTED_DEEPGRAM_MODEL": "nova-3",
+    "DEEPGRAM_MODEL_LANGUAGES": {
+     "nova-3": [
+      "en",
+      "ja",
+      "multi"
+     ],
+     "nova-2": [
+      "en"
+     ]
+    },
+    "SELECTED_TAB_NO": "1",
+    "SELECTED_YOUR_LANGUAGES": {
+     "1": {
+      "1": {
+       "language": "Japanese",
+       "country": "Japan",
+       "enable": true
+      },
+      "2": {
+       "language": "English",
+       "country": "United States",
+       "enable": false
+      },
+      "3": {
+       "language": "Korean",
+       "country": "South Korea",
+       "enable": false
+      }
+     },
+     "2": {
+      "1": {
+       "language": "French",
+       "country": "France",
+       "enable": true
+      },
+      "2": {
+       "language": "German",
+       "country": "Germany",
+       "enable": true
+      },
+      "3": {
+       "language": "Thai",
+       "country": "Thailand",
+       "enable": false
+      }
+     },
+     "3": {
+      "1": {
+       "language": "English",
+       "country": "United States",
+       "enable": false
+      },
+      "2": {
+       "language": "English",
+       "country": "United States",
+       "enable": false
+      },
+      "3": {
+       "language": "English",
+       "country": "United States",
+       "enable": false
+      }
+     }
+    },
+    "SELECTED_TARGET_LANGUAGES": {
+     "1": {
+      "1": {
+       "language": "English",
+       "country": "United States",
+       "enable": true
+      },
+      "2": {
+       "language": "Chinese Simplified",
+       "country": "China",
+       "enable": true
+      },
+      "3": {
+       "language": "Korean",
+       "country": "South Korea",
+       "enable": false
+      }
+     },
+     "2": {
+      "1": {
+       "language": "Spanish",
+       "country": "Spain",
+       "enable": true
+      },
+      "2": {
+       "language": "English",
+       "country": "United States",
+       "enable": false
+      },
+      "3": {
+       "language": "English",
+       "country": "United States",
+       "enable": false
+      }
+     },
+     "3": {
+      "1": {
+       "language": "English",
+       "country": "United States",
+       "enable": false
+      },
+      "2": {
+       "language": "English",
+       "country": "United States",
+       "enable": false
+      },
+      "3": {
+       "language": "English",
+       "country": "United States",
+       "enable": false
+      }
+     }
+    }
+   },
+   "devices": {
+    "mics": {
+     "NoHost": [
+      {
+       "name": "NoDevice"
+      }
+     ]
+    },
+    "speakers": [
+     {
+      "name": "NoDevice"
+     }
+    ]
+   },
+   "whisper_available": false,
+   "expected": {
+    "mic": {
+     "device": null,
+     "transcriber": {
+      "engine": "Google",
+      "provider": null,
+      "speaker": false,
+      "phrase_timeout": 3,
+      "max_phrases": 10,
+      "vad_segmented": false,
+      "source": "mic"
+     },
+     "ask": {
+      "languages": [
+       "Japanese"
+      ],
+      "countries": [
+       "Japan"
+      ],
+      "avg_logprob": -0.8,
+      "no_speech_prob": 0.6,
+      "no_repeat_ngram_size": 0
+     }
+    },
+    "speaker": {
+     "device": null,
+     "transcriber": {
+      "engine": "Google",
+      "provider": null,
+      "speaker": true,
+      "phrase_timeout": 3,
+      "max_phrases": 10,
+      "vad_segmented": false,
+      "source": "speaker"
+     },
+     "ask": {
+      "languages": [
+       "English",
+       "Chinese Simplified"
+      ],
+      "countries": [
+       "United States",
+       "China"
+      ],
+      "avg_logprob": -0.8,
+      "no_speech_prob": 0.6,
+      "no_repeat_ngram_size": 0
+     }
+    }
+   }
+  }
+ ]
+}

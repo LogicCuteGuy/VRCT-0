@@ -1,0 +1,2376 @@
+{
+ "python": "3.12.0",
+ "scenarios": [
+  {
+   "name": "transcript_basic",
+   "config": {
+    "selected": "Mic A"
+   },
+   "steps": [
+    {
+     "op": "reconfigure",
+     "transcript": true
+    },
+    {
+     "op": "snapshot"
+    },
+    {
+     "op": "audio",
+     "chunks": [
+      "hello",
+      "world"
+     ]
+    },
+    {
+     "op": "wait_for",
+     "tag": "deliver",
+     "count": 2
+    },
+    {
+     "op": "snapshot"
+    },
+    {
+     "op": "reconfigure",
+     "transcript": false
+    },
+    {
+     "op": "snapshot"
+    }
+   ],
+   "events": [
+    [
+     "open",
+     "Mic A"
+    ],
+    [
+     "record_into",
+     {
+      "energy": false,
+      "queue": "bounded:20"
+     }
+    ],
+    [
+     "transcriber",
+     {
+      "sample_rate": 16000,
+      "channels": 1
+     }
+    ],
+    [
+     "snapshot",
+     {
+      "transcript": true,
+      "energy": false,
+      "device": "Mic A"
+     }
+    ],
+    [
+     "deliver",
+     {
+      "confidence": 0.9,
+      "text": "hello",
+      "language": "en",
+      "recognition_error": false
+     }
+    ],
+    [
+     "deliver",
+     {
+      "confidence": 0.9,
+      "text": "world",
+      "language": "en",
+      "recognition_error": false
+     }
+    ],
+    [
+     "snapshot",
+     {
+      "transcript": true,
+      "energy": false,
+      "device": "Mic A"
+     }
+    ],
+    [
+     "resume",
+     null
+    ],
+    [
+     "stop",
+     null
+    ],
+    [
+     "snapshot",
+     {
+      "transcript": false,
+      "energy": false,
+      "device": null
+     }
+    ]
+   ]
+  },
+  {
+   "name": "energy_only",
+   "config": {
+    "selected": "Mic A"
+   },
+   "steps": [
+    {
+     "op": "reconfigure",
+     "energy": true
+    },
+    {
+     "op": "snapshot"
+    },
+    {
+     "op": "energy",
+     "values": [
+      5
+     ]
+    },
+    {
+     "op": "wait_for",
+     "tag": "level",
+     "count": 1
+    },
+    {
+     "op": "energy",
+     "values": [
+      9
+     ]
+    },
+    {
+     "op": "wait_for",
+     "tag": "level",
+     "count": 2
+    },
+    {
+     "op": "snapshot"
+    },
+    {
+     "op": "reconfigure",
+     "energy": false
+    },
+    {
+     "op": "snapshot"
+    },
+    {
+     "op": "energy",
+     "values": [
+      7
+     ]
+    },
+    {
+     "op": "sleep",
+     "ms": 80
+    }
+   ],
+   "events": [
+    [
+     "open",
+     "Mic A"
+    ],
+    [
+     "record_into",
+     {
+      "energy": true,
+      "queue": "discard"
+     }
+    ],
+    [
+     "snapshot",
+     {
+      "transcript": false,
+      "energy": true,
+      "device": "Mic A"
+     }
+    ],
+    [
+     "level",
+     5
+    ],
+    [
+     "level",
+     9
+    ],
+    [
+     "snapshot",
+     {
+      "transcript": false,
+      "energy": true,
+      "device": "Mic A"
+     }
+    ],
+    [
+     "resume",
+     null
+    ],
+    [
+     "stop",
+     null
+    ],
+    [
+     "snapshot",
+     {
+      "transcript": false,
+      "energy": false,
+      "device": null
+     }
+    ]
+   ]
+  },
+  {
+   "name": "both_features_restart",
+   "config": {
+    "selected": "Mic A"
+   },
+   "steps": [
+    {
+     "op": "reconfigure",
+     "transcript": true
+    },
+    {
+     "op": "audio",
+     "chunks": [
+      "a"
+     ]
+    },
+    {
+     "op": "wait_for",
+     "tag": "deliver",
+     "count": 1
+    },
+    {
+     "op": "reconfigure",
+     "energy": true
+    },
+    {
+     "op": "snapshot"
+    },
+    {
+     "op": "audio",
+     "chunks": [
+      "b"
+     ]
+    },
+    {
+     "op": "wait_for",
+     "tag": "deliver",
+     "count": 2
+    },
+    {
+     "op": "energy",
+     "values": [
+      3
+     ]
+    },
+    {
+     "op": "wait_for",
+     "tag": "level",
+     "count": 1
+    },
+    {
+     "op": "snapshot"
+    },
+    {
+     "op": "reconfigure",
+     "transcript": false
+    },
+    {
+     "op": "snapshot"
+    },
+    {
+     "op": "reconfigure",
+     "transcript": false,
+     "energy": false
+    },
+    {
+     "op": "snapshot"
+    }
+   ],
+   "events": [
+    [
+     "open",
+     "Mic A"
+    ],
+    [
+     "record_into",
+     {
+      "energy": false,
+      "queue": "bounded:20"
+     }
+    ],
+    [
+     "transcriber",
+     {
+      "sample_rate": 16000,
+      "channels": 1
+     }
+    ],
+    [
+     "deliver",
+     {
+      "confidence": 0.9,
+      "text": "a",
+      "language": "en",
+      "recognition_error": false
+     }
+    ],
+    [
+     "resume",
+     null
+    ],
+    [
+     "stop",
+     null
+    ],
+    [
+     "open",
+     "Mic A"
+    ],
+    [
+     "record_into",
+     {
+      "energy": true,
+      "queue": "bounded:20"
+     }
+    ],
+    [
+     "transcriber",
+     {
+      "sample_rate": 16000,
+      "channels": 1
+     }
+    ],
+    [
+     "snapshot",
+     {
+      "transcript": true,
+      "energy": true,
+      "device": "Mic A"
+     }
+    ],
+    [
+     "deliver",
+     {
+      "confidence": 0.9,
+      "text": "b",
+      "language": "en",
+      "recognition_error": false
+     }
+    ],
+    [
+     "level",
+     3
+    ],
+    [
+     "snapshot",
+     {
+      "transcript": true,
+      "energy": true,
+      "device": "Mic A"
+     }
+    ],
+    [
+     "resume",
+     null
+    ],
+    [
+     "stop",
+     null
+    ],
+    [
+     "open",
+     "Mic A"
+    ],
+    [
+     "record_into",
+     {
+      "energy": true,
+      "queue": "discard"
+     }
+    ],
+    [
+     "snapshot",
+     {
+      "transcript": false,
+      "energy": true,
+      "device": "Mic A"
+     }
+    ],
+    [
+     "resume",
+     null
+    ],
+    [
+     "stop",
+     null
+    ],
+    [
+     "snapshot",
+     {
+      "transcript": false,
+      "energy": false,
+      "device": null
+     }
+    ]
+   ]
+  },
+  {
+   "name": "same_state_is_a_noop",
+   "config": {
+    "selected": "Mic A"
+   },
+   "steps": [
+    {
+     "op": "reconfigure",
+     "transcript": true
+    },
+    {
+     "op": "reconfigure",
+     "transcript": true
+    },
+    {
+     "op": "snapshot"
+    },
+    {
+     "op": "reconfigure",
+     "energy": false
+    },
+    {
+     "op": "snapshot"
+    },
+    {
+     "op": "reconfigure",
+     "transcript": false
+    }
+   ],
+   "events": [
+    [
+     "open",
+     "Mic A"
+    ],
+    [
+     "record_into",
+     {
+      "energy": false,
+      "queue": "bounded:20"
+     }
+    ],
+    [
+     "transcriber",
+     {
+      "sample_rate": 16000,
+      "channels": 1
+     }
+    ],
+    [
+     "snapshot",
+     {
+      "transcript": true,
+      "energy": false,
+      "device": "Mic A"
+     }
+    ],
+    [
+     "snapshot",
+     {
+      "transcript": true,
+      "energy": false,
+      "device": "Mic A"
+     }
+    ],
+    [
+     "resume",
+     null
+    ],
+    [
+     "stop",
+     null
+    ]
+   ]
+  },
+  {
+   "name": "no_device_override",
+   "config": {
+    "selected": "Mic A"
+   },
+   "steps": [
+    {
+     "op": "reconfigure",
+     "transcript": true,
+     "device": "NoDevice"
+    },
+    {
+     "op": "snapshot"
+    },
+    {
+     "op": "reconfigure",
+     "energy": true,
+     "device": "NoDevice"
+    },
+    {
+     "op": "snapshot"
+    }
+   ],
+   "events": [
+    [
+     "deliver",
+     {
+      "text": false,
+      "language": null
+     }
+    ],
+    [
+     "snapshot",
+     {
+      "transcript": false,
+      "energy": false,
+      "device": null
+     }
+    ],
+    [
+     "level",
+     false
+    ],
+    [
+     "snapshot",
+     {
+      "transcript": false,
+      "energy": false,
+      "device": null
+     }
+    ]
+   ]
+  },
+  {
+   "name": "no_device_selected",
+   "config": {
+    "selected": null
+   },
+   "steps": [
+    {
+     "op": "reconfigure",
+     "transcript": true
+    },
+    {
+     "op": "snapshot"
+    },
+    {
+     "op": "reconfigure",
+     "energy": true
+    },
+    {
+     "op": "snapshot"
+    }
+   ],
+   "events": [
+    [
+     "deliver",
+     {
+      "text": false,
+      "language": null
+     }
+    ],
+    [
+     "snapshot",
+     {
+      "transcript": false,
+      "energy": false,
+      "device": null
+     }
+    ],
+    [
+     "level",
+     false
+    ],
+    [
+     "snapshot",
+     {
+      "transcript": false,
+      "energy": false,
+      "device": null
+     }
+    ]
+   ]
+  },
+  {
+   "name": "device_change_restarts",
+   "config": {
+    "selected": "Mic A"
+   },
+   "steps": [
+    {
+     "op": "reconfigure",
+     "transcript": true
+    },
+    {
+     "op": "snapshot"
+    },
+    {
+     "op": "reconfigure",
+     "device": "Mic B"
+    },
+    {
+     "op": "snapshot"
+    },
+    {
+     "op": "reconfigure",
+     "device": "Mic B"
+    },
+    {
+     "op": "audio",
+     "chunks": [
+      "x"
+     ]
+    },
+    {
+     "op": "wait_for",
+     "tag": "deliver",
+     "count": 1
+    },
+    {
+     "op": "select",
+     "name": "Mic C"
+    },
+    {
+     "op": "reconfigure"
+    },
+    {
+     "op": "snapshot"
+    },
+    {
+     "op": "reconfigure",
+     "transcript": false
+    }
+   ],
+   "events": [
+    [
+     "open",
+     "Mic A"
+    ],
+    [
+     "record_into",
+     {
+      "energy": false,
+      "queue": "bounded:20"
+     }
+    ],
+    [
+     "transcriber",
+     {
+      "sample_rate": 16000,
+      "channels": 1
+     }
+    ],
+    [
+     "snapshot",
+     {
+      "transcript": true,
+      "energy": false,
+      "device": "Mic A"
+     }
+    ],
+    [
+     "resume",
+     null
+    ],
+    [
+     "stop",
+     null
+    ],
+    [
+     "open",
+     "Mic B"
+    ],
+    [
+     "record_into",
+     {
+      "energy": false,
+      "queue": "bounded:20"
+     }
+    ],
+    [
+     "transcriber",
+     {
+      "sample_rate": 16000,
+      "channels": 1
+     }
+    ],
+    [
+     "snapshot",
+     {
+      "transcript": true,
+      "energy": false,
+      "device": "Mic B"
+     }
+    ],
+    [
+     "deliver",
+     {
+      "confidence": 0.9,
+      "text": "x",
+      "language": "en",
+      "recognition_error": false
+     }
+    ],
+    [
+     "resume",
+     null
+    ],
+    [
+     "stop",
+     null
+    ],
+    [
+     "open",
+     "Mic C"
+    ],
+    [
+     "record_into",
+     {
+      "energy": false,
+      "queue": "bounded:20"
+     }
+    ],
+    [
+     "transcriber",
+     {
+      "sample_rate": 16000,
+      "channels": 1
+     }
+    ],
+    [
+     "snapshot",
+     {
+      "transcript": true,
+      "energy": false,
+      "device": "Mic C"
+     }
+    ],
+    [
+     "resume",
+     null
+    ],
+    [
+     "stop",
+     null
+    ]
+   ]
+  },
+  {
+   "name": "open_fails",
+   "config": {
+    "selected": "Mic A",
+    "fail_open": true
+   },
+   "steps": [
+    {
+     "op": "reconfigure",
+     "transcript": true
+    },
+    {
+     "op": "snapshot"
+    }
+   ],
+   "events": [
+    [
+     "open_failed",
+     "Mic A"
+    ],
+    [
+     "deliver",
+     {
+      "text": "",
+      "language": null,
+      "recognition_error": true,
+      "error_code": "AUDIO_OPEN_ERROR",
+      "stage": "recording",
+      "source": "mic",
+      "message": "Audio device could not be opened",
+      "recoverable": false
+     }
+    ],
+    [
+     "raised",
+     null
+    ],
+    [
+     "snapshot",
+     {
+      "transcript": false,
+      "energy": false,
+      "device": null
+     }
+    ]
+   ]
+  },
+  {
+   "name": "record_fails",
+   "config": {
+    "selected": "Mic A",
+    "fail_record": true
+   },
+   "steps": [
+    {
+     "op": "reconfigure",
+     "transcript": true
+    },
+    {
+     "op": "snapshot"
+    }
+   ],
+   "events": [
+    [
+     "open",
+     "Mic A"
+    ],
+    [
+     "record_into",
+     {
+      "energy": false,
+      "queue": "bounded:20"
+     }
+    ],
+    [
+     "deliver",
+     {
+      "text": "",
+      "language": null,
+      "recognition_error": true,
+      "error_code": "AUDIO_READ_ERROR",
+      "stage": "recording",
+      "source": "mic",
+      "message": "Audio capture failed",
+      "recoverable": false
+     }
+    ],
+    [
+     "raised",
+     null
+    ],
+    [
+     "snapshot",
+     {
+      "transcript": false,
+      "energy": false,
+      "device": null
+     }
+    ]
+   ]
+  },
+  {
+   "name": "record_fails_with_recorder_info",
+   "config": {
+    "selected": "Mic A",
+    "fail_record": true,
+    "fail_record_info": true
+   },
+   "steps": [
+    {
+     "op": "reconfigure",
+     "transcript": true
+    },
+    {
+     "op": "snapshot"
+    }
+   ],
+   "events": [
+    [
+     "open",
+     "Mic A"
+    ],
+    [
+     "record_into",
+     {
+      "energy": false,
+      "queue": "bounded:20"
+     }
+    ],
+    [
+     "deliver",
+     {
+      "text": "",
+      "language": null,
+      "recognition_error": true,
+      "error_code": "VAD_INFERENCE_ERROR",
+      "stage": "vad",
+      "source": "mic",
+      "message": "Voice activity detection failed",
+      "recoverable": false
+     }
+    ],
+    [
+     "raised",
+     null
+    ],
+    [
+     "snapshot",
+     {
+      "transcript": false,
+      "energy": false,
+      "device": null
+     }
+    ]
+   ]
+  },
+  {
+   "name": "transcriber_init_fails",
+   "config": {
+    "selected": "Mic A",
+    "fail_transcriber": true
+   },
+   "steps": [
+    {
+     "op": "reconfigure",
+     "transcript": true
+    },
+    {
+     "op": "snapshot"
+    }
+   ],
+   "events": [
+    [
+     "open",
+     "Mic A"
+    ],
+    [
+     "record_into",
+     {
+      "energy": false,
+      "queue": "bounded:20"
+     }
+    ],
+    [
+     "transcriber_failed",
+     null
+    ],
+    [
+     "resume",
+     null
+    ],
+    [
+     "stop",
+     null
+    ],
+    [
+     "deliver",
+     {
+      "text": "",
+      "language": null,
+      "recognition_error": true,
+      "error_code": "TRANSCRIBER_INIT_ERROR",
+      "stage": "asr",
+      "source": "mic",
+      "message": "Speech recognizer initialization failed",
+      "recoverable": false
+     }
+    ],
+    [
+     "raised",
+     null
+    ],
+    [
+     "snapshot",
+     {
+      "transcript": false,
+      "energy": false,
+      "device": null
+     }
+    ]
+   ]
+  },
+  {
+   "name": "cleanup_timeout_on_a_failed_start",
+   "config": {
+    "selected": "Mic A",
+    "fail_transcriber": true,
+    "stop_hang_ms": 1500,
+    "stop_timeout_ms": 300
+   },
+   "steps": [
+    {
+     "op": "reconfigure",
+     "transcript": true
+    },
+    {
+     "op": "snapshot"
+    }
+   ],
+   "events": [
+    [
+     "open",
+     "Mic A"
+    ],
+    [
+     "record_into",
+     {
+      "energy": false,
+      "queue": "bounded:20"
+     }
+    ],
+    [
+     "transcriber_failed",
+     null
+    ],
+    [
+     "resume",
+     null
+    ],
+    [
+     "stop",
+     null
+    ],
+    [
+     "log",
+     "Mic recorder did not stop within timeout"
+    ],
+    [
+     "deliver",
+     {
+      "text": "",
+      "language": null,
+      "recognition_error": true,
+      "error_code": "CLEANUP_TIMEOUT",
+      "stage": "cleanup",
+      "source": "mic",
+      "message": "Audio transcription cleanup timed out",
+      "recoverable": false
+     }
+    ],
+    [
+     "raised",
+     null
+    ],
+    [
+     "snapshot",
+     {
+      "transcript": false,
+      "energy": false,
+      "device": null
+     }
+    ]
+   ]
+  },
+  {
+   "name": "start_failure_beats_recorder_info",
+   "config": {
+    "selected": "Mic A",
+    "fail_transcriber": true,
+    "info_at_record": true
+   },
+   "steps": [
+    {
+     "op": "reconfigure",
+     "transcript": true
+    },
+    {
+     "op": "snapshot"
+    }
+   ],
+   "events": [
+    [
+     "open",
+     "Mic A"
+    ],
+    [
+     "record_into",
+     {
+      "energy": false,
+      "queue": "bounded:20"
+     }
+    ],
+    [
+     "transcriber_failed",
+     null
+    ],
+    [
+     "resume",
+     null
+    ],
+    [
+     "stop",
+     null
+    ],
+    [
+     "deliver",
+     {
+      "text": "",
+      "language": null,
+      "recognition_error": true,
+      "error_code": "TRANSCRIBER_INIT_ERROR",
+      "stage": "asr",
+      "source": "mic",
+      "message": "Speech recognizer initialization failed",
+      "recoverable": false
+     }
+    ],
+    [
+     "raised",
+     null
+    ],
+    [
+     "snapshot",
+     {
+      "transcript": false,
+      "energy": false,
+      "device": null
+     }
+    ]
+   ]
+  },
+  {
+   "name": "asr_pipeline_error",
+   "config": {
+    "selected": "Mic A"
+   },
+   "steps": [
+    {
+     "op": "reconfigure",
+     "transcript": true
+    },
+    {
+     "op": "audio",
+     "chunks": [
+      "ok"
+     ]
+    },
+    {
+     "op": "wait_for",
+     "tag": "deliver",
+     "count": 1
+    },
+    {
+     "op": "audio",
+     "chunks": [
+      "<raise-pipeline>"
+     ]
+    },
+    {
+     "op": "wait_for",
+     "tag": "deliver",
+     "count": 2
+    },
+    {
+     "op": "sleep",
+     "ms": 50
+    },
+    {
+     "op": "snapshot"
+    },
+    {
+     "op": "audio",
+     "chunks": [
+      "late"
+     ]
+    },
+    {
+     "op": "sleep",
+     "ms": 50
+    }
+   ],
+   "events": [
+    [
+     "open",
+     "Mic A"
+    ],
+    [
+     "record_into",
+     {
+      "energy": false,
+      "queue": "bounded:20"
+     }
+    ],
+    [
+     "transcriber",
+     {
+      "sample_rate": 16000,
+      "channels": 1
+     }
+    ],
+    [
+     "deliver",
+     {
+      "confidence": 0.9,
+      "text": "ok",
+      "language": "en",
+      "recognition_error": false
+     }
+    ],
+    [
+     "resume",
+     null
+    ],
+    [
+     "stop",
+     null
+    ],
+    [
+     "deliver",
+     {
+      "text": "",
+      "language": null,
+      "recognition_error": true,
+      "error_code": "ASR_ERROR",
+      "stage": "asr",
+      "source": "mic",
+      "message": "Speech recognition failed",
+      "recoverable": false
+     }
+    ],
+    [
+     "snapshot",
+     {
+      "transcript": false,
+      "energy": false,
+      "device": null
+     }
+    ]
+   ]
+  },
+  {
+   "name": "asr_generic_error",
+   "config": {
+    "selected": "Mic A"
+   },
+   "steps": [
+    {
+     "op": "reconfigure",
+     "transcript": true
+    },
+    {
+     "op": "audio",
+     "chunks": [
+      "<raise-generic>"
+     ]
+    },
+    {
+     "op": "wait_for",
+     "tag": "deliver",
+     "count": 1
+    },
+    {
+     "op": "sleep",
+     "ms": 50
+    },
+    {
+     "op": "snapshot"
+    }
+   ],
+   "events": [
+    [
+     "open",
+     "Mic A"
+    ],
+    [
+     "record_into",
+     {
+      "energy": false,
+      "queue": "bounded:20"
+     }
+    ],
+    [
+     "transcriber",
+     {
+      "sample_rate": 16000,
+      "channels": 1
+     }
+    ],
+    [
+     "resume",
+     null
+    ],
+    [
+     "stop",
+     null
+    ],
+    [
+     "deliver",
+     {
+      "text": "",
+      "language": null,
+      "recognition_error": true,
+      "error_code": "ASR_ERROR",
+      "stage": "asr",
+      "source": "mic",
+      "message": "Speech recognition failed",
+      "recoverable": false
+     }
+    ],
+    [
+     "snapshot",
+     {
+      "transcript": false,
+      "energy": false,
+      "device": null
+     }
+    ]
+   ]
+  },
+  {
+   "name": "device_error_is_reported",
+   "config": {
+    "selected": "Mic A"
+   },
+   "steps": [
+    {
+     "op": "reconfigure",
+     "transcript": true
+    },
+    {
+     "op": "device_error"
+    },
+    {
+     "op": "wait_for",
+     "tag": "deliver",
+     "count": 1
+    },
+    {
+     "op": "sleep",
+     "ms": 50
+    },
+    {
+     "op": "snapshot"
+    }
+   ],
+   "events": [
+    [
+     "open",
+     "Mic A"
+    ],
+    [
+     "record_into",
+     {
+      "energy": false,
+      "queue": "bounded:20"
+     }
+    ],
+    [
+     "transcriber",
+     {
+      "sample_rate": 16000,
+      "channels": 1
+     }
+    ],
+    [
+     "resume",
+     null
+    ],
+    [
+     "stop",
+     null
+    ],
+    [
+     "deliver",
+     {
+      "text": "",
+      "language": null,
+      "recognition_error": true,
+      "error_code": "AUDIO_READ_ERROR",
+      "stage": "recording",
+      "source": "mic",
+      "message": "Audio capture failed",
+      "recoverable": false
+     }
+    ],
+    [
+     "snapshot",
+     {
+      "transcript": false,
+      "energy": false,
+      "device": null
+     }
+    ]
+   ]
+  },
+  {
+   "name": "restart_after_failure",
+   "config": {
+    "selected": "Mic A"
+   },
+   "steps": [
+    {
+     "op": "reconfigure",
+     "transcript": true
+    },
+    {
+     "op": "audio",
+     "chunks": [
+      "<raise-pipeline>"
+     ]
+    },
+    {
+     "op": "wait_for",
+     "tag": "deliver",
+     "count": 1
+    },
+    {
+     "op": "sleep",
+     "ms": 50
+    },
+    {
+     "op": "snapshot"
+    },
+    {
+     "op": "reconfigure",
+     "transcript": true
+    },
+    {
+     "op": "snapshot"
+    },
+    {
+     "op": "audio",
+     "chunks": [
+      "again"
+     ]
+    },
+    {
+     "op": "wait_for",
+     "tag": "deliver",
+     "count": 2
+    },
+    {
+     "op": "audio",
+     "chunks": [
+      "<raise-pipeline>"
+     ]
+    },
+    {
+     "op": "wait_for",
+     "tag": "deliver",
+     "count": 3
+    },
+    {
+     "op": "sleep",
+     "ms": 50
+    },
+    {
+     "op": "snapshot"
+    }
+   ],
+   "events": [
+    [
+     "open",
+     "Mic A"
+    ],
+    [
+     "record_into",
+     {
+      "energy": false,
+      "queue": "bounded:20"
+     }
+    ],
+    [
+     "transcriber",
+     {
+      "sample_rate": 16000,
+      "channels": 1
+     }
+    ],
+    [
+     "resume",
+     null
+    ],
+    [
+     "stop",
+     null
+    ],
+    [
+     "deliver",
+     {
+      "text": "",
+      "language": null,
+      "recognition_error": true,
+      "error_code": "ASR_ERROR",
+      "stage": "asr",
+      "source": "mic",
+      "message": "Speech recognition failed",
+      "recoverable": false
+     }
+    ],
+    [
+     "snapshot",
+     {
+      "transcript": false,
+      "energy": false,
+      "device": null
+     }
+    ],
+    [
+     "open",
+     "Mic A"
+    ],
+    [
+     "record_into",
+     {
+      "energy": false,
+      "queue": "bounded:20"
+     }
+    ],
+    [
+     "transcriber",
+     {
+      "sample_rate": 16000,
+      "channels": 1
+     }
+    ],
+    [
+     "snapshot",
+     {
+      "transcript": true,
+      "energy": false,
+      "device": "Mic A"
+     }
+    ],
+    [
+     "deliver",
+     {
+      "confidence": 0.9,
+      "text": "again",
+      "language": "en",
+      "recognition_error": false
+     }
+    ],
+    [
+     "resume",
+     null
+    ],
+    [
+     "stop",
+     null
+    ],
+    [
+     "deliver",
+     {
+      "text": "",
+      "language": null,
+      "recognition_error": true,
+      "error_code": "ASR_ERROR",
+      "stage": "asr",
+      "source": "mic",
+      "message": "Speech recognition failed",
+      "recoverable": false
+     }
+    ],
+    [
+     "snapshot",
+     {
+      "transcript": false,
+      "energy": false,
+      "device": null
+     }
+    ]
+   ]
+  },
+  {
+   "name": "batch_delivers_all",
+   "config": {
+    "selected": "Mic A"
+   },
+   "steps": [
+    {
+     "op": "reconfigure",
+     "transcript": true
+    },
+    {
+     "op": "audio",
+     "chunks": [
+      "<batch>"
+     ]
+    },
+    {
+     "op": "wait_for",
+     "tag": "deliver",
+     "count": 3
+    },
+    {
+     "op": "reconfigure",
+     "transcript": false
+    }
+   ],
+   "events": [
+    [
+     "open",
+     "Mic A"
+    ],
+    [
+     "record_into",
+     {
+      "energy": false,
+      "queue": "bounded:20"
+     }
+    ],
+    [
+     "transcriber",
+     {
+      "sample_rate": 16000,
+      "channels": 1
+     }
+    ],
+    [
+     "deliver",
+     {
+      "confidence": 0.9,
+      "text": "b1",
+      "language": "en",
+      "recognition_error": false
+     }
+    ],
+    [
+     "deliver",
+     {
+      "confidence": 0.9,
+      "text": "b2",
+      "language": "en",
+      "recognition_error": false
+     }
+    ],
+    [
+     "deliver",
+     {
+      "confidence": 0.9,
+      "text": "b3",
+      "language": "en",
+      "recognition_error": false
+     }
+    ],
+    [
+     "resume",
+     null
+    ],
+    [
+     "stop",
+     null
+    ]
+   ]
+  },
+  {
+   "name": "recognition_error_flag",
+   "config": {
+    "selected": "Mic A"
+   },
+   "steps": [
+    {
+     "op": "reconfigure",
+     "transcript": true
+    },
+    {
+     "op": "audio",
+     "chunks": [
+      "!bad"
+     ]
+    },
+    {
+     "op": "wait_for",
+     "tag": "deliver",
+     "count": 1
+    },
+    {
+     "op": "audio",
+     "chunks": [
+      "good"
+     ]
+    },
+    {
+     "op": "wait_for",
+     "tag": "deliver",
+     "count": 2
+    },
+    {
+     "op": "reconfigure",
+     "transcript": false
+    }
+   ],
+   "events": [
+    [
+     "open",
+     "Mic A"
+    ],
+    [
+     "record_into",
+     {
+      "energy": false,
+      "queue": "bounded:20"
+     }
+    ],
+    [
+     "transcriber",
+     {
+      "sample_rate": 16000,
+      "channels": 1
+     }
+    ],
+    [
+     "deliver",
+     {
+      "confidence": 0.9,
+      "text": "!bad",
+      "language": "en",
+      "recognition_error": true
+     }
+    ],
+    [
+     "deliver",
+     {
+      "confidence": 0.9,
+      "text": "good",
+      "language": "en",
+      "recognition_error": false
+     }
+    ],
+    [
+     "resume",
+     null
+    ],
+    [
+     "stop",
+     null
+    ]
+   ]
+  },
+  {
+   "name": "queue_overflow_drops_oldest",
+   "config": {
+    "selected": "Mic A"
+   },
+   "steps": [
+    {
+     "op": "reconfigure",
+     "transcript": true
+    },
+    {
+     "op": "gate",
+     "closed": true
+    },
+    {
+     "op": "audio",
+     "chunks": [
+      "c00",
+      "c01",
+      "c02",
+      "c03",
+      "c04",
+      "c05",
+      "c06",
+      "c07",
+      "c08",
+      "c09",
+      "c10",
+      "c11",
+      "c12",
+      "c13",
+      "c14",
+      "c15",
+      "c16",
+      "c17",
+      "c18",
+      "c19",
+      "c20",
+      "c21",
+      "c22",
+      "c23",
+      "c24"
+     ]
+    },
+    {
+     "op": "gate",
+     "closed": false
+    },
+    {
+     "op": "wait_for",
+     "tag": "deliver",
+     "count": 20
+    },
+    {
+     "op": "sleep",
+     "ms": 60
+    },
+    {
+     "op": "reconfigure",
+     "transcript": false
+    }
+   ],
+   "events": [
+    [
+     "open",
+     "Mic A"
+    ],
+    [
+     "record_into",
+     {
+      "energy": false,
+      "queue": "bounded:20"
+     }
+    ],
+    [
+     "transcriber",
+     {
+      "sample_rate": 16000,
+      "channels": 1
+     }
+    ],
+    [
+     "deliver",
+     {
+      "confidence": 0.9,
+      "text": "c05",
+      "language": "en",
+      "recognition_error": false
+     }
+    ],
+    [
+     "deliver",
+     {
+      "confidence": 0.9,
+      "text": "c06",
+      "language": "en",
+      "recognition_error": false
+     }
+    ],
+    [
+     "deliver",
+     {
+      "confidence": 0.9,
+      "text": "c07",
+      "language": "en",
+      "recognition_error": false
+     }
+    ],
+    [
+     "deliver",
+     {
+      "confidence": 0.9,
+      "text": "c08",
+      "language": "en",
+      "recognition_error": false
+     }
+    ],
+    [
+     "deliver",
+     {
+      "confidence": 0.9,
+      "text": "c09",
+      "language": "en",
+      "recognition_error": false
+     }
+    ],
+    [
+     "deliver",
+     {
+      "confidence": 0.9,
+      "text": "c10",
+      "language": "en",
+      "recognition_error": false
+     }
+    ],
+    [
+     "deliver",
+     {
+      "confidence": 0.9,
+      "text": "c11",
+      "language": "en",
+      "recognition_error": false
+     }
+    ],
+    [
+     "deliver",
+     {
+      "confidence": 0.9,
+      "text": "c12",
+      "language": "en",
+      "recognition_error": false
+     }
+    ],
+    [
+     "deliver",
+     {
+      "confidence": 0.9,
+      "text": "c13",
+      "language": "en",
+      "recognition_error": false
+     }
+    ],
+    [
+     "deliver",
+     {
+      "confidence": 0.9,
+      "text": "c14",
+      "language": "en",
+      "recognition_error": false
+     }
+    ],
+    [
+     "deliver",
+     {
+      "confidence": 0.9,
+      "text": "c15",
+      "language": "en",
+      "recognition_error": false
+     }
+    ],
+    [
+     "deliver",
+     {
+      "confidence": 0.9,
+      "text": "c16",
+      "language": "en",
+      "recognition_error": false
+     }
+    ],
+    [
+     "deliver",
+     {
+      "confidence": 0.9,
+      "text": "c17",
+      "language": "en",
+      "recognition_error": false
+     }
+    ],
+    [
+     "deliver",
+     {
+      "confidence": 0.9,
+      "text": "c18",
+      "language": "en",
+      "recognition_error": false
+     }
+    ],
+    [
+     "deliver",
+     {
+      "confidence": 0.9,
+      "text": "c19",
+      "language": "en",
+      "recognition_error": false
+     }
+    ],
+    [
+     "deliver",
+     {
+      "confidence": 0.9,
+      "text": "c20",
+      "language": "en",
+      "recognition_error": false
+     }
+    ],
+    [
+     "deliver",
+     {
+      "confidence": 0.9,
+      "text": "c21",
+      "language": "en",
+      "recognition_error": false
+     }
+    ],
+    [
+     "deliver",
+     {
+      "confidence": 0.9,
+      "text": "c22",
+      "language": "en",
+      "recognition_error": false
+     }
+    ],
+    [
+     "deliver",
+     {
+      "confidence": 0.9,
+      "text": "c23",
+      "language": "en",
+      "recognition_error": false
+     }
+    ],
+    [
+     "deliver",
+     {
+      "confidence": 0.9,
+      "text": "c24",
+      "language": "en",
+      "recognition_error": false
+     }
+    ],
+    [
+     "resume",
+     null
+    ],
+    [
+     "stop",
+     null
+    ]
+   ]
+  },
+  {
+   "name": "resume_drains_the_queue",
+   "config": {
+    "selected": "Mic A"
+   },
+   "steps": [
+    {
+     "op": "reconfigure",
+     "transcript": true
+    },
+    {
+     "op": "gate",
+     "closed": true
+    },
+    {
+     "op": "audio",
+     "chunks": [
+      "a",
+      "b"
+     ]
+    },
+    {
+     "op": "pause"
+    },
+    {
+     "op": "resume"
+    },
+    {
+     "op": "gate",
+     "closed": false
+    },
+    {
+     "op": "audio",
+     "chunks": [
+      "c"
+     ]
+    },
+    {
+     "op": "wait_for",
+     "tag": "deliver",
+     "count": 1
+    },
+    {
+     "op": "sleep",
+     "ms": 60
+    },
+    {
+     "op": "reconfigure",
+     "transcript": false
+    }
+   ],
+   "events": [
+    [
+     "open",
+     "Mic A"
+    ],
+    [
+     "record_into",
+     {
+      "energy": false,
+      "queue": "bounded:20"
+     }
+    ],
+    [
+     "transcriber",
+     {
+      "sample_rate": 16000,
+      "channels": 1
+     }
+    ],
+    [
+     "pause",
+     null
+    ],
+    [
+     "resume",
+     null
+    ],
+    [
+     "deliver",
+     {
+      "confidence": 0.9,
+      "text": "c",
+      "language": "en",
+      "recognition_error": false
+     }
+    ],
+    [
+     "resume",
+     null
+    ],
+    [
+     "stop",
+     null
+    ]
+   ]
+  },
+  {
+   "name": "stop_while_paused",
+   "config": {
+    "selected": "Mic A"
+   },
+   "steps": [
+    {
+     "op": "reconfigure",
+     "transcript": true
+    },
+    {
+     "op": "pause"
+    },
+    {
+     "op": "reconfigure",
+     "transcript": false
+    },
+    {
+     "op": "snapshot"
+    }
+   ],
+   "events": [
+    [
+     "open",
+     "Mic A"
+    ],
+    [
+     "record_into",
+     {
+      "energy": false,
+      "queue": "bounded:20"
+     }
+    ],
+    [
+     "transcriber",
+     {
+      "sample_rate": 16000,
+      "channels": 1
+     }
+    ],
+    [
+     "pause",
+     null
+    ],
+    [
+     "resume",
+     null
+    ],
+    [
+     "stop",
+     null
+    ],
+    [
+     "snapshot",
+     {
+      "transcript": false,
+      "energy": false,
+      "device": null
+     }
+    ]
+   ]
+  },
+  {
+   "name": "cleanup_timeout_replaces_the_error",
+   "config": {
+    "selected": "Mic A",
+    "stop_hang_ms": 1500,
+    "stop_timeout_ms": 300
+   },
+   "steps": [
+    {
+     "op": "reconfigure",
+     "transcript": true
+    },
+    {
+     "op": "audio",
+     "chunks": [
+      "<raise-pipeline>"
+     ]
+    },
+    {
+     "op": "wait_for",
+     "tag": "deliver",
+     "count": 1
+    },
+    {
+     "op": "snapshot"
+    }
+   ],
+   "events": [
+    [
+     "open",
+     "Mic A"
+    ],
+    [
+     "record_into",
+     {
+      "energy": false,
+      "queue": "bounded:20"
+     }
+    ],
+    [
+     "transcriber",
+     {
+      "sample_rate": 16000,
+      "channels": 1
+     }
+    ],
+    [
+     "resume",
+     null
+    ],
+    [
+     "stop",
+     null
+    ],
+    [
+     "log",
+     "Mic recorder did not stop within timeout"
+    ],
+    [
+     "deliver",
+     {
+      "text": "",
+      "language": null,
+      "recognition_error": true,
+      "error_code": "CLEANUP_TIMEOUT",
+      "stage": "cleanup",
+      "source": "mic",
+      "message": "Audio transcription cleanup timed out",
+      "recoverable": false
+     }
+    ],
+    [
+     "snapshot",
+     {
+      "transcript": false,
+      "energy": false,
+      "device": null
+     }
+    ]
+   ]
+  },
+  {
+   "name": "hung_transcriber_times_out",
+   "config": {
+    "selected": "Mic A",
+    "stop_timeout_ms": 300
+   },
+   "steps": [
+    {
+     "op": "reconfigure",
+     "transcript": true
+    },
+    {
+     "op": "audio",
+     "chunks": [
+      "<hang>"
+     ]
+    },
+    {
+     "op": "sleep",
+     "ms": 60
+    },
+    {
+     "op": "reconfigure",
+     "transcript": false
+    },
+    {
+     "op": "snapshot"
+    },
+    {
+     "op": "release"
+    }
+   ],
+   "events": [
+    [
+     "open",
+     "Mic A"
+    ],
+    [
+     "record_into",
+     {
+      "energy": false,
+      "queue": "bounded:20"
+     }
+    ],
+    [
+     "transcriber",
+     {
+      "sample_rate": 16000,
+      "channels": 1
+     }
+    ],
+    [
+     "log",
+     "Mic transcription thread did not terminate within timeout"
+    ],
+    [
+     "resume",
+     null
+    ],
+    [
+     "stop",
+     null
+    ],
+    [
+     "snapshot",
+     {
+      "transcript": false,
+      "energy": false,
+      "device": null
+     }
+    ]
+   ]
+  },
+  {
+   "name": "hung_recorder_stop_times_out",
+   "config": {
+    "selected": "Mic A",
+    "stop_hang_ms": 1500,
+    "stop_timeout_ms": 300
+   },
+   "steps": [
+    {
+     "op": "reconfigure",
+     "transcript": true
+    },
+    {
+     "op": "reconfigure",
+     "transcript": false
+    },
+    {
+     "op": "snapshot"
+    }
+   ],
+   "events": [
+    [
+     "open",
+     "Mic A"
+    ],
+    [
+     "record_into",
+     {
+      "energy": false,
+      "queue": "bounded:20"
+     }
+    ],
+    [
+     "transcriber",
+     {
+      "sample_rate": 16000,
+      "channels": 1
+     }
+    ],
+    [
+     "resume",
+     null
+    ],
+    [
+     "stop",
+     null
+    ],
+    [
+     "log",
+     "Mic recorder did not stop within timeout"
+    ],
+    [
+     "snapshot",
+     {
+      "transcript": false,
+      "energy": false,
+      "device": null
+     }
+    ]
+   ]
+  }
+ ]
+}

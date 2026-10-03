@@ -4,7 +4,8 @@
 //! `vad` cuts that stream into speech segments with a state machine around a
 //! per-frame speech probability, which `silero` computes. `devices`, `capture` and `samples` read
 //! the microphone or a speaker's loopback through WASAPI, and `pipeline` runs capture, normaliser and
-//! VAD together on their own threads. The normaliser and VAD follow `models/transcription/audio_vad.py`
+//! VAD together on their own threads. `raw` reads a device in its own format for the energy-threshold recorder
+//! and is the Windows `Platform` that mic/speaker sessions are built on. The normaliser and VAD follow `models/transcription/audio_vad.py`
 //! and are checked against its output.
 
 pub mod devices;
@@ -16,6 +17,8 @@ pub mod silero;
 pub mod vad;
 #[cfg(windows)]
 pub mod capture;
+#[cfg(windows)]
+pub mod raw;
 #[cfg(windows)]
 pub mod wasapi;
 
