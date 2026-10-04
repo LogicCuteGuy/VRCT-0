@@ -142,14 +142,17 @@ fn a_first_start_offers_the_cpu_and_picks_the_first_engine() {
 }
 
 #[test]
-fn the_system_devices_answer_with_one_host_or_the_placeholder() {
+fn the_system_devices_answer_with_available_hosts_or_the_placeholder() {
     let devices = SystemDevices;
     let hosts = devices.mic_hosts();
-    assert_eq!(hosts.len(), 1);
+    assert!(!hosts.is_empty());
+    assert!(hosts.iter().all(|host| matches!(host.as_str(), "Windows WASAPI" | "ASIO" | "NoHost")), "{hosts:?}");
     assert!(hosts[0] == "Windows WASAPI" || hosts[0] == "NoHost", "{hosts:?}");
     assert!(!devices.mic_device_names(&hosts[0]).is_empty());
     // Any other host (a saved MME choice) has no devices, so it is not accepted.
     assert!(devices.mic_device_names("MME").is_empty());
+    #[cfg(windows)]
+    assert!(devices.speaker_device_names_for_host("MME").is_empty());
     assert!(!devices.speaker_device_names().is_empty());
 }
 

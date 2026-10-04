@@ -50,7 +50,9 @@ impl Devices for SystemDevices {
     fn mic_device_names(&self, host: &str) -> Vec<String> {
         #[cfg(windows)]
         if host != WASAPI_HOST && host != NO_HOST {
-            return crate::audio::wasapi::list_devices_for_host(host).unwrap_or_default().mic_names().into_iter().map(str::to_owned).collect();
+            return crate::audio::wasapi::list_devices_for_host(host)
+                .map(|list| list.mic_names().into_iter().map(str::to_owned).collect())
+                .unwrap_or_default();
         }
         let list = Self::list();
         // One host exists; asking for another gives nothing, so a saved MME choice is not accepted.
@@ -70,7 +72,9 @@ impl Devices for SystemDevices {
 
     fn speaker_device_names_for_host(&self, host: &str) -> Vec<String> {
         #[cfg(windows)]
-        { crate::audio::wasapi::list_devices_for_host(host).unwrap_or_default().speaker_names().into_iter().map(str::to_owned).collect() }
+        { crate::audio::wasapi::list_devices_for_host(host)
+            .map(|list| list.speaker_names().into_iter().map(str::to_owned).collect())
+            .unwrap_or_default() }
         #[cfg(not(windows))]
         { let _ = host; self.speaker_device_names() }
     }

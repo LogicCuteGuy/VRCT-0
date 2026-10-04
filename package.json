@@ -1,7 +1,7 @@
 {
   "name": "vrct-0",
   "private": true,
-  "version": "3.5.1-beta.4",
+  "version": "3.5.1-beta.5",
   "type": "module",
   "scripts": {
     "test:appearance": "node --test utils/tests/appearance.test.js",
