@@ -13,7 +13,7 @@
 - 保存できるダーク・ライト・システムテーマとUI翻訳の拡充。
 - Rust xtaskによるビルド・パッケージ検証と、このforkのリリースからの更新。
 
-[Documentation](/docs/README.md) · [Releases](https://github.com/LogicCuteGuy/0-VRCT/releases)
+[Documentation](/docs/README.md) · [Releases](https://github.com/LogicCuteGuy/VRCT-0/releases)
 
 Upstream store and supporter links below belong to the original project. Original credits are retained.
 

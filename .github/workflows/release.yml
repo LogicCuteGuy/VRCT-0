@@ -86,6 +86,17 @@ jobs:
         # The Rust build compiles CTranslate2 (feature `ct2`) with CMake and MSVC.
         run: cmake --version
 
+      - name: Set up libclang for ASIO
+        shell: pwsh
+        run: |
+          $llvmBin = "C:/Program Files/LLVM/bin"
+          if (-not (Test-Path "$llvmBin/libclang.dll")) {
+            choco install llvm --yes --no-progress
+            if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
+          }
+          if (-not (Test-Path "$llvmBin/libclang.dll")) { throw "LLVM libclang.dll is missing" }
+          "LIBCLANG_PATH=$llvmBin" | Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append
+
       - name: Install dependencies
         run: npm ci
 
@@ -93,7 +104,7 @@ jobs:
         run: npm run native:prepare-release
 
       - name: Test native backend and release tooling
-        run: cargo test --manifest-path src-tauri/Cargo.toml -p vrct-core -p xtask --locked -j1 --config 'profile.test.package.vrct-core.debug=0' --config 'profile.test.package.vrct-core.codegen-units=16'
+        run: node utils/native_env.js cargo test --manifest-path src-tauri/Cargo.toml -p vrct-core -p xtask --locked -j1 --config 'profile.test.package.vrct-core.debug=0' --config 'profile.test.package.vrct-core.codegen-units=16'
 
       - name: Build and package
         run: npm run release
@@ -107,7 +118,7 @@ jobs:
           # GitHub rejects release assets of 2 GiB or more; fail here with a
           # clear message instead of after the whole build.
           $limit = 2GB - 1
-          foreach ($file in @("./VRCT.zip", "./src-tauri/target/release/bundle/nsis/VRCT_${{ env.VERSION }}_x64-setup.exe")) {
+          foreach ($file in @("./VRCT.zip", "./src-tauri/target/release/bundle/nsis/VRCT-0_${{ env.VERSION }}_x64-setup.exe")) {
             $size = (Get-Item $file).Length
             Write-Host "$file = $([math]::Round($size / 1MB)) MB"
             if ($size -ge $limit) {
@@ -122,7 +133,7 @@ jobs:
           # The installer's own updater and the NSIS bootstrapper both look for
           # "<asset>.sha256" next to each asset and refuse a mismatch.
           $assets = @(
-            "./src-tauri/target/release/bundle/nsis/VRCT_${{ env.VERSION }}_x64-setup.exe",
+            "./src-tauri/target/release/bundle/nsis/VRCT-0_${{ env.VERSION }}_x64-setup.exe",
             "./VRCT.zip"
           )
           foreach ($asset in $assets) {
@@ -136,11 +147,12 @@ jobs:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           $dir = "./src-tauri/target/release/bundle/nsis"
-          $setup = "$dir/VRCT_${{ env.VERSION }}_x64-setup.exe"
+          $setup = "$dir/VRCT-0_${{ env.VERSION }}_x64-setup.exe"
           $args = @(
             "release", "create", "${{ github.ref_name }}",
             "--repo", "${{ github.repository }}",
             "--title", "${{ env.VERSION }}",
+            "--generate-notes",
             "--verify-tag",
             $setup, "$setup.sha256",
             "./VRCT.zip", "./VRCT.zip.sha256"

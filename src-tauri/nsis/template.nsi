@@ -679,7 +679,7 @@ Section Install
   !addplugindir "..\..\..\..\nsis\plugins\x86-unicode"
   ; 指定のURLからファイルをダウンロード
   ; The app package is a GitHub release asset of the tag "v<version>".
-  !define SOFTWARE_RELEASE_REPO "LogicCuteGuy/0-VRCT"
+  !define SOFTWARE_RELEASE_REPO "LogicCuteGuy/VRCT-0"
   !define SOFTWARE_DOWNLOAD_FILENAME "VRCT.zip"
 
   ; Free-space budget (MiB) per edition. The compressed archive is written to

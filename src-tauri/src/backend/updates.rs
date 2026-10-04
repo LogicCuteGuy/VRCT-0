@@ -12,7 +12,7 @@ use vrct_core::updater::{Channel, Edition, UpdateSource, Updater};
 
 /// Releases are read from this repository's GitHub Releases.
 const REPO_OWNER: &str = "LogicCuteGuy";
-const REPO_NAME: &str = "0-VRCT";
+const REPO_NAME: &str = "VRCT-0";
 /// Same floor the Python updater used for the version picker.
 const MIN_SUPPORTED_VERSION: &str = "3.4.3";
 

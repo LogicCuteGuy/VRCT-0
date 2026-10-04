@@ -10,7 +10,7 @@ VRChat translation and transcription.
 
 [English](/docs/readmes/README.en.md) · [日本語](/docs/readmes/README.ja.md) · [한국어](/docs/readmes/README.ko.md) · [繁體中文](/docs/readmes/README.zh-Hant.md) · [简体中文](/docs/readmes/README.zh-Hans.md) · [ไทย](/docs/readmes/README.th.md)
 
-[Downloads](https://github.com/LogicCuteGuy/0-VRCT/releases) · [Issues](https://github.com/LogicCuteGuy/0-VRCT/issues) · [Documentation](/docs/README.md)
+[Downloads](https://github.com/LogicCuteGuy/VRCT-0/releases) · [Issues](https://github.com/LogicCuteGuy/VRCT-0/issues) · [Documentation](/docs/README.md)
 </div>
 
 ## What changed in this fork
@@ -34,7 +34,7 @@ VRCT-0 is a fork of [VRCT](https://github.com/misyaguziya/VRCT). It keeps the tr
 
 ## Install
 
-Get builds from [this fork’s Releases](https://github.com/LogicCuteGuy/0-VRCT/releases). Extract the complete portable package before launching the application. The current portable payload retains the compatibility filename `VRCT.exe` and archive name `VRCT.zip`; its displayed product name is **VRCT-0**. Installer and application icons use the new VRCT-0 mark.
+Get builds from [this fork’s Releases](https://github.com/LogicCuteGuy/VRCT-0/releases). Extract the complete portable package before launching the application. The current portable payload retains the compatibility filename `VRCT.exe` and archive name `VRCT.zip`; its displayed product name is **VRCT-0**. Installer and application icons use the new VRCT-0 mark.
 
 Choose your preferred UI language during installation or in **Settings → Appearance → UI Language**. Theme and language settings are described in the [user guide](/docs/vrct-0.md).
 

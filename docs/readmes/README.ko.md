@@ -13,7 +13,7 @@
 - 저장되는 Dark/Light/System 테마와 UI 현지화 확장.
 - Rust xtask 빌드·패키지 검증과 이 포크의 릴리스에서 업데이트.
 
-[Documentation](/docs/README.md) · [Releases](https://github.com/LogicCuteGuy/0-VRCT/releases)
+[Documentation](/docs/README.md) · [Releases](https://github.com/LogicCuteGuy/VRCT-0/releases)
 
 Upstream store and supporter links below belong to the original project. Original credits are retained.
 

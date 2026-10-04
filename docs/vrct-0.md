@@ -35,6 +35,19 @@ The default is System. Theme changes apply immediately across the main window, s
 
 Theme changes affect the desktop UI. VR overlays, OBS output, model settings, and conversation contents keep their independent configuration.
 
+## Updates
+
+For the first installation of this fork, download the Windows setup executable
+from [VRCT-0 Releases](https://github.com/LogicCuteGuy/VRCT-0/releases).
+The installer downloads the matching `VRCT.zip`; keep an internet connection
+available during installation. For a portable installation, download `VRCT.zip`
+and extract the complete archive before running `VRCT.exe`.
+
+For later updates, open **Settings → Updater**, choose **Beta** for prereleases,
+refresh the release list, and install the selected version. Stable and Beta have
+separate release lists. The updater verifies the installer's SHA-256 checksum
+before launching it.
+
 ## Compatibility and credits
 
 The native executable (`VRCT.exe`), portable archive (`VRCT.zip`), crate names, application identifier, and protocol/settings keys keep their existing technical names for compatibility with the installer and releases. User-facing branding is VRCT-0. The AI-generated wordmark has the subtitle “VRChat Chatbox Translator & Transcription”, with black and white variants selected by the desktop theme. Markdown pages use the corresponding image for the reader’s color scheme. Attribution appears in credits sections rather than the logo or README introduction. Assets can be regenerated from `src-ui/views/assets/vrct-0-icon.svg` with:
@@ -43,7 +56,7 @@ The native executable (`VRCT.exe`), portable archive (`VRCT.zip`), crate names, 
 npm run tauri -- icon src-ui/views/assets/vrct-0-icon.svg --output src-tauri/icons
 ```
 
-Use [LogicCuteGuy/0-VRCT](https://github.com/LogicCuteGuy/0-VRCT) for fork downloads and issues. Original developer and license attribution remains intact. Historical documents and external upstream stores retain their original identities.
+Use [LogicCuteGuy/VRCT-0](https://github.com/LogicCuteGuy/VRCT-0) for fork downloads and issues. Original developer and license attribution remains intact. Historical documents and external upstream stores retain their original identities.
 
 ## Checks
 

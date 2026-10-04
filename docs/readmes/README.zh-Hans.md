@@ -10,7 +10,7 @@
 
 [English](/docs/readmes/README.en.md) · [日本語](/docs/readmes/README.ja.md) · [한국어](/docs/readmes/README.ko.md) · [繁體中文](/docs/readmes/README.zh-Hant.md) · [简体中文](/docs/readmes/README.zh-Hans.md) · [ไทย](/docs/readmes/README.th.md)
 
-[下载](https://github.com/LogicCuteGuy/0-VRCT/releases) · [文档](/docs/README.md)
+[下载](https://github.com/LogicCuteGuy/VRCT-0/releases) · [文档](/docs/README.md)
 </div>
 
 ## 此 fork 的变更

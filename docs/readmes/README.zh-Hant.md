@@ -13,7 +13,7 @@
 - 可儲存的深色／淺色／系統主題與 UI 在地化擴充。
 - Rust xtask 建置與套件驗證，並從此 fork 的發行版本更新。
 
-[Documentation](/docs/README.md) · [Releases](https://github.com/LogicCuteGuy/0-VRCT/releases)
+[Documentation](/docs/README.md) · [Releases](https://github.com/LogicCuteGuy/VRCT-0/releases)
 
 Upstream store and supporter links below belong to the original project. Original credits are retained.
 
