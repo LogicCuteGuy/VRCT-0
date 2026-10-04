@@ -129,6 +129,7 @@ VIAddVersionKey "ProductVersion" "${VERSION}"
 !endif
 
 ; 4-1. Choose language page
+Var UILang
 Var DropListLanguages
 Var SelectedLangage
 Var DialogChooseLanguage
@@ -472,7 +473,6 @@ FunctionEnd
 
 Var PassiveMode
 Var TargetVersion
-Var UILang
 Function .onInit
   ${GetOptions} $CMDLINE "/P" $PassiveMode
   IfErrors +2 0

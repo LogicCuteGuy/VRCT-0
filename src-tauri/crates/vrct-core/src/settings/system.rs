@@ -55,9 +55,9 @@ impl Devices for SystemDevices {
                 .unwrap_or_default();
         }
         let list = Self::list();
-        // One host exists; asking for another gives nothing, so a saved MME choice is not accepted.
-        let known = if list.mics.is_empty() { NO_HOST } else { WASAPI_HOST };
-        if host == known {
+        // WASAPI remains an available host on machines without a microphone.
+        // Keep its NoDevice placeholder; unsupported hosts still return nothing.
+        if host == WASAPI_HOST || (host == NO_HOST && list.mics.is_empty()) {
             list.mic_names().into_iter().map(str::to_string).collect()
         } else {
             Vec::new()
