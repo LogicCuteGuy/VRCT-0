@@ -153,6 +153,22 @@ fn the_system_devices_answer_with_one_host_or_the_placeholder() {
     assert!(!devices.speaker_device_names().is_empty());
 }
 
+#[cfg(windows)]
+#[test]
+fn wasapi_enumeration_survives_sequential_thread_exit() {
+    // Each caller exits before the next starts. A process-wide STA enumerator
+    // becomes invalid after the first caller's COM apartment is destroyed.
+    for _ in 0..16 {
+        std::thread::spawn(|| {
+            use cpal::traits::HostTrait;
+            let host = cpal::default_host();
+            let _ = host.devices().expect("enumerate WASAPI endpoints").count();
+            let _ = host.default_input_device();
+            let _ = host.default_output_device();
+        }).join().expect("WASAPI enumeration thread");
+    }
+}
+
 #[test]
 fn adopt_takes_a_value_the_rules_would_refuse() {
     let dir = scratch_dir();

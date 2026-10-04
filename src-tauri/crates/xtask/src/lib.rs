@@ -801,6 +801,15 @@ fn package_kind(root: &Path, profile: &str, output: &Path, tools: bool) -> Resul
     for name in ["LICENSE", "NOTICE.md"] {
         files.insert(name.into(), root.join(name));
     }
+    for (source, target) in [
+        ("LICENSE", "cpal-LICENSE"),
+        ("VRCT-PATCH.md", "cpal-VRCT-PATCH.md"),
+    ] {
+        let path = root.join("src-tauri/vendor/cpal").join(source);
+        if path.is_file() {
+            files.insert(format!("licenses/{target}"), path);
+        }
+    }
     for name in required_files()
         .iter()
         .filter(|&&name| !tools || name != "VRCT.exe")

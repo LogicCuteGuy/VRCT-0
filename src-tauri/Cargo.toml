@@ -10,6 +10,10 @@ edition = "2021"
 [workspace]
 members = ["crates/vrct-core", "crates/xtask", "crates/vrct-annotator", "crates/vrct-capture-tools", "crates/vrct-whisper-eval", "crates/vrct-yolox"]
 
+[patch.crates-io]
+# Keep WASAPI enumerators in their owning COM apartment (CPAL issue #1302).
+cpal = { path = "vendor/cpal" }
+
 # The native core includes inference and shaping libraries. Keep Windows
 # development/test builds within ordinary memory limits during LLVM codegen.
 [profile.dev.package.vrct-core]

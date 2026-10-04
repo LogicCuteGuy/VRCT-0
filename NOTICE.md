@@ -20,6 +20,10 @@ their own licenses.
 
 ## Native third-party components
 
+The source tree vendors CPAL 0.17.1 under Apache-2.0 with a WASAPI COM
+enumerator lifetime fix. Its license and patch notice are included in release
+packages as `licenses/cpal-LICENSE` and `licenses/cpal-VRCT-PATCH.md`.
+
 Native packages include OpenVR, ONNX Runtime, the Microsoft Visual C++
 redistributable, Noto fonts, Sudachi dictionaries and general RapidOCR models.
 Their license and attribution files accompany the DLLs under `licenses/` or
