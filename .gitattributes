@@ -9,3 +9,6 @@ src-tauri/crates/vrct-core/tests/fixtures/ct2_tiny_nllb/model/model.bin binary
 # Native resource checksums cover exact bytes, including vendor line endings.
 # Preserve licenses/data verbatim and do not apply source whitespace rules.
 src-tauri/resources/** -text -eol -whitespace
+
+# Bundled third-party runtimes, models, and fonts are not application source.
+src-tauri/resources/** linguist-vendored
