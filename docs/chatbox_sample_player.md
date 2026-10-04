@@ -1,71 +1,58 @@
-# 多言語チャットの送信と撮影
+# 多言語チャットの送信と撮影（Rust）
 
-送信役の別PCで `VRCT-Chatbox-Sample-Player-windows-x64.zip` を展開し、
-VRChatのOSCを有効にしてからexeを起動する。Enterで開始、Pで一時停止・再開、Qで終了。
-通知音なしで `127.0.0.1:9000` の `/chatbox/input` に `[本文, true, false]` を送る。
-本文は6秒ごとにシャッフルして繰り返す。撮影側は既存のDataset Collectorを使う。
-送信元と撮影側のPCを取り違えないこと。
+`vrct-chatbox-player.exe` は編集可能な `chatbox_samples/*.json` を読み、実行中のPCの
+`127.0.0.1:9000` の `/chatbox/input` に `[本文, true, false]` を送る。
+送信役のアカウントのPCで起動する。通知音は無効。撮影側は `vrct-dataset-collector.exe` を使う。
+UDPの送信成功はVRChatの表示成功を意味しない。
 
-仕様・操作・撮影条件の詳細は [同梱READMEの原本](../tools/chatbox_samples/README.txt) を参照。
-サンプルの原本は `tools/chatbox_samples/` 内のJSON。生成済みのJSONL/TXT一覧は配布物に含む。
-言語、文の長さ、改行、文字幅、混在文字を変え、画像内のチャットボックスの形状を広く集める。
-RTL文字や結合文字、絵文字の字形がVRChatで正しく描かれるかは撮影時に確認する。
+引数なしではEnterで送信開始、既定は6秒周期のシャッフル・繰り返し。
+開始前にQ→Enterで取り消し。開始後はコンソールにフォーカスを置いて
+P=一時停止/再開、R=状態表示、Q/Ctrl+C=終了。引数なしの対話起動は終了後Enterで閉じる。
+一時停止後の再開と遅れた送信は間隔を取り直し、遅れを取り戻す連続送信をしない。
 
-VRChatの公式仕様は144文字・折り返し込み最大9行。送信前検証では保守的に
-UTF-16単位で144以下、明示改行で9行以下に制限し、本文を勝手に切り詰めない。
+```powershell
+.\vrct-chatbox-player.exe --list
+.\vrct-chatbox-player.exe --samples .\chatbox_samples --export-catalogue .\catalogue
+.\vrct-chatbox-player.exe --dry-run --max-messages 1
+.\vrct-chatbox-player.exe --languages ja,en,ko,zh-Hans --interval 8
+.\vrct-chatbox-player.exe --length long --once
+.\vrct-chatbox-player.exe --languages mixed --ordered --start --max-messages 50
+.\vrct-chatbox-player.exe --samples "D:\サンプル" --seed 42 --port 9000
+```
+
+`--samples` はJSONフォルダ、`--languages` はカンマ区切りの言語コード、
+`--length` は tiny/short/medium/long。境界は5/30/80/144 UTF-16単位。
+`--ordered` はファイル順とJSON内の言語・行順を保持、`--seed` は同じRust版のシャッフルを再現する。
+Rustの固定PRNGであり、以前のPython版の同じseedと並び順は一致しない。
+`--once` は1周、`--max-messages` は送信件数上限（0=無制限）、`--interval` は最低3秒。
+`--port` はローカルのOSC入力ポート。送信先のホストは変更できない。
+`--timeout` はUDP送信待ちの上限秒（既定1、最大3600）。`--log-dir` はログ保存先の上書き。
+`--start` は開始確認を省略する。非対話端末での実送信にはこの明示指定が必要。
+`--dry-run` はソケットを作らず、OSC送信・ログ書込も行わない。`--list` は一覧のみ。
+`--export-catalogue <directory>` は送信せず、原本の順に `samples.jsonl`（UTF-8）と
+`samples.txt`（UTF-8 BOM）を作る。本文、tags、ID、UTF-16単位、length、明示行数を保持する。
+既存の同名生成ファイルは置き換える。シャッフルは行わず、言語/lengthのフィルタは適用する。
+
+すべてのJSONを送信前に検証し、空本文、制御・方向制御文字、144 UTF-16単位超、
+9行超を拒否する。本文を切り詰めない。JSONはUTF-8/BOM対応、元の本文と改行を保持する。
+VRChatの最大9行には自動折り返しも含まれるため、字形・RTL・絵文字は撮影時に確認する。
 [Chatbox OSC](https://docs.vrchat.com/docs/osc-as-input-controller#chatbox)、
 [公式Wiki](https://wiki.vrchat.com/wiki/Chatbox)。
 
-## ビルド
+実送信はexeの隣の `sent_logs/*.jsonl` にUTC日時、ID、言語、本文、UTF-16単位、
+明示行数、宛先、tagsを即時flushして記録する。編集用の原本は `tools/chatbox_samples/`。
+配布時にはJSONとライセンスを同梱し、送信ログや収集画像を含めない。
 
-既存の `.venv` に `requirements-chatbox-sample-player.txt` の依存がある場合:
-
-```powershell
-.\bat\build_chatbox_sample_player.bat
-```
-
-別環境ではCPython 3.11 x64で専用venvを作り、同requirementsをインストールする。
-`VRCT_CHATBOX_PYTHON` 環境変数にそのpython.exeの絶対パスを指定できる。
-ビルド中は `--list` と `--dry-run` だけを実行し、VRChatへ送信しない。
-配布ZIPにはexe、編集用JSON、一覧JSONL/TXT、README、ライセンス、BUILD-INFOを同梱する。
-ログは同梱しない。既存の収集ツールexeやVRCT本体は変更しない。
-
-出力は `tool-dist/VRCT-Chatbox-Sample-Player-windows-x64.zip`。
-同じ `tool-dist/` に展開済みフォルダと `.zip.sha256` も生成する。
-2026-09-13から、VRCT本体の画面ビルドやcleanで消去される `dist/` との共用をやめ、
-専用の `tool-dist/` に変更した。配布物はGit管理外なので、別PCにはZIP全体をコピーする。
-
-## 検証
+## ビルドと回帰テスト
 
 ```powershell
-.\.venv\Scripts\python.exe -m pytest -q src-python\test_chatbox_sample_player.py
-.\.venv\Scripts\python.exe -m ruff check tools\chatbox_sample_player.py tools\build_chatbox_sample_player.py src-python\test_chatbox_sample_player.py
+cd src-tauri
+cargo build -p vrct-capture-tools --release --bins -j1
+cargo test -p vrct-capture-tools -j1 -- --test-threads=1
 ```
 
-OSCテストはローカルのテスト専用一時ポートへ送り、UTF-8本文・bool引数・通知音無効を検証する。
-VRChatの9000番ポートや外部PCにはテスト送信しない。
-UDP送信成功とVRChatへの表示成功は区別する。自動ラベルの正解は実際の画像から作成する。
-
-### 配布候補の検証結果（2026-09-12）
-
-- サンプル246件、20言語・表記と混在例。全件144 UTF-16単位以下、明示9行以下。
-  長さ別はtiny 40件、short 77件、medium 80件、long 49件。
-- 上記pytestは23件成功、ruffと`git diff --check`も成功。独立レビューの重大指摘なし。
-- 専用ビルドが成功。ZIPは6,978,123 bytes、14ファイルでCRC正常。
-  元JSON・JSONL・TXTの本文一致、ライセンス同梱、画像・送信ログの混入なし。
-- ソース外の一時フォルダへZIPを展開し、WindowsのみのPATHでexeの
-  `--list`と`--dry-run --max-messages 1`が正常終了。
-- 日本語・空白を含む展開先から実exeを起動し、専用のループバックUDP受信先で
-  アラビア語、ヒンディー語の改行、絵文字、144単位の漢字を受信。
-  本文と`[text, true, false]`の型を保持し、指定3秒以上の間隔と送信ログ4件を確認。
-- 実exeのdry-runでPによる一時停止中は件数不変、再開後の進行、Rの状態表示、
-  Qによる正常終了を確認。通常起動の開始待ちでQ→Enterによる取り消しも確認。
-
-```text
-ZIP SHA256: 4a65f8f3d1183d0ef8a3f8f27c77fb947870c7d48047e684b127251ddffa4ce2
-EXE SHA256: e5fa12c3d34244632d06eec443cf116d0a0c4f6111c4ac6fc64593dc286dcc76
-```
-
-配布物は未署名。Python未導入の別PCと、VRChat上の実表示・全言語の字形は未検証。
-実VRChatへの送信は行っていない。送信役PCでOSCを有効にし、撮影側から短文・長文・
-改行・RTL文字・絵文字がどのように見えるかを確認してから収集する。
+ソースは `src-tauri/crates/vrct-capture-tools`。Python、venv、PyInstallerは不要。
+Windows x64の対話キー操作を使用する。既定のJSONはexeの隣から読み、
+開発debug版だけはリポジトリの原本も参照する。
+テストは画像源を偽物に置換し、OSCはローカルの一時ポートだけで検証する。
+VRChatの9000番や外部PCへ送信しない。Rust版の実VRChat表示・全言語の字形は別途実機確認する。

@@ -79,7 +79,7 @@ impl BubbleDetector {
         #[cfg(debug_assertions)]
         candidates.push(
             std::path::Path::new(env!("CARGO_MANIFEST_DIR"))
-                .join("../../../src-python/models/ocr/onnx/chatbox_yolox_tiny.onnx"),
+                .join("../../../weights/ocr/chatbox_yolox_tiny.onnx"),
         );
         let path = candidates.into_iter().find(|p| p.is_file()).ok_or(
             "OCR_DISABLED_MODEL_MISSING: provide an authorized chatbox_yolox_tiny.onnx via VRCT_OCR_BUBBLE_MODEL",

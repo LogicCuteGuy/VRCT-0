@@ -3,14 +3,16 @@
 //! The Python backend lists devices through PortAudio, which exposes several
 //! host APIs (MME, DirectSound, WASAPI) and takes a speaker's audio from a
 //! WASAPI "loopback" twin of each playback device, named `<playback name>
-//! [Loopback]`. The Rust side captures through WASAPI only, so there is one host
-//! and the names stay the same as Python's WASAPI ones. What changes for a user
+//! [Loopback]`. WASAPI names retain that convention. ASIO uses registered
+//! driver names and input capture for both roles; host-scoped enumeration lives
+//! in `wasapi`. What changes for a user
 //! is a saved selection made under another host: `DeviceList::resolve_mic`
 //! maps it onto the WASAPI device (MME cuts names to 31 characters, so a saved
 //! name can be a prefix of the real one).
 
-/// The host name PortAudio gave WASAPI, and the only host Rust offers.
+/// The host name PortAudio gave WASAPI.
 pub const WASAPI_HOST: &str = "Windows WASAPI";
+pub const ASIO_HOST: &str = "ASIO";
 /// Placeholders the UI is given when nothing is available.
 pub const NO_HOST: &str = "NoHost";
 pub const NO_DEVICE: &str = "NoDevice";
@@ -27,7 +29,7 @@ pub struct Device {
 pub struct DeviceList {
     pub mics: Vec<Device>,
     pub default_mic: Option<String>,
-    /// Playback devices, named with `LOOPBACK_SUFFIX`: capturing one records what it plays.
+    /// Receiving STT sources: recording inputs and playback loopback sources.
     pub speakers: Vec<Device>,
     pub default_speaker: Option<String>,
 }

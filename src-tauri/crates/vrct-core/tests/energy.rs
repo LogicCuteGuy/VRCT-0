@@ -1,9 +1,9 @@
-//! The energy-threshold recorder against the real `custom_speech_recognition` code
-//! (`fixtures/regenerate_energy_golden.py` runs it on scripted audio and records what it does).
+//! The energy-threshold recorder replays the historical `custom_speech_recognition`
+//! contract in `fixtures/energy_golden.json`, frozen at `16cb286c`.
+//! Provenance and native test commands: `fixtures/README.md`.
 //!
-//! The same scripts are replayed here: a source whose reads come from the script, a clock the script
-//! moves, and a stop when the script runs out. Every phrase, every energy value, the threshold as it
-//! drifts, the reads consumed and the clock must agree with Python's.
+//! Scripted reads, clock changes and stopping conditions are replayed here.
+//! Phrases, energy, drifting thresholds, consumed reads and time must match Python.
 
 use std::cell::Cell;
 use std::io;

@@ -1,8 +1,8 @@
 # Native overlay fonts
 
-These four files are unmodified copies of VRCT's existing bundled Noto Sans
-fonts in `src-python/models/overlay/fonts`. The native application loads this
-directory directly; it does not install fonts or open a Python process.
+These four files are unmodified copies of VRCT's previously bundled Noto Sans
+fonts (preserved from commit `16cb286c`). The native application loads this
+directory directly; it does not install fonts.
 
 The font name-table license entries identify SIL Open Font License 1.1 and
 `(c) 2014-2021 Adobe (http://www.adobe.com/), with Reserved Font Name 'Source'.`

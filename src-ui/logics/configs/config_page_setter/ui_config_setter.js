@@ -96,6 +96,25 @@ export const SETTINGS_ARRAY = [
     },
     {
         Category: "Device",
+        Base_Name: "SpeakerHostList",
+        default_value: [],
+        ui_template_id: "list",
+        logics_template_id: "get_set",
+        add_endpoint_run_array: ["from_backend"],
+        base_endpoint_name: "selectable_speaker_host_list",
+        response_transform: "arrayToObject",
+    },
+    {
+        Category: "Device",
+        Base_Name: "SelectedSpeakerHost",
+        default_value: "",
+        ui_template_id: "select",
+        logics_template_id: "get_set",
+        add_endpoint_run_array: ["from_backend"],
+        base_endpoint_name: "selected_speaker_host",
+    },
+    {
+        Category: "Device",
         Base_Name: "SelectedSpeakerDevice",
         default_value: "",
         ui_template_id: "select",
@@ -465,6 +484,48 @@ export const SETTINGS_ARRAY = [
     },
 
     // Transcription
+    ...[
+        ["groq_whisper", "GroqWhisper"],
+        ["openai_whisper", "OpenAIWhisper"],
+        ["custom_whisper", "CustomWhisper"],
+        ["deepgram", "Deepgram"],
+    ].flatMap(([endpoint, name]) => [
+        {
+            Category: "Transcription",
+            Base_Name: `${name}AuthKey`,
+            default_value: "",
+            ui_template_id: "input",
+            logics_template_id: "get_set_delete",
+            base_endpoint_name: `${endpoint}_auth_key`,
+        },
+        {
+            Category: "Transcription",
+            Base_Name: `Selectable${name}ModelList`,
+            default_value: [],
+            ui_template_id: "list",
+            logics_template_id: "get_set",
+            add_endpoint_run_array: ["from_backend"],
+            base_endpoint_name: `selectable_${endpoint}_model_list`,
+            response_transform: "arrayToObject",
+        },
+        {
+            Category: "Transcription",
+            Base_Name: `Selected${name}Model`,
+            default_value: "",
+            ui_template_id: "select",
+            logics_template_id: "get_set",
+            add_endpoint_run_array: ["from_backend"],
+            base_endpoint_name: `selected_${endpoint}_model`,
+        },
+    ]),
+    {
+        Category: "Transcription",
+        Base_Name: "CustomWhisperURL",
+        default_value: "",
+        ui_template_id: "input",
+        logics_template_id: "get_set",
+        base_endpoint_name: "custom_whisper_url",
+    },
     // Mic
     {
         Category: "Transcription",

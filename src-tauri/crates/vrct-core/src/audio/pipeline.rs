@@ -144,10 +144,20 @@ mod capture_pipeline {
         where
             P: FrameProbability + Send + 'static,
         {
+            Self::start_on_host(source, crate::audio::devices::WASAPI_HOST, device_name, segmenter, handler)
+        }
+
+        pub fn start_on_host<P>(
+            source: Source, host: &str, device_name: &str, segmenter: VadSegmenter<P>,
+            handler: impl FnMut(Event) + Send + 'static,
+        ) -> Result<Self, String>
+        where P: FrameProbability + Send + 'static,
+        {
             let worker = SegmentWorker::spawn(segmenter, handler)?;
             let (audio, failures) = (worker.feeder(), worker.feeder());
-            let capture = Capture::start(
+            let capture = Capture::start_on_host(
                 source,
+                host,
                 device_name,
                 move |pcm| {
                     audio.feed(pcm);

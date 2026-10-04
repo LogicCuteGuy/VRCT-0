@@ -3,7 +3,7 @@
 
 pub mod engine;
 #[cfg(windows)]
-mod hwnd;
+pub mod hwnd;
 mod models;
 
 use std::collections::VecDeque;

@@ -66,6 +66,7 @@ fn open_settings(app: &AppHandle) -> Result<Arc<Settings>, String> {
     if let (Some(saved), Ok(devices)) = (saved, vrct_core::audio::wasapi::list_devices()) {
         if let Some(device) = saved["SELECTED_MIC_DEVICE"]
             .as_str()
+            .filter(|_| saved["SELECTED_MIC_HOST"].as_str() != Some(vrct_core::audio::devices::ASIO_HOST))
             .and_then(|name| devices.resolve_mic(name))
         {
             let _ = settings.set(
@@ -76,6 +77,7 @@ fn open_settings(app: &AppHandle) -> Result<Arc<Settings>, String> {
         }
         if let Some(device) = saved["SELECTED_SPEAKER_DEVICE"]
             .as_str()
+            .filter(|_| saved["SELECTED_SPEAKER_HOST"].as_str() != Some(vrct_core::audio::devices::ASIO_HOST))
             .and_then(|name| devices.resolve_speaker(name))
         {
             let _ = settings.set("SELECTED_SPEAKER_DEVICE", json!(device.name));

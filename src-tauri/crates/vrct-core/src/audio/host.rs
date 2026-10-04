@@ -1,16 +1,14 @@
-//! Audio capture as the Python sidecar sees it: RPC methods to start and stop a listening
-//! session, and speech segments pushed back as lines on the sidecar's stdin.
+//! Native audio capture RPC methods and speech-segment events.
 //!
-//! Python keeps the transcription (Whisper, cloud engines) for now and keeps its message
-//! pipeline; what moves to Rust is everything up to the finished speech segment. A session
+//! The native transcription and message pipeline consume finished speech segments. A session
 //! is a device, the normaliser and the VAD, named by the caller (`mic` or `speaker`), so
 //! restarting one never touches the other.
 //!
-//! Lines written to Python (audio is raw 16 kHz mono PCM16, base64 inside the JSON):
+//! Internal events (audio is raw 16 kHz mono PCM16, base64 inside the JSON):
 //!   `/internal/audio/segment {session, segment_id, reason, audio}`
 //!   `/internal/audio/event   {session, kind, message}` with kind `diagnostic` (a VAD log line),
 //!   `engine_error` (a frame was dropped, listening goes on) or `capture_failed` (the device
-//!   failed; the session is finished and Python should start it again).
+//!   failed; the session is finished and its owner may start it again).
 //! Segments carry what the user says: these lines are never logged.
 
 use std::collections::HashMap;
@@ -46,9 +44,11 @@ pub enum SourceKind {
 
 #[derive(Debug, Clone, Deserialize)]
 pub struct StartSpec {
-    /// What Python calls this listener; the key for `audio.stop` and in every line pushed back.
+    /// The listener's key for `audio.stop` and every emitted event.
     pub session: String,
     pub source: SourceKind,
+    #[serde(default = "default_host")]
+    pub host: String,
     /// The device name as the UI shows it (see `audio.devices`); a name MME cut short still finds its device.
     pub device: String,
     #[serde(default = "default_max_speech_ms")]
@@ -58,6 +58,7 @@ pub struct StartSpec {
 fn default_max_speech_ms() -> u64 {
     DEFAULT_MAX_SPEECH_MS
 }
+fn default_host() -> String { super::devices::WASAPI_HOST.to_owned() }
 
 impl StartSpec {
     /// Python: `max(1, round(max_speech_ms / FRAME_DURATION_MS))`, rounding halves to even.
@@ -200,7 +201,7 @@ mod wasapi_factory {
     }
 
     impl WasapiFactory {
-        /// None when no ONNX Runtime library can be found: audio is then left to Python.
+        /// None when no ONNX Runtime library can be found; capture cannot start.
         pub fn locate() -> Option<Self> {
             OnnxRuntime::locate().map(|library| Self { library })
         }
@@ -224,7 +225,7 @@ mod wasapi_factory {
         }
 
         fn start(&self, spec: &StartSpec, out: Arc<dyn Fn(Output) + Send + Sync>) -> Result<(Box<dyn Session>, String), String> {
-            let devices = list_devices()?;
+            let devices = crate::audio::wasapi::list_devices_for_host(&spec.host)?;
             let (device, source) = match spec.source {
                 SourceKind::Microphone => (devices.resolve_mic(&spec.device), Source::Microphone),
                 SourceKind::Speaker => (devices.resolve_speaker(&spec.device), Source::Speaker),
@@ -246,7 +247,7 @@ mod wasapi_factory {
             segmenter.on_diagnostic(move |line| diagnostics(Output::Diagnostic(line.to_string())));
 
             let events = Arc::clone(&out);
-            let pipeline = CapturePipeline::start(source, &device, segmenter, move |event| {
+            let pipeline = CapturePipeline::start_on_host(source, &spec.host, &device, segmenter, move |event| {
                 events(match event {
                     Event::Segment(segment) => Output::Segment(segment),
                     Event::EngineError(message) => Output::EngineError(message),

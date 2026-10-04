@@ -292,6 +292,7 @@ pub static PROPS: &[Prop] = &[
     typed("AUTO_SPEAKER_SELECT", Bool),
     validated("SELECTED_MIC_HOST", validators::selected_mic_host),
     validated("SELECTED_MIC_DEVICE", validators::selected_mic_device),
+    validated("SELECTED_SPEAKER_HOST", validators::selected_speaker_host),
     validated("SELECTED_SPEAKER_DEVICE", validators::selected_speaker_device),
     validated("SELECTED_TRANSLATION_COMPUTE_DEVICE", validators::compute_device),
     validated("SELECTED_TRANSCRIPTION_COMPUTE_DEVICE", validators::compute_device),

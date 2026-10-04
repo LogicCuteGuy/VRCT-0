@@ -7,6 +7,7 @@ import { SETTINGS_ARRAY } from "./configs/config_page_setter/ui_config_setter";
 export const STATIC_ROUTE_META_LIST = [
     // Common
     { endpoint: "/run/feed_watchdog", ns: null, hook_name: null, method_name: null },
+    { endpoint: "/run/open_asio_control_panel", ns: null, hook_name: null, method_name: null },
     { endpoint: "/run/initialization_progress", ns: common, hook_name: "useInitProgress", method_name: "updateInitProgress" },
     { endpoint: "/run/enable_ai_models", ns: common, hook_name: "useIsVrctAvailable", method_name: "handleAiModelsAvailability" },
     { endpoint: "/get/data/compute_mode", ns: common, hook_name: "useComputeMode", method_name: "updateComputeMode" },
@@ -98,6 +99,7 @@ export const STATIC_ROUTE_META_LIST = [
 
     // Language Selector
     { endpoint: "/get/data/selectable_language_list", ns: main, hook_name: "useLanguageSettings", method_name: "updateSelectableLanguageList" },
+    { endpoint: "/run/selectable_language_list", ns: main, hook_name: "useLanguageSettings", method_name: "updateSelectableLanguageList" },
 
 
     // Message Input Box

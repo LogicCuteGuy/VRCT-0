@@ -1,6 +1,6 @@
 ---
 description: 'プロジェクト解析に基づくREADME自動生成専用モード'
-tools: ['edit', 'search', 'runCommands', 'runTasks', 'usages', 'vscodeAPI', 'problems', 'changes', 'fetch', 'ms-python.python/getPythonEnvironmentInfo', 'ms-python.python/getPythonExecutableCommand', 'ms-python.python/installPythonPackage', 'ms-python.python/configurePythonEnvironment', 'todos']
+tools: ['edit', 'search', 'runCommands', 'runTasks', 'usages', 'vscodeAPI', 'problems', 'changes', 'fetch', 'todos']
 model: 'Auto'
 ---
 
@@ -12,8 +12,8 @@ model: 'Auto'
 
 ### 分析対象
 - プロジェクトの全ファイル構成
-- 主要なソースコード（HTML、JavaScript、CSS、Python等）
-- 設定ファイル（package.json、requirements.txt等）
+- 主要なソースコード（HTML、JavaScript、CSS、Rust等）
+- 設定ファイル（package.json、Cargo.toml等）
 - 既存のドキュメント
 
 ### README構成要件 ※下記コードでは絵文字をカットしています

@@ -41,10 +41,17 @@ impl SystemDevices {
 
 impl Devices for SystemDevices {
     fn mic_hosts(&self) -> Vec<String> {
-        Self::list().hosts().into_iter().map(str::to_string).collect()
+        #[cfg(windows)]
+        { crate::audio::wasapi::host_names() }
+        #[cfg(not(windows))]
+        { Self::list().hosts().into_iter().map(str::to_string).collect() }
     }
 
     fn mic_device_names(&self, host: &str) -> Vec<String> {
+        #[cfg(windows)]
+        if host != WASAPI_HOST && host != NO_HOST {
+            return crate::audio::wasapi::list_devices_for_host(host).unwrap_or_default().mic_names().into_iter().map(str::to_owned).collect();
+        }
         let list = Self::list();
         // One host exists; asking for another gives nothing, so a saved MME choice is not accepted.
         let known = if list.mics.is_empty() { NO_HOST } else { WASAPI_HOST };
@@ -57,6 +64,15 @@ impl Devices for SystemDevices {
 
     fn speaker_device_names(&self) -> Vec<String> {
         Self::list().speaker_names().into_iter().map(str::to_string).collect()
+    }
+
+    fn speaker_hosts(&self) -> Vec<String> { self.mic_hosts() }
+
+    fn speaker_device_names_for_host(&self, host: &str) -> Vec<String> {
+        #[cfg(windows)]
+        { crate::audio::wasapi::list_devices_for_host(host).unwrap_or_default().speaker_names().into_iter().map(str::to_owned).collect() }
+        #[cfg(not(windows))]
+        { let _ = host; self.speaker_device_names() }
     }
 
     fn default_mic(&self) -> Option<(String, String)> {

@@ -9,15 +9,15 @@ export const Logo = () => {
 };
 
 
-import vrct_logo from "@images/vrct_logo_for_dark_mode.png";
-import chato_img from "@images/chato_white.png";
+import { BrandLogo } from "@common_components";
+import chato_img from "@images/vrct-0-icon.svg";
 import { useIsMainPageCompactMode } from "@logics_main";
 
 export const LogoBox = () => {
     const { currentIsMainPageCompactMode } = useIsMainPageCompactMode();
     if (currentIsMainPageCompactMode.data === true) {
-        return <img src={chato_img} className={styles.logo_chato} alt="VRCT logo chato" />;
+        return <img src={chato_img} className={styles.logo_chato} alt="VRCT-0" />;
     } else {
-        return <img src={vrct_logo} className={styles.logo} alt="VRCT logo" />;
+        return <BrandLogo className={styles.logo} />;
     }
 };

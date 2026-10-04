@@ -1,18 +1,25 @@
 # OCR設定UIの引き継ぎ資料
 
-VRChatのチャット吹き出しを読み取って翻訳する機能（OCR）の**バックエンドは完成している**。
-UIは作り直す前提で一度削除したので、この資料だけを見てフロント側を実装できるようにまとめた。
+VRChatのチャット吹き出しを読み取って翻訳するOCRのUI契約と、Rustバックエンドとの接続をまとめる。
+設定画面は現在 `src-ui/views/app/config_page/setting_section/setting_box/ocr/` にあり、ON/OFFはメイン機能側が扱う。
 
 対象読者はフロントエンド担当者。バックエンドのコードを読まなくても実装できることを目指している。
-内部の設計は [src-python/docs/details/ocr.md](../src-python/docs/details/ocr.md) を参照。
+現行の構成と検証範囲は [native backend](native_pipeline.md)、操作・補助ツールは [native tools](native_tools.md)、実装は [native OCR](../src-tauri/crates/vrct-core/src/ocr/mod.rs) を参照。
 
 ## 1. この機能は何をするか
 
-VRChatの画面をキャプチャ → 吹き出しを検出（学習済みYOLOv8n）→ 文字を読む（PP-OCR）→
+VRChatのHWNDまたはOpenVR mirrorをキャプチャ → 吹き出しを検出（YOLOX）→ 文字を読む（PP-OCR/ONNX）→
 重複を除いて既存の翻訳パイプラインへ流す。出力先はメッセージログとSteamVRオーバーレイの2つ。
 **OSCでVRChatへ送り返すことはしない**（他人の発言を自分のチャットボックスに流すのは不適切なため、初版で封印）。
 
-## 2. 削除したもの / 残してあるもの
+検出モデルはフォーク配布物に含まれない。権限のある外部モデルを `VRCT_OCR_BUBBLE_MODEL` で指定する。
+未指定で開始すると `OCR_DISABLED_MODEL_MISSING` を含む不足理由が返る。利用条件は
+[モデル条文](licenses/chatbox/LICENSE.txt)、[学習手順](ocr_yolo_training.md) を参照。
+
+## 2. UI整理時の履歴と現在の接続
+
+次の表はUIを作り直す前に削除・保持した項目の記録。現在は `Ocr.jsx`、サイドバーのOCRタブ、
+`SettingBox.jsx` のOCR表示を復元している。設定は `useOcr()`、ON/OFFは `useMainFunction()` が担当する。
 
 | | 状態 |
 |---|---|
@@ -55,22 +62,25 @@ UIでは `ui_config_setter.js` の設定項目から外し、応答は `/set/ena
 
 | エンドポイント | 中身 | 現在の受け手 |
 |---|---|---|
-| `/run/enable_ocr_capture` | エラー応答（下記） | `useOcr.updateFromBackendEnableOcrCapture`（メイン機能側へ移す想定） |
+| `/run/enable_ocr_capture` | エラー応答（下記） | 共通エラー処理 → `useMainFunction.updateOcrCaptureStatus` |
 | `/run/transcription_ocr_message` | 下記 | `useMessage.addReceivedMessageLog` |
 
-`/run/enable_ocr_capture` は**ONにして開始に失敗したときだけ**、status 400 のエラー応答
-（`TRANSLATION_DISABLED_VRAM` と同じ形、`data: false`）が飛んでくる。UI側はトグルを戻し、
-`error_code` に合わせて文言を出す。成功時と、動作中（ON後）には飛ばない。
+開始時は `/set/enable/ocr_capture` の応答を処理する。動作中の再設定・認識失敗では
+`/run/enable_ocr_capture` がstatus 400、`data: false` を通知してOCRをOFFへ戻す。
+UI側は要求応答と共通エラー処理の両方でトグルを更新し、`error_code` と詳細に合わせて文言を出す。
 
 | error_code | 意味 |
 |---|---|
-| `OCR_DISABLED_ENGINE_UNAVAILABLE` | OCRエンジンや依存（opencv / onnxruntime / 吹き出し検出モデル）が無い。同梱漏れなど |
+| `OCR_DISABLED_ENGINE_UNAVAILABLE` | native OCRエンジンやONNX Runtime資源が無い |
 | `OCR_DISABLED_MODEL_LOAD_FAILED` | 文字認識モデルか吹き出し検出モデルの読み込みに失敗 |
 | `OCR_DISABLED_UNSUPPORTED_LANGUAGE` | 読み取り言語に未対応（設定時に弾いているので通常は起きない） |
 | `OCR_DISABLED_UNKNOWN` | 想定外のエラー |
 
+検出モデル欠落の内部理由は `OCR_DISABLED_MODEL_MISSING`。runtimeのモデルエラー通知は
+`OCR_DISABLED_MODEL_LOAD_FAILED` に詳細を付けて返すため、エラー分類と説明を両方表示する。
+
 `/set/enable/ocr_capture` はモデルの読み込みまで済ませてから応答する（翻訳のONと同じ）。
-初回は数百ms〜かかるので、応答までローディング表示にする。
+初回の所要時間は資源・機器に依存するので、応答までローディング表示にする。
 
 OCR結果のペイロード:
 
@@ -133,7 +143,7 @@ setOcrSourceLanguage(value)    /set/data/ocr_source_language
 - それ以外 … 上記のモデルに含まれない文字体系。選ぶとモデルごと切り替わる
 - 選択肢に「Japanese」等が無いのは、それらが `auto` と同じモデルで読めるため。
   設定として保存されている古い言語名（`Japanese` など）は `auto` と同じ扱いになる
-- **アラビア語は現状精度が低い**（他言語より明確に劣る）。UIで期待値を下げる表現があるとよい
+- **旧Python版の評価ではアラビア語の精度が低かった**。この比較をRust版の精度保証として使わず、現在のモデル・入力で確認する
 
 ## 4. 設定変更のタイミング
 
@@ -154,14 +164,13 @@ setOcrSourceLanguage(value)    /set/data/ocr_source_language
 
 ## 6. 実装時に知っておくとよいこと
 
-- **処理は重い**。1回の処理周期で1〜2.6秒かかることがある（吹き出し1件あたり約0.8秒、CPU推論）。
-  取得間隔を短くしても速くはならない。「反応が遅い」ことを前提にした見せ方が要る
-- **GPUは使わない**。以前あったGPU設定は廃止した（onnxruntimeのGPU版は音声認識側と共存できないため）
-- **同じ文は再配送しない**。画面から消えて30秒経つまで覚えている（内部の定数。設定にはしていない）
+- **取得間隔は処理時間を短縮しない**。旧Python版では1周期1〜2.6秒、吹き出し1件約0.8秒のCPU推論を記録した。Rust版の実機性能は現在のモデル・機器で測る
+- **現行の準備済みONNX Runtime資源はCPU用**。OCR設定にGPU選択はない
+- **同じ文の再配送を抑制する**。通常30秒保持し、長い処理周期では保持期間を延ばす（内部の定数。設定にはしていない）
 - **改行は完全には復元できない**。VRChatは送信者の改行と折り返しを同じように描画するため、
   文末記号のない改行は繋がって出る。仕様として受け入れている
-- 開始に失敗した理由、1周期ごとの内訳（フレーム取得/吹き出し検出/OCR/配送の件数）は
-  バックエンドのログに30秒ごとに出る。UIに出す価値があるかは要検討
+- 旧バックエンドでは周期の内訳を30秒ごとにログへ出していた。現行の開始・動作中エラーは
+  controller応答を扱い、周期ログが常に届くという前提をUIに置かない
 
 ## 7. 改善したい点（UI側で拾えると嬉しい）
 

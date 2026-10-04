@@ -1,6 +1,8 @@
-//! `audio::devices` (names, placeholders, mapping a saved selection) and, on Windows, a smoke
-//! test of the WASAPI listing. Whether that listing equals Python's is a property of the
-//! machine, so `fixtures/check_audio_devices_parity.py` checks it there.
+//! `audio::devices` naming, placeholders and saved-selection mapping, plus a
+//! Windows WASAPI listing smoke test. The historical naming contract is frozen
+//! at `16cb286c`; native test commands are in `fixtures/README.md`.
+//! Actual device listings depend on the machine; the smoke test does not prove
+//! parity with every historical Python installation.
 
 use vrct_core::audio::devices::{
     loopback_name, Device, DeviceList, LOOPBACK_SUFFIX, NO_DEVICE, NO_HOST, WASAPI_HOST,
@@ -32,6 +34,15 @@ fn an_empty_list_shows_the_placeholders_the_ui_expects() {
     assert_eq!(empty.mic_names(), vec![NO_DEVICE]);
     assert_eq!(empty.speaker_names(), vec![NO_DEVICE]);
     assert!(empty.resolve_mic("anything").is_none());
+}
+
+#[test]
+fn recording_inputs_and_playback_loopbacks_are_separate_stt_sources() {
+    let mut devices = list(&[], &["VBMatrix In 1"]);
+    devices.speakers.push(device("VBMatrix Out 1"));
+    assert_eq!(devices.speaker_names(), vec!["VBMatrix In 1 [Loopback]", "VBMatrix Out 1"]);
+    assert_eq!(devices.resolve_speaker("VBMatrix Out 1").unwrap().name, "VBMatrix Out 1");
+    assert_eq!(devices.resolve_speaker("VBMatrix In 1").unwrap().name, "VBMatrix In 1 [Loopback]");
 }
 
 #[test]
@@ -93,10 +104,14 @@ fn a_playback_name_without_the_suffix_still_finds_its_loopback_twin() {
 fn the_wasapi_listing_is_well_formed() {
     let devices = vrct_core::audio::wasapi::list_devices().expect("listing devices");
     for speaker in &devices.speakers {
-        assert!(speaker.name.ends_with(LOOPBACK_SUFFIX), "{}", speaker.name);
+        if devices.mics.iter().any(|input| input == speaker) {
+            continue;
+        }
+        assert!(speaker.name.ends_with(LOOPBACK_SUFFIX), "playback sources must only appear as loopback: {}", speaker.name);
         assert!(speaker.channels > 0 && speaker.default_sample_rate > 0, "{speaker:?}");
     }
     for mic in &devices.mics {
+        assert!(devices.speakers.contains(mic), "recording input must also be selectable for receiving STT: {mic:?}");
         assert!(!mic.name.ends_with(LOOPBACK_SUFFIX), "{}", mic.name);
         assert!(mic.channels > 0 && mic.default_sample_rate > 0, "{mic:?}");
     }

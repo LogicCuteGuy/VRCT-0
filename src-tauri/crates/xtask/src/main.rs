@@ -38,6 +38,13 @@ fn run() -> Result<(), String> {
     match command.as_str() {
         "prepare" => xtask::prepare(&root, &profile, offline),
         "version" => xtask::sync_version(&root),
+        "tools" => xtask::build_tools(&root, &profile),
+        "package-tools" => {
+            let output = output.unwrap_or_else(|| root.join("tool-dist/VRCT-native-tools.zip"));
+            let path = xtask::package_tools(&root, &profile, &output)?;
+            println!("Created and verified {}", path.display());
+            Ok(())
+        }
         "package" => {
             let output = output.unwrap_or_else(|| root.join("VRCT.zip"));
             let path = xtask::package(&root, &profile, &output)?;
@@ -50,7 +57,7 @@ fn run() -> Result<(), String> {
             Ok(())
         }
         "help" => {
-            println!("cargo run -p xtask -- prepare|version|package|verify [--profile debug|release] [--offline] [--output path] [--root path]");
+            println!("cargo run -p xtask -- prepare|version|package|verify|tools|package-tools [--profile debug|release] [--offline] [--output path] [--root path]");
             Ok(())
         }
         _ => Err(format!("unknown task {command}")),

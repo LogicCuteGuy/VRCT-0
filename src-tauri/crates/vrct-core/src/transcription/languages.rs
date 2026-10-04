@@ -1,7 +1,7 @@
 //! `transcription_lang`: a display language and country to each engine's own language code.
 //!
 //! The table is Python's `models/transcription/transcription_languages.py` as JSON
-//! (`assets/transcription_languages.json`, written by `tests/fixtures/regenerate_cloud_stt_golden.py`).
+//! (`assets/transcription_languages.json`, frozen at commit `16cb286c`).
 
 use std::sync::OnceLock;
 

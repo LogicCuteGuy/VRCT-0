@@ -118,6 +118,8 @@ config_page:
             unable_to_use_osc_query: "Due to the OSC IP Address settings, OSC data cannot be received, so this feature is currently unavailable."
 
     side_menu_labels:
+        supporters: "Supporters"
+        about_vrct: "About VRCT-0"
         device: "Device"
         appearance: "Appearance"
         translation: "Translation"
@@ -149,6 +151,12 @@ config_page:
             desc_for_manual: "Input sensitivity can be manually adjusted using the slider. Click the headphone icon to listen to the audio and adjust the level while checking the volume."
 
     appearance:
+        theme:
+            label: "Theme"
+            desc: "Choose window colors, or follow the system theme. Saved on this device."
+            dark: "Dark"
+            light: "Light"
+            system: "System"
         transparency:
             label: "Transparency"
             desc: "Change the main window's transparency."
@@ -313,7 +321,7 @@ config_page:
             desc: "Automatically saves the conversation messages as text files."
         vrc_mic_mute_sync:
             label: "VRC Mic Mute Sync"
-            desc: "Messages will not be sent to VRCT while VRChat's mic is muted.\n*There may be a slight delay. Push-To-Talk is not supported."
+            desc: "Messages will not be sent to VRCT-0 while VRChat's mic is muted.\n*There may be a slight delay. Push-To-Talk is not supported."
         send_message_to_vrc:
             label: "Send Message To VRChat"
             desc: "This feature is not supported, but there is a way to use it without sending messages to VRChat. Make sure to enable this feature when you wish to send messages to VRChat."
@@ -402,7 +410,7 @@ config_page:
         error_in_use: "The hotkey ({{hotkey}}) for \"{{action_name}}\" cannot be registered because it is already in use elsewhere."
         error_failed_to_register_at_launch: "The hotkey ({{hotkey}}) for \"{{action_name}}\" is unavailable because it is in use by another application."
         toggle_vrct_visibility:
-            label: "Toggle VRCT visibility"
+            label: "Toggle VRCT-0 visibility"
         toggle_translation:
             label: "Toggle {{translation}}"
         toggle_transcription_send:

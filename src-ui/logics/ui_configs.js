@@ -56,6 +56,7 @@ export const ui_configs = {
 
     selectable_ui_languages: [
         {id: "en", label: "English"},
+        {id: "th", label: "ไทย"},
         {id: "ja", label: "日本語"},
         {id: "ko", label: "한국어"},
         {id: "zh-Hant", label: "繁體中文"},

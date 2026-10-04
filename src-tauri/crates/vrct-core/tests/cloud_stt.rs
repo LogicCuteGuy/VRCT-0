@@ -1,9 +1,9 @@
-//! The cloud speech-to-text engines against what the Python providers did
-//! (`fixtures/regenerate_cloud_stt_golden.py` records it): Deepgram's language choice, what each
-//! provider sends and how it reads the answer, the model lists, and the WAV header.
+//! Cloud speech-to-text engines replay the historical Python provider contract:
+//! Deepgram language choice, requests/replies, model lists and WAV headers.
+//! `fixtures/cloud_stt_golden.json` is frozen at `16cb286c`; see `fixtures/README.md`.
 //!
-//! The servers are local scripted ones. Where Python's client raised for a failed request, the
-//! equivalent here is a status (401, 429, ...), a refused connection or an answer that never comes.
+//! Local scripted servers represent Python client failures with HTTP statuses,
+//! refused connections or replies that never arrive.
 
 mod common;
 

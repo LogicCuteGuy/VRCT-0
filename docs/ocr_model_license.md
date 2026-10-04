@@ -1,10 +1,10 @@
 # チャットボックス検出モデルのライセンスと出自
 
-`src-python/models/ocr/onnx/chatbox_yolox_tiny.onnx` の権利関係をまとめる。
+`weights/ocr/chatbox_yolox_tiny.onnx` の権利関係をまとめる。
 リポジトリ全体は MIT だが、**このファイルだけは MIT の対象外**で、VRCT 専用の
 利用許諾が適用される。正式な表記は [`NOTICE.md`](../NOTICE.md)、条文は
-[`LICENSE.txt`](../src-python/models/ocr/onnx/LICENSE.txt)（日本語・正文）と
-[`LICENSE.en.txt`](../src-python/models/ocr/onnx/LICENSE.en.txt)（英訳）。
+[`LICENSE.txt`](licenses/chatbox/LICENSE.txt)（日本語・正文）と
+[`LICENSE.en.txt`](licenses/chatbox/LICENSE.en.txt)（英訳）。
 
 ## 現状
 
@@ -12,7 +12,7 @@
 |---|---|---|
 | `weights/yolox_tiny.pth`（学習の初期値、COCO事前学習） | Megvii ([YOLOX](https://github.com/Megvii-BaseDetection/YOLOX)) | Apache-2.0 |
 | YOLOX 0.3.0（学習・エクスポート） | Megvii | Apache-2.0 |
-| 学習データ（VRChat のスクリーンショット + 人手確定アノテーション） | 自前収集（`tools/ocr_dataset_collector.py`） | 非公開・未配布 |
+| 学習データ（VRChat のスクリーンショット + 人手確定アノテーション） | 自前収集（現在は Rust `vrct-dataset-collector`） | 非公開・未配布 |
 | **`chatbox_yolox_tiny.onnx`（成果物）** | 上記の派生 | **VRCT 専用の利用許諾** |
 | RapidOCR / PP-OCR の ONNX（文字認識側） | RapidAI | Apache-2.0 |
 
@@ -34,17 +34,19 @@ VRCT 本体は MIT のままで、モデルが無くてもビルドも実行も�
 フォークが検出機能ごと配布したい場合は、自前で検出器を学習すればよい
 （手順・学習設定・前処理スクリプトはすべて公開してある）。
 
-`rapidocr==3.9.2` は Apache-2.0 で、`tools/fetch_ocr_models.py` が取得する
+`rapidocr==3.9.2` は Apache-2.0 で、現在は Rust `xtask prepare` が取得する
 PP-OCR の重みも同じく Apache-2.0。こちらは制約にならない。
 
 ## 配布時にやること
 
 義務として残るのは、配布物へのライセンス全文と著作権表示の添付。
 
-- 全文は `src-python/models/ocr/onnx/LICENSE.txt` と `LICENSE.en.txt` に置いてある。
-- `spec/backend.spec` / `spec/backend_cuda.spec` は `src-python/models/ocr/onnx`
-  ディレクトリごと `ocr_onnx/` として同梱するので、この2ファイルと `NOTICE.txt` は
-  **自動的に配布物へ入る**。モデルを差し替えるときにこれらを消さないこと。
+- 全文は `docs/licenses/chatbox/LICENSE.txt` と `LICENSE.en.txt` に置いてある。
+- このフォークの Rust `xtask` は、制限付きモデルの名前・内容・実行ファイルへの
+  埋め込みを検査し、アプリとツールの ZIP への同梱を拒否する。
+  開発用のコピーは Git 管理外の `weights/ocr/` に置くか、
+  `VRCT_OCR_BUBBLE_MODEL` で指定する。現在のツールは
+  [native_tools.md](native_tools.md) を参照。
 
 ## 経緯: なぜ載せ替えたか
 

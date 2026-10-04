@@ -1,7 +1,6 @@
-//! `settings` against the real Python `Config` (`fixtures/regenerate_config_golden.py`):
-//! every property's descriptor, thousands of values pushed through the real setters, and whole
-//! `load_config` runs. A few Rust-only tests cover what has no Python counterpart (the debounce
-//! timer, subscribers, atomic writes).
+//! Settings replay the historical Python `Config` descriptor/setter/load contract
+//! in `fixtures/config_golden.json`, frozen at `16cb286c`; see `fixtures/README.md`.
+//! Rust-only cases additionally cover debounce, subscribers and atomic writes.
 
 use std::collections::{BTreeMap, HashMap};
 use std::path::{Path, PathBuf};
@@ -97,17 +96,20 @@ fn open_empty(golden: &Value) -> (Settings, PathBuf) {
 fn the_properties_and_their_order_are_pythons() {
     let golden = golden();
     let python: Vec<&str> = golden["props"].as_object().unwrap().keys().map(String::as_str).collect();
-    let mut ours: Vec<&str> = PROPS.iter().map(|p| p.name).collect();
+    let native_host = schema::find("SELECTED_SPEAKER_HOST").unwrap();
+    assert!(native_host.persisted && matches!(native_host.rule, Rule::Validated(_)));
+    let legacy_props: Vec<_> = PROPS.iter().filter(|p| p.name != "SELECTED_SPEAKER_HOST").collect();
+    let mut ours: Vec<&str> = legacy_props.iter().map(|p| p.name).collect();
     ours.sort_unstable();
     let mut python_sorted = python.clone();
     python_sorted.sort_unstable();
     assert_eq!(ours, python_sorted, "same set of settings");
 
-    let persisted: Vec<&str> = PROPS.iter().filter(|p| p.persisted).map(|p| p.name).collect();
+    let persisted: Vec<&str> = legacy_props.iter().filter(|p| p.persisted).map(|p| p.name).collect();
     let order: Vec<&str> = golden["order"].as_array().unwrap().iter().map(|v| v.as_str().unwrap()).collect();
     assert_eq!(persisted, order, "config.json key order");
 
-    for prop in PROPS {
+    for prop in legacy_props {
         let py = &golden["props"][prop.name];
         assert_eq!(py["persisted"].as_bool().unwrap(), prop.persisted, "{} persisted", prop.name);
         match prop.rule {
@@ -217,7 +219,11 @@ fn a_first_start_has_pythons_defaults_and_statics() {
         if machine_specific.contains(&name.as_str()) || elsewhere.contains(&name.as_str()) {
             continue;
         }
-        assert_eq!(settings.get(name).as_ref(), Some(python), "static {name}");
+        // VRCT-0 adds Thai to the frozen upstream language list.
+        let expected = if name == "SELECTABLE_UI_LANGUAGE_LIST" {
+            serde_json::json!(["en", "th", "ja", "ko", "zh-Hant", "zh-Hans"])
+        } else { python.clone() };
+        assert_eq!(settings.get(name).as_ref(), Some(&expected), "static {name}");
     }
     assert_eq!(settings.get_str("PATH_CONFIG").unwrap(), dir.join("config.json").to_string_lossy());
     assert!(dir.join("logs").is_dir(), "the logs directory is created");
@@ -238,11 +244,16 @@ fn every_load_case_ends_as_python_did() {
         }
         let (settings, report) = Settings::open_with(env_in(&dir, &golden), Duration::from_millis(50));
 
-        let snapshot: HashMap<String, Value> = settings.snapshot().into_iter().collect();
+        let mut snapshot: HashMap<String, Value> = settings.snapshot().into_iter().collect();
+        // Speaker host selection is a new native setting, absent from the frozen Python fixture.
+        assert_eq!(snapshot.remove("SELECTED_SPEAKER_HOST"), Some(Value::String("Windows WASAPI".into())));
         let python: HashMap<String, Value> = case["snapshot"].as_object().unwrap().iter().map(|(k, v)| (k.clone(), v.clone())).collect();
         assert_eq!(snapshot, python, "{title}: settings after loading");
         for (name, value) in case["runtime"].as_object().unwrap() {
-            assert_eq!(settings.get(name).as_ref(), Some(value), "{title}: run-time {name}");
+            let expected = if name == "SELECTABLE_UI_LANGUAGE_LIST" {
+                serde_json::json!(["en", "th", "ja", "ko", "zh-Hant", "zh-Hans"])
+            } else { value.clone() };
+            assert_eq!(settings.get(name).as_ref(), Some(&expected), "{title}: run-time {name}");
         }
 
         let written = std::fs::read_to_string(dir.join("config.json")).ok();
@@ -255,11 +266,13 @@ fn every_load_case_ends_as_python_did() {
         } else {
             // Python's text, with the keys inside nested objects sorted (serde_json sorts them and
             // nothing reads them by position): byte for byte what Rust wrote.
-            assert_eq!(written.as_deref(), case["formatted"].as_str(), "{title}: file text");
+            let legacy_written = written.as_ref().unwrap().lines().filter(|line| !line.contains("\"SELECTED_SPEAKER_HOST\""))
+                .collect::<Vec<_>>().join("\n");
+            assert_eq!(legacy_written, case["formatted"].as_str().unwrap(), "{title}: file text");
             let top_level = |text: &str| -> Vec<String> {
                 text.lines().filter(|l| l.starts_with("    \"")).filter_map(|l| l[5..].split('"').next()).map(str::to_string).collect()
             };
-            assert_eq!(top_level(written.as_deref().unwrap()), top_level(python_written.unwrap()), "{title}: key order");
+            assert_eq!(top_level(&legacy_written), top_level(python_written.unwrap()), "{title}: key order");
         }
         assert_eq!(dir.join("installer_language.txt").exists(), case["marker_left"].as_bool().unwrap(), "{title}: marker file");
     }

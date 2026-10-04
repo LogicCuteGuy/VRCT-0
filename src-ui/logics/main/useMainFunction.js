@@ -7,7 +7,7 @@ import {
     useStore_OcrCaptureStatus,
     useStore_ForegroundStatus,
 } from "@store";
-import { useStdoutToPython } from "@useStdoutToPython";
+import { useBackendRequest } from "@useBackendRequest";
 
 export const useMainFunction = () => {
     const appWindow = store.appWindow;
@@ -38,15 +38,15 @@ export const useMainFunction = () => {
         pendingForegroundStatus,
     } = useStore_ForegroundStatus();
 
-    const { asyncStdoutToPython } = useStdoutToPython();
+    const { sendBackendRequest } = useBackendRequest();
 
     const createTogglePair = (pendingFn, updateFn, endpointName) => {
         const setFn = (to_enable) => {
             pendingFn();
             if (to_enable) {
-                asyncStdoutToPython(`/set/enable/${endpointName}`);
+                sendBackendRequest(`/set/enable/${endpointName}`);
             } else {
-                asyncStdoutToPython(`/set/disable/${endpointName}`);
+                sendBackendRequest(`/set/disable/${endpointName}`);
             }
         };
         const toggleFn = () => {

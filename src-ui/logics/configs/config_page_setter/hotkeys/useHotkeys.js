@@ -1,5 +1,5 @@
 import { store, useStore_Hotkeys } from "@store";
-import { useStdoutToPython } from "@useStdoutToPython";
+import { useBackendRequest } from "@useBackendRequest";
 import { useNotificationStatus } from "@logics_common";
 import { useMainFunction } from "@logics_main";
 import { register, unregister, unregisterAll, isRegistered } from "@tauri-apps/plugin-global-shortcut";
@@ -9,7 +9,7 @@ export const useHotkeys = () => {
     const appWindow = store.appWindow;
     const { t } = useI18n();
 
-    const { asyncStdoutToPython } = useStdoutToPython();
+    const { sendBackendRequest } = useBackendRequest();
     const { currentHotkeys, updateHotkeys, pendingHotkeys } = useStore_Hotkeys();
     const {
         toggleTranslation,
@@ -19,7 +19,7 @@ export const useHotkeys = () => {
 
     const getHotkeys = () => {
         pendingHotkeys();
-        asyncStdoutToPython("/get/data/hotkeys");
+        sendBackendRequest("/get/data/hotkeys");
     };
     const { showNotification_SaveSuccess, showNotification_Error, closeNotification } = useNotificationStatus();
 
@@ -31,7 +31,7 @@ export const useHotkeys = () => {
             pendingHotkeys();
             const updatedHotkeys = { ...currentHotkeys.data, [targetActionKey]: null };
             updateHotkeys(updatedHotkeys);
-            asyncStdoutToPython("/set/data/hotkeys", updatedHotkeys);
+            sendBackendRequest("/set/data/hotkeys", updatedHotkeys);
             closeNotification();
             return true;
         }
@@ -79,7 +79,7 @@ export const useHotkeys = () => {
         pendingHotkeys();
         const updatedHotkeys = { ...currentHotkeys.data, [targetActionKey]: targetHotkey };
         updateHotkeys(updatedHotkeys);
-        asyncStdoutToPython("/set/data/hotkeys", updatedHotkeys);
+        sendBackendRequest("/set/data/hotkeys", updatedHotkeys);
         closeNotification();
         return true;
     };

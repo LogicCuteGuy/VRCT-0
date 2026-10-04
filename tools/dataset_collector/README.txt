@@ -1,4 +1,4 @@
-VRCT Dataset Collector — Windows x64
+VRCT Dataset Collector — Rust / Windows x64
 ===================================
 
 VRChatのチャットボックス検出モデルを作るための画像収集ツールです。
@@ -8,9 +8,9 @@ PythonやVRCT本体のインストールは不要です。
 1. ZIPをすべて展開してください。
    デスクトップ等、自分が書き込めるフォルダに置いてください。
 2. VRChatを起動します。VRで使う場合はSteamVR経由で起動します。
-3. VRCT-Dataset-Collector.exeをダブルクリックします。
+3. vrct-dataset-collector.exeをダブルクリックします。
    2秒周期・左眼・10分間の自動撮影を開始します。
-   初回起動は数十秒かかる場合があります。起動直後はそのまま待ってください。
+   native APIが処理中の場合は完了を待ちます。
 4. 画像と撮影情報はexeの隣のdataset_collectedフォルダに保存されます。
    実行ごとに日時付きフォルダができます。
 5. 終了後、Enterで画面を閉じます。
@@ -32,11 +32,11 @@ P/Q/RにEnterは不要です。VRChatへ戻っても自動撮影は続きます�
 【設定を変える】
 exeのあるフォルダでPowerShellを開いて実行します。
 
-  .\VRCT-Dataset-Collector.exe --duration 300 --interval 3
-  .\VRCT-Dataset-Collector.exe --backend openvr --eye right --max-frames 100
-  .\VRCT-Dataset-Collector.exe --backend hwnd --out "D:\VRChat画像"
-  .\VRCT-Dataset-Collector.exe --manual
-  .\VRCT-Dataset-Collector.exe --help
+  .\vrct-dataset-collector.exe --duration 300 --interval 3
+  .\vrct-dataset-collector.exe --backend openvr --eye right --max-frames 100
+  .\vrct-dataset-collector.exe --backend hwnd --out "D:\VRChat画像"
+  .\vrct-dataset-collector.exe --manual
+  .\vrct-dataset-collector.exe --help
 
 --duration は秒（初期値600、0は無制限）、一時停止も時間に含みます。
 --interval は秒（初期値2）。保存が間に合わない回は飛ばします。
@@ -56,3 +56,14 @@ PNGは元の解像度の可逆圧縮です。3000×3276では300枚で約2 GBが
 配布する際はREADME.txtとlicensesフォルダを含むZIP全体を渡してください。
 dataset_collectedに撮影画像が入ったフォルダをそのまま配布しないでください。
 BUILD-INFO.jsonにビルド環境とexeのSHA-256を記録しています。
+
+--max-age は取得開始から保存までの許容秒（既定2）。
+--wander はOSCでランダムに歩く機能。--osc-port は送信先127.0.0.1のポート（既定9000）。
+Pは歩行も停止・再開、終了時は全軸を0に戻します。障害物は検知しません。
+セッション名は単一フォルダ名のみ。パス移動・予約名・root外へのjunctionを拒否します。
+PNG/JSONの組を完全にpublishした後だけ件数を増やします。失敗した画像を再利用しません。
+VRChat.exeのPID/プロセス開始時刻と取得前後のsourceを確認します。
+OpenVR DLL v2.15.6と対応ライセンスをZIPに同梱してください。
+診断: vrct-capture-probe.exe --frames 5 --interval 1 --eye left
+ビルド: src-tauriで cargo build -p vrct-capture-tools --release --bins -j1
+Rust版の実GPU/HMD・SteamVR再起動・長時間動作は別途実機確認が必要です。

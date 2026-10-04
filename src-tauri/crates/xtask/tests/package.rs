@@ -282,10 +282,7 @@ fn native_zip_has_installer_root_and_every_payload_hash_and_preserves_existing_o
 fn renamed_protected_detector_content_is_rejected() {
     let fixture = resource_fixture();
     xtask::prepare(&fixture.0, "release", true).unwrap();
-    fixture.write(
-        "src-python/models/ocr/onnx/chatbox_yolox_tiny.onnx",
-        b"protected fixture",
-    );
+    fixture.write("weights/ocr/chatbox_yolox_tiny.onnx", b"protected fixture");
     fixture.write(
         "src-tauri/target/release/resources/renamed-detector.onnx",
         b"protected fixture",
@@ -313,7 +310,7 @@ fn embedded_protected_detector_in_executable_preserves_existing_package() {
             state as u8
         })
         .collect();
-    fixture.write("src-python/models/ocr/onnx/chatbox_yolox_tiny.onnx", &model);
+    fixture.write("weights/ocr/chatbox_yolox_tiny.onnx", &model);
     // The model's prefix crosses the scanner's 128 KiB read boundary.
     let mut executable = vec![0u8; 128 * 1024 - 63];
     executable[..2].copy_from_slice(b"MZ");
@@ -333,9 +330,9 @@ fn embedded_protected_detector_in_executable_preserves_existing_package() {
 }
 
 #[test]
-fn version_sync_preserves_config_fields_and_never_edits_python() {
+fn version_sync_preserves_config_fields_and_user_settings() {
     let fixture = resource_fixture();
-    fixture.write("src-python/config.py", b"do not modify Python");
+    fixture.write("config.json", b"do not modify user settings");
     xtask::sync_version(&fixture.0).unwrap();
     let config: serde_json::Value =
         serde_json::from_slice(&fs::read(fixture.0.join("src-tauri/tauri.conf.json")).unwrap())
@@ -343,8 +340,8 @@ fn version_sync_preserves_config_fields_and_never_edits_python() {
     assert_eq!(config["version"], "3.5.1-beta.1");
     assert_eq!(config["bundle"]["externalBin"], json!([]));
     assert_eq!(
-        fs::read(fixture.0.join("src-python/config.py")).unwrap(),
-        b"do not modify Python"
+        fs::read(fixture.0.join("config.json")).unwrap(),
+        b"do not modify user settings"
     );
 }
 

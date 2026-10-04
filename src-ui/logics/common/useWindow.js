@@ -1,12 +1,12 @@
 import { useEffect, useRef } from "react";
 import { currentMonitor, availableMonitors, PhysicalPosition, PhysicalSize } from "@tauri-apps/api/window";
-import { useStdoutToPython } from "@useStdoutToPython";
+import { useBackendRequest } from "@useBackendRequest";
 import { useStore_IsBreakPoint } from "@store";
 import { useAppearance } from "@logics_configs";
 import { store } from "@store";
 
 export const useWindow = () => {
-    const { asyncStdoutToPython } = useStdoutToPython();
+    const { sendBackendRequest } = useBackendRequest();
     const { currentUiScaling } = useAppearance();
     const { updateIsBreakPoint } = useStore_IsBreakPoint();
 
@@ -35,7 +35,7 @@ export const useWindow = () => {
         const minimized = await appWindow.isMinimized();
         if (minimized === true) return; // don't save while the window is minimized.
         const data = await asyncGetWindowGeometry();
-        asyncStdoutToPython("/set/data/main_window_geometry", data);
+        sendBackendRequest("/set/data/main_window_geometry", data);
     };
 
     const restoreWindowGeometry = async (data) => {
@@ -154,7 +154,7 @@ export const useWindow = () => {
     };
 
     const asyncCloseApp = async () => {
-        asyncStdoutToPython("/run/shutdown");
+        sendBackendRequest("/run/shutdown");
         await new Promise(resolve => setTimeout(resolve, 2000));
         await appWindow.close();
     };

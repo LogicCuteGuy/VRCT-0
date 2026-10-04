@@ -1,10 +1,10 @@
-//! The message pipeline against what the real Python code did (`tests/fixtures/pipeline_golden.json`, made
-//! by `regenerate_pipeline_golden.py`).
+//! Message processing replays the historical Python contract in
+//! `fixtures/pipeline_golden.json`, frozen at `16cb286c`; see `fixtures/README.md`.
 //!
-//! * Scenarios: the real `Controller._processMessage` and its entry points, run against a scripted model,
-//!   and the ordered log of everything they did. The same steps here must produce the same log.
-//! * flashtext's keyword matching, `messageFormatter`, `detectVRAMError`, the per-direction table, the
-//!   endpoints and the error texts, each against the Python value.
+//! Scenarios record `Controller._processMessage` and its entry points against a
+//! scripted model; replay must preserve their ordered logs.
+//! Keyword matching, formatting, VRAM errors, direction tables, endpoints and
+//! error text must retain the recorded Python values.
 
 use std::collections::HashMap;
 use std::sync::{Arc, Mutex};

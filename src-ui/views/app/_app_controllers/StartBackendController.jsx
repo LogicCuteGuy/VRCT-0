@@ -1,7 +1,7 @@
 import { invoke } from "@tauri-apps/api/core";
 import { listen } from "@tauri-apps/api/event";
 import { useEffect } from "react";
-import { useStdoutToPython } from "@useStdoutToPython";
+import { useBackendRequest } from "@useBackendRequest";
 import { useReceiveRoutes } from "@useReceiveRoutes";
 import { useStore_SelectableFontFamilyList } from "@store";
 import { arrayToObject } from "@utils";
@@ -9,7 +9,7 @@ import { useNotificationStatus } from "@logics_common";
 
 export const StartBackendController = () => {
     const { receiveRoutes } = useReceiveRoutes();
-    const { asyncStdoutToPython: request } = useStdoutToPython();
+    const { sendBackendRequest: request } = useBackendRequest();
     const { updateSelectableFontFamilyList } = useStore_SelectableFontFamilyList();
     const { showNotification_Error } = useNotificationStatus();
 

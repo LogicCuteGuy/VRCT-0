@@ -1,5 +1,7 @@
 # 吹き出し検出を YOLOX へ載せ替えられるかの検証 (2026-09-22)
 
+> **履歴資料（2026-09-22、Python版）**: 本書の旧ソースパス、学習コマンド、測定値は当時の検証記録です。現行Rustツールは [native_tools.md](native_tools.md)、現在の学習手順は [ocr_yolo_training.md](ocr_yolo_training.md) を参照してください。旧ソースは当時のコミットのGit履歴を参照してください。
+
 [docs/ocr_model_license.md](ocr_model_license.md) で決めた「許諾の緩い基盤で再学習する」方針
 (候補: YOLOX-Tiny, Apache-2.0) について、**精度が落ちないか**と**VRCT に組み込めるか**を
 実機で確認した記録。ブランチは `ocr-yolox`。
@@ -28,7 +30,7 @@
 学習データ・train/val の分割・入力サイズ (1280)・augmentation はすべて YOLOv8n 側
 ([tools/yolo_chatbox_train.yaml](../tools/yolo_chatbox_train.yaml)) と揃えた。基盤の差だけを見るため。
 
-比較は [tools/eval_bubble_onnx.py](../tools/eval_bubble_onnx.py) で行う。基盤ごとの val
+この検証の比較には [tools/eval_bubble_onnx.py](../tools/eval_bubble_onnx.py) を使用した。基盤ごとの val
 スクリプト (ultralytics / YOLOX) をそのまま比べると mAP の実装差が混ざるので、
 **配布時と同じ onnxruntime 推論を通し、mAP も pycocotools で揃えて**測り直している。
 参考までに ultralytics の `detect val` は現行モデルに mAP50 0.986 / mAP50-95 0.710 を出す。
@@ -209,7 +211,7 @@ Python テストは全件通る (943 passed)。`spec/backend.spec` / `spec/backe
   取りこぼしも 8→1 に減った。結果は `ocr_yolo_training.md` の履歴表。
 - **弁護士の確認**。`LICENSE.txt` の条文は法律の専門家が書いたものではない。
 
-## 学習環境
+## 当時の学習環境（再現記録）
 
 本体の `.venv` とも YOLOv8 用の `.venv-yolo` とも分ける。YOLOX は clone をそのまま使う
 (`pip install` だけだと `tools/` と `exps/` が手に入らない)。clone には手を入れていない。

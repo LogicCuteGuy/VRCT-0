@@ -1,6 +1,6 @@
-//! LLM translation against what the real Python clients built and against a
-//! scripted provider. `fixtures/translation_golden.json` is captured from the
-//! real clients by `fixtures/regenerate_translation_golden.py`.
+//! LLM translation replays historical Python client requests with a scripted provider.
+//! `fixtures/translation_golden.json` is frozen at `16cb286c`; provenance
+//! and native test commands are in `fixtures/README.md`.
 
 mod common;
 

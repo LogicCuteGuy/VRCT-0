@@ -1,15 +1,15 @@
 import { store } from "@store";
 import { useStore_MessageInputBoxRatio } from "@store";
-import { useStdoutToPython } from "@useStdoutToPython";
+import { useBackendRequest } from "@useBackendRequest";
 import { clampMinMax } from "@utils";
 export const useMessageInputBoxRatio = () => {
     const appWindow = store.appWindow;
 
-    const { asyncStdoutToPython } = useStdoutToPython();
+    const { sendBackendRequest } = useBackendRequest();
     const { currentMessageInputBoxRatio, updateMessageInputBoxRatio } = useStore_MessageInputBoxRatio();
 
     const getMessageInputBoxRatio = () => {
-        asyncStdoutToPython("/get/data/message_box_ratio");
+        sendBackendRequest("/get/data/message_box_ratio");
     };
 
     const asyncSetMessageInputBoxRatio = async (ratio) => {
@@ -17,7 +17,7 @@ export const useMessageInputBoxRatio = () => {
         if (minimized === true) return; // don't save while the window is minimized.
         const parsed = parseFloat(ratio.toFixed(2));
         const valid_ratio = clampMinMax(parsed, 1, 99);
-        asyncStdoutToPython("/set/data/message_box_ratio", valid_ratio);
+        sendBackendRequest("/set/data/message_box_ratio", valid_ratio);
     };
 
     return {

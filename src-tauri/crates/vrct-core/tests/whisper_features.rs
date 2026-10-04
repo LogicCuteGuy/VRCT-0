@@ -1,6 +1,6 @@
-//! The parts of local Whisper that do not need model weights, against faster-whisper
-//! (`fixtures/regenerate_whisper_golden.py` records it): the log-mel spectrogram, and what the
-//! provider asks of a model and makes of its segments.
+//! Weight-free local Whisper components replay historical faster-whisper behavior:
+//! log-mel features, model requests and segment handling.
+//! `fixtures/whisper_golden.json` is frozen at `16cb286c`; see `fixtures/README.md`.
 
 use std::path::PathBuf;
 use std::sync::Mutex;

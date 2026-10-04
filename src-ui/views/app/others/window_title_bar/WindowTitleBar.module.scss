@@ -22,11 +22,10 @@
     justify-content: center;
     align-items: center;
 }
-.title_svg {
-    color: var(--dark_800_color);
-    width: 4rem;
-    height: 100%;
-
+.title_text {
+    color: var(--dark_400_color);
+    font-size: 1.1rem;
+    font-weight: 600;
 }
 
 .window_control_wrapper {

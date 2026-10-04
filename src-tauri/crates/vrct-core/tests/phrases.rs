@@ -1,6 +1,6 @@
-//! `transcription::phrases` against what `AudioTranscriber.transcribeAudioQueue` did on the same
-//! queues (`fixtures/regenerate_phrases_golden.py` records it): what is sent for recognition and
-//! when, what is left in the buffer, the transcript list and the counters after every call.
+//! `transcription::phrases` replays historical `AudioTranscriber.transcribeAudioQueue`
+//! behavior: recognition inputs/timing, buffers, transcripts and counters.
+//! `fixtures/phrases_golden.json` is frozen at `16cb286c`; see `fixtures/README.md`.
 
 use std::collections::VecDeque;
 use std::path::PathBuf;

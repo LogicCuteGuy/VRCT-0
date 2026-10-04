@@ -1,9 +1,9 @@
-//! `NativeTranslator` against what the real `Translator.translate` did (`tests/fixtures/adapter_golden.json`,
-//! made by `regenerate_adapter_golden.py`): the same answers, and the same calls to the clients with the same
-//! codes, histories, keys and models.
+//! `NativeTranslator` replays the historical Python `Translator.translate` contract:
+//! identical answers and client calls with the same codes, histories, keys and models.
+//! `fixtures/adapter_golden.json` is frozen at `16cb286c`; see `fixtures/README.md`.
 //!
-//! The web engines (Google, Bing, Papago) are not ported: Python asked its web library and the script made that
-//! fail, so what is compared is the answer ("failed"), not the call.
+//! This fixture made Python's Google/Bing/Papago web library fail, so these
+//! adapter cases compare the failed answer rather than the web-library call.
 
 use std::collections::HashMap;
 use std::sync::{Arc, Mutex};

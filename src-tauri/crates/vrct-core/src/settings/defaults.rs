@@ -61,7 +61,7 @@ pub fn initial_state(env: &Env) -> State {
     set("SELECTABLE_WHISPER_WEIGHT_TYPE_LIST", strings(&env.whisper_weight_types));
     set("SELECTABLE_TRANSLATION_ENGINE_LIST", strings(&env.translation_engines));
     set("SELECTABLE_TRANSCRIPTION_ENGINE_LIST", strings(&env.transcription_engines));
-    set("SELECTABLE_UI_LANGUAGE_LIST", json!(["en", "ja", "ko", "zh-Hant", "zh-Hans"]));
+    set("SELECTABLE_UI_LANGUAGE_LIST", json!(["en", "th", "ja", "ko", "zh-Hant", "zh-Hans"]));
     set("SELECTABLE_OCR_SOURCE_LANGUAGE_LIST", strings(&env.ocr_source_languages));
     set("SELECTABLE_COMPUTE_DEVICE_LIST", Value::Array(env.compute_devices.clone()));
     let has_cuda = env.compute_devices.iter().any(|device| device.get("device").and_then(Value::as_str) == Some("cuda"));
@@ -148,6 +148,7 @@ pub fn initial_state(env: &Env) -> State {
     set("MIC_NO_SPEECH_PROB", json!(0.6));
     set("MIC_NO_REPEAT_NGRAM_SIZE", json!(0));
     set("AUTO_SPEAKER_SELECT", json!(true));
+    set("SELECTED_SPEAKER_HOST", json!(crate::audio::devices::WASAPI_HOST));
     set("SELECTED_SPEAKER_DEVICE", json!(env.devices.default_speaker().unwrap_or_else(|| "NoDevice".into())));
     set("SPEAKER_THRESHOLD", json!(300));
     set("SPEAKER_AUTOMATIC_THRESHOLD", json!(false));

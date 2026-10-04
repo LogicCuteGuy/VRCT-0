@@ -118,6 +118,8 @@ config_page:
             unable_to_use_osc_query:
 
     side_menu_labels:
+        supporters: "후원자"
+        about_vrct: "VRCT-0 정보"
         device: "장치"
         appearance: "모양"
         translation: "번역"
@@ -149,6 +151,12 @@ config_page:
             desc_for_manual: "슬라이더를 움직여 입력 감도를 수동으로 조절합니다. 헤드폰 아이콘을 누르면 실제 음성의 볼륨을 확인하며 감도를 조절할 수 있습니다."
 
     appearance:
+        theme:
+            label: "테마"
+            desc: "창 색상을 선택하거나 시스템 테마를 따릅니다. 이 기기에 저장됩니다."
+            dark: "어둡게"
+            light: "밝게"
+            system: "시스템"
         transparency:
             label: "투명도"
             desc: "메인 화면의 투명도를 변경합니다."
@@ -396,7 +404,7 @@ config_page:
         error_in_use: "\"{{action_name}}\" 단축키({{hotkey}})가 이미 다른 곳에서 사용 중이므로 등록할 수 없습니다."
         error_failed_to_register_at_launch: "\"{{action_name}}\" 단축키({{hotkey}})가 다른 애플리케이션에서 사용 중이므로 사용할 수 없습니다."
         toggle_vrct_visibility:
-            label: "VRCT 최소화/활성화 전환"
+            label: "VRCT-0 최소화/활성화 전환"
         toggle_translation:
             label: "'{{translation}}' 켜기/끄기 전환"
         toggle_transcription_send:

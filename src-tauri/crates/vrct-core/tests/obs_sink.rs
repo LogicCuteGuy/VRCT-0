@@ -1,6 +1,6 @@
-//! The OBS browser-source server against real HTTP clients.
-//! `fixtures/obs_golden.json` is captured from the real Python page builder
-//! and a real running Python server by `fixtures/regenerate_obs_golden.py`.
+//! OBS browser-source HTTP behavior replays the historical Python page builder
+//! and server contract in `fixtures/obs_golden.json`, frozen at `16cb286c`.
+//! Provenance and native test commands: `fixtures/README.md`.
 
 use std::net::TcpListener;
 use std::sync::Arc;

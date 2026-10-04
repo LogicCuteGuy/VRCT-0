@@ -1,9 +1,27 @@
+# VRCT-0
+
+[English](/docs/readmes/README.en.md) · [日本語](/docs/readmes/README.ja.md) · [한국어](/docs/readmes/README.ko.md) · [繁體中文](/docs/readmes/README.zh-Hant.md) · [简体中文](/docs/readmes/README.zh-Hans.md) · [ไทย](/docs/readmes/README.th.md)
+
+## このforkでの変更
+
+[VRCT](https://github.com/misyaguziya/VRCT) をベースにしたforkです。翻訳・音声認識の流れを引き継ぎ、以下を変更しています。
+
+- Python sidecarをネイティブRustバックエンドに置き換え。
+- マイクとスピーカーのHost/Device選択、WASAPI・ASIO入力、ドライバー設定パネル。
+- キャプチャ、データセット、アノテーション、学習・評価用のネイティブツール。
+- VRCT-0の名称、アイコン、明暗のロゴ。
+- 保存できるダーク・ライト・システムテーマとUI翻訳の拡充。
+- Rust xtaskによるビルド・パッケージ検証と、このforkのリリースからの更新。
+
+[Documentation](/docs/README.md) · [Releases](https://github.com/LogicCuteGuy/0-VRCT/releases)
+
+Upstream store and supporter links below belong to the original project. Original credits are retained.
+
 <div align="center">
 
 <picture>
-    <source srcset="/docs/img/vrct_logo_white.png" media="(prefers-color-scheme: dark)" width="50%">
-    <source srcset="/docs/img/vrct_logo_black.png" media="(prefers-color-scheme: light)" width="50%">
-    <img src="/docs/img/vrct_logo.png" alt="VRCT Logo" width="50%">
+    <source srcset="/docs/img/vrct_logo_white.png" media="(prefers-color-scheme: dark)">
+    <img src="/docs/img/vrct_logo_black.png" alt="VRCT-0 — VRChat Chatbox Translator &amp; Transcription" width="50%">
 </picture>
 
 <br>
@@ -16,7 +34,7 @@
 [![Github Sponsors](https://img.shields.io/badge/GitHub%20Sponsors-30363D?&logo=GitHub-Sponsors&logoColor=EA4AAA)](https://github.com/sponsors/misyaguziya)
 
 <h3>
-Become a VRCT Supporter on:
+Become a VRCT-0 Supporter on:
 </h3>
 
 <a href="https://vrct-dev.fanbox.cc">
@@ -46,8 +64,7 @@ Become a VRCT Supporter on:
 <br>
 <br>
 
-| [English](/docs/readmes/README.en.md) | **日本語** | [한국어](/docs/readmes/README.ko.md) | [繁體中文](/docs/readmes/README.zh-Hant.md) |
-
+[English](/docs/readmes/README.en.md) · [日本語](/docs/readmes/README.ja.md) · [한국어](/docs/readmes/README.ko.md) · [繁體中文](/docs/readmes/README.zh-Hant.md) · [简体中文](/docs/readmes/README.zh-Hans.md) · [ไทย](/docs/readmes/README.th.md)
 <h3>
 VRCTは翻訳や文字起こしでVRChatの会話をサポートするソフトウェアです。
 </h3>
@@ -97,17 +114,25 @@ VRCTは[Aptabase](https://aptabase.com)を通じて、アプリの改善のた�
 
 テレメトリーはアプリの設定からいつでも無効化できます。詳細は[Aptabaseプライバシーポリシー](https://aptabase.com/legal/privacy)をご確認ください。
 
+## ネイティブ開発
+
+WindowsバックエンドはRustで動作します。Node/npm、Rust、MSVC/Windows SDK、CMakeを用意して
+`npm run dev`、`npm run build`、`npm run release` を使います。資源準備とパッケージ検査はRust
+`xtask` が行います。構成と検証の範囲は [native backend](../native_pipeline.md)、
+補助ツールは [native tools](../native_tools.md) を参照してください。
+
 ## ライセンス
 
-VRCT は [MIT License](/LICENSE) で公開しています。ただし OCR 機能が使うチャットボックス
-検出モデル（`src-python/models/ocr/onnx/chatbox_yolox_tiny.onnx`）は例外で、**VRCT 専用の
-利用許諾**が適用されます。VRCT として、また **VRCT の開発・修正・検証のためのフォークとして**
+VRCT-0 は [MIT License](../../LICENSE) で公開しています。ただし OCR 機能が使うチャットボックス
+検出モデル（`weights/ocr/chatbox_yolox_tiny.onnx`）は例外で、**VRCT-0 専用の
+利用許諾**が適用されます。VRCT-0 として、また **VRCT-0 の開発・修正・検証のためのフォークとして**
 実行することは自由で、リポジトリをフォークしてモデルを含んだまま持っていて構いません。
-できないのは、フォーク独自のリリース版にモデルを同梱すること、VRCT 以外のソフトウェアへ
+できないのは、フォーク独自のリリース版にモデルを同梱すること、VRCT-0 以外のソフトウェアへ
 持ち出すこと、単体での再配布、派生モデルの作成です。
-条文は [LICENSE.txt](/src-python/models/ocr/onnx/LICENSE.txt)、範囲は [NOTICE.md](/NOTICE.md) を
-確認してください。モデルを持たない状態でもビルド・実行でき、その場合は吹き出し検出だけが
-無効になります（自前で学習する手順は [docs/ocr_yolo_training.md](/docs/ocr_yolo_training.md)）。
+条文は [LICENSE.txt](../licenses/chatbox/LICENSE.txt)、範囲は [NOTICE.md](../../NOTICE.md) を
+確認してください。このフォークの配布物にはモデルを同梱しません。権限のある外部モデルは
+`VRCT_OCR_BUBBLE_MODEL` で指定します。モデルがなくてもアプリはビルド・実行できますが、
+OCR開始時に不足を通知します（自前で学習する手順は [学習ガイド](../ocr_yolo_training.md)）。
 
 ## Thanks to our contributors
 <a href="https://github.com/misyaguziya/VRCT/graphs/contributors" target="_blank">
@@ -116,4 +141,8 @@ VRCT は [MIT License](/LICENSE) で公開しています。ただし OCR 機能
 
 ---
 
-VRCT は VRChat によって承認されておらず、VRChat または VRChat の開発もしくは管理に公式に関与する者の見解や意見が反映されたものではありません。VRChat および関連するすべての財産は 米国VRChat, Incの商標または登録商標です。
+VRCT-0 は VRChat によって承認されておらず、VRChat または VRChat の開発もしくは管理に公式に関与する者の見解や意見が反映されたものではありません。VRChat および関連するすべての財産は 米国VRChat, Incの商標または登録商標です。
+
+## Fork credits
+
+VRCT-0 includes rebranding, UI localization, and appearance changes by LogicCuteGuy. Original VRCT developer and contributor credits are retained.

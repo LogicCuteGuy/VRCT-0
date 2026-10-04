@@ -1,14 +1,14 @@
-import { useStdoutToPython } from "@useStdoutToPython";
+import { useBackendRequest } from "@useBackendRequest";
 import { useNotificationStatus } from "@logics_common";
 import { useI18n } from "@useI18n";
 
 export const useOpenFolder = () => {
-    const { asyncStdoutToPython } = useStdoutToPython();
+    const { sendBackendRequest } = useBackendRequest();
     const { showNotification_Success } = useNotificationStatus();
     const { t } = useI18n();
 
     const openFolder_MessageLogs = () => {
-        asyncStdoutToPython("/run/open_filepath_logs");
+        sendBackendRequest("/run/open_filepath_logs");
     };
     const openedFolder_MessageLogs = () => {
         showNotification_Success(t("config_page.notifications.opened_folder"), {
@@ -19,7 +19,7 @@ export const useOpenFolder = () => {
     };
 
     const openFolder_ConfigFile = () => {
-        asyncStdoutToPython("/run/open_filepath_config_file");
+        sendBackendRequest("/run/open_filepath_config_file");
     };
     const openedFolder_ConfigFile = () => {
         showNotification_Success(t("config_page.notifications.opened_folder"), {

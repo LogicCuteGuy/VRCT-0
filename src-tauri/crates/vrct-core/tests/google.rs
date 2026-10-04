@@ -1,9 +1,8 @@
-//! The Google speech endpoint against the real `custom_speech_recognition`
-//! (`fixtures/regenerate_google_golden.py` runs `recognize_google` and `AudioFile` and records them):
-//! how a reply is read, what is asked of the endpoint, and how stereo audio is mixed to mono.
+//! The Google speech endpoint replays the historical `custom_speech_recognition`
+//! `recognize_google`/`AudioFile` contract: reply parsing, requests and stereo mixing.
+//! `fixtures/google_golden.json` is frozen at `16cb286c`; see `fixtures/README.md`.
 //!
-//! The FLAC itself is not Python's (`flac --best`); it is read back here and has to hold the samples it
-//! was given.
+//! The FLAC encoder differs from Python's `flac --best`; decoded samples must match.
 
 mod common;
 

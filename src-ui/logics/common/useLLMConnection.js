@@ -1,11 +1,11 @@
-import { useStdoutToPython } from "@useStdoutToPython";
+import { useBackendRequest } from "@useBackendRequest";
 import {
     useStore_IsLMStudioConnected,
     useStore_IsOllamaConnected,
 } from "@store";
 
 export const useLLMConnection = () => {
-    const { asyncStdoutToPython } = useStdoutToPython();
+    const { sendBackendRequest } = useBackendRequest();
     const {
         currentIsLMStudioConnected,
         updateIsLMStudioConnected,
@@ -19,7 +19,7 @@ export const useLLMConnection = () => {
 
     const checkConnection_LMStudio = () => {
         pendingIsLMStudioConnected();
-        asyncStdoutToPython("/run/lmstudio_connection");
+        sendBackendRequest("/run/lmstudio_connection");
     };
     const setConnectionStatus_LMStudio = (is_connected) => {
         updateIsLMStudioConnected(is_connected);
@@ -27,7 +27,7 @@ export const useLLMConnection = () => {
 
     const checkConnection_Ollama = () => {
         pendingIsOllamaConnected();
-        asyncStdoutToPython("/run/ollama_connection");
+        sendBackendRequest("/run/ollama_connection");
     };
     const setConnectionStatus_Ollama = (is_connected) => {
         updateIsOllamaConnected(is_connected);

@@ -1,6 +1,6 @@
-//! The log sink must write the file Python's `setupLogger` did.
-//! `fixtures/logger_golden.json` is captured from the real Python logger by
-//! `fixtures/regenerate_logger_golden.py` (timestamps replaced by `<TS>`).
+//! The log sink reproduces historical Python `setupLogger` output.
+//! `fixtures/logger_golden.json` is frozen at `16cb286c`, with timestamps
+//! replaced by `<TS>`. Provenance and native tests: `fixtures/README.md`.
 
 use std::path::{Path, PathBuf};
 use std::sync::Arc;

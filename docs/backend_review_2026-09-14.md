@@ -1,5 +1,7 @@
 # VRCT バックエンド（Python）再評価レビュー
 
+> **履歴資料（Python版）**: 本書のパス、コマンド、検証結果、対応状況は記載した時点のスナップショットです。旧ソースは記載コミットのGit履歴を参照してください。現行Rustツールの実行手順は [native_tools.md](native_tools.md) を参照してください。
+
 - 対象: `src-python/` 全体（develop `e1fa1e4a` 時点）
 - 実施日: 2026-09-14
 - 前回レビュー: [`backend_review_2026-08-27.md`](./backend_review_2026-08-27.md)

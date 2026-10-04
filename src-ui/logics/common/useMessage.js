@@ -4,14 +4,14 @@ import {
     store,
 } from "@store";
 
-import { useStdoutToPython } from "@useStdoutToPython";
+import { useBackendRequest } from "@useBackendRequest";
 
 const COOLDOWN = 2000; // 2 seconds
 
 export const useMessage = () => {
     const { currentMessageLogs, addMessageLogs, updateMessageLogs } = useStore_MessageLogs();
     const { currentMessageInputValue, updateMessageInputValue } = useStore_MessageInputValue();
-    const { asyncStdoutToPython } = useStdoutToPython();
+    const { sendBackendRequest } = useBackendRequest();
 
     const sendMessage = (message) => {
         const uuid = crypto.randomUUID();
@@ -19,7 +19,7 @@ export const useMessage = () => {
             id: uuid,
             message: message,
         };
-        asyncStdoutToPython("/run/send_message_box", send_message_object);
+        sendBackendRequest("/run/send_message_box", send_message_object);
 
         addMessageLogs({
             id: uuid,
@@ -71,12 +71,12 @@ export const useMessage = () => {
         const now = Date.now();
         if (now - store.last_executed_time_startTyping >= 2000) {
             store.last_executed_time_startTyping = now;
-            asyncStdoutToPython("/run/typing_message_box");
+            sendBackendRequest("/run/typing_message_box");
         }
     };
 
     const stopTyping = () => {
-        asyncStdoutToPython("/run/stop_typing_message_box");
+        sendBackendRequest("/run/stop_typing_message_box");
     };
 
     return {

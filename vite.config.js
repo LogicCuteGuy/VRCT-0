@@ -66,7 +66,7 @@ export default defineConfig(() => {
                 "@useI18n": path.resolve(__dirname, "locales/useI18n.js"),
 
                 "@useReceiveRoutes": path.resolve(__dirname, "src-ui/logics/useReceiveRoutes.js"),
-                "@useStdoutToPython": path.resolve(__dirname, "src-ui/logics/common/useStdoutToPython.js"),
+                "@useBackendRequest": path.resolve(__dirname, "src-ui/logics/common/useBackendRequest.js"),
 
                 "@ui_configs": path.resolve(__dirname, "src-ui/logics/ui_configs.js"),
                 "@scss_mixins": path.resolve(__dirname, "src-ui/views/common_css/mixins.scss"),

@@ -1,9 +1,10 @@
-//! What a mic/speaker session builds from the settings, against the real `MicSession` / `SpeakerSession` and
-//! `AudioTranscriber` (`fixtures/regenerate_native_golden.py` lifts them out of the Python source, stubs only
-//! what would open a device or load a model, and records the arguments). The planning functions get the same
-//! settings and have to come to the same device, recorder, engine and per-round question.
+//! Session planning replays the historical Python `MicSession`, `SpeakerSession`
+//! and `AudioTranscriber` contract in `fixtures/native_golden.json`, frozen at `16cb286c`.
+//! Device/model opening was stubbed when recording arguments; identical settings
+//! must produce the same device, recorder, engine and per-round question.
 //!
-//! The rest checks that `NativeBackend` builds what the plans say, with a fake machine.
+//! `NativeBackend` is checked against these plans with a fake machine.
+//! Provenance and native test commands: `fixtures/README.md`.
 
 use std::collections::HashMap;
 use std::path::{Path, PathBuf};

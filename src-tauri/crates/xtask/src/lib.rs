@@ -68,7 +68,13 @@ pub struct PackageFile {
 struct PackageManifest {
     format: u32,
     version: String,
+    #[serde(default = "application_kind")]
+    kind: String,
     files: BTreeMap<String, PackageFile>,
+}
+
+fn application_kind() -> String {
+    "application".into()
 }
 
 #[derive(Deserialize)]
@@ -80,7 +86,7 @@ struct ProtectedFingerprint {
 
 fn protected_fingerprint(root: Option<&Path>) -> Result<ProtectedFingerprint> {
     if let Some(path) = root
-        .map(|root| root.join("src-python/models/ocr/onnx/chatbox_yolox_tiny.onnx"))
+        .map(|root| root.join("weights/ocr/chatbox_yolox_tiny.onnx"))
         .filter(|path| path.is_file())
     {
         let content = file_checksum(&path)?;
@@ -602,8 +608,53 @@ fn required_files() -> &'static [&'static str] {
 }
 
 pub fn package(root: &Path, profile: &str, output: &Path) -> Result<PathBuf> {
+    package_kind(root, profile, output, false)
+}
+
+pub const TOOL_BINARIES: &[&str] = &[
+    "vrct-chatbox-player.exe",
+    "vrct-dataset-collector.exe",
+    "vrct-capture-probe.exe",
+    "vrct-annotator.exe",
+    "vrct-dataset.exe",
+    "vrct-whisper-prepare.exe",
+    "vrct-transcription-eval.exe",
+    "vrct-yolox.exe",
+];
+
+pub fn build_tools(root: &Path, profile: &str) -> Result<()> {
+    profile_path(root, profile)?;
+    let mut command = std::process::Command::new("cargo");
+    command
+        .current_dir(root.join("src-tauri"))
+        .args(["build", "-j", "1", "--bins"]);
+    for name in [
+        "vrct-capture-tools",
+        "vrct-annotator",
+        "vrct-whisper-eval",
+        "vrct-yolox",
+    ] {
+        command.args(["-p", name]);
+    }
+    if profile == "release" {
+        command.arg("--release");
+    }
+    let status = command
+        .status()
+        .map_err(|e| format!("could not build native tools: {e}"))?;
+    if !status.success() {
+        return Err(format!("native tool build failed: {status}"));
+    }
+    Ok(())
+}
+
+pub fn package_tools(root: &Path, profile: &str, output: &Path) -> Result<PathBuf> {
+    package_kind(root, profile, output, true)
+}
+
+fn package_kind(root: &Path, profile: &str, output: &Path, tools: bool) -> Result<PathBuf> {
     // Revalidate authoritative source pins before collecting the staged tree.
-    // Offline mode makes packaging deterministic and catches missing resources.
+    // Offline mode verifies staged resources and catches missing resources.
     prepare(root, profile, true)?;
     let directory = profile_path(root, profile)?;
     let config: serde_json::Value = read_json(&root.join("package.json"))?;
@@ -612,7 +663,6 @@ pub fn package(root: &Path, profile: &str, output: &Path) -> Result<PathBuf> {
         .ok_or("package.json has no version")?;
     let mut files = BTreeMap::new();
     for name in [
-        "VRCT.exe",
         "openvr_api.dll",
         "onnxruntime.dll",
         "onnxruntime_providers_shared.dll",
@@ -622,12 +672,100 @@ pub fn package(root: &Path, profile: &str, output: &Path) -> Result<PathBuf> {
     {
         files.insert(name.into(), directory.join(name));
     }
+    if tools {
+        for &name in TOOL_BINARIES {
+            files.insert(name.into(), directory.join(name));
+        }
+        walk(
+            &root.join("tools/chatbox_samples"),
+            "chatbox_samples",
+            &mut files,
+        )?;
+        for name in [
+            "native_tools.md",
+            "native_dataset.md",
+            "chatbox_sample_player.md",
+            "ocr_dataset_collection.md",
+            "dataset_collector_distribution.md",
+            "gemini_annotation_workflow.md",
+            "ocr_yolo_training.md",
+            "ocr_model_license.md",
+        ] {
+            files.insert(format!("docs/{name}"), root.join("docs").join(name));
+        }
+        files.insert(
+            "tools/whisper_eval/README.md".into(),
+            root.join("tools/whisper_eval/README.md"),
+        );
+        walk(
+            &root.join("docs/licenses/chatbox"),
+            "docs/licenses/chatbox",
+            &mut files,
+        )?;
+        files.insert(
+            "licenses/YOLOX-NOTICE.md".into(),
+            root.join("src-tauri/crates/vrct-yolox/NOTICE.md"),
+        );
+        files.insert(
+            "licenses/YOLOX-LICENSE".into(),
+            root.join("src-tauri/crates/vrct-yolox/YOLOX-LICENSE"),
+        );
+        for name in ["CANDLE-LICENSE", "MPL-2.0-LICENSE"] {
+            files.insert(
+                format!("licenses/{name}"),
+                root.join("src-tauri/crates/vrct-yolox").join(name),
+            );
+        }
+        let catalogue = directory.join("native-tool-catalogue");
+        fs::create_dir_all(&catalogue).map_err(|e| e.to_string())?;
+        let readme_path = catalogue.join("README.md");
+        fs::write(&readme_path, "# VRCT native tools\n\nExtract the entire archive before running the tools. Read [the tool guide](docs/native_tools.md) for commands and validation boundaries. Run each executable with --help.\n").map_err(|e| e.to_string())?;
+        files.insert("README.md".into(), readme_path);
+        let status = std::process::Command::new(directory.join("vrct-chatbox-player.exe"))
+            .arg("--samples")
+            .arg(root.join("tools/chatbox_samples"))
+            .arg("--export-catalogue")
+            .arg(&catalogue)
+            .status()
+            .map_err(|e| format!("sample catalogue export: {e}"))?;
+        if !status.success() {
+            return Err("sample catalogue export failed".into());
+        }
+        for name in ["samples.jsonl", "samples.txt"] {
+            files.insert(name.into(), catalogue.join(name));
+        }
+        let mut binaries = BTreeMap::new();
+        for &name in TOOL_BINARIES {
+            binaries.insert(name, file_checksum(&directory.join(name))?);
+        }
+        let sample_count = fs::read_to_string(catalogue.join("samples.jsonl"))
+            .map_err(|e| e.to_string())?
+            .lines()
+            .count();
+        let created_unix_seconds = std::time::SystemTime::now()
+            .duration_since(std::time::UNIX_EPOCH)
+            .map_err(|e| e.to_string())?
+            .as_secs();
+        let info = serde_json::json!({"format": 1, "version": version, "profile": profile, "runtime": "Rust", "created_unix_seconds": created_unix_seconds, "samples": sample_count, "binaries": binaries});
+        let info_path = catalogue.join("BUILD-INFO.json");
+        fs::write(
+            &info_path,
+            serde_json::to_vec_pretty(&info).map_err(|e| e.to_string())?,
+        )
+        .map_err(|e| e.to_string())?;
+        files.insert("BUILD-INFO.json".into(), info_path);
+    } else {
+        files.insert("VRCT.exe".into(), directory.join("VRCT.exe"));
+    }
     walk(&directory.join("resources"), "resources", &mut files)?;
     walk(&directory.join("licenses"), "licenses", &mut files)?;
     for name in ["LICENSE", "NOTICE.md"] {
         files.insert(name.into(), root.join(name));
     }
-    for name in required_files() {
+    for name in required_files()
+        .iter()
+        .filter(|&&name| !tools || name != "VRCT.exe")
+    {
         if !files.contains_key(*name) {
             return Err(format!(
                 "native package is missing {name}; run prepare first"
@@ -654,6 +792,7 @@ pub fn package(root: &Path, profile: &str, output: &Path) -> Result<PathBuf> {
     let manifest = PackageManifest {
         format: 1,
         version: version.into(),
+        kind: if tools { "tools" } else { "application" }.into(),
         files: hashes,
     };
     if let Some(parent) = output.parent() {
@@ -682,6 +821,20 @@ pub fn package(root: &Path, profile: &str, output: &Path) -> Result<PathBuf> {
     drop(file);
     verify_zip(&temporary.0)?;
     publish_file(&temporary.0, output)?;
+    let checksum = file_checksum(output)?;
+    let sidecar = output.with_extension("zip.sha256");
+    fs::write(
+        sidecar,
+        format!(
+            "{}  {}\n",
+            checksum.sha256,
+            output
+                .file_name()
+                .ok_or("ZIP has no filename")?
+                .to_string_lossy()
+        ),
+    )
+    .map_err(|e| e.to_string())?;
     Ok(output.to_owned())
 }
 
@@ -697,12 +850,39 @@ pub fn verify_zip(path: &Path) -> Result<()> {
         }
         serde_json::from_reader(entry).map_err(|e| format!("invalid package manifest: {e}"))?
     };
-    if manifest.format != 1 || manifest.version.is_empty() {
+    if manifest.format != 1
+        || manifest.version.is_empty()
+        || !["application", "tools"].contains(&manifest.kind.as_str())
+    {
         return Err("unsupported native package manifest".into());
     }
-    for name in required_files() {
+    for name in required_files()
+        .iter()
+        .filter(|&&name| manifest.kind != "tools" || name != "VRCT.exe")
+    {
         if !manifest.files.contains_key(*name) {
             return Err(format!("ZIP is missing native resource {name}"));
+        }
+    }
+    if manifest.kind == "tools" {
+        for &name in TOOL_BINARIES.iter().chain(
+            [
+                "README.md",
+                "licenses/YOLOX-NOTICE.md",
+                "licenses/YOLOX-LICENSE",
+                "licenses/CANDLE-LICENSE",
+                "licenses/MPL-2.0-LICENSE",
+                "docs/native_tools.md",
+                "chatbox_samples/latin.json",
+                "samples.jsonl",
+                "samples.txt",
+                "BUILD-INFO.json",
+            ]
+            .iter(),
+        ) {
+            if !manifest.files.contains_key(name) {
+                return Err(format!("ZIP is missing native tool {name}"));
+            }
         }
     }
     let fingerprint = protected_fingerprint(None)?;

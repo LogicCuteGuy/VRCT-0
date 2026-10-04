@@ -9,10 +9,10 @@ BOOTH.
 
 | | |
 |---|---|
-| File (repository) | `src-python/models/ocr/onnx/chatbox_yolox_tiny.onnx` |
-| File (built application) | `_internal/ocr_onnx/chatbox_yolox_tiny.onnx` |
+| Optional private development copy | `weights/ocr/chatbox_yolox_tiny.onnx` (ignored by Git) |
+| Fork application and tools packages | Excluded |
 | Copyright | Copyright (c) 2026 misyaguziya. All rights reserved. |
-| License | VRCT Chat-Bubble Detection Model License Agreement — [`LICENSE.txt`](src-python/models/ocr/onnx/LICENSE.txt) (Japanese, authoritative) / [`LICENSE.en.txt`](src-python/models/ocr/onnx/LICENSE.en.txt) (English translation) |
+| License | VRCT Chat-Bubble Detection Model License Agreement — [`LICENSE.txt`](docs/licenses/chatbox/LICENSE.txt) (Japanese, authoritative) / [`LICENSE.en.txt`](docs/licenses/chatbox/LICENSE.en.txt) (English translation) |
 
 This file is **not** covered by the MIT License in `LICENSE`. VRCT's
 first-party source is covered by MIT; bundled third-party components retain
@@ -92,9 +92,14 @@ the OCR feature is unavailable.
 | Component | Version | License |
 |---|---|---|
 | YOLOX `yolox_tiny.pth` (COCO-pretrained base of the model above; not shipped, used only at training time) | 0.1.1rc0 | Apache-2.0 |
-| RapidOCR and the PP-OCR ONNX models it ships, fetched by `tools/fetch_ocr_models.py` | 3.9.2 | Apache-2.0 |
+| RapidOCR and the PP-OCR ONNX models it ships, fetched by native `xtask prepare` | 3.9.2 | Apache-2.0 |
 
-This table covers bundled **model weights** only. Python package
-dependencies are listed in `requirements.txt` / `requirements_cuda.txt` and
-carry their own licenses; JavaScript and Rust dependencies are listed in
-`package.json` and `src-tauri/Cargo.toml`.
+This table covers bundled **model weights** only. JavaScript and Rust
+dependencies are listed in `package.json` and the Rust workspace manifests.
+The native tools include an additional YOLOX notice and the upstream licenses
+for Megvii YOLOX, Candle and onnx-protobuf.
+
+
+## Fork contributions
+
+VRCT-0 is maintained by LogicCuteGuy, based on VRCT by m's software. Original copyright and third-party notices remain applicable.

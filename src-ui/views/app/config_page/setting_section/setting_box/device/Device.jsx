@@ -1,8 +1,7 @@
 import { useI18n } from "@useI18n";
 import styles from "./Device.module.scss";
-import clsx from "clsx";
-import { useStore_IsBreakPoint } from "@store";
 import { ui_configs } from "@ui_configs";
+import { useBackendRequest } from "@useBackendRequest";
 import {
     useDevice,
 } from "@logics_configs";
@@ -13,7 +12,6 @@ import {
 
 import {
     LabelComponent,
-    DropdownMenu,
     ThresholdComponent,
     SwitchBox,
 } from "../_components";
@@ -99,10 +97,11 @@ const MicContainer = () => {
                         list: currentMicDeviceList.data,
                         selectFunction: selectFunction_device,
                         state: currentSelectedMicDevice.state,
-                        is_disabled: is_disabled_selector,
+                        is_disabled: is_disabled_selector || currentSelectedMicHost.state === "pending",
                     }
                 ]}
             />
+            <AsioControlPanel source="mic" host={currentSelectedMicHost} device={currentSelectedMicDevice} />
             <div className={styles.threshold_container}>
                 <div className={styles.threshold_switch_section}>
                     <LabelComponent {...getLabels()} />
@@ -129,6 +128,9 @@ const SpeakerContainer = () => {
         currentEnableAutoSpeakerSelect,
         toggleEnableAutoSpeakerSelect,
         currentSpeakerDeviceList,
+        currentSpeakerHostList,
+        currentSelectedSpeakerHost,
+        setSelectedSpeakerHost,
         currentSelectedSpeakerDevice,
         setSelectedSpeakerDevice,
         currentEnableAutomaticSpeakerThreshold,
@@ -156,33 +158,42 @@ const SpeakerContainer = () => {
 
     };
 
-    const { currentIsBreakPoint } = useStore_IsBreakPoint();
-    const device_container_class = clsx(styles.device_container, {
-        [styles.is_break_point]: currentIsBreakPoint.data,
-    });
-
     return (
         <div className={styles.speaker_container}>
-            <div className={device_container_class}>
-                <LabelComponent label={t("config_page.device.speaker_device.label")} />
-                <div className={styles.device_contents}>
-                    <SwitchBox
-                        secondary_label={t("config_page.device.label_auto_select")}
-                        variable={currentEnableAutoSpeakerSelect}
-                        toggleFunction={toggleEnableAutoSpeakerSelect}
-                    />
-                    <DropdownMenu
-                        dropdown_id="speaker_device"
-                        secondary_label={t("config_page.device.label_device")}
-                        label={t("config_page.device.speaker_device.label")}
-                        selected_id={currentSelectedSpeakerDevice.data}
-                        list={currentSpeakerDeviceList.data}
-                        selectFunction={selectFunction}
-                        state={currentSelectedSpeakerDevice.state}
-                        is_disabled={is_disabled_selector}
-                    />
-                </div>
-            </div>
+            <MultiDropdownMenuContainer
+                label={t("config_page.device.speaker_device.label")}
+                remove_border_bottom={true}
+                dropdown_settings={[
+                    {
+                        insert_component: SwitchBox,
+                        insert_component_props: {
+                            secondary_label: t("config_page.device.label_auto_select"),
+                            variable: currentEnableAutoSpeakerSelect,
+                            toggleFunction: toggleEnableAutoSpeakerSelect,
+                        },
+                        insert_to: "before",
+                    },
+                    {
+                        dropdown_id: "speaker_host",
+                        secondary_label: t("config_page.device.label_host"),
+                        selected_id: currentSelectedSpeakerHost.data,
+                        list: currentSpeakerHostList.data,
+                        selectFunction: (selected) => setSelectedSpeakerHost(selected.selected_id),
+                        state: currentSelectedSpeakerHost.state,
+                        is_disabled: is_disabled_selector,
+                    },
+                    {
+                        dropdown_id: "speaker_device",
+                        secondary_label: t("config_page.device.label_device"),
+                        selected_id: currentSelectedSpeakerDevice.data,
+                        list: currentSpeakerDeviceList.data,
+                        selectFunction,
+                        state: currentSelectedSpeakerDevice.state,
+                        is_disabled: is_disabled_selector || currentSelectedSpeakerHost.state === "pending",
+                    },
+                ]}
+            />
+            <AsioControlPanel source="speaker" host={currentSelectedSpeakerHost} device={currentSelectedSpeakerDevice} />
             <div className={styles.threshold_container}>
                 <div className={styles.threshold_switch_section}>
                     <LabelComponent {...getLabels()}/>
@@ -199,6 +210,19 @@ const SpeakerContainer = () => {
                     />
                 </div>
             </div>
+        </div>
+    );
+};
+
+const AsioControlPanel = ({ source, host, device }) => {
+    const { sendBackendRequest } = useBackendRequest();
+    if (host.data !== "ASIO") return null;
+    return (
+        <div className={styles.asio_panel}>
+            <button disabled={host.state === "pending" || device.state === "pending" || !device.data || device.data === "NoDevice"}
+                onClick={() => sendBackendRequest("/run/open_asio_control_panel", source)}>
+                ASIO Control Panel
+            </button>
         </div>
     );
 };

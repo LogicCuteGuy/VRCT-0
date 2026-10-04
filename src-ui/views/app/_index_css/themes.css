@@ -1,0 +1,49 @@
+/* The existing dark_* tokens are shared by every panel and popup. */
+:root { color-scheme: dark; }
+:root[data-theme="light"] {
+    color-scheme: light;
+    --dark_basic_text_color: #202936;
+    --dark_100_color: #172232;
+    --dark_200_color: #202b3b;
+    --dark_300_color: #293547;
+    --dark_350_color: #334155;
+    --dark_400_color: #3e4c60;
+    --dark_450_color: #4b596c;
+    --dark_500_color: #586679;
+    --dark_550_color: #657386;
+    --dark_600_color: #728094;
+    --dark_650_color: #8090a2;
+    --dark_700_color: #94a3b8;
+    --dark_725_color: #a3b1c2;
+    --dark_750_color: #b3bfcd;
+    --dark_775_color: #c2cbd6;
+    --dark_800_color: #cfd7e1;
+    --dark_825_color: #d9e0e9;
+    --dark_850_color: #e0e6ee;
+    --dark_863_color: #e5eaf1;
+    --dark_875_color: #e9edf3;
+    --dark_888_color: #edf1f6;
+    --dark_900_color: #f0f3f8;
+    --dark_925_color: #f3f6fa;
+    --dark_950_color: #f6f8fc;
+    --dark_975_color: #f9fbfd;
+    --dark_1000_color: #ffffff;
+    --dark_550_color_22: #65738622;
+    --dark_825_color_cc: #d9e0e9cc;
+    --dark_1000_color_66: #ffffff66;
+    --dark_1000_color_aa: #ffffffaa;
+    --dark_1000_color_dd: #ffffffdd;
+    --primary_100_color: #064e3b;
+    --primary_150_color: #065f46;
+    --primary_200_color: #096650;
+    --primary_250_color: #0b6e57;
+    --primary_300_color: #0f766e;
+    --primary_350_color: #117d70;
+    --primary_400_color: #158575;
+    --sent_400_color: #25648b;
+    --received_300_color: #864494;
+}
+
+:root:lang(th) {
+    --font_family: "Leelawadee UI", "Noto Sans Thai", "Tahoma", sans-serif;
+}

@@ -9,6 +9,22 @@
     padding-top: 0rem;
 }
 
+.asio_panel {
+    display: flex;
+    justify-content: flex-end;
+    padding: 0 2rem 1rem;
+
+    button {
+        color: var(--dark_100_color);
+        background: var(--dark_800_color);
+        border: 0;
+        border-radius: 0.4rem;
+        padding: 0.8rem 1.2rem;
+        cursor: pointer;
+        &:disabled { opacity: 0.5; cursor: default; }
+    }
+}
+
 .device_container {
     display: flex;
     width: 100%;

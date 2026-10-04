@@ -1,10 +1,14 @@
 # VRChat の最小化中に使う学習画像の取得調査
 
+> **履歴資料（2026-09-12、Python版）**: 本書の取得結果、旧ソースパス、コマンドは当時の検証記録です。現行Rustの実行手順は [native tools](native_tools.md)、収集操作は [画像収集](ocr_dataset_collection.md)、本体との接続は [native backend](native_pipeline.md) を参照してください。
+
+`tmp/openvr_probe/` のreport/PNGリンクは調査時の一時成果物への参照として残している。現在のcheckoutにはその6ファイルがないため、本文の記録と新しい実機検証を区別する。
+
 調査日: 2026-09-12 / branch: `feature/ocr-chat-bubble`
 
 追記: 本書は最初の取得可能性検証の記録。その後、収集CLIをD3D11対応・自動撮影・
 pause/resume・安全な保存/終了へ更新した。現在の操作は
-[画像収集の手順](ocr_dataset_collection.md)を参照。本番OCRへの組み込みは引き続き未実施。
+[画像収集の手順](ocr_dataset_collection.md)を参照。当時の本番OCR組み込み状況は、この調査時点の記録として扱う。
 
 ## 結論
 

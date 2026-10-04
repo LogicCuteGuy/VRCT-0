@@ -1,5 +1,6 @@
-//! `audio::normalize` and `audio::vad` against what the Python code did on the
-//! same input (`fixtures/regenerate_audio_golden.py` records it).
+//! `audio::normalize` and `audio::vad` replay the historical Python contract on
+//! identical inputs. Audio golden fixtures are frozen at `16cb286c`; provenance
+//! and native test commands are in `fixtures/README.md`.
 
 use std::path::PathBuf;
 use std::sync::{Arc, Mutex};

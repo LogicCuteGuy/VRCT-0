@@ -1,8 +1,8 @@
-//! The mic/speaker session against the real `_AudioDeviceSession`
-//! (`fixtures/regenerate_session_golden.py` runs the class lifted out of `model.py` against scripted fakes
-//! and records one ordered log per scenario). The same fakes and steps are rebuilt here around the Rust
-//! session, and the logs have to be identical: which calls the recorder got and in what order, the queues it
-//! was given, what was delivered, what was logged, and the session's state after each snapshot.
+//! Mic/speaker sessions replay historical `_AudioDeviceSession` behavior.
+//! `fixtures/session_golden.json`, frozen at `16cb286c`, records ordered logs
+//! against scripted fakes. Rust replays the same recorder calls, queues,
+//! deliveries, logs and session-state snapshots.
+//! Provenance and native test commands: `fixtures/README.md`.
 
 use std::path::PathBuf;
 use std::sync::atomic::{AtomicBool, Ordering};

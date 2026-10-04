@@ -1,14 +1,14 @@
 import { useStore_SoftwareVersion, useStore_LatestSoftwareVersionInfo } from "@store";
-import { useStdoutToPython } from "@useStdoutToPython";
+import { useBackendRequest } from "@useBackendRequest";
 
 export const useSoftwareVersion = () => {
-    const { asyncStdoutToPython } = useStdoutToPython();
+    const { sendBackendRequest } = useBackendRequest();
     const { currentLatestSoftwareVersionInfo, updateLatestSoftwareVersionInfo } = useStore_LatestSoftwareVersionInfo();
     const { currentSoftwareVersion, updateSoftwareVersion, pendingSoftwareVersion } = useStore_SoftwareVersion();
 
     const getSoftwareVersion = () => {
         pendingSoftwareVersion();
-        asyncStdoutToPython("/get/data/version");
+        sendBackendRequest("/get/data/version");
     };
 
     const updateSoftwareVersionInfo = (payload) => {

@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 import { useI18n } from "@useI18n";
 import styles from "./Appearance.module.scss";
 import { ui_configs } from "@ui_configs";
+import { useTheme } from "@logics_common/useTheme";
 import { useStore_SelectableFontFamilyList } from "@store";
 
 import {
@@ -24,6 +25,7 @@ export const Appearance = () => {
     return (
         <>
             <UiLanguageContainer />
+            <ThemeContainer />
             <UiScalingContainer />
             <MessageLogUiScalingContainer />
             <SendMessageButtonTypeContainer />
@@ -32,6 +34,19 @@ export const Appearance = () => {
             <TransparencyContainer />
         </>
     );
+};
+
+export const ThemeContainer = () => {
+    const { t } = useI18n();
+    const { theme, setTheme } = useTheme();
+    return <RadioButtonContainer
+        label={t("config_page.appearance.theme.label")}
+        desc={t("config_page.appearance.theme.desc")}
+        name="theme"
+        selectFunction={setTheme}
+        checked_variable={{ data: theme, state: "success" }}
+        options={["dark", "light", "system"].map(id => ({ id, label: t(`config_page.appearance.theme.${id}`) }))}
+    />;
 };
 
 const UiLanguageContainer = () => {

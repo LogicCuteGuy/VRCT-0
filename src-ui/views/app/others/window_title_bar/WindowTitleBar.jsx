@@ -4,7 +4,6 @@ import styles from "./WindowTitleBar.module.scss";
 import XMarkSvg from "@images/cancel.svg?react";
 import SquareSvg from "@images/square.svg?react";
 import LineSvg from "@images/line.svg?react";
-import VrctSvg from "@images/vrct.svg?react";
 
 export const WindowTitleBar = () => {
     const { asyncCloseApp, asyncToggleMaximizeApp, asyncMinimizeApp} = useWindow();
@@ -13,7 +12,7 @@ export const WindowTitleBar = () => {
         <div className={styles.container}>
             <div className={styles.wrapper} data-tauri-drag-region>
                 <div className={styles.title_wrapper}>
-                    <VrctSvg className={styles.title_svg}/>
+                    <span className={styles.title_text}>VRCT-0 · LogicCuteGuy</span>
                 </div>
 
                 <div className={styles.window_control_wrapper}>

@@ -1,6 +1,6 @@
 {
   "$schema": "https://schema.tauri.app/config/2",
-  "productName": "VRCT",
+  "productName": "VRCT-0",
   "version": "3.5.1-beta.1",
   "identifier": "com.vrct.app",
   "build": {
@@ -13,7 +13,7 @@
     "enableGTKAppId": false,
     "windows": [
       {
-        "title": "VRCT",
+        "title": "VRCT-0",
         "center": true,
         "width": 450,
         "height": 220,
@@ -35,10 +35,10 @@
   "bundle": {
     "active": true,
     "targets": "nsis",
-    "publisher": "m's software",
-    "copyright": "Copyright m's software",
+    "publisher": "LogicCuteGuy",
+    "copyright": "Copyright LogicCuteGuy and original VRCT contributors (m's software)",
     "licenseFile": "../LICENSE",
-    "shortDescription": "VRCT",
+    "shortDescription": "VRCT-0 by LogicCuteGuy — VRChat translation and transcription",
     "icon": [
       "icons/32x32.png",
       "icons/128x128.png",
@@ -71,6 +71,7 @@
         "displayLanguageSelector": true,
         "languages": [
           "English",
+          "Thai",
           "Japanese",
           "Korean",
           "TradChinese",

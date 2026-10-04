@@ -1,4 +1,4 @@
-VRCT Chatbox Sample Player — Windows x64
+VRCT Chatbox Sample Player — Rust / Windows x64
 =======================================
 
 チャットボックス検出モデルの学習画像を作るための、多言語サンプル送信ツールです。
@@ -10,7 +10,7 @@ PythonやVRCT本体は不要です。サンプル本文はこの用途向けに�
 3. 撮影役と送信役が同じインスタンスに入ります。
 4. 送信役のVRChatのアクションメニューからOSCを有効にします。
    初期設定の入力ポート9000を使います。変更した場合は下の--portを指定します。
-5. VRCT-Chatbox-Sample-Player.exeをダブルクリックします。
+5. vrct-chatbox-player.exeをダブルクリックします。
    最初は待機しています。Enterを押すとチャット送信を開始します。
    6秒ごとにサンプルをシャッフルして繰り返し送信します。
 6. 撮影側PCの収集ツールを起動し、送信役のチャットボックスを撮影します。
@@ -44,18 +44,20 @@ samples.txt は人が読む一覧、samples.jsonl は別ツールで読み込む
 編集後はexeを起動し直してください。元のJSONに不正なサンプルがあると送信前に停止します。
 JSONはUTF-8、改行は文字列内に\nと書きます。空文字・制御文字・上限超過は送信しません。
 samples.txt/jsonlはビルド時の一覧なので、JSONを編集しても自動更新されません。
+--export-catalogue <フォルダ> でRust版から再生成できます（OSC送信なし）。
+samples.txtはUTF-8 BOM、samples.jsonlはUTF-8。原本の順と本文・tagsを保持し、同名生成ファイルを置き換えます。
 
 【設定例：exeのフォルダでPowerShellから実行】
-  .\VRCT-Chatbox-Sample-Player.exe --languages ja,en,ko,zh-Hans --interval 8
-  .\VRCT-Chatbox-Sample-Player.exe --length long --once
-  .\VRCT-Chatbox-Sample-Player.exe --languages mixed --ordered
-  .\VRCT-Chatbox-Sample-Player.exe --port 9000 --max-messages 50
-  .\VRCT-Chatbox-Sample-Player.exe --list
-  .\VRCT-Chatbox-Sample-Player.exe --dry-run --max-messages 3
+  .\vrct-chatbox-player.exe --languages ja,en,ko,zh-Hans --interval 8
+  .\vrct-chatbox-player.exe --length long --once
+  .\vrct-chatbox-player.exe --languages mixed --ordered
+  .\vrct-chatbox-player.exe --port 9000 --max-messages 50
+  .\vrct-chatbox-player.exe --list
+  .\vrct-chatbox-player.exe --dry-run --max-messages 3
 
 通常は開始時にEnter待ちです。--startを明示するとEnterを待たず送信します。
 --onceは全サンプルを1周して終了、--max-messagesは送信件数で終了します。
---orderedはファイル順、--seed 42はシャッフルの順番を再現します。
+--orderedはファイル順、--seed 42はRust版のシャッフル順を再現します（Python版の同じseedとは順番が異なります）。
 --intervalは6秒が初期値、ツールの下限は3秒です。
 --dry-runは画面表示のみで、ソケット作成・OSC送信・ログ保存をしません。
 --listも送信しません。引数付き起動は終了時のEnter待ちがありません。
@@ -81,3 +83,7 @@ Python未導入の別PCや、VRChat上の全言語の字形は未検証です。
 公式仕様:
 https://docs.vrchat.com/docs/osc-as-input-controller#chatbox
 https://docs.vrchat.com/docs/osc-overview
+
+--timeout はUDP送信待ち上限秒（既定1、最大3600）。--log-dir はログ保存先を変更します。
+Rust版の実VRChat表示・全言語の字形は別途実機確認が必要です。
+ビルド: src-tauriで cargo build -p vrct-capture-tools --release --bins -j1

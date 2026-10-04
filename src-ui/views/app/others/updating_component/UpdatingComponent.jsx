@@ -1,7 +1,7 @@
 import styles from "./UpdatingComponent.module.scss";
 import { useI18n } from "@useI18n";
 import { CircularProgress } from "@common_components";
-import chat_white_square from "@images/chato_white_square.png";
+import chat_white_square from "@images/vrct-0-icon.svg";
 
 export const UpdatingComponent = () => {
     const { t } = useI18n();

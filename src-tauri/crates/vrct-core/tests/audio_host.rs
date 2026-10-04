@@ -1,6 +1,10 @@
 //! `audio::host`: the `audio.*` RPC methods and the lines pushed to the sidecar, with a fake
 //! factory standing in for WASAPI + Silero (those are tested on their own).
 
+#[cfg(windows)]
+#[path = "common/onnxruntime.rs"]
+mod onnxruntime;
+
 use std::sync::{Arc, Mutex};
 use std::time::Duration;
 
@@ -115,7 +119,7 @@ fn the_default_max_speech_is_pythons_seven_seconds() {
 
 #[test]
 fn halves_round_to_even_like_pythons_round_and_the_minimum_is_one_frame() {
-    let spec = |ms: u64| StartSpec { session: "s".into(), source: vrct_core::audio::host::SourceKind::Microphone, device: "d".into(), max_speech_ms: ms };
+    let spec = |ms: u64| StartSpec { session: "s".into(), source: vrct_core::audio::host::SourceKind::Microphone, host: "Windows WASAPI".into(), device: "d".into(), max_speech_ms: ms };
     assert_eq!(spec(48).max_speech_frames(), 2); // 1.5 -> 2
     assert_eq!(spec(80).max_speech_frames(), 2); // 2.5 -> 2 (Python's round)
     assert_eq!(spec(0).max_speech_frames(), 1);
@@ -239,24 +243,13 @@ async fn the_methods_are_advertised_only_once_audio_is_added_and_answer_over_rpc
 }
 
 /// The real stack: WASAPI loopback of the default speaker, the real Silero model, through the host.
-/// Needs `onnxruntime.dll` (ORT_DYLIB_PATH, or the Python package's); otherwise it says so and passes.
+/// Requires the native ONNX Runtime; see `fixtures/README.md` for preparation.
 #[cfg(windows)]
 #[test]
 fn the_real_factory_runs_a_loopback_session_end_to_end() {
-    use std::path::PathBuf;
-    use std::process::Command;
     use vrct_core::audio::host::WasapiFactory;
 
-    let library = std::env::var_os("ORT_DYLIB_PATH").map(PathBuf::from).or_else(|| {
-        let script = "import onnxruntime, os; print(os.path.join(os.path.dirname(onnxruntime.__file__), 'capi', 'onnxruntime.dll'))";
-        let out = Command::new("python").args(["-c", script]).output().ok()?;
-        let path = PathBuf::from(String::from_utf8(out.stdout).ok()?.trim());
-        path.is_file().then_some(path)
-    });
-    let Some(library) = library else {
-        eprintln!("SKIPPED: no onnxruntime.dll (set ORT_DYLIB_PATH)");
-        return;
-    };
+    let library = onnxruntime::library();
     let lines = Arc::new(Lines::default());
     let host = AudioHost::new(Arc::new(WasapiFactory::with_library(library)), lines.clone());
 

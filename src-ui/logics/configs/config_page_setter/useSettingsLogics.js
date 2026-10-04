@@ -1,6 +1,6 @@
 import { useState, useEffect, useCallback, useMemo, useRef } from "react";
 import * as stores from "@store";
-import { useStdoutToPython } from "@useStdoutToPython";
+import { useBackendRequest } from "@useBackendRequest";
 import { useNotificationStatus } from "@logics_common";
 import { arrayToObject, arrayToIdLabel, transformToIndexedArray } from "@utils";
 
@@ -20,7 +20,7 @@ const transformResponse = (transformName, payload) => {
 };
 
 export const useSettingsLogics = (settingsArray, Category) => {
-    const { asyncStdoutToPython } = useStdoutToPython();
+    const { sendBackendRequest } = useBackendRequest();
     const { showNotification_SaveSuccess } = useNotificationStatus();
 
     const filtered = settingsArray.filter((s) => s.Category === Category);
@@ -71,27 +71,27 @@ export const useSettingsLogics = (settingsArray, Category) => {
         const buildGet = () => {
             return () => {
                 if (pending) pending();
-                asyncStdoutToPython(`/get/data/${s.base_endpoint_name}`);
+                sendBackendRequest(`/get/data/${s.base_endpoint_name}`);
             };
         };
 
         const buildSet = () => {
             return (value) => {
                 if (pending) pending();
-                asyncStdoutToPython(`/set/data/${s.base_endpoint_name}`, value);
+                sendBackendRequest(`/set/data/${s.base_endpoint_name}`, value);
             };
         };
 
         const buildDelete = () => {
             return (value) => {
                 if (pending) pending();
-                asyncStdoutToPython(`/delete/data/${s.base_endpoint_name}`, value);
+                sendBackendRequest(`/delete/data/${s.base_endpoint_name}`, value);
             };
         };
 
         const buildRun = () => {
             return () => {
-                asyncStdoutToPython(`/run/${s.base_endpoint_name}`);
+                sendBackendRequest(`/run/${s.base_endpoint_name}`);
             };
         };
 
@@ -154,9 +154,9 @@ export const useSettingsLogics = (settingsArray, Category) => {
                 if (pending) pending();
                 const isOn = current && current.data;
                 if (isOn) {
-                    asyncStdoutToPython(`/set/disable/${s.base_endpoint_name}`);
+                    sendBackendRequest(`/set/disable/${s.base_endpoint_name}`);
                 } else {
-                    asyncStdoutToPython(`/set/enable/${s.base_endpoint_name}`);
+                    sendBackendRequest(`/set/enable/${s.base_endpoint_name}`);
                 }
             };
 
@@ -204,7 +204,7 @@ export const useSettingsLogics = (settingsArray, Category) => {
             };
 
             result[`download${base}`] = (weight_type) => {
-                asyncStdoutToPython(`/run/download_${s.base_endpoint_name}`, weight_type);
+                sendBackendRequest(`/run/download_${s.base_endpoint_name}`, weight_type);
             };
 
             continue;
@@ -216,13 +216,13 @@ export const useSettingsLogics = (settingsArray, Category) => {
 
 
 export const useConfigFunctions = (Category) => {
-    const { asyncStdoutToPython } = useStdoutToPython();
+    const { sendBackendRequest } = useBackendRequest();
 
     switch (Category) {
         case "Vr":
             return {
                 sendTextToOverlay: (text) => {
-                    asyncStdoutToPython("/run/send_text_overlay", text);
+                    sendBackendRequest("/run/send_text_overlay", text);
                 },
             };
         default:

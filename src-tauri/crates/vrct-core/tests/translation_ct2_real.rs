@@ -1,10 +1,10 @@
-//! Local translation on the real `jncraton/m2m100_418M-ct2-int8` model against what Python's
-//! `translateCTranslate2` returns on it (`fixtures/regenerate_ct2_real_golden.py` records it).
+//! Real `jncraton/m2m100_418M-ct2-int8` translation replays historical Python
+//! `translateCTranslate2` output in `fixtures/ct2_m2m100_real_golden.json`.
+//! Frozen at `16cb286c`; provenance and native test commands: `fixtures/README.md`.
 //!
-//! Needs the `ct2` feature and the model folder (`VRCT_M2M100_MODEL`, or `~/Downloads/m2m100_418M-ct2-int8`);
-//! without it, or with a different `model.bin`, the test says so and passes, since a CI machine has none
-//! of that. One test, because a thread that has run CTranslate2 hangs when it exits: the result is
-//! reported from the thread and the process exits with it.
+//! Requires `ct2` and `VRCT_M2M100_MODEL` (or `~/Downloads/m2m100_418M-ct2-int8`).
+//! Missing/mismatched weights are reported and skipped. One test reports from
+//! the inference thread and exits the process, avoiding CT2 thread-exit hangs.
 
 #![cfg(feature = "ct2")]
 

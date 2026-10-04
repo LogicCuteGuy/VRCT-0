@@ -118,6 +118,8 @@ config_page:
             unable_to_use_osc_query: "由於 OSC IP Address 的設定無法接收 OSC 資料，目前無法使用此功能。"
 
     side_menu_labels:
+        supporters: "支持者"
+        about_vrct: "關於 VRCT-0"
         device: "裝置"
         appearance: "外觀"
         translation: "翻譯"
@@ -149,6 +151,12 @@ config_page:
             desc_for_manual: "使用滑桿調整喇叭輸入靈敏度，你可以按下喇叭圖示來測試。"
 
     appearance:
+        theme:
+            label: "主題"
+            desc: "選擇視窗配色或跟隨系統主題。儲存在此裝置。"
+            dark: "深色"
+            light: "淺色"
+            system: "跟隨系統"
         transparency:
             label: "透明度"
             desc: "變更主視窗的透明度。"
@@ -307,7 +315,7 @@ config_page:
             desc: "自動將對話訊息匯出為文字文件。"
         vrc_mic_mute_sync:
             label: "VRC 麥克風靜音同步"
-            desc: "當 VRChat 的麥克風靜音時，VRCT 將不會向 VRChat 發送訊息。\n*存在一些延遲且不支援按鍵發話 (PTT)。"
+            desc: "當 VRChat 的麥克風靜音時，VRCT-0 將不會向 VRChat 發送訊息。\n*存在一些延遲且不支援按鍵發話 (PTT)。"
         send_message_to_vrc:
             label: "發送訊息到 VRChat"
             desc: "當你打算向 VRChat 發送訊息時啟用此功能。"
@@ -396,7 +404,7 @@ config_page:
         error_in_use: "「{{action_name}}」的快捷鍵（{{hotkey}}）已在其他位置使用，無法註冊。"
         error_failed_to_register_at_launch: "「{{action_name}}」的快捷鍵（{{hotkey}}）正被其他應用程式使用，無法啟用。"
         toggle_vrct_visibility:
-            label: "切換 VRCT 最小化/啟動"
+            label: "切換 VRCT-0 最小化/啟動"
         toggle_translation:
             label: "切換「{{translation}}」開/關"
         toggle_transcription_send:

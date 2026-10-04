@@ -1,94 +1,65 @@
 # 収集画像からGeminiの仮アノテーションを作る
 
-前提はDataset Collectorが生成した `session/unlabeled/*.png` と同名のJSON一式。
-`positive/negative/` も入力可能だが、撮影時の分類を正解bboxとしては扱わない。
-操作の詳細は [配布README](../tools/gemini_annotator/README.txt) を参照。
+Rust製の `vrct-annotator` は画像抽出、Gemini RESTへの送信、再開、Label Studio向け書き出しを行う。PythonやGoogle SDKは不要。Label Studioは別途導入する。
 
-## 使い始める
+入力はDataset Collectorが生成した `session/unlabeled/*.png` と同名のJSON。`positive/negative/` も入力できるが、撮影時の分類を正解bboxとして扱わない。
 
-`tool-dist/VRCT-Gemini-Annotator-windows-x64.zip` を展開し、exeを起動する。
-画像フォルダ、抽出枚数（既定100枚）を入力すると、exe隣の `annotation_jobs/` に
-独立した作業フォルダを作る。送信する場合は1を選びAPIキーを入力する。
-Label Studioは別途導入し、`exports/<日時>/START_HERE.txt` の手順で取り込む。
-
-Pythonからの使用例:
+## ビルドと基本操作
 
 ```powershell
-.\.venv-annotator\Scripts\python.exe -X utf8 tools\gemini_bbox_labeler.py prepare 'D:\captures' --out 'D:\annotation-job' --limit 100
-# GEMINI_API_KEYを環境変数で設定してから実行。キーは保存・表示しない。
-.\.venv-annotator\Scripts\python.exe -X utf8 tools\gemini_bbox_labeler.py annotate 'D:\annotation-job' --limit 100
-.\.venv-annotator\Scripts\python.exe -X utf8 tools\gemini_bbox_labeler.py status 'D:\annotation-job'
+cargo build --manifest-path src-tauri/Cargo.toml -p vrct-annotator --release
+src-tauri/target/release/vrct-annotator.exe check
+src-tauri/target/release/vrct-annotator.exe prepare D:/captures --out D:/annotation_jobs/job1 --limit 100 --seed 42
+$env:GEMINI_API_KEY = "your-api-key"
+src-tauri/target/release/vrct-annotator.exe annotate D:/annotation_jobs/job1 --limit 100
+src-tauri/target/release/vrct-annotator.exe status D:/annotation_jobs/job1
+src-tauri/target/release/vrct-annotator.exe export D:/annotation_jobs/job1
 ```
 
-旧CLIの `input_dir --out` による即YOLO出力は廃止した。新しいコマンドは
-`prepare/annotate/export/status/check`。本番VRCTのendpointや収集ツールは変更していない。
+`check` はオフライン検査でAPIを呼ばない。引数なしで起動すると対話ウィザードになる。新しいジョブはexe隣の `annotation_jobs/` に作り、既存の `manifest.json` を持つジョブを選ぶと再開する。環境変数がない場合、ウィザードはキーを画面に表示せず入力する。パイプやCIでは明示的なサブコマンドを使う。APIキーをコマンド引数に渡すオプションはない。
 
-## 設計とデータの境界
+`prepare --limit 0` は全件を抽出する。既定モデルは旧ジョブとの互換性を維持する `gemini-2.5-flash`。`--model` で変更できるが、既存ジョブのモデル・プロンプト・スキーマは変更できない。別モデルを使う場合は新しいジョブを作る。モデルの提供状況はGoogleのモデル一覧で確認する。
 
-1. **prepare（オフライン）**: 再帰走査で収集PNG/JSONを列挙し、session/run/backendを分散して
-   seed付き抽出。画像名・寸法・PNG形式を照合し、入力外の新規jobへコピーする。
-   manifestの確定前に失敗したjobは公開しない。元画像・metadataは変更しない。
-2. **annotate（Geminiへの送信）**: job画像とpolicyのSHA-256を照合してから、未処理を順次送信する。
-   モデル既定は `gemini-2.5-flash`。公式SDKのJSON Schemaで全bboxを受け、整数4要素、
-   0..1000、正の面積、クラス、重複をローカル検証する。途中で切れた応答も不採用。
-3. **export（オフライン）**: すべての画像に対しLabel Studio tasksを出力。成功時だけ
-   `predictions`を付け、`annotations`は作らない。空予測、失敗、未処理も人手で確認する。
-   各出力は日時付きの新規フォルダ。Label StudioのDBや人手の成果物へ書き戻さない。
-4. **人手確定とYOLO**: Label Studioで予測をannotationへコピーして修正・Submit。
-   全画像を確認してから標準YOLO出力を使う。未確認やSkipを負例にせず、確認済みの枠なし画像を
-   保持する。class 0=`chat_box`と画像対応を検査し、同一撮影runが学習/評価にまたがらないよう分割する。
+`annotate` の既定値は `--limit 100 --interval 6 --retries 2`。`--limit 0` は対象全件、間隔は1秒以上、再試行回数は0〜5。`--retry-failed` を付けた場合のみ失敗・不明の画像を再送する。
 
-状態は `detected/no_detection/api_error/invalid_response/unknown/pending`。
-`no_detection`は検出器の判断であり、正解負例ではない。
-API呼び出し前にunknownを保存し、完了後に応答・usage・結果を原子的に置き換える。
-試行履歴を残し、再開では成功を再送しない。失敗/unknownは`--retry-failed`で明示的に再試行。
-通信完了とファイル保存を一体化できないため、中断・タイムアウトの重複課金は保証できない。
-OSファイルロックで同じjobの同時操作を防ぐ。プロセス異常終了でもOSがロックを解放する。
+## ジョブと検証
 
-6秒の間隔はquota保証ではない。429/500/502/503/504のみ最大2回自動再試行し、
-Retry-Afterがあれば尊重する。設定・認証エラー、再試行後も429なら処理全体を止める。
-SDK内部の自動再試行は1試行に制限。120秒の要求timeout。
-料金を固定値で推定せず、statusで全履歴の報告usageを表示する（未応答分の使用量は不明）。
+- 抽出はsession/backend別に分散し、Python版と同じ整数seedのMT19937シャッフルを使う。入力は変更せず、新しいジョブにPNGをコピーする。ジョブの出力先を入力内に置くことはできない。
+- メタデータのファイル名、寸法、PNG形式、画像の実寸法と向きを検査する。パスの親参照、絶対パス、シンボリックリンクやジャンクションを経由したジョブ内アクセスを拒否する。
+- `manifest.json` は画像SHA256とモデル・プロンプト・スキーマのpolicy hashを固定する。送信前に全画像を検証し、送信直前も当該画像のハッシュを検証する。
+- Gemini RESTにPNGと固定プロンプトを送信する。構造化JSON、temperature 0、candidate 1、最大出力8192 tokens、要求タイムアウト120秒を使用する。
+- bboxは `box_2d: [ymin,xmin,ymax,xmax]` の整数0〜1000と `label: chat_box` のみ。正の面積、重複なし、余分なキーなし、finish reason `STOP` を要求する。軸を推測した入れ替え、clamp、一部の不正boxだけを捨てる処理はしない。
+- 書き出しは `exports/<日時>/` の追加スナップショット。人が確認済みの既存書き出しを上書きしない。仮bboxはLabel Studioの **predictions** に入れ、確定済みannotationsとしては書かない。
 
-画像は元の寸法を維持し、Geminiの0..1000をLabel Studioの左上xywh百分率へ変換する。
-Label Studioにコピー先jobをLocal Filesとして登録するため、外部画像ホスティングは不要。
-同じprojectへのtasks再importは更新として扱わず、新規projectを使用する。
+## 再開・失敗・利用量
 
-## 配布ビルドと検証
+結果の状態は `pending`、`unknown`、`detected`、`no_detection`、`invalid_response`、`api_error`。送信直前に `unknown` をatomic書き込みし、完了結果と全attempt履歴を保存する。`detected/no_detection` は再送しない。通常の再開では `pending` のみ処理し、失敗・不明を再送するときは明示的に `--retry-failed` を付ける。
 
-既存 `.venv` の依存を変更せず、専用の `.venv-annotator` に
-`requirements-gemini-annotator.txt` を導入してビルドする。既存アプリの環境には
-同じimport名を置き換える依存やoptionalパッケージがあり、流用すると通知と実物がずれる。
-別のクリーン環境を使う場合は `VRCT_ANNOTATOR_PYTHON` にpython.exeを指定する。
-Label Studioは独立venvに `label-studio==1.23.0` を導入する（このexeに同梱しない）。
+HTTP処理中のCtrl+Cではジョブロックを解放して書き出しを作り、exit 130になる。強制終了や接続断では `unknown` が残ることがある。ジョブはOSファイルロックで並行更新を防ぐ。ロックファイルが残っていても、停止済みプロセスのロックは解除される。
+
+429/500/502/503/504だけを指定回数まで再試行する。`Retry-After` の秒数とHTTP日時を尊重し、各API呼び出し間の最小間隔も守る。400/401/403/404、または再試行を使い切った429では残り画像の送信を止める。HTTP/1のみを使い、idle接続の再利用を無効にして、HTTP/2や再利用接続に伴う隠れた再試行を避ける。リダイレクトも無効。キーはヘッダーに渡し、URL、エラー応答本文、キーをログや結果ファイルに保存しない。
+
+`status` は全attempt履歴のtoken使用量を合計する。未知の接続結果について課金やAPI実行の有無を確定することはできず、再送のexactly-onceは保証できない。間隔指定はGoogle側のquotaや課金額を保証しない。
+
+## Label Studioで人が確定する
+
+1. 書き出しごとに新しいプロジェクトを作り、`label_config.xml` を読み込む。
+2. Local Filesのdocument rootをジョブのルートに設定する。`START_HERE.txt` に必要な環境変数とパスを出力している。
+3. Local Files Storageを保存するときは **Saveのみ** を使う。Save & Syncによる重複取り込みを避ける。
+4. `tasks.json` を一度だけimportし、predictionsを表示してannotationへコピーする。
+5. bboxを修正してSubmitする。`no_detection`、失敗、未送信の画像も全件確認し、吹き出しなしと判断した画像は空のannotationをSubmitする。背景画像をSkipで済ませない。
+6. 確定結果をYOLOでexportする。chat_boxはclass 0。空ラベルは人が確認した負例として保持する。
+
+座標は元画像の寸法を保持し、0〜1000のyxyxからLabel Studioの百分率xywhへ変換する。ジョブを移動したらLocal Filesのdocument rootを更新する。追加書き出しを同じプロジェクトへ再importすると重複するので、新しいプロジェクトで扱う。
+
+学習用のscene分割、固定validation、COCO変換は [native dataset手順](native_dataset.md) を参照。
+
+## 回帰検査と外部仕様
 
 ```powershell
-py -3.11 -m venv .venv-annotator
-.\.venv-annotator\Scripts\python.exe -m pip install -r requirements-gemini-annotator.txt
-.\bat\build_gemini_annotator.bat
-.\.venv\Scripts\python.exe -m pytest -q src-python\test_gemini_bbox_labeler.py
-.\.venv\Scripts\python.exe -m ruff check tools\annotation_job.py tools\gemini_bbox_labeler.py tools\build_gemini_annotator.py src-python\test_gemini_bbox_labeler.py
+cargo test --manifest-path src-tauri/Cargo.toml -p vrct-annotator
 ```
 
-ビルドは新しいステージからZIPを作り、既存jobを巻き込まない。exeとREADME、依存ライセンス、
-BUILD-INFO、ZIP SHA-256を生成する。実キーを渡さずSDK初期化と合成PNGのprepare/exportを検査する。
-API通信テストはHTTPXのメモリ内transportを使い、実Geminiへは接続しない。
-画像の内容を検出する精度、実際のquota/料金、Label Studio画面での最終確認は実データの試行で測る。
+検査は合成PNGとlocalhostの模擬HTTPを使用する。有料APIは呼ばない。実APIでの検出精度、quota、課金額、Label Studio UIの動作は、この検査では確認していない。
 
-2026-09-14の検証結果:
-
-- 対象pytest 31件成功、対象4ファイルのruff成功。独立レビューの指摘は解消済み。
-- 専用環境からexe/ZIPビルド成功。ZIPのCRC・SHA-256・exeハッシュ・ライセンス・同梱物を独立確認。
-- ZIPを日本語・空白入りの一時パスに展開し、WindowsのみのPATH、APIキーなしで
-  `check/prepare/status/export` が終了コード0。元画像のハッシュを維持し、API試行記録なし。
-- 引数なしexeの対話操作でも、合成画像の取り込みから「準備だけで終了」まで成功。
-- 実Gemini API、実画像の検出精度、Label Studioの画面操作・YOLO出力、Python未導入の別PCは未検証。
-
-## 確認した公式仕様
-
-- [Gemini画像検出](https://ai.google.dev/gemini-api/docs/image-understanding#object-detection)
-- [構造化出力](https://ai.google.dev/gemini-api/docs/structured-output)
-- [レート制限](https://ai.google.dev/gemini-api/docs/rate-limits)
-- [モデル提供状況](https://ai.google.dev/gemini-api/docs/deprecations)
-- [料金](https://ai.google.dev/gemini-api/docs/pricing#gemini-2.5-flash)・[データ利用条件](https://ai.google.dev/gemini-api/terms#how-google-uses-your-data)
-- [Label Studio Local Files](https://labelstud.io/guide/storage_local)・[予測取り込み](https://labelstud.io/guide/predictions)・[出力](https://labelstud.io/guide/export)
+外部仕様: [Gemini REST](https://ai.google.dev/api/generate-content)、[構造化出力](https://ai.google.dev/gemini-api/docs/structured-output)、[画像入力](https://ai.google.dev/gemini-api/docs/image-understanding)、[rate limits](https://ai.google.dev/gemini-api/docs/rate-limits)、[モデル](https://ai.google.dev/gemini-api/docs/models)、[価格](https://ai.google.dev/gemini-api/docs/pricing)、[利用規約](https://ai.google.dev/gemini-api/terms)、[Label Studio Local Storage](https://labelstud.io/guide/storage.html#Local-storage)。

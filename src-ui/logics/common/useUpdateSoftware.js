@@ -1,13 +1,13 @@
-import { useStdoutToPython } from "@useStdoutToPython";
+import { useBackendRequest } from "@useBackendRequest";
 
 export const useUpdateSoftware = () => {
-    const { asyncStdoutToPython } = useStdoutToPython();
+    const { sendBackendRequest } = useBackendRequest();
     const updateSoftware = (target_version) => {
-        asyncStdoutToPython("/run/update_software", target_version);
+        sendBackendRequest("/run/update_software", target_version);
     };
 
     const updateSoftware_CUDA = (target_version) => {
-        asyncStdoutToPython("/run/update_cuda_software", target_version);
+        sendBackendRequest("/run/update_cuda_software", target_version);
     };
 
     return {

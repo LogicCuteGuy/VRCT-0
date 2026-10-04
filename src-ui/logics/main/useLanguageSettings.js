@@ -1,9 +1,9 @@
 import { useStore_SelectedPresetTabNumber, useStore_SelectedYourLanguages, useStore_SelectedTargetLanguages, useStore_TranslationEngines, useStore_SelectedTranslationEngines, useStore_SelectableLanguageList } from "@store";
-import { useStdoutToPython } from "@useStdoutToPython";
+import { useBackendRequest } from "@useBackendRequest";
 import { translator_status } from "@ui_configs";
 
 export const useLanguageSettings = () => {
-    const { asyncStdoutToPython } = useStdoutToPython();
+    const { sendBackendRequest } = useBackendRequest();
 
     const {
         currentSelectedYourLanguages,
@@ -39,19 +39,19 @@ export const useLanguageSettings = () => {
 
     const getSelectedPresetTabNumber = () => {
         pendingSelectedPresetTabNumber();
-        asyncStdoutToPython("/get/data/selected_tab_no");
+        sendBackendRequest("/get/data/selected_tab_no");
     };
 
     const setSelectedPresetTabNumber = (preset_number) => {
         pendingSelectedPresetTabNumber();
 
-        asyncStdoutToPython("/set/data/selected_tab_no", preset_number);
+        sendBackendRequest("/set/data/selected_tab_no", preset_number);
     };
 
 
     const getSelectedYourLanguages = () => {
         pendingSelectedYourLanguages();
-        asyncStdoutToPython("/get/data/selected_your_languages");
+        sendBackendRequest("/get/data/selected_your_languages");
     };
 
     const setSelectedYourLanguages = (selected_language_data) => {
@@ -66,13 +66,13 @@ export const useLanguageSettings = () => {
                 }
             }
         };
-        asyncStdoutToPython("/set/data/selected_your_languages", send_obj);
+        sendBackendRequest("/set/data/selected_your_languages", send_obj);
     };
 
 
     const getSelectedTargetLanguages = () => {
         pendingSelectedTargetLanguages();
-        asyncStdoutToPython("/get/data/selected_target_languages");
+        sendBackendRequest("/get/data/selected_target_languages");
     };
 
     const setSelectedTargetLanguages = (selected_language_data) => {
@@ -90,7 +90,7 @@ export const useLanguageSettings = () => {
                 },
             },
         };
-        asyncStdoutToPython("/set/data/selected_target_languages", send_obj);
+        sendBackendRequest("/set/data/selected_target_languages", send_obj);
     };
 
     const addTargetLanguage = () => {
@@ -107,7 +107,7 @@ export const useLanguageSettings = () => {
                 },
             },
         };
-        asyncStdoutToPython("/set/data/selected_target_languages", send_obj);
+        sendBackendRequest("/set/data/selected_target_languages", send_obj);
     };
     const removeTargetLanguage = () => {
         pendingSelectedTargetLanguages();
@@ -123,13 +123,13 @@ export const useLanguageSettings = () => {
                 },
             },
         };
-        asyncStdoutToPython("/set/data/selected_target_languages", send_obj);
+        sendBackendRequest("/set/data/selected_target_languages", send_obj);
     };
 
 
     const getTranslationEngines = () => {
         pendingTranslationEngines();
-        asyncStdoutToPython("/get/data/selectable_translation_engines");
+        sendBackendRequest("/get/data/selectable_translation_engines");
     };
 
     const updateTranslatorAvailability = (payload) => {
@@ -144,7 +144,7 @@ export const useLanguageSettings = () => {
 
     const getSelectedTranslationEngines = () => {
         pendingSelectedTranslationEngines();
-        asyncStdoutToPython("/get/data/selected_translation_engines");
+        sendBackendRequest("/get/data/selected_translation_engines");
     };
 
     const setSelectedTranslationEngines = (selected_translator) => {
@@ -153,13 +153,13 @@ export const useLanguageSettings = () => {
             ...currentSelectedTranslationEngines.data,
             [currentSelectedPresetTabNumber.data]: selected_translator,
         };
-        asyncStdoutToPython("/set/data/selected_translation_engines", send_obj);
+        sendBackendRequest("/set/data/selected_translation_engines", send_obj);
     };
 
     const swapSelectedLanguages = () => {
         pendingSelectedYourLanguages();
         pendingSelectedTargetLanguages();
-        asyncStdoutToPython("/run/swap_your_language_and_target_language");
+        sendBackendRequest("/run/swap_your_language_and_target_language");
     };
 
     const updateBothSelectedLanguages = (payload) => {
@@ -169,7 +169,7 @@ export const useLanguageSettings = () => {
 
 
     const getSelectableLanguageList = () => {
-        asyncStdoutToPython("/get/data/selectable_language_list");
+        sendBackendRequest("/get/data/selectable_language_list");
     };
 
 

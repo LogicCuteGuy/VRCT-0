@@ -219,9 +219,15 @@ pub fn selected_mic_device(val: &Value, st: &State, env: &Env) -> Option<Value> 
     env.devices.mic_device_names(host).iter().any(|n| n == name).then(|| val.clone())
 }
 
-pub fn selected_speaker_device(val: &Value, _: &State, env: &Env) -> Option<Value> {
+pub fn selected_speaker_host(val: &Value, _: &State, env: &Env) -> Option<Value> {
+    let host = val.as_str()?;
+    (host == "NoHost" || env.devices.speaker_hosts().iter().any(|h| h == host)).then(|| val.clone())
+}
+
+pub fn selected_speaker_device(val: &Value, st: &State, env: &Env) -> Option<Value> {
     let name = val.as_str()?;
-    (name == "NoDevice" || env.devices.speaker_device_names().iter().any(|n| n == name)).then(|| val.clone())
+    let host = get(st, "SELECTED_SPEAKER_HOST").as_str()?;
+    (name == "NoDevice" || env.devices.speaker_device_names_for_host(host).iter().any(|n| n == name)).then(|| val.clone())
 }
 
 /// One of the machine's compute devices, as it is listed.

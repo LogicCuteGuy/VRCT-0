@@ -1,0 +1,33 @@
+[package]
+name = "vrct-capture-tools"
+version = "0.1.0"
+edition = "2021"
+license = "MIT"
+
+[dependencies]
+vrct-core = { path = "../vrct-core" }
+clap = { version = "4", features = ["derive"] }
+serde = { version = "1", features = ["derive"] }
+serde_json = { version = "1", features = ["preserve_order"] }
+image = { version = "0.25", default-features = false, features = ["png"] }
+chrono = { version = "0.4", default-features = false, features = ["clock"] }
+sha2 = "0.10"
+hex = "0.4"
+getrandom = "0.3"
+unicode-general-category = "1"
+ctrlc = "3"
+
+[target.'cfg(windows)'.dependencies]
+windows-sys = { version = "0.59", features = ["Win32_Foundation", "Win32_Storage_FileSystem", "Win32_System_Diagnostics_ToolHelp"] }
+
+[[bin]]
+name = "vrct-chatbox-player"
+path = "src/bin/player.rs"
+
+[[bin]]
+name = "vrct-dataset-collector"
+path = "src/bin/collector.rs"
+
+[[bin]]
+name = "vrct-capture-probe"
+path = "src/bin/probe.rs"

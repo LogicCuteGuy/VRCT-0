@@ -686,6 +686,7 @@ fn restart_setting(kind: Kind, name: &str) -> bool {
         "SPEAKER_"
     };
     name.starts_with(prefix)
+        || name == if kind == Kind::Mic { "SELECTED_MIC_HOST" } else { "SELECTED_SPEAKER_HOST" }
         || name.starts_with("SELECTED_TRANSCRIPTION_")
         || name.starts_with("SELECTED_WHISPER_")
         || name == "WHISPER_WEIGHT_TYPE"

@@ -1,12 +1,10 @@
-//! Local CTranslate2 translation against a tiny model built by
-//! `tests/fixtures/regenerate_ct2_golden.py`, whose expected output is what
-//! Python's own tokenizer and `ctranslate2` produce on it.
+//! Local CTranslate2 translation replays the historical Python tokenizer/CT2
+//! contract using frozen tiny-model fixtures (`ct2_tiny` and `ct2_tiny_nllb`)
+//! captured at `16cb286c`; provenance and native test commands: `fixtures/README.md`.
 //!
-//! The model is random, so its "translations" are noise; what is checked is
-//! that Rust and Python agree on every step. Build with the `ct2` feature:
-//!
-//!     RUSTFLAGS="-C target-feature=+crt-static" CARGO_TARGET_DIR=C:/vrct_static \
-//!         cargo test -p vrct-core --features ct2 --test translation_ct2
+//! The randomly initialized models produce noise, so the assertions check
+//! tokenizer, decoding and inference parity rather than translation quality.
+//! Run from `src-tauri`: cargo test -p vrct-core --features ct2 --test translation_ct2 -j1
 #![cfg(feature = "ct2")]
 
 use std::fs;

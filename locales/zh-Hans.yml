@@ -118,6 +118,8 @@ config_page:
             unable_to_use_osc_query: "由于 OSC IP Address 的设置无法接收 OSC 数据，目前无法使用此功能。"
 
     side_menu_labels:
+        supporters: "支持者"
+        about_vrct: "关于 VRCT-0"
         device: "设备"
         appearance: "外观"
         translation: "翻译"
@@ -149,6 +151,12 @@ config_page:
             desc_for_manual: "使用滑杆手动调整他人语音接收阈值.在按下耳机按钮时,请根据实际听到的声音调整该大小"
 
     appearance:
+        theme:
+            label: "主题"
+            desc: "选择窗口配色或跟随系统主题。保存在此设备。"
+            dark: "深色"
+            light: "浅色"
+            system: "跟随系统"
         transparency:
             label: "透明度"
             desc: "更改主视窗透明度"
@@ -396,7 +404,7 @@ config_page:
         error_in_use: "“{{action_name}}”的快捷键（{{hotkey}}）已在其他位置使用，无法注册。"
         error_failed_to_register_at_launch: "“{{action_name}}”的快捷键（{{hotkey}}）正被其他应用程序使用，无法启用。"
         toggle_vrct_visibility:
-            label: "切换 VRCT 最小化/激活"
+            label: "切换 VRCT-0 最小化/激活"
         toggle_translation:
             label: "切换「{{translation}}」开/关"
         toggle_transcription_send:

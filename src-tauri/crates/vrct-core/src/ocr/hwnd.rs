@@ -193,7 +193,7 @@ fn find_window(title: &str) -> HWND {
         search.process
     }
 }
-pub(crate) fn process_name(pid: u32) -> Option<String> {
+pub fn process_name(pid: u32) -> Option<String> {
     unsafe {
         let handle = OpenProcess(PROCESS_QUERY_LIMITED_INFORMATION, 0, pid);
         if handle.is_null() {
@@ -210,6 +210,101 @@ pub(crate) fn process_name(pid: u32) -> Option<String> {
         Some(path.rsplit(['\\', '/']).next()?.to_lowercase())
     }
 }
+#[derive(Clone, Debug, PartialEq, Eq, serde::Serialize)]
+pub struct WindowSnapshot {
+    pub pid: u32,
+    pub hwnd: usize,
+    pub minimized: bool,
+    pub visible: bool,
+    pub process_started: u64,
+    pub rect: [i32; 4],
+}
+pub fn process_started(pid: u32) -> Option<u64> {
+    unsafe {
+        let process = OpenProcess(
+            PROCESS_QUERY_LIMITED_INFORMATION | PROCESS_SYNCHRONIZE,
+            0,
+            pid,
+        );
+        if process.is_null() {
+            return None;
+        }
+        let mut created: FILETIME = std::mem::zeroed();
+        let mut exit: FILETIME = std::mem::zeroed();
+        let mut kernel: FILETIME = std::mem::zeroed();
+        let mut user: FILETIME = std::mem::zeroed();
+        let ok = GetProcessTimes(process, &mut created, &mut exit, &mut kernel, &mut user);
+        // Creation time alone survives process exit while other handles exist.
+        // A process wait also distinguishes an exit code of STILL_ACTIVE (259)
+        // from a running process, which GetExitCodeProcess cannot do by itself.
+        let running = WaitForSingleObject(process, 0) == WAIT_TIMEOUT;
+        CloseHandle(process);
+        (ok != 0 && running)
+            .then_some((created.dwHighDateTime as u64) << 32 | created.dwLowDateTime as u64)
+    }
+}
+/// Enumerate without focusing/restoring windows. Titles alone never authorize
+/// dataset collection; the owning process must be VRChat.exe.
+pub fn vrchat_windows() -> Vec<WindowSnapshot> {
+    unsafe extern "system" fn visit(hwnd: HWND, context: LPARAM) -> BOOL {
+        unsafe {
+            let mut pid = 0;
+            GetWindowThreadProcessId(hwnd, &mut pid);
+            if process_name(pid).as_deref() != Some("vrchat.exe") {
+                return 1;
+            }
+            let mut title = [0u16; 256];
+            let len = GetWindowTextW(hwnd, title.as_mut_ptr(), title.len() as i32).max(0) as usize;
+            if String::from_utf16_lossy(&title[..len]) != "VRChat" {
+                return 1;
+            }
+            let Some(process_started) = process_started(pid) else {
+                return 1;
+            };
+            let mut rect: RECT = std::mem::zeroed();
+            if GetWindowRect(hwnd, &mut rect) == 0 {
+                return 1;
+            }
+            let windows = &mut *(context as *mut Vec<WindowSnapshot>);
+            windows.push(WindowSnapshot {
+                pid,
+                hwnd: hwnd as usize,
+                visible: IsWindowVisible(hwnd) != 0,
+                minimized: IsIconic(hwnd) != 0,
+                process_started,
+                rect: [rect.left, rect.top, rect.right, rect.bottom],
+            });
+        }
+        1
+    }
+    let mut windows = Vec::new();
+    unsafe {
+        EnumWindows(
+            Some(visit),
+            &mut windows as *mut Vec<WindowSnapshot> as LPARAM,
+        );
+    }
+    windows
+}
+pub fn capture_verified(window: &WindowSnapshot) -> Result<RgbImage, String> {
+    if !window.visible || window.minimized {
+        return Err("Desktop VRChat window is hidden or minimized".into());
+    }
+    if !vrchat_windows().contains(window) {
+        return Err("VRChat window changed before capture".into());
+    }
+    let mut source = HwndCapture {
+        title: "VRChat".into(),
+        hwnd: window.hwnd as HWND,
+    };
+    let frame = source
+        .capture()?
+        .ok_or("VRChat window has no drawable surface")?;
+    if !vrchat_windows().contains(window) {
+        return Err("VRChat window changed during capture".into());
+    }
+    Ok(frame)
+}
 pub fn blank(image: &RgbImage, mean_threshold: f64, variance_threshold: f64) -> bool {
     if image.as_raw().is_empty() {
         return true;
@@ -223,4 +318,21 @@ pub fn blank(image: &RgbImage, mean_threshold: f64, variance_threshold: f64) -> 
         .sum::<f64>();
     let mean = sum / count;
     mean < mean_threshold || squared / count - mean * mean < variance_threshold
+}
+#[cfg(test)]
+mod tests {
+    use super::*;
+    #[test]
+    fn process_identity_requires_a_live_process_even_when_exit_code_is_259() {
+        use std::os::windows::process::CommandExt;
+        assert!(process_started(std::process::id()).is_some());
+        let mut child = std::process::Command::new("cmd.exe")
+            .args(["/D", "/C", "exit /b 259"])
+            .creation_flags(CREATE_NO_WINDOW)
+            .spawn()
+            .unwrap();
+        let pid = child.id();
+        assert_eq!(child.wait().unwrap().code(), Some(259));
+        assert_eq!(process_started(pid), None);
+    }
 }

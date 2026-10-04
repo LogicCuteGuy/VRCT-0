@@ -1,12 +1,11 @@
-//! `audio::silero` against the repo's Python `SileroFrameProbability` on the same
-//! synthetic audio (`fixtures/regenerate_silero_golden.py`).
-//!
-//! These tests need the ONNX Runtime library (`onnxruntime.dll`). They look at
-//! `ORT_DYLIB_PATH`, then at the one inside the Python `onnxruntime` package; with
-//! neither they print why and return, so a machine without it still passes.
+//! Native `audio::silero` replays the historical Python `SileroFrameProbability`
+//! synthetic-audio contract in `fixtures/silero_golden.json`, frozen at `16cb286c`.
+//! Provenance and native runtime preparation/test commands: `fixtures/README.md`.
+//! These tests require the native ONNX Runtime and fail clearly if it is absent.
 
 use std::path::PathBuf;
-use std::process::Command;
+#[path = "common/onnxruntime.rs"]
+mod onnxruntime;
 
 use base64::Engine as _;
 use serde_json::Value;
@@ -20,22 +19,10 @@ fn fixture() -> Value {
     serde_json::from_str(&std::fs::read_to_string(path).unwrap()).unwrap()
 }
 
-fn library() -> Option<PathBuf> {
-    if let Some(path) = std::env::var_os("ORT_DYLIB_PATH").map(PathBuf::from) {
-        return Some(path);
-    }
-    let script = "import onnxruntime, os; print(os.path.join(os.path.dirname(onnxruntime.__file__), 'capi', 'onnxruntime.dll'))";
-    let out = Command::new("python").args(["-c", script]).output().ok()?;
-    let path = PathBuf::from(String::from_utf8(out.stdout).ok()?.trim());
-    path.is_file().then_some(path)
-}
-
-fn engine() -> Option<SileroFrameProbability> {
-    let Some(path) = library() else {
-        eprintln!("SKIPPED: no onnxruntime.dll (set ORT_DYLIB_PATH)");
-        return None;
-    };
-    Some(SileroFrameProbability::with_library(&path).unwrap_or_else(|e| panic!("{e}")))
+fn engine() -> SileroFrameProbability {
+    let path = onnxruntime::library();
+    SileroFrameProbability::with_library(&path)
+        .unwrap_or_else(|e| panic!("Cannot load native ONNX Runtime {}: {e}", path.display()))
 }
 
 fn decode(b64: &str) -> Vec<u8> {
@@ -48,7 +35,7 @@ fn samples(pcm: &[u8]) -> Vec<f32> {
 
 #[test]
 fn probabilities_match_python_frame_by_frame() {
-    let Some(mut engine) = engine() else { return };
+    let mut engine = engine();
     let golden = fixture();
     let mut worst = 0.0f32;
     let mut checked = 0;
@@ -79,7 +66,7 @@ fn probabilities_match_python_frame_by_frame() {
 
 #[test]
 fn reset_puts_state_and_context_back() {
-    let Some(mut engine) = engine() else { return };
+    let mut engine = engine();
     let golden = fixture();
     let scenario = golden["scenarios"].as_array().unwrap().iter().find(|s| s["name"] == "vowel_a").unwrap();
     let frames: Vec<Vec<f32>> =
@@ -97,14 +84,14 @@ fn reset_puts_state_and_context_back() {
 
 #[test]
 fn wrong_frame_size_is_an_error() {
-    let Some(mut engine) = engine() else { return };
+    let mut engine = engine();
     assert!(engine.probability(&vec![0.0; FRAME_SAMPLES - 1]).is_err());
     assert!(engine.probability(&vec![0.0; FRAME_SAMPLES + 1]).is_err());
 }
 
 #[test]
 fn the_whole_chain_cuts_the_same_segments_as_python() {
-    let Some(engine) = engine() else { return };
+    let engine = engine();
     let golden = fixture();
     let pipeline = &golden["pipeline"];
     let pcm = decode(pipeline["pcm"].as_str().unwrap());

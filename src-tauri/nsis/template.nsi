@@ -134,7 +134,7 @@ Var SelectedLangage
 Var DialogChooseLanguage
 Page custom PageChooseLanguage PageLeaveChooseLanguage
 Function PageChooseLanguage
-    !insertmacro MUI_HEADER_TEXT "Initial Settings" "Set the language of the VRCT UI (can be changed later)."
+    !insertmacro MUI_HEADER_TEXT "Initial Settings" "Set the language of the VRCT-0 UI (can be changed later)."
     nsDialogs::Create 1018
     Pop $DialogChooseLanguage
 
@@ -146,6 +146,7 @@ Function PageChooseLanguage
     ${NSD_CreateDropList} 33% 20u 33% 12u ""
     Pop $DropListLanguages
     ${NSD_CB_AddString} $DropListLanguages "English"
+    ${NSD_CB_AddString} $DropListLanguages "ไทย"
     ${NSD_CB_AddString} $DropListLanguages "日本語"
     ${NSD_CB_AddString} $DropListLanguages "한국어"
     ${NSD_CB_AddString} $DropListLanguages "繁體中文"
@@ -153,7 +154,10 @@ Function PageChooseLanguage
 
     ; Preselect based on /UILANG= (passed from the app when launched from
     ; within VRCT). Falls back to English on first-time installs.
-    ${If} $UILang == "ja"
+    ${If} $UILang == "th"
+        ${NSD_CB_SelectString} $DropListLanguages "ไทย"
+        StrCpy $SelectedLangage "th"
+    ${ElseIf} $UILang == "ja"
         ${NSD_CB_SelectString} $DropListLanguages "日本語"
         StrCpy $SelectedLangage "ja"
     ${ElseIf} $UILang == "ko"
@@ -181,6 +185,9 @@ Function PageLeaveChooseLanguage
     ${If} "English" == $0
         StrCpy $SelectedLangage "en"
         StrCpy $LANGUAGE ${LANG_ENGLISH}
+    ${ElseIf} "ไทย" == $0
+        StrCpy $SelectedLangage "th"
+        StrCpy $LANGUAGE ${LANG_THAI}
     ${ElseIf} "日本語" == $0
         StrCpy $SelectedLangage "ja"
         StrCpy $LANGUAGE ${LANG_JAPANESE}
@@ -487,6 +494,8 @@ Function .onInit
   ClearErrors
   ${If} $UILang == "en"
     WriteRegStr HKCU "${MANUPRODUCTKEY}" "Installer Language" "1033"
+  ${ElseIf} $UILang == "th"
+    WriteRegStr HKCU "${MANUPRODUCTKEY}" "Installer Language" "1054"
   ${ElseIf} $UILang == "ja"
     WriteRegStr HKCU "${MANUPRODUCTKEY}" "Installer Language" "1041"
   ${ElseIf} $UILang == "ko"

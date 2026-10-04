@@ -9,6 +9,7 @@ export const UiLanguageController = () => {
 
     useEffect(() => {
         i18n.changeLanguage(currentUiLanguage.data);
+        document.documentElement.lang = currentUiLanguage.data || "en";
     }, [currentUiLanguage.data]);
     return null;
 };

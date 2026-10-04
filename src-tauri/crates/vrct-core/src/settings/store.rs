@@ -350,6 +350,10 @@ pub fn config_text(entries: &[(String, Value)]) -> String {
 }
 
 fn pretty(value: &Value) -> String {
+    // Keep persisted nested key order stable when another workspace crate enables
+    // serde_json's preserve_order feature. Top-level settings retain their order.
+    let mut value = value.clone();
+    value.sort_all_objects();
     let mut buffer = Vec::new();
     let formatter = serde_json::ser::PrettyFormatter::with_indent(b"    ");
     let mut serializer = serde_json::Serializer::with_formatter(&mut buffer, formatter);

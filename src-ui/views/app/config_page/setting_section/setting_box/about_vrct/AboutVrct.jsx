@@ -2,7 +2,7 @@ import styles from "./AboutVrct.module.scss";
 import dev_section_title from "@images/about_vrct/dev_section_title.png";
 import dev_misya from "@images/about_vrct/dev_misya.png";
 import dev_shiina from "@images/about_vrct/dev_shiina.png";
-import vrct_logo_for_about_vrct from "@images/about_vrct/vrct_logo_for_about_vrct.png";
+import { BrandLogo } from "@common_components";
 
 import contributors_section_title from "@images/about_vrct/contributors_section_title.png";
 import contributor_done from "@images/about_vrct/contributor_done.png";
@@ -38,6 +38,7 @@ export const AboutVrct = () => {
     const { currentUiLanguage } = useAppearance();
     return (
         <div className={styles.container}>
+            <p>VRCT-0 by LogicCuteGuy — based on VRCT by m's software.</p>
             <div className={styles.dev_section}>
                 <img src={dev_section_title} className={clsx(styles.section_title, styles.the_developers)} />
                 <div className={styles.dev_section_wrapper}>
@@ -55,7 +56,7 @@ export const AboutVrct = () => {
 
             <div className={styles.project_links_and_logo_section}>
                 <div className={styles.about_vrct_logo_wrapper}>
-                    <img src={vrct_logo_for_about_vrct} className={styles.about_vrct_logo} />
+                    <BrandLogo className={styles.about_vrct_logo} />
                 </div>
                 <div className={styles.project_links_wrapper}>
                     <OpenLinkContainer className={styles.project_link} href_id="project_link_booth" />
@@ -156,7 +157,7 @@ const about_vrct_links = {
 
     project_link_booth: { img: project_link_booth, href: "https://misyaguziya.booth.pm/items/5155325" },
     project_link_documents: { img: project_link_documents, href: (lang) => generateLocalizedDocumentUrl(lang).vrct_document_home_url },
-    project_link_vrct_github: { img: project_link_vrct_github, href: "https://github.com/misyaguziya/VRCT" },
+    project_link_vrct_github: { img: project_link_vrct_github, href: "https://github.com/LogicCuteGuy/0-VRCT" },
     project_link_contact_us: { img: project_link_contact_us, href: "https://docs.google.com/forms/d/e/1FAIpQLSei-xoydOY60ivXqhOjaTzNN8PiBQIDcNhzfy6cw2sjYkcg_g/viewform" },
 
     contributors_done_san_x: { img: contributors_x_icon, href: "https://twitter.com/done_vrc" },

@@ -3,6 +3,7 @@ import i18n from "i18next";
 import { initReactI18next } from "react-i18next";
 
 import en_yml from "./en.yml?raw";
+import th_yml from "./th.yml?raw";
 import ja_yml from "./ja.yml?raw";
 import ko_yml from "./ko.yml?raw";
 import zh_hant_yml from "./zh-Hant.yml?raw";
@@ -17,6 +18,7 @@ const translation_zh_Hans = yaml.load(zh_hans_yml);
 
 const resources = {
     en: { translation: translation_en },
+    th: { translation: yaml.load(th_yml) },
     ja: { translation: translation_ja },
     ko: { translation: translation_ko },
     "zh-Hant": { translation: translation_zh_Hant },

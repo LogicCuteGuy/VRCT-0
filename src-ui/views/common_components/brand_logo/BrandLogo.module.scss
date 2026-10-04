@@ -1,0 +1,6 @@
+.light { display: none; }
+.dark { display: block; }
+:global(:root[data-theme="light"]) {
+    .light { display: block; }
+    .dark { display: none; }
+}

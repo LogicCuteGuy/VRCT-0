@@ -23,6 +23,14 @@ pub fn contract() -> &'static [Contract] {
     })
 }
 
+/// Native additions to the frozen legacy endpoint contract.
+pub const NATIVE_ENDPOINTS: &[&str] = &[
+    "/get/data/selected_speaker_host",
+    "/set/data/selected_speaker_host",
+    "/get/data/selectable_speaker_host_list",
+    "/run/open_asio_control_panel",
+];
+
 /// Changes that also control a service must finish (or return an error) before
 /// answering the UI. Implementations execute on a blocking worker, never under
 /// the settings listener lock.
@@ -55,6 +63,9 @@ impl Controller {
         effects: Arc<dyn Effects>,
     ) -> Arc<Self> {
         let mut keys = HashMap::new();
+        for endpoint in ["/get/data/selected_speaker_host", "/set/data/selected_speaker_host"] {
+            keys.insert(endpoint.to_owned(), "SELECTED_SPEAKER_HOST".to_owned());
+        }
         for row in contract() {
             if let Some(key) = &row.setting {
                 keys.insert(row.endpoint.clone(), key.clone());
@@ -108,11 +119,22 @@ impl Controller {
                     | "/get/data/selectable_mic_host_list"
                     | "/get/data/selectable_mic_device_list"
                     | "/get/data/selectable_speaker_device_list"
+                    | "/get/data/selectable_speaker_host_list"
                     | "/run/swap_your_language_and_target_language"
             )
     }
 
     pub fn register(self: &Arc<Self>, mut router: Router) -> Router {
+        for &endpoint in NATIVE_ENDPOINTS {
+            let this = self.clone();
+            router = router.handle(endpoint, move |data| {
+                let this = this.clone();
+                async move {
+                    tokio::task::spawn_blocking(move || this.answer(endpoint, data.unwrap_or(Value::Null)))
+                        .await.unwrap_or((500, json!("Internal error")))
+                }
+            });
+        }
         for row in contract().iter().filter(|row| self.owns(&row.endpoint)) {
             let this = self.clone();
             let endpoint = row.endpoint.clone();
@@ -132,8 +154,26 @@ impl Controller {
     }
 
     pub fn answer(&self, endpoint: &str, data: Value) -> Reply {
+        if endpoint == "/run/open_asio_control_panel" {
+            let prefix = match data.as_str() {
+                Some("mic") => "SELECTED_MIC",
+                Some("speaker") => "SELECTED_SPEAKER",
+                _ => return error("Choose mic or speaker for the ASIO control panel", Value::Null),
+            };
+            if self.settings.get_str(&format!("{prefix}_HOST")).as_deref() != Some(crate::audio::devices::ASIO_HOST) {
+                return error("Select an ASIO host before opening its control panel", Value::Null);
+            }
+            #[cfg(windows)]
+            return match crate::audio::wasapi::open_asio_control_panel(&self.settings.get_str(&format!("{prefix}_DEVICE")).unwrap_or_default()) {
+                Ok(()) => (200, json!(true)),
+                Err(message) => error(message, Value::Null),
+            };
+            #[cfg(not(windows))]
+            return error("ASIO control panels are available on Windows", Value::Null);
+        }
         let _serial = self.serial.lock().unwrap_or_else(|p| p.into_inner());
         match endpoint {
+            "/get/data/selectable_speaker_host_list" => return (200, json!(self.devices.speaker_hosts())),
             "/get/data/selectable_translation_engines" => return (200, self.translation_engines()),
             "/get/data/selectable_transcription_engines" => {
                 let status = self
@@ -162,7 +202,7 @@ impl Controller {
                 )
             }
             "/get/data/selectable_speaker_device_list" => {
-                return (200, json!(self.devices.speaker_device_names()))
+                return (200, json!(self.devices.speaker_device_names_for_host(&self.settings.get_str("SELECTED_SPEAKER_HOST").unwrap_or_default())))
             }
             "/run/swap_your_language_and_target_language" => return self.swap(),
             _ => {}
@@ -178,6 +218,7 @@ impl Controller {
             "SELECTED_TRANSLATION_COMPUTE_DEVICE" => vec!["SELECTED_TRANSLATION_COMPUTE_TYPE"],
             "SELECTED_TRANSCRIPTION_COMPUTE_DEVICE" => vec!["SELECTED_TRANSCRIPTION_COMPUTE_TYPE"],
             "SELECTED_MIC_HOST" => vec!["SELECTED_MIC_DEVICE"],
+            "SELECTED_SPEAKER_HOST" => vec!["SELECTED_SPEAKER_DEVICE"],
             "WEBSOCKET_SERVER" => vec!["OBS_BROWSER_SOURCE"],
             "OBS_BROWSER_SOURCE" => vec!["WEBSOCKET_SERVER"],
             _ => Vec::new(),
@@ -255,6 +296,7 @@ impl Controller {
             let _ = self.settings.set(type_key, json!("auto"));
             self.emit(&format!("/run/{}", type_key.to_lowercase()), json!("auto"));
         }
+        let mut dependent_events = Vec::new();
         if key == "SELECTED_MIC_HOST" {
             let host = self.settings.get_str(key).unwrap_or_default();
             let names = self.devices.mic_device_names(&host);
@@ -272,8 +314,21 @@ impl Controller {
                     .unwrap_or_else(|| names.first().map(|n| json!(n)).unwrap_or(json!("NoDevice")))
             };
             let _ = self.settings.set("SELECTED_MIC_DEVICE", selected.clone());
-            self.emit("/run/selectable_mic_device_list", json!(names));
-            self.emit("/run/selected_mic_device", selected);
+            dependent_events.push(("/run/selectable_mic_device_list", json!(names)));
+            dependent_events.push(("/run/selected_mic_device", selected));
+        }
+        if key == "SELECTED_SPEAKER_HOST" {
+            let host = self.settings.get_str(key).unwrap_or_default();
+            let names = self.devices.speaker_device_names_for_host(&host);
+            let previous = dependent.first().map(|(_, v)| v.clone()).unwrap_or_default();
+            let selected = if names.iter().any(|n| previous == n.as_str()) {
+                previous
+            } else {
+                names.first().map(|n| json!(n)).unwrap_or(json!("NoDevice"))
+            };
+            let _ = self.settings.set("SELECTED_SPEAKER_DEVICE", selected.clone());
+            dependent_events.push(("/run/selectable_speaker_device_list", json!(names)));
+            dependent_events.push(("/run/selected_speaker_device", selected));
         }
         if matches!(
             key.as_str(),
@@ -289,6 +344,7 @@ impl Controller {
             let _ = self.effects.changed(key);
             return error(e, old);
         }
+        for (endpoint, value) in dependent_events { self.emit(endpoint, value); }
         if key.starts_with("SELECTED_")
             && (key.contains("LANGUAGE")
                 || key == "SELECTED_TRANSLATION_ENGINES"

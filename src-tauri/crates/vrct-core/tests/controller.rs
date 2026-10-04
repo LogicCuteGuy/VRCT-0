@@ -131,13 +131,22 @@ impl ResponseSink for Events {
 struct DevicesFake;
 impl Devices for DevicesFake {
     fn mic_hosts(&self) -> Vec<String> {
-        vec!["Windows WASAPI".into()]
+        vec!["Windows WASAPI".into(), "ASIO".into()]
     }
-    fn mic_device_names(&self, _: &str) -> Vec<String> {
-        vec!["Mic A".into(), "Mic B".into()]
+    fn mic_device_names(&self, host: &str) -> Vec<String> {
+        if host == "ASIO" { vec!["VB-Matrix VASIO-8".into()] }
+        else { vec!["Mic A".into(), "Mic B".into()] }
     }
     fn speaker_device_names(&self) -> Vec<String> {
         vec!["Speaker A [Loopback]".into()]
+    }
+    fn speaker_hosts(&self) -> Vec<String> { self.mic_hosts() }
+    fn speaker_device_names_for_host(&self, host: &str) -> Vec<String> {
+        match host {
+            "ASIO" => vec!["VB-Matrix VASIO-8".into()],
+            "Windows WASAPI" => self.speaker_device_names(),
+            _ => Vec::new(),
+        }
     }
     fn default_mic(&self) -> Option<(String, String)> {
         Some(("Windows WASAPI".into(), "Mic A".into()))
@@ -184,6 +193,32 @@ fn controller() -> (Arc<Controller>, Arc<Settings>, Arc<Events>, Arc<Effect>) {
     )
 }
 struct NoCapture;
+
+#[test]
+fn both_audio_hosts_select_devices_from_the_selected_host_and_reject_stale_names() {
+    let (controller, settings, events, _) = controller();
+    assert_eq!(controller.answer("/get/data/selectable_speaker_host_list", Value::Null), (200, json!(["Windows WASAPI", "ASIO"])));
+    for kind in ["mic", "speaker"] {
+        assert_eq!(controller.answer(&format!("/set/data/selected_{kind}_host"), json!("ASIO")).0, 200);
+        assert_eq!(settings.get(&format!("SELECTED_{}_HOST", kind.to_uppercase())), Some(json!("ASIO")));
+        assert_eq!(settings.get(&format!("SELECTED_{}_DEVICE", kind.to_uppercase())), Some(json!("VB-Matrix VASIO-8")));
+        assert_eq!(controller.answer(&format!("/get/data/selectable_{kind}_device_list"), Value::Null), (200, json!(["VB-Matrix VASIO-8"])));
+        assert_eq!(controller.answer(&format!("/set/data/selected_{kind}_device"), json!("Mic A")).0, 400);
+        assert_eq!(controller.answer(&format!("/set/data/selected_{kind}_host"), json!("missing host")).0, 400);
+    }
+    assert!(events.0.lock().unwrap().iter().any(|r| r.endpoint == "/run/selected_speaker_device"));
+    settings.flush().unwrap();
+}
+
+#[test]
+fn failed_speaker_host_change_restores_both_settings_without_publishing_stale_devices() {
+    let (controller, settings, events, effects) = controller();
+    effects.0.store(true, Ordering::SeqCst);
+    assert_eq!(controller.answer("/set/data/selected_speaker_host", json!("ASIO")).0, 400);
+    assert_eq!(settings.get("SELECTED_SPEAKER_HOST"), Some(json!("Windows WASAPI")));
+    assert_eq!(settings.get("SELECTED_SPEAKER_DEVICE"), Some(json!("Speaker A [Loopback]")));
+    assert!(events.0.lock().unwrap().is_empty());
+}
 impl Backend for NoCapture {
     fn selected_device(&self, _: Kind) -> Option<Device> {
         None
@@ -245,6 +280,11 @@ async fn every_legacy_route_has_a_native_owner_and_every_initialization_getter_a
     let snapshot = native.snapshot().unwrap();
     assert!(snapshot.as_object().unwrap().len() > 110);
     assert!(snapshot["/get/data/selectable_mic_device_list"].is_array());
+    assert_eq!(snapshot["/get/data/selected_speaker_host"], json!("Windows WASAPI"));
+    assert_eq!(snapshot["/get/data/selectable_speaker_host_list"], json!(["Windows WASAPI", "ASIO"]));
+    for endpoint in vrct_core::controller::NATIVE_ENDPOINTS {
+        assert!(router.is_owned(endpoint), "missing native endpoint: {endpoint}");
+    }
     assert!(snapshot["/get/data/openai_auth_key"].is_null());
     native.services.shutdown();
     assert!(native.initialize().await.is_err());
@@ -263,6 +303,14 @@ fn failed_service_change_rolls_back_config() {
     assert_eq!(reply.0, 400);
     assert_eq!(reply.1["data"], old);
     assert_eq!(settings.get("WEBSOCKET_PORT").unwrap(), old);
+}
+
+#[test]
+fn asio_panel_rejects_invalid_roles_and_non_asio_hosts_without_loading_a_driver() {
+    let (controller, _, _, _) = controller();
+    for role in [json!(null), json!("output"), json!("mic"), json!("speaker")] {
+        assert_eq!(controller.answer("/run/open_asio_control_panel", role).0, 400);
+    }
 }
 #[test]
 fn model_selection_requires_an_authenticated_model_catalog() {

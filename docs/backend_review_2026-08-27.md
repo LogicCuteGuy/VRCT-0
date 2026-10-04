@@ -1,5 +1,7 @@
 # VRCT バックエンド（Python）コードレビュー
 
+> **履歴資料（Python版）**: 本書のパス、コマンド、検証結果、対応状況は記載した時点のスナップショットです。旧ソースは記載コミットのGit履歴を参照してください。現行Rustツールの実行手順は [native_tools.md](native_tools.md) を参照してください。
+
 - **対象**: `src-python/`（実装 約 15,000 行 / テスト含め 22,144 行、44 モジュール）
   - 中核: `controller.py` (4,267) / `model.py` (1,738) / `config.py` (1,161) / `device_manager.py` (874) / `errors.py` (857) / `mainloop.py` (701)
   - 周辺: `models/` 配下（transcription / translation / overlay / osc / obs / websocket / telemetry / transliteration / clipboard / watchdog）

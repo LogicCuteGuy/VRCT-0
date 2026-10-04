@@ -1,19 +1,19 @@
 import { useStore_IsMainPageCompactMode } from "@store";
-import { useStdoutToPython } from "@useStdoutToPython";
+import { useBackendRequest } from "@useBackendRequest";
 
 export const useIsMainPageCompactMode = () => {
-    const { asyncStdoutToPython } = useStdoutToPython();
+    const { sendBackendRequest } = useBackendRequest();
     const { currentIsMainPageCompactMode, updateIsMainPageCompactMode } = useStore_IsMainPageCompactMode();
 
     const getIsMainPageCompactMode = () => {
-        asyncStdoutToPython("/get/data/main_window_sidebar_compact_mode");
+        sendBackendRequest("/get/data/main_window_sidebar_compact_mode");
     };
 
     const toggleIsMainPageCompactMode = () => {
         if (currentIsMainPageCompactMode.data) {
-            asyncStdoutToPython("/set/disable/main_window_sidebar_compact_mode");
+            sendBackendRequest("/set/disable/main_window_sidebar_compact_mode");
         } else {
-            asyncStdoutToPython("/set/enable/main_window_sidebar_compact_mode");
+            sendBackendRequest("/set/enable/main_window_sidebar_compact_mode");
         }
     };
 

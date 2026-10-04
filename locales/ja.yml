@@ -118,6 +118,8 @@ config_page:
             unable_to_use_osc_query: "OSC IP Address の設定によりOSCデータの受信ができないため、現在この機能は使用できません。"
 
     side_menu_labels:
+        supporters: "支援者"
+        about_vrct: "VRCT-0について"
         device: "デバイス"
         appearance: "デザイン"
         translation: "翻訳"
@@ -149,6 +151,12 @@ config_page:
             desc_for_manual: "スライダーを調整して入力感度を手動で決められます。ヘッドフォンのアイコンを押すと、実際に音声を聞き取り、音量を確認しながら調節できます。"
 
     appearance:
+        theme:
+            label: "テーマ"
+            desc: "ウィンドウの配色を選択するか、システムに合わせます。この端末に保存されます。"
+            dark: "ダーク"
+            light: "ライト"
+            system: "システム"
         transparency:
             label: "透明度"
             desc: "メイン画面の透明度を変更できます。"

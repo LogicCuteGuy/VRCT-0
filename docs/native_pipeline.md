@@ -43,11 +43,11 @@ fonts, Sudachi and OCR resources under `resources/`. ZIP verification checks
 entry lengths/hashes and rejects Python runtime files and the restricted
 chat-bubble detector, including copies under another filename.
 
-`src-python` and historical Python utilities/fixture generators remain
-reference source. They are not invoked by development, application startup,
-build, packaging or release CI. The frontend's retained
-`useStdoutToPython` helper name is a compatibility name for a Tauri request;
-it does not launch or communicate with Python.
+The frontend uses `useBackendRequest` for Tauri requests. Auxiliary capture,
+annotation, dataset preparation, detector training/export/calibration and speech
+evaluation are being verified as native Rust tools; see
+[native tools](native_tools.md). Historical contract fixtures retain the
+recorded outputs of the former backend for regression checks.
 
 ## Services and lifecycle
 
@@ -78,7 +78,7 @@ native ONNX sessions, and applies bounded deduplication before the message
 pipeline. The original chat-bubble detector has a VRCT-only license:
 development can use an authorized source copy; fork release packages exclude it.
 An authorized external detector is required for bubble detection. See
-[the original terms](../src-python/models/ocr/onnx/LICENSE.en.txt).
+[the original terms](licenses/chatbox/LICENSE.en.txt).
 Recognition code and the general RapidOCR models do not require Python.
 
 Telemetry preserves the existing enabled-only daily `app_started` and

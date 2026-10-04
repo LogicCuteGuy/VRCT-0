@@ -1,6 +1,6 @@
-//! The replica must understand what the real Python `Config` writes.
-//! `fixtures/config_bridge.jsonl` is captured from it by
-//! `fixtures/regenerate_config_bridge.py`.
+//! The replica understands what the historical Python `Config` wrote.
+//! `fixtures/config_bridge.jsonl` is the frozen contract captured at `16cb286c`.
+//! Provenance and native test commands: `fixtures/README.md`.
 
 use serde_json::json;
 use vrct_core::config::{ConfigReplica, SIMPLE_GETTERS};

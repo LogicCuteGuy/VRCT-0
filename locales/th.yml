@@ -1,0 +1,422 @@
+common:
+    go_back_button_label: "กลับ"
+    default_label: "ค่าเริ่มต้น"
+common_error:
+    no_device_mic: "ไม่พบไมโครโฟน"
+    no_device_speaker: "ไม่พบลำโพง"
+    copy_to_clipboard_failed: "คัดลอกไปยังคลิปบอร์ดไม่สำเร็จ"
+    threshold_invalid_value: "ระบุค่าระหว่าง {{min}} ถึง {{max}}"
+    failed_download_weight_ctranslate2: "ดาวน์โหลดโมเดล CTranslate2 ไม่สำเร็จ"
+    failed_download_weight_whisper: "ดาวน์โหลดโมเดล Whisper ไม่สำเร็จ"
+    translation_limit: "เครื่องมือแปลถึงขีดจำกัดหรือถูกจำกัดชั่วคราว"
+    deepl_auth_key_invalid_length: "ความยาวคีย์ DeepL API ไม่ถูกต้อง"
+    deepl_auth_key_failed_authentication: "คีย์ API ไม่ถูกต้องหรือถึงขีดจำกัดการใช้งาน"
+    invalid_value_mic_record_timeout: "ค่าต้องไม่น้อยกว่า 0 และไม่เกิน '{{mic_phrase_timeout_label}}'"
+    invalid_value_mic_phrase_timeout: "ค่าต้องไม่น้อยกว่า 0 และไม่ต่ำกว่า '{{mic_record_timeout_label}}'"
+    invalid_value_mic_max_phrase: "ระบุตัวเลขตั้งแต่ 0 ขึ้นไป"
+    invalid_value_speaker_record_timeout: "ค่าต้องไม่น้อยกว่า 0 และไม่เกิน '{{speaker_phrase_timeout_label}}'"
+    invalid_value_speaker_phrase_timeout: "ค่าต้องไม่น้อยกว่า 0 และไม่ต่ำกว่า '{{speaker_record_timeout_label}}'"
+    invalid_value_speaker_max_phrase: "ระบุตัวเลขตั้งแต่ 0 ขึ้นไป"
+    invalid_hex_color: "ระบุรหัสสี HEX ที่ถูกต้อง เช่น {{brand_color_hex}}"
+common_warning:
+    unable_to_use_osc_query: "ปิดฟังก์ชันต่อไปนี้โดยอัตโนมัติ เนื่องจากการตั้งค่า IP ของ OSC ทำให้รับข้อมูล OSC ไม่ได้"
+main_page:
+    translation: "การแปล"
+    transcription_send: "เสียงไปยังกล่องแชต"
+    transcription_receive: "เสียงลำโพงไปยังบันทึก"
+    ocr: "อ่านข้อความแชต"
+    foreground: "แสดงหน้าต่างไว้ด้านบน"
+    language_settings: "ตั้งค่าภาษา"
+    your_language: "ภาษาของคุณ"
+    translate_each_other_label: "แปลทั้งสองภาษา"
+    swap_button_label: "สลับภาษา"
+    target_language: "ภาษาเป้าหมาย"
+    translator: "เครื่องมือแปล"
+    translator_label_default: "ค่าเริ่มต้น"
+    translator_selector:
+        is_selected_same_language: "คุณเลือก '{{your_language}}' และ '{{target_language}}' เป็นภาษาเดียวกัน จึงใช้ได้เฉพาะ '{{ctranslate2}}'"
+    message_log:
+        all: "ทั้งหมด"
+        sent: "ส่งแล้ว"
+        received: "ได้รับ"
+        received_ocr: "ได้รับ (OCR)"
+        system: "ระบบ"
+        resend_button_on_hover_desc: "กดค้างเพื่อส่ง"
+    state_text_enabled: "เปิดใช้งาน"
+    state_text_disabled: "ปิดใช้งาน"
+    language_selector:
+        title_your_language: "เลือกภาษาของคุณ"
+        title_target_language: "เลือกภาษาเป้าหมาย"
+    update_available: "มีเวอร์ชันใหม่แล้ว!"
+    updating: "กำลังอัปเดต..."
+update_modal:
+    title: "อัปเดต"
+    summary_up_to_date_desc: "คุณใช้เวอร์ชันล่าสุดแล้ว"
+    channel_stable: "เสถียร"
+    channel_beta: "ทดสอบ"
+    compute_mode_cpu: "CPU"
+    compute_mode_cuda: "GPU (CUDA)"
+    latest_label: "ล่าสุด"
+    install_latest_button: "อัปเดตเป็นเวอร์ชันล่าสุด"
+    install_button: "ติดตั้งใหม่ด้วยการตั้งค่านี้"
+    section_pick_variant: "เลือกเวอร์ชันหรือรุ่นอื่น"
+    refresh_button: "ตรวจสอบการอัปเดต"
+    channel_label: "ช่องทางเผยแพร่"
+    channel_desc: "รุ่นทดสอบมีฟีเจอร์ใหม่ก่อน แต่อาจเสถียรน้อยกว่า"
+    compute_mode_label: "รุ่นอุปกรณ์"
+    compute_mode_desc: "GPU (CUDA) ทำงานเร็วขึ้นบน NVIDIA แต่ต้องการพื้นที่เพิ่มประมาณ 5 GB"
+    version_label: "เวอร์ชันที่จะติดตั้ง"
+    version_desc: "เลือกเวอร์ชันจากช่องทางเผยแพร่ที่กำหนด"
+    no_versions_available: "ยังไม่มีเวอร์ชันในช่องทางนี้"
+    change_col_current: "ปัจจุบัน"
+    change_col_after: "หลังติดตั้ง"
+    warn_downgrade: "กำลังลดเวอร์ชันจาก {{from}} เป็น {{to}} ไฟล์ตั้งค่าอาจเข้ากันไม่ได้"
+    warn_cuda_extra_size: "รุ่น GPU ต้องดาวน์โหลดเพิ่มประมาณ 5 GB"
+    warn_switch_channel: "กำลังเปลี่ยนไปใช้ช่องทาง {{channel}} การแจ้งอัปเดตจะติดตามช่องทาง {{channel}}"
+config_page:
+    common:
+        version: "เวอร์ชัน {{version}}"
+        model_download_button_label: "ดาวน์โหลด"
+        save_button_label: "บันทึก"
+        edit_button_label: "แก้ไข"
+        correct_auth_key_required: "ต้องใช้คีย์ API ที่ถูกต้อง"
+        open_auth_key_webpage: "เปิดหน้าจัดการคีย์ API"
+        auth_key_success: "อัปเดตคีย์ API แล้ว"
+        connection_check:
+            button_label: "ตรวจสอบการเชื่อมต่อ"
+            checking: "กำลังตรวจสอบ..."
+            connected: "เชื่อมต่อแล้ว"
+            disconnected: "ไม่ได้เชื่อมต่อ"
+        compute_device:
+            desc: "ความแม่นยำ ความเร็ว และวิธีคำนวณที่รองรับขึ้นอยู่กับเครื่องของคุณ ลำดับที่แสดงใช้เป็นแนวทางเท่านั้น"
+            label_device: "อุปกรณ์ประมวลผล"
+            label_type: "รูปแบบการประมวลผล"
+            type_template_auto: "อัตโนมัติ"
+            type_template_low: "{{type_name}} (แม่นยำน้อยลง เร็วขึ้น)"
+            type_template_high: "{{type_name}} (แม่นยำมากขึ้น ช้าลง)"
+        warning_labels:
+            unable_to_use_osc_query: "การตั้งค่า IP ของ OSC ทำให้รับข้อมูลไม่ได้ จึงใช้ฟีเจอร์นี้ไม่ได้ในขณะนี้"
+    side_menu_labels:
+        supporters: "ผู้สนับสนุน"
+        about_vrct: "เกี่ยวกับ VRCT-0"
+        device: "อุปกรณ์"
+        appearance: "รูปลักษณ์"
+        translation: "การแปล"
+        transcription: "ถอดเสียง"
+        others: "อื่น ๆ"
+        hotkeys: "ปุ่มลัด"
+        advanced_settings: "ขั้นสูง"
+        updater: "อัปเดต"
+        ocr: "อ่านข้อความแชต"
+    device:
+        check_volume: "ตรวจสอบระดับเสียง"
+        label_auto_select: "เลือกอัตโนมัติ"
+        label_host: "โฮสต์/ไดรเวอร์"
+        label_device: "อุปกรณ์"
+        mic_host_device:
+            label: "ไมโครโฟน"
+        mic_dynamic_energy_threshold:
+            label_for_automatic: "ความไวไมโครโฟน (อัตโนมัติ)"
+            desc_for_automatic: "ปรับความไวไมโครโฟนอัตโนมัติ"
+            label_for_manual: "ความไวไมโครโฟน (ปรับเอง)"
+            desc_for_manual: "ใช้แถบเลื่อนปรับความไว กดไอคอนไมโครโฟนเพื่อทดสอบเสียงและดูระดับเสียงขณะปรับ"
+        speaker_device:
+            label: "ลำโพง"
+        speaker_dynamic_energy_threshold:
+            label_for_automatic: "ความไวเสียงลำโพง (อัตโนมัติ)"
+            desc_for_automatic: "ปรับความไวเสียงลำโพงอัตโนมัติ"
+            label_for_manual: "ความไวเสียงลำโพง (ปรับเอง)"
+            desc_for_manual: "ใช้แถบเลื่อนปรับความไว กดไอคอนหูฟังเพื่อฟังและตรวจสอบระดับเสียงขณะปรับ"
+    appearance:
+        theme:
+            label: "ธีม"
+            desc: "เลือกสีหน้าต่าง หรือใช้ธีมตามระบบ บันทึกตัวเลือกบนเครื่องนี้"
+            dark: "มืด"
+            light: "สว่าง"
+            system: "ตามระบบ"
+        transparency:
+            label: "ความโปร่งใส"
+            desc: "ปรับความโปร่งใสของหน้าต่างหลัก"
+        ui_size:
+            label: "ขนาดหน้าจอ"
+        textbox_ui_size:
+            label: "ขนาดตัวอักษรบันทึกข้อความ"
+            desc: "ปรับขนาดตัวอักษรบันทึกเทียบกับขนาดหน้าจอ"
+        send_message_button_type:
+            label: "ปุ่มส่งข้อความ"
+            hide: "ซ่อน (กด Enter เพื่อส่ง)"
+            show: "แสดง"
+            show_and_disable_enter_key: "แสดงและปิดการส่งด้วย Enter"
+        show_resend_button:
+            label: "แสดงปุ่มส่งซ้ำ"
+            desc: "ชี้เมาส์ที่ข้อความที่ส่งแล้วเพื่อแสดงปุ่ม คลิกเพื่อแก้ไข กดค้างเพื่อส่งซ้ำ"
+        font_family:
+            label: "แบบอักษร"
+        ui_language:
+            label: "ภาษาหน้าจอ"
+    translation:
+        ctranslate2_weight_type:
+            label: "โมเดล {{ctranslate2}}"
+            desc: "เลือกโมเดลสำหรับเครื่องมือแปล {{ctranslate2}}"
+            small: "โมเดลพื้นฐาน ({{capacity}})"
+            large: "โมเดลความแม่นยำสูง ({{capacity}})"
+        translation_compute_device:
+            label: "อุปกรณ์ประมวลผลการแปล AI"
+        deepl_auth_key:
+            label: "คีย์ DeepL API"
+            desc: "เปลี่ยน {{translator}} บนหน้าหลักเป็น DeepL_API บางภาษาอาจไม่รองรับ"
+        plamo_auth_key:
+            label: "คีย์ Plamo API"
+        select_plamo_model:
+            label: "เลือกโมเดล Plamo"
+        gemini_auth_key:
+            label: "คีย์ Gemini API"
+        select_gemini_model:
+            label: "เลือกโมเดล Gemini"
+        openai_auth_key:
+            label: "คีย์ OpenAI API"
+        select_openai_model:
+            label: "เลือกโมเดล OpenAI"
+        groq_auth_key:
+            label: "คีย์ Groq API"
+        select_groq_model:
+            label: "เลือกโมเดล Groq"
+        openrouter_auth_key:
+            label: "คีย์ OpenRouter API"
+        select_openrouter_model:
+            label: "เลือกโมเดล OpenRouter"
+        lmstudio_connection_check:
+            label: "ตรวจสอบการเชื่อมต่อ LM Studio"
+        select_lmstudio_model:
+            label: "เลือกโมเดล LMStudio"
+            connection_required: "ต้องเชื่อมต่อ LMStudio"
+        openai_compatible_url:
+            label: "URL ปลายทางที่รองรับ OpenAI"
+            desc: "หากใช้ปลายทางที่ไม่ใช่ของผู้ให้บริการอย่างเป็นทางการ โปรดตรวจสอบราคา ความปลอดภัย และโมเดลที่รองรับด้วยตนเอง"
+        openai_compatible_auth_key:
+            label: "คีย์ API ที่รองรับ OpenAI"
+        select_openai_compatible_model:
+            label: "เลือกโมเดลที่รองรับ OpenAI"
+        ollama_connection_check:
+            label: "ตรวจสอบการเชื่อมต่อ Ollama"
+        select_ollama_model:
+            label: "เลือกโมเดล Ollama"
+            connection_required: "ต้องเชื่อมต่อ Ollama"
+    transcription:
+        section_label_mic: "ไมโครโฟน"
+        section_label_speaker: "ลำโพง"
+        section_label_transcription_engines: "เครื่องมือถอดเสียง"
+        mic_record_timeout:
+            label: "ระยะเงียบก่อนจบเสียงไมโครโฟน"
+            desc: "เมื่อเงียบตามเวลาที่กำหนด ระบบถือว่าสิ้นสุดเสียงพูด (วินาที)"
+        mic_phrase_timeout:
+            label: "ช่วงเวลาถอดเสียงไมโครโฟน"
+            desc: "ประมวลผลการถอดเสียงทุกช่วงเวลาที่กำหนด (วินาที)"
+        mic_max_phrase:
+            label: "เกณฑ์จำนวนคำไมโครโฟน"
+            desc: "แสดงผลและส่งไป VRChat เมื่อจำนวนคำที่ถอดได้เกินเกณฑ์นี้"
+        mic_word_filter:
+            label: "กรองคำไมโครโฟน"
+            desc: "ไม่ส่งข้อความที่มีคำในรายการ ใช้ ',' คั่นเพื่อเพิ่มหลายคำ\n*ไม่เพิ่มคำซ้ำ"
+            add_button_label: "เพิ่ม"
+            count_desc: "จำนวนคำในรายการ: {{count}}"
+        mic_vad_filter:
+            label: "กรองเสียงพูดไมโครโฟน (VAD)"
+            desc: "ส่งเสียงไปถอดเมื่อพบช่วงเงียบ ปิดตัวเลือกนี้หากการถอดเสียงหยุดกลางบทสนทนา"
+        speaker_record_timeout:
+            label: "ระยะเงียบก่อนจบเสียงลำโพง"
+            desc: "เมื่อเงียบตามเวลาที่กำหนด ระบบถือว่าสิ้นสุดเสียงลำโพง (วินาที)"
+        speaker_phrase_timeout:
+            label: "ช่วงเวลาถอดเสียงลำโพง"
+            desc: "ประมวลผลการถอดเสียงทุกช่วงเวลาที่กำหนด (วินาที)"
+        speaker_max_phrase:
+            label: "เกณฑ์จำนวนคำลำโพง"
+            desc: "แสดงบันทึกเมื่อจำนวนคำที่ถอดได้เกินเกณฑ์นี้"
+        speaker_vad_filter:
+            label: "กรองเสียงพูดลำโพง (VAD)"
+            desc: "ส่งเสียงไปถอดเมื่อพบช่วงเงียบ ปิดหากการถอดเสียงหยุดหรือแจ้งข้อผิดพลาดระหว่างเสียงเกมหรือเสียงพูดต่อเนื่อง"
+        select_transcription_engine:
+            label: "เครื่องมือรู้จำเสียงพูด"
+        whisper_weight_type:
+            label: "โมเดล Whisper"
+            desc: "โมเดลใหญ่แม่นยำกว่า แต่ใช้ CPU/GPU มากขึ้น\nโมเดลที่ใหญ่กว่า medium อาจใช้งานได้ยากหรือไม่ได้ ขึ้นอยู่กับประสิทธิภาพเครื่อง"
+        transcription_compute_device:
+            label: "อุปกรณ์ประมวลผลการถอดเสียง AI"
+    vr:
+        single_line: "บรรทัดเดียว"
+        multi_lines: "หลายบรรทัด"
+        overlay_enable: "เปิดใช้งาน"
+        restore_default_settings: "คืนค่าเริ่มต้น"
+        position: "ตำแหน่ง"
+        rotation: "การหมุน"
+        x_position: "แกน X (ซ้าย-ขวา)"
+        y_position: "แกน Y (ขึ้น-ลง)"
+        z_position: "แกน Z (หน้า-หลัง)"
+        x_rotation: "หมุนแกน X"
+        y_rotation: "หมุนแกน Y"
+        z_rotation: "หมุนแกน Z"
+        sample_text_button:
+            start: "ส่งข้อความตัวอย่าง\nไปยังโอเวอร์เลย์"
+            stop: "หยุดส่ง"
+            sample_text: "ข้อความตัวอย่าง"
+        opacity: "ความทึบ"
+        ui_scaling: "ขนาดหน้าจอ"
+        display_duration: "เวลาแสดง"
+        fadeout_duration: "เวลาจางหาย"
+        common_settings: "การตั้งค่าทั่วไป"
+        tracker: "อุปกรณ์ติดตาม"
+        hmd: "HMD"
+        left_hand: "มือซ้าย"
+        right_hand: "มือขวา"
+        overlay_show_only_translated_messages:
+            label: "แสดงเฉพาะข้อความแปล"
+        voice_typing_mode:
+            label: "โหมดพิมพ์ด้วยเสียง"
+            desc: "วางข้อความที่ถอดเสียงในช่องป้อนข้อมูลที่ใช้งานอยู่โดยอัตโนมัติ\n*ใช้คลิปบอร์ดมาตรฐานของ Windows"
+    others:
+        section_label_sounds: "เสียง"
+        section_label_message_formats: "รูปแบบข้อความ"
+        auto_clear_the_message_box:
+            label: "ล้างช่องข้อความอัตโนมัติ"
+        send_only_translated_messages:
+            label: "ส่งเฉพาะข้อความแปล"
+        auto_export_message_logs:
+            label: "บันทึกข้อความอัตโนมัติ"
+            desc: "บันทึกบทสนทนาเป็นไฟล์ข้อความอัตโนมัติ"
+        vrc_mic_mute_sync:
+            label: "ซิงก์การปิดไมโครโฟน VRC"
+            desc: "ไม่ส่งข้อความไป VRCT-0 เมื่อปิดไมโครโฟนใน VRChat\n*อาจหน่วงเล็กน้อย ไม่รองรับ Push-To-Talk"
+        send_message_to_vrc:
+            label: "ส่งข้อความไป VRChat"
+            desc: "เปิดเพื่อส่งข้อความไป VRChat สามารถปิดเพื่อใช้งานโดยไม่ส่งข้อความ แต่รูปแบบนี้ไม่ได้รับการรองรับอย่างเป็นทางการ"
+        notification_vrc_sfx:
+            label: "เปิดเสียงแจ้งเตือนเมื่อส่งแชต"
+            desc: "เมื่อปิด ข้อความจะส่งโดยไม่มีเสียงแจ้งเตือนกล่องแชตที่ผู้อื่นได้ยิน"
+        send_received_message_to_vrc:
+            label: "ส่งข้อความที่ได้รับไป VRChat"
+            desc: "ส่งข้อความที่ถอดจากเสียงลำโพงไปยังกล่องแชต VRChat"
+        message_format_common:
+            example_view:
+                title: "ตัวอย่าง"
+                original_translated: "ต้นฉบับ + คำแปล"
+                original_translated_multi: "ต้นฉบับ + คำแปล (หลายภาษา)"
+                translated_only_multi: "เฉพาะคำแปล (หลายภาษา)"
+                translated_only: "เฉพาะคำแปล"
+                original_only: "เฉพาะต้นฉบับ"
+            settings:
+                title: "การตั้งค่า"
+                original: "ต้นฉบับ"
+                translated: "คำแปล"
+                for_multi_translation: "สำหรับการแปลหลายภาษา"
+        send_message_format:
+            label: "รูปแบบข้อความ (ส่ง)"
+            desc: "ปรับรูปแบบข้อความที่ผู้อื่นเห็นใน VRChat"
+        received_message_format:
+            label: "รูปแบบข้อความ (Speaker2Chatbox)"
+            desc: "ใช้สำหรับ Speaker2Chatbox"
+        common_convert_message_hiragana_romaji:
+            desc_1: "รองรับเมื่อเลือกภาษาญี่ปุ่นเป็นภาษาแปลเท่านั้น"
+            desc_2: "ความซับซ้อนของภาษาญี่ปุ่นทำให้มีข้อจำกัดด้านความแม่นยำ"
+        convert_message_to_romaji:
+            label: "แสดงโรมาจิ"
+            desc: "เมื่อเปิดพร้อม '{{convert_message_to_hiragana}}' จะแสดงโรมาจิเมื่อชี้เมาส์"
+        convert_message_to_hiragana:
+            label: "แสดงฮิรางานะ"
+        telemetry:
+            label: "สนับสนุนการพัฒนา"
+            desc: "ส่งข้อมูลการใช้งานเพื่อช่วยนักพัฒนาปรับปรุงแอป\n*ไม่ส่งข้อมูลส่วนบุคคลหรือเนื้อหาบทสนทนา"
+            aptabase_privacy_policy_label: "นโยบายความเป็นส่วนตัว Aptabase"
+    ocr:
+        section_title: "อ่านข้อความแชต VRChat"
+        section_desc: "จับภาพกล่องแชตและส่งข้อความที่อ่านได้ไปแปล แสดงในบันทึกหลักและโอเวอร์เลย์ SteamVR โดยไม่ส่งไปกล่องแชต OSC ของ VRChat"
+        capture_target: "เป้าหมายการจับภาพ"
+        language: "ภาษา"
+        performance: "ประสิทธิภาพ"
+        window_title:
+            label: "ชื่อหน้าต่าง"
+            desc: "ค้นหาบางส่วนของชื่อหน้าต่างโดยไม่แยกตัวพิมพ์เล็กใหญ่ เปลี่ยนค่านี้หากหน้าต่างไม่ได้ชื่อ 'VRChat'"
+        source_language:
+            label: "ภาษาต้นฉบับ"
+            desc: "ภาษาในกล่องแชต 'auto' อ่านญี่ปุ่น อังกฤษ จีน และอักษรละตินได้ ส่วนเกาหลี ซีริลลิก ไทย อาหรับ และเทวนาครีต้องเลือกโมเดลเฉพาะ เปลี่ยนขณะทำงานได้โดยไม่เริ่มใหม่ ความแม่นยำภาษาอาหรับยังต่ำ"
+        poll_interval_ms:
+            label: "ช่วงเวลาจับภาพ (มิลลิวินาที)"
+            desc: "ค่าต่ำตอบสนองเร็วขึ้นแต่ใช้ CPU/GPU มากขึ้น ค่าเริ่มต้น: 750"
+        min_confidence:
+            label: "ความมั่นใจขั้นต่ำ"
+            desc: "ทิ้งคำที่ความมั่นใจต่ำกว่าเกณฑ์ เพิ่มเพื่อลดการอ่านผิด ลดเพื่ออ่านข้อความจาง ค่าเริ่มต้น: 0.85"
+        bubble_min_text_length:
+            label: "ความยาวข้อความขั้นต่ำ"
+            desc: "ละเว้นกล่องแชตที่มีอักขระน้อยกว่าค่านี้ ค่าเริ่มต้น: 2"
+    updater:
+        install_panel:
+            section_label: "เลือกเวอร์ชันและรุ่น"
+            current_summary_label: "ปัจจุบัน"
+            current_summary_value: "{{version}} / {{compute_mode}} / {{channel}}"
+            channel_label: "ช่องทางเผยแพร่"
+            channel_stable: "เสถียร"
+            channel_beta: "ทดสอบ"
+            compute_mode_label: "อุปกรณ์"
+            compute_mode_cpu: "CPU"
+            compute_mode_gpu: "GPU (CUDA)"
+            version_label: "เวอร์ชันที่จะติดตั้ง"
+            version_desc: "เลือกเวอร์ชันเก่าเพื่อลดเวอร์ชัน รายการกรองตามช่องทางที่เลือก"
+            no_versions_available: "ยังไม่มีเวอร์ชันในช่องทางนี้"
+            beta_suffix: "ทดสอบ"
+            latest_suffix: "ล่าสุด"
+            install_button: "ติดตั้งด้วยการตั้งค่านี้"
+            reinstall_button: "ติดตั้งใหม่ด้วยการตั้งค่านี้"
+    hotkeys:
+        input_placeholder: "กดชุดปุ่มลัด"
+        disabled_notice: "*ปิดปุ่มลัดชั่วคราวระหว่างเปิดหน้าตั้งค่า เพื่อป้องกันการทำงานโดยไม่ตั้งใจ"
+        error_in_use: "ลงทะเบียนปุ่มลัด ({{hotkey}}) สำหรับ \"{{action_name}}\" ไม่ได้ เพราะถูกใช้งานแล้ว"
+        error_failed_to_register_at_launch: "ใช้ปุ่มลัด ({{hotkey}}) สำหรับ \"{{action_name}}\" ไม่ได้ เพราะแอปอื่นใช้อยู่"
+        toggle_vrct_visibility:
+            label: "สลับการแสดง VRCT-0"
+        toggle_translation:
+            label: "สลับ {{translation}}"
+        toggle_transcription_send:
+            label: "สลับ {{transcription_send}}"
+        toggle_transcription_receive:
+            label: "สลับ {{transcription_receive}}"
+    advanced_settings:
+        osc_ip_address:
+            label: "ที่อยู่ IP ของ OSC"
+        osc_port:
+            label: "พอร์ต OSC"
+        open_config_filepath:
+            label: "เปิดไฟล์ตั้งค่า"
+        enable_websocket:
+            label: "เปิดเซิร์ฟเวอร์ WebSocket"
+            locked_by_obs_browser_source: "ปิด OBS Browser Source ก่อนเปลี่ยนค่านี้"
+        websocket_host:
+            label: "โฮสต์ WebSocket"
+        websocket_port:
+            label: "พอร์ต WebSocket"
+        websocket_url:
+            label: "URL ของ WebSocket (คลิกเพื่อคัดลอก)"
+        obs_browser_source:
+            section_label: "OBS Browser Source"
+        enable_obs_browser_source:
+            label: "เปิด OBS Browser Source"
+            desc: "เปิดหน้าโอเวอร์เลย์ภายในเครื่องสำหรับ OBS แสดงคำแปลและจางหายตามเวลา"
+        obs_browser_source_url:
+            label: "URL ของ OBS (คลิกเพื่อคัดลอก)"
+        obs_browser_source_port:
+            label: "พอร์ต OBS"
+        obs_browser_source_max_messages:
+            label: "จำนวนข้อความสูงสุด"
+        obs_browser_source_display_duration:
+            label: "เวลาแสดง (วินาที)"
+        obs_browser_source_fadeout_duration:
+            label: "เวลาจางหาย (วินาที)"
+        obs_browser_source_font_size:
+            label: "ขนาดตัวอักษร (พิกเซล)"
+        obs_browser_source_font_color:
+            label: "สีตัวอักษร (#RRGGBB)"
+        obs_browser_source_font_outline_thickness:
+            label: "ความหนาขอบตัวอักษร (พิกเซล)"
+        obs_browser_source_font_outline_color:
+            label: "สีขอบตัวอักษร (#RRGGBB)"
+    notifications:
+        save_success: "บันทึกการตั้งค่าแล้ว"
+        opened_folder: "เปิดโฟลเดอร์แล้ว"

@@ -108,6 +108,11 @@ impl RawSource {
     /// Opens the device called `name` and starts collecting. `mono` mixes the channels down to one (a
     /// microphone), otherwise they are delivered interleaved as the device has them.
     pub fn open(source: Source, name: &str, mono: bool) -> Result<(RawSource, Closer), String> {
+        Self::open_on_host(source, super::devices::WASAPI_HOST, name, mono)
+    }
+
+    pub fn open_on_host(source: Source, host: &str, name: &str, mono: bool) -> Result<(RawSource, Closer), String> {
+        let host = host.to_owned();
         let shared = Arc::new(Shared { buffer: Mutex::new(Buffer::default()), arrived: Condvar::new(), closed: AtomicBool::new(false) });
         let name = name.to_string();
         let (stop_tx, stop_rx) = mpsc::channel::<()>();
@@ -118,18 +123,24 @@ impl RawSource {
         let thread = std::thread::Builder::new()
             .name("vrct-raw-capture".into())
             .spawn(move || {
-                let stream = match build(source, &name, mono, &worker) {
+                let _apartment = match super::wasapi::AudioApartment::initialize(&host) {
+                    Ok(apartment) => apartment,
+                    Err(error) => { let _ = ready_tx.send(Err(error)); return; }
+                };
+                let stream = match build(source, &host, &name, mono, &worker) {
                     Ok((stream, rate, channels)) => {
                         let _ = ready_tx.send(Ok((rate, channels)));
                         stream
                     }
                     Err(error) => {
+                        if host == super::devices::ASIO_HOST { super::wasapi::release_asio_device(); }
                         let _ = ready_tx.send(Err(error));
                         return;
                     }
                 };
                 let _ = stop_rx.recv();
                 drop(stream);
+                if host == super::devices::ASIO_HOST { super::wasapi::release_asio_device(); }
             })
             .map_err(|e| format!("cannot start the capture thread: {e}"))?;
         let (rate, channels) = match ready_rx.recv() {
@@ -158,8 +169,8 @@ impl RawSource {
     }
 }
 
-fn build(source: Source, name: &str, mono: bool, shared: &Arc<Shared>) -> Result<(cpal::Stream, u32, u32), String> {
-    let (device, supported) = find_device(source, name)?;
+fn build(source: Source, host: &str, name: &str, mono: bool, shared: &Arc<Shared>) -> Result<(cpal::Stream, u32, u32), String> {
+    let (device, supported) = find_device(source, host, name)?;
     let format = raw_format(supported.sample_format())
         .ok_or_else(|| format!("{name}: sample format {:?} is not supported", supported.sample_format()))?;
     let config = supported.config();
@@ -169,11 +180,13 @@ fn build(source: Source, name: &str, mono: bool, shared: &Arc<Shared>) -> Result
 
     let (data_shared, error_shared) = (Arc::clone(shared), Arc::clone(shared));
     let frame = channels as usize * 2;
+    let driver_lease = device.clone();
     let stream = device
         .build_input_stream_raw(
             &config,
             supported.sample_format(),
             move |data, _| {
+                let _keep_driver_alive = &driver_lease;
                 let mut pcm = format.to_pcm16(data.bytes());
                 if mono && device_channels > 1 {
                     pcm = mix_down(&pcm, device_channels as usize);
@@ -254,12 +267,13 @@ impl Capturing for Capture {
 
 struct WasapiCapture {
     source: Source,
+    host: String,
     name: String,
 }
 
 impl CaptureFactory for WasapiCapture {
     fn start(&self, sink: PcmSink, on_failure: CaptureFailure) -> Result<Box<dyn Capturing>, String> {
-        let capture = Capture::start(self.source, &self.name, sink, on_failure)?;
+        let capture = Capture::start_on_host(self.source, &self.host, &self.name, sink, on_failure)?;
         Ok(Box::new(capture))
     }
 }
@@ -293,18 +307,30 @@ impl Platform for WasapiPlatform {
         list_devices().unwrap_or_default()
     }
 
+    fn devices_for_host(&self, host: &str) -> DeviceList {
+        super::wasapi::list_devices_for_host(host).unwrap_or_default()
+    }
+
     fn energy_recorder(&self, kind: Kind, device: &Device, params: EnergyParams) -> Result<Arc<dyn Recorder>, String> {
-        let (source, closer) = RawSource::open(source_of(kind), &device.name, kind == Kind::Mic)?;
+        self.energy_recorder_on_host(kind, super::devices::WASAPI_HOST, device, params)
+    }
+
+    fn energy_recorder_on_host(&self, kind: Kind, host: &str, device: &Device, params: EnergyParams) -> Result<Arc<dyn Recorder>, String> {
+        let (source, closer) = RawSource::open_on_host(source_of(kind), host, &device.name, kind == Kind::Mic)?;
         let channels = source.channels();
         let unblock = Box::new(move || closer.close());
         Ok(Arc::new(EnergyRecorder::new(kind.as_str(), Box::new(source), channels, params, unblock)))
     }
 
     fn vad_recorder(&self, kind: Kind, device: &Device, config: VadConfig) -> Result<Arc<dyn Recorder>, String> {
+        self.vad_recorder_on_host(kind, super::devices::WASAPI_HOST, device, config)
+    }
+
+    fn vad_recorder_on_host(&self, kind: Kind, host: &str, device: &Device, config: VadConfig) -> Result<Arc<dyn Recorder>, String> {
         let library = self.onnx.as_ref().ok_or("the ONNX Runtime library was not found")?;
         let engine = SileroFrameProbability::with_library(library)?;
         let segmenter = VadSegmenter::with_ids(engine, config, SegmentIds::global());
-        let capture = Arc::new(WasapiCapture { source: source_of(kind), name: device.name.clone() });
+        let capture = Arc::new(WasapiCapture { source: source_of(kind), host: host.to_owned(), name: device.name.clone() });
         Ok(Arc::new(VadRecorder::new(kind.as_str(), capture, segmenter)))
     }
 }

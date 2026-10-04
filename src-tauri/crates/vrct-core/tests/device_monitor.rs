@@ -31,6 +31,8 @@ impl Devices for FakeDevices {
     fn speaker_device_names(&self) -> Vec<String> {
         self.0.lock().unwrap().speakers.clone()
     }
+    fn speaker_hosts(&self) -> Vec<String> { self.mic_hosts() }
+    fn speaker_device_names_for_host(&self, _: &str) -> Vec<String> { self.speaker_device_names() }
     fn default_mic(&self) -> Option<(String, String)> {
         self.0
             .lock()
@@ -292,4 +294,22 @@ fn enumeration_error_keeps_previous_selection_and_emits_no_list() {
     assert!(monitor.refresh().is_err());
     assert_eq!(r.settings.get_str("SELECTED_MIC_DEVICE"), before);
     assert!(r.sink.0.lock().unwrap().is_empty());
+}
+
+#[test]
+fn manual_asio_host_survives_hotplug_refresh_for_both_sessions() {
+    let r = Rig::new();
+    r.devices.0.lock().unwrap().hosts.push("ASIO".into());
+    for kind in ["MIC", "SPEAKER"] {
+        r.settings.set(&format!("AUTO_{kind}_SELECT"), json!(false)).unwrap();
+        r.settings.set(&format!("SELECTED_{kind}_HOST"), json!("ASIO")).unwrap();
+    }
+    r.monitor.refresh().unwrap();
+    assert_eq!(r.settings.get_str("SELECTED_MIC_HOST").as_deref(), Some("ASIO"));
+    assert_eq!(r.settings.get_str("SELECTED_SPEAKER_HOST").as_deref(), Some("ASIO"));
+    r.settings.set("AUTO_MIC_SELECT", json!(true)).unwrap();
+    r.settings.set("AUTO_SPEAKER_SELECT", json!(true)).unwrap();
+    r.monitor.refresh().unwrap();
+    assert_eq!(r.settings.get_str("SELECTED_MIC_HOST").as_deref(), Some(WASAPI_HOST));
+    assert_eq!(r.settings.get_str("SELECTED_SPEAKER_HOST").as_deref(), Some(WASAPI_HOST));
 }

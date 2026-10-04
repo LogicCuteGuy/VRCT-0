@@ -1,8 +1,9 @@
-//! The translation flow against what the real `Model.getTranslate` / `getInputTranslate` /
-//! `getOutputTranslate` did (`tests/fixtures/flow_golden.json`, made by `regenerate_flow_golden.py`).
+//! Translation flow replays the historical Python `Model.getTranslate`,
+//! `getInputTranslate` and `getOutputTranslate` contract in `fixtures/flow_golden.json`.
+//! Frozen at `16cb286c`; provenance and native test commands: `fixtures/README.md`.
 //!
-//! The translator is scripted by (engine, target language, country) and how often it was asked, so the
-//! targets that run side by side give the same calls in any order; the calls are compared as a sorted list.
+//! Scripted translators retain engine/target/country and call-count behavior.
+//! Concurrent target calls are compared as a sorted list.
 
 use std::collections::HashMap;
 use std::sync::{Arc, Mutex};

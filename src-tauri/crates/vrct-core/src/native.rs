@@ -543,22 +543,27 @@ impl NativeController {
     }
     pub fn snapshot(&self) -> Result<Value, String> {
         let mut values = serde_json::Map::new();
-        for row in crate::controller::contract().iter().filter(|r| {
-            r.endpoint.starts_with("/get/data/") && r.endpoint != "/get/data/available_releases"
-        }) {
-            let value = if let Some(value) = self.auth.getter(&row.endpoint) {
+        for endpoint in crate::controller::contract()
+            .iter()
+            .map(|row| row.endpoint.as_str())
+            .chain(crate::controller::NATIVE_ENDPOINTS.iter().copied())
+            .filter(|endpoint| {
+                endpoint.starts_with("/get/data/") && *endpoint != "/get/data/available_releases"
+            })
+        {
+            let value = if let Some(value) = self.auth.getter(endpoint) {
                 value
             } else {
-                let (status, value) = self.controller.answer(&row.endpoint, Value::Null);
+                let (status, value) = self.controller.answer(endpoint, Value::Null);
                 if status != 200 {
                     return Err(format!(
                         "Native initialization getter failed: {}",
-                        row.endpoint
+                        endpoint
                     ));
                 }
                 value
             };
-            values.insert(row.endpoint.clone(), value);
+            values.insert(endpoint.to_owned(), value);
         }
         Ok(Value::Object(values))
     }

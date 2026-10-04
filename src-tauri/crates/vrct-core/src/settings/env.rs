@@ -13,6 +13,16 @@ pub trait Devices: Send + Sync {
     fn mic_hosts(&self) -> Vec<String>;
     fn mic_device_names(&self, host: &str) -> Vec<String>;
     fn speaker_device_names(&self) -> Vec<String>;
+    fn speaker_hosts(&self) -> Vec<String> {
+        vec![crate::audio::devices::WASAPI_HOST.into()]
+    }
+    fn speaker_device_names_for_host(&self, host: &str) -> Vec<String> {
+        if host == crate::audio::devices::WASAPI_HOST || host == "NoHost" {
+            self.speaker_device_names()
+        } else {
+            Vec::new()
+        }
+    }
     /// `(host, device)` of the default microphone, if there is one.
     fn default_mic(&self) -> Option<(String, String)>;
     fn default_speaker(&self) -> Option<String>;

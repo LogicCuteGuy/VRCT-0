@@ -1,7 +1,7 @@
-//! The Whisper model runner against faster-whisper on real weights and real speech
-//! (`fixtures/regenerate_whisper_e2e_golden.py` records it). Needs the `ct2` feature, a
-//! faster-whisper-small model folder and the clips that script wrote; without them the tests say so
-//! and pass, since a CI machine has none of that.
+//! Whisper inference replays historical faster-whisper output on real weights/speech.
+//! `fixtures/whisper_e2e_golden.json` is frozen at `16cb286c`; see `fixtures/README.md`.
+//! Requires `ct2`, faster-whisper-small weights and the recorded clips.
+//! Missing external model/audio files are reported and skipped; fixtures are not regenerated.
 
 #![cfg(feature = "ct2")]
 

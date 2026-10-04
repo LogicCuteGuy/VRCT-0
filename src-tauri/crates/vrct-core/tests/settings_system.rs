@@ -38,6 +38,21 @@ fn texts(value: &Value) -> Vec<String> {
     value.as_array().unwrap().iter().map(|v| v.as_str().unwrap().to_string()).collect()
 }
 
+#[test]
+fn thai_ui_language_is_valid_persisted_and_restored_from_installer_marker() {
+    let dir = scratch_dir();
+    let settings = open(&dir);
+    settings.set("UI_LANGUAGE", json!("th")).unwrap();
+    settings.save_now().unwrap();
+    assert_eq!(open(&dir).get_str("UI_LANGUAGE").as_deref(), Some("th"));
+    assert!(settings.set("UI_LANGUAGE", json!("not-a-language")).is_err());
+    assert_eq!(settings.get_str("UI_LANGUAGE").as_deref(), Some("th"));
+    settings.set("UI_LANGUAGE", json!("en")).unwrap();
+    settings.save_now().unwrap();
+    std::fs::write(dir.join("installer_language.txt"), "th\n").unwrap();
+    assert_eq!(open(&dir).get_str("UI_LANGUAGE").as_deref(), Some("th"));
+}
+
 fn config_file(dir: &Path) -> Value {
     serde_json::from_str(&std::fs::read_to_string(dir.join("config.json")).unwrap()).unwrap()
 }

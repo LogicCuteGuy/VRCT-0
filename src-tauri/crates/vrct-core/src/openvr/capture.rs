@@ -1,25 +1,124 @@
-//! OpenVR D3D11 left-eye mirror capture. Function tables are pinned to Valve
+//! OpenVR D3D11 mirror capture (left eye by default). Tables are pinned to Valve
 //! SDK v2.15.6 (System_026, Compositor_029). Resources stay on the creating
 //! thread, the mirror is acquired once, and the shared lease outlives it.
 use super::native::{self, Lease};
 use image::RgbImage;
+use serde::Serialize;
 use std::{ffi::c_void, ptr::null_mut};
 use windows_sys::Win32::{Foundation::CloseHandle, System::Threading::*};
 
 #[repr(C)]
-#[derive(Clone, Copy, Default)]
-struct TextureDesc {
+#[derive(Clone, Copy, Default, Serialize)]
+pub struct TextureDesc {
+    #[serde(rename = "Width")]
     width: u32,
+    #[serde(rename = "Height")]
     height: u32,
+    #[serde(rename = "MipLevels")]
     mips: u32,
+    #[serde(rename = "ArraySize")]
     array: u32,
+    #[serde(rename = "Format")]
     format: u32,
+    #[serde(rename = "SampleCount")]
     samples: u32,
+    #[serde(rename = "SampleQuality")]
     quality: u32,
+    #[serde(rename = "Usage")]
     usage: u32,
+    #[serde(rename = "BindFlags")]
     bind: u32,
+    #[serde(rename = "CPUAccessFlags")]
     cpu: u32,
+    #[serde(rename = "MiscFlags")]
     misc: u32,
+}
+#[repr(C)]
+#[derive(Default)]
+struct TrackedPose {
+    matrix: [f32; 12],
+    velocity: [f32; 3],
+    angular_velocity: [f32; 3],
+    tracking: i32,
+    valid: bool,
+    connected: bool,
+}
+/// Exact SDK v2.15.6 layout, including the caller-initialized size.
+#[repr(C)]
+#[derive(Default)]
+struct FrameTiming {
+    counters: [u32; 6],
+    system_time: f64,
+    times: [f32; 16],
+    pose: TrackedPose,
+    vsync_ready: u32,
+    vsync_first: u32,
+    transfer_latency: f32,
+}
+#[derive(Clone, Copy, Debug, PartialEq, Eq, Serialize)]
+pub struct SceneState {
+    pub renderer_pid: u32,
+    pub focus_pid: u32,
+    pub frame_index: u32,
+}
+/// Query scene ownership before acquiring a GPU mirror. The lease keeps the
+/// compositor table valid, including while a mirror is temporarily unavailable.
+pub struct SceneConnection {
+    _lease: Lease,
+    compositor: *const [usize; 53],
+}
+impl SceneConnection {
+    pub fn new() -> Result<Self, String> {
+        let lease = native::acquire()?;
+        let compositor = unsafe {
+            lease
+                .connection()
+                .interface::<[usize; 53]>(c"FnTable:IVRCompositor_029")?
+        };
+        Ok(Self {
+            _lease: lease,
+            compositor,
+        })
+    }
+    pub fn scene_processes(&self) -> (u32, u32) {
+        unsafe { scene_processes(self.compositor) }
+    }
+    pub fn scene_state(&self) -> Result<SceneState, String> {
+        unsafe { scene_state(self.compositor) }
+    }
+}
+unsafe fn scene_processes(compositor: *const [usize; 53]) -> (u32, u32) {
+    unsafe {
+        let focus: unsafe extern "system" fn() -> u32 = std::mem::transmute((*compositor)[24]);
+        let renderer: unsafe extern "system" fn() -> u32 = std::mem::transmute((*compositor)[25]);
+        (renderer(), focus())
+    }
+}
+unsafe fn scene_state(compositor: *const [usize; 53]) -> Result<SceneState, String> {
+    unsafe {
+        let (renderer_pid, focus_pid) = scene_processes(compositor);
+        let get_timing: unsafe extern "system" fn(*mut FrameTiming, u32) -> bool =
+            std::mem::transmute((*compositor)[10]);
+        let mut timing = FrameTiming::default();
+        timing.counters[0] = std::mem::size_of::<FrameTiming>() as u32;
+        if !get_timing(&mut timing, 0) {
+            return Err("SteamVR frame timing is unavailable".into());
+        }
+        Ok(SceneState {
+            renderer_pid,
+            focus_pid,
+            frame_index: timing.counters[1],
+        })
+    }
+}
+#[derive(Serialize)]
+pub struct MirrorDiagnostics {
+    pub adapter_index: i32,
+    pub view_format: u32,
+    pub texture: TextureDesc,
+    pub row_pitch: u32,
+    pub hmd: String,
+    pub recommended_size: [u32; 2],
 }
 #[repr(C)]
 #[derive(Default)]
@@ -86,9 +185,15 @@ pub struct MirrorCapture {
     staging: *mut c_void,
     desc: TextureDesc,
     format: u32,
+    system: *const [usize; 51],
+    adapter_index: i32,
+    row_pitch: u32,
 }
 impl MirrorCapture {
     pub fn new() -> Result<Self, String> {
+        Self::new_eye(false)
+    }
+    pub fn new_eye(right: bool) -> Result<Self, String> {
         let lease = native::acquire()?;
         let compositor = unsafe {
             lease
@@ -110,12 +215,16 @@ impl MirrorCapture {
             staging: null_mut(),
             desc: TextureDesc::default(),
             format: 0,
+            system,
+            adapter_index: -1,
+            row_pitch: 0,
         };
         unsafe {
             let get_adapter: unsafe extern "system" fn(*mut i32) =
                 std::mem::transmute((*system)[8]);
             let mut adapter_index = -1;
             get_adapter(&mut adapter_index);
+            capture.adapter_index = adapter_index;
             if adapter_index < 0 {
                 return Err("SteamVR has no DXGI adapter".into());
             }
@@ -156,7 +265,7 @@ impl MirrorCapture {
                 )?;
                 let mirror: unsafe extern "system" fn(i32, *mut c_void, *mut *mut c_void) -> i32 =
                     std::mem::transmute((*compositor)[35]);
-                let code = mirror(0, capture.device, &mut capture.srv);
+                let code = mirror(i32::from(right), capture.device, &mut capture.srv);
                 if code != 0 || capture.srv.is_null() {
                     return Err(format!("GetMirrorTextureD3D11: OpenVR {code}"));
                 }
@@ -215,15 +324,60 @@ impl MirrorCapture {
         Ok(capture)
     }
     pub fn capture(&mut self) -> Result<Option<RgbImage>, String> {
+        let (pid, focus) = self.scene_processes();
+        if pid == 0 || pid != focus || !vrchat_process(pid) {
+            return Ok(None);
+        }
+        let image = self.read_mirror()?;
+        if self.scene_processes() != (pid, focus) || !vrchat_process(pid) {
+            return Ok(None);
+        }
+        if image
+            .as_raw()
+            .windows(2)
+            .all(|pixels| pixels[0] == pixels[1])
+        {
+            return Ok(None);
+        }
+        Ok(Some(image))
+    }
+    pub fn scene_processes(&self) -> (u32, u32) {
+        unsafe { scene_processes(self.compositor) }
+    }
+    pub fn scene_state(&self) -> Result<SceneState, String> {
+        unsafe { scene_state(self.compositor) }
+    }
+    pub fn diagnostics(&self) -> MirrorDiagnostics {
+        let mut size = [0u32; 2];
+        let mut name = [0u8; 1024];
         unsafe {
-            let focus: unsafe extern "system" fn() -> u32 =
-                std::mem::transmute((*self.compositor)[24]);
-            let renderer: unsafe extern "system" fn() -> u32 =
-                std::mem::transmute((*self.compositor)[25]);
-            let pid = renderer();
-            if pid == 0 || pid != focus() || !vrchat_process(pid) {
-                return Ok(None);
-            }
+            let recommended: unsafe extern "system" fn(*mut u32, *mut u32) =
+                std::mem::transmute((*self.system)[0]);
+            recommended(size.as_mut_ptr(), size.as_mut_ptr().add(1));
+            let property: unsafe extern "system" fn(u32, i32, *mut u8, u32, *mut i32) -> u32 =
+                std::mem::transmute((*self.system)[28]);
+            let mut error = 0;
+            property(0, 1001, name.as_mut_ptr(), name.len() as u32, &mut error);
+        }
+        MirrorDiagnostics {
+            adapter_index: self.adapter_index,
+            view_format: self.format,
+            texture: self.desc,
+            row_pitch: self.row_pitch,
+            hmd: String::from_utf8_lossy(
+                &name[..name
+                    .iter()
+                    .position(|byte| *byte == 0)
+                    .unwrap_or(name.len())],
+            )
+            .into(),
+            recommended_size: size,
+        }
+    }
+    /// Unfiltered mirror read for diagnostic probes. Dataset sources must check
+    /// scene identity and timing around this call; application OCR uses capture.
+    pub fn read_mirror(&mut self) -> Result<RgbImage, String> {
+        unsafe {
             let copy: unsafe extern "system" fn(*mut c_void, *mut c_void, *mut c_void) =
                 std::mem::transmute(slot(self.context, 47));
             copy(self.context, self.staging, self.texture);
@@ -240,6 +394,7 @@ impl MirrorCapture {
                 map(self.context, self.staging, 0, 1, 0, &mut mapped),
                 "Map mirror texture",
             )?;
+            self.row_pitch = mapped.row_pitch;
             let result = decode_rows(
                 mapped.data,
                 mapped.row_pitch,
@@ -250,15 +405,7 @@ impl MirrorCapture {
             let unmap: unsafe extern "system" fn(*mut c_void, *mut c_void, u32) =
                 std::mem::transmute(slot(self.context, 15));
             unmap(self.context, self.staging, 0);
-            let image = result?;
-            if image
-                .as_raw()
-                .windows(2)
-                .all(|pixels| pixels[0] == pixels[1])
-            {
-                return Ok(None);
-            }
-            Ok(Some(image))
+            result
         }
     }
 }
@@ -326,6 +473,39 @@ fn vrchat_process(pid: u32) -> bool {
 #[cfg(test)]
 mod tests {
     use super::*;
+    #[test]
+    fn scene_ownership_is_available_without_gpu_or_frame_timing() {
+        use std::sync::atomic::{AtomicUsize, Ordering};
+        static SIZE: AtomicUsize = AtomicUsize::new(0);
+        unsafe extern "system" fn renderer() -> u32 {
+            10
+        }
+        unsafe extern "system" fn focus() -> u32 {
+            12
+        }
+        unsafe extern "system" fn unavailable(timing: *mut FrameTiming, _: u32) -> bool {
+            SIZE.store(unsafe { (*timing).counters[0] } as usize, Ordering::Release);
+            false
+        }
+        let mut table = [0usize; 53];
+        table[24] = focus as *const () as usize;
+        table[25] = renderer as *const () as usize;
+        table[10] = unavailable as *const () as usize;
+        assert_eq!(unsafe { scene_processes(&table) }, (10, 12));
+        assert!(unsafe { scene_state(&table) }.is_err());
+        assert_eq!(
+            SIZE.load(Ordering::Acquire),
+            std::mem::size_of::<FrameTiming>()
+        );
+    }
+    #[test]
+    fn sdk_2156_frame_timing_layout_has_initialized_size_and_correct_offsets() {
+        assert_eq!(std::mem::size_of::<TrackedPose>(), 80);
+        assert_eq!(std::mem::size_of::<FrameTiming>(), 192);
+        assert_eq!(std::mem::offset_of!(FrameTiming, system_time), 24);
+        assert_eq!(std::mem::offset_of!(FrameTiming, pose), 96);
+        assert_eq!(std::mem::offset_of!(FrameTiming, vsync_ready), 176);
+    }
     #[test]
     fn pitched_bgra_mirror_preserves_top_row_and_discards_padding() {
         let mut rows = [

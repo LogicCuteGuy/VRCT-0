@@ -259,10 +259,17 @@ pub fn ask(kind: Kind, config: &dyn Config) -> Ask {
 pub trait Platform: Send + Sync {
     /// The devices that are plugged in now.
     fn devices(&self) -> DeviceList;
+    fn devices_for_host(&self, _host: &str) -> DeviceList { self.devices() }
     /// Opens `device` for the energy-threshold recorder.
     fn energy_recorder(&self, kind: Kind, device: &Device, params: EnergyParams) -> Result<Arc<dyn Recorder>, String>;
     /// Opens `device` for the Silero recorder.
     fn vad_recorder(&self, kind: Kind, device: &Device, config: VadConfig) -> Result<Arc<dyn Recorder>, String>;
+    fn energy_recorder_on_host(&self, kind: Kind, _host: &str, device: &Device, params: EnergyParams) -> Result<Arc<dyn Recorder>, String> {
+        self.energy_recorder(kind, device, params)
+    }
+    fn vad_recorder_on_host(&self, kind: Kind, _host: &str, device: &Device, config: VadConfig) -> Result<Arc<dyn Recorder>, String> {
+        self.vad_recorder(kind, device, config)
+    }
 }
 
 pub struct NativeBackend {
@@ -297,14 +304,16 @@ pub fn phrase_settings(plan: &TranscriberPlan, format: Format) -> PhraseSettings
 
 impl Backend for NativeBackend {
     fn selected_device(&self, kind: Kind) -> Option<Device> {
-        selected_device(kind, self.config.as_ref(), &self.platform.devices()).cloned()
+        let host = text(self.config.as_ref(), &format!("SELECTED_{}_HOST", prefix(kind)));
+        selected_device(kind, self.config.as_ref(), &self.platform.devices_for_host(&host)).cloned()
     }
 
     fn open_recorder(&self, kind: Kind, device: &Device) -> Result<Arc<dyn Recorder>, String> {
         let plan = recorder_plan(kind, self.config.as_ref());
+        let host = text(self.config.as_ref(), &format!("SELECTED_{}_HOST", prefix(kind)));
         match energy_params(&plan) {
-            Some(params) => self.platform.energy_recorder(kind, device, params),
-            None => self.platform.vad_recorder(kind, device, vad_config(kind)),
+            Some(params) => self.platform.energy_recorder_on_host(kind, &host, device, params),
+            None => self.platform.vad_recorder_on_host(kind, &host, device, vad_config(kind)),
         }
     }
 

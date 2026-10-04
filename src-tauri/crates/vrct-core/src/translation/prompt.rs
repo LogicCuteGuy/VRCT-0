@@ -2,8 +2,8 @@
 //! clients (`translation_openai.py` and its siblings) so a switch of backend
 //! does not change what the model is asked.
 //!
-//! `assets/prompts.json` is generated from Python's own YAML files by
-//! `tests/fixtures/regenerate_translation_golden.py`, and
+//! `assets/prompts.json` preserves the former backend's YAML prompts at commit
+//! `16cb286c`, and
 //! `fixtures/translation_golden.json` holds what the real clients built.
 
 use std::collections::HashMap;

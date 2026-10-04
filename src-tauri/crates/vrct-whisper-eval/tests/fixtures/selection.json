@@ -1,0 +1,125 @@
+{
+  "rows": [
+    {
+      "audio_path": "clip-00.wav",
+      "transcript": "短い話",
+      "speaker_id": "speaker-0",
+      "row_number": 2
+    },
+    {
+      "audio_path": "clip-01.wav",
+      "transcript": "短い話",
+      "speaker_id": "speaker-1",
+      "row_number": 3
+    },
+    {
+      "audio_path": "clip-02.wav",
+      "transcript": "短い話",
+      "speaker_id": "speaker-2",
+      "row_number": 4
+    },
+    {
+      "audio_path": "clip-03.wav",
+      "transcript": "短い話",
+      "speaker_id": "speaker-3",
+      "row_number": 5
+    },
+    {
+      "audio_path": "clip-04.wav",
+      "transcript": "短い話",
+      "speaker_id": "speaker-0",
+      "row_number": 6
+    },
+    {
+      "audio_path": "clip-05.wav",
+      "transcript": "短い話",
+      "speaker_id": "speaker-1",
+      "row_number": 7
+    },
+    {
+      "audio_path": "clip-06.wav",
+      "transcript": "これは中程度の長さの日本語テキストです",
+      "speaker_id": "speaker-2",
+      "row_number": 8
+    },
+    {
+      "audio_path": "clip-07.wav",
+      "transcript": "これは中程度の長さの日本語テキストです",
+      "speaker_id": "speaker-3",
+      "row_number": 9
+    },
+    {
+      "audio_path": "clip-08.wav",
+      "transcript": "これは中程度の長さの日本語テキストです",
+      "speaker_id": "speaker-0",
+      "row_number": 10
+    },
+    {
+      "audio_path": "clip-09.wav",
+      "transcript": "これは中程度の長さの日本語テキストです",
+      "speaker_id": "speaker-1",
+      "row_number": 11
+    },
+    {
+      "audio_path": "clip-10.wav",
+      "transcript": "これは中程度の長さの日本語テキストです",
+      "speaker_id": "speaker-2",
+      "row_number": 12
+    },
+    {
+      "audio_path": "clip-11.wav",
+      "transcript": "これは中程度の長さの日本語テキストです",
+      "speaker_id": "speaker-3",
+      "row_number": 13
+    },
+    {
+      "audio_path": "clip-12.wav",
+      "transcript": "これは評価用の十分に長い日本語発話サンプルとして使用します。複数の語を含む文章です",
+      "speaker_id": "speaker-0",
+      "row_number": 14
+    },
+    {
+      "audio_path": "clip-13.wav",
+      "transcript": "これは評価用の十分に長い日本語発話サンプルとして使用します。複数の語を含む文章です",
+      "speaker_id": "speaker-1",
+      "row_number": 15
+    },
+    {
+      "audio_path": "clip-14.wav",
+      "transcript": "これは評価用の十分に長い日本語発話サンプルとして使用します。複数の語を含む文章です",
+      "speaker_id": "speaker-2",
+      "row_number": 16
+    },
+    {
+      "audio_path": "clip-15.wav",
+      "transcript": "これは評価用の十分に長い日本語発話サンプルとして使用します。複数の語を含む文章です",
+      "speaker_id": "speaker-3",
+      "row_number": 17
+    },
+    {
+      "audio_path": "clip-16.wav",
+      "transcript": "これは評価用の十分に長い日本語発話サンプルとして使用します。複数の語を含む文章です",
+      "speaker_id": "speaker-0",
+      "row_number": 18
+    },
+    {
+      "audio_path": "clip-17.wav",
+      "transcript": "これは評価用の十分に長い日本語発話サンプルとして使用します。複数の語を含む文章です",
+      "speaker_id": "speaker-1",
+      "row_number": 19
+    }
+  ],
+  "seed": 20260911,
+  "selected": [
+    "clip-03.wav",
+    "clip-05.wav",
+    "clip-00.wav",
+    "clip-11.wav",
+    "clip-09.wav",
+    "clip-08.wav",
+    "clip-15.wav",
+    "clip-17.wav",
+    "clip-12.wav"
+  ],
+  "hash_seed": 10252593186974732224
+}

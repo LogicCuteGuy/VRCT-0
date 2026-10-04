@@ -12,7 +12,7 @@
 //!   and run through `clean_up_tokenization` when the tokenizer config asks for it
 //!   (it does by default in the `transformers` pinned by VRCT).
 //!
-//! Checked against `transformers` 5.5.4 (`tests/fixtures/regenerate_ct2_golden.py`);
+//! Checked against `transformers` 5.5.4 (frozen fixtures at commit `16cb286c`);
 //! VRCT pins 4.40.2. Text that itself contains a special token such as `</s>`
 //! is split into that token by Python and tokenised as plain characters here.
 

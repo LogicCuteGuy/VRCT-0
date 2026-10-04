@@ -1,13 +1,13 @@
 import { useStore_AvailableReleases } from "@store";
-import { useStdoutToPython } from "@useStdoutToPython";
+import { useBackendRequest } from "@useBackendRequest";
 
 export const useAvailableReleases = () => {
-    const { asyncStdoutToPython } = useStdoutToPython();
+    const { sendBackendRequest } = useBackendRequest();
     const { currentAvailableReleases, updateAvailableReleases, pendingAvailableReleases } = useStore_AvailableReleases();
 
     const getAvailableReleases = () => {
         pendingAvailableReleases();
-        asyncStdoutToPython("/get/data/available_releases");
+        sendBackendRequest("/get/data/available_releases");
     };
 
     const updateAvailableReleasesFromBackend = (payload) => {

@@ -1,7 +1,6 @@
-//! The OSC sink must put the exact bytes python-osc did on the wire, to the
-//! address currently in the config replica.
-//! `fixtures/osc_golden.json` is captured from the real Python `OSCHandler` by
-//! `fixtures/regenerate_osc_golden.py`.
+//! The OSC sink reproduces python-osc bytes at the configured destination.
+//! `fixtures/osc_golden.json` captures the historical Python `OSCHandler`
+//! contract, frozen at `16cb286c`; native test commands: `fixtures/README.md`.
 
 use std::net::UdpSocket;
 use std::sync::Arc;

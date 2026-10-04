@@ -1,5 +1,7 @@
 # 文字起こしSTT API連携 方針書
 
+> **履歴資料（2026-09-02、Python版）**: 本書のAPI設計、VAD実験、旧ソースと環境の記述は当時の方針と検証記録です。現行Rustの接続と実行は [native backend](native_pipeline.md)、評価ツールは [native tools](native_tools.md) と [Whisper評価](../tools/whisper_eval/README.md) を参照してください。
+
 - **作成日**: 2026-09-02
 - **背景**: バックエンドレビュー完了後のPhase 3検討の一環。当初VAD(発話区間検出の高度化)から着手したが、実機検証の結果「文字起こしの実行回数がエネルギー閾値方式より減少する」という体感上の退行が解消できず、方向転換した。
 

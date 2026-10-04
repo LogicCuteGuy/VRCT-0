@@ -1,11 +1,11 @@
 //! The local web page an OBS "Browser Source" shows (`OBS_BROWSER_SOURCE`):
 //! subtitles drawn from the WebSocket broadcast.
 //!
-//! Python still decides *when* it runs (port probes, enable/disable, host)
-//! and sends `start`/`stop`; Rust owns the socket and builds the page from the
-//! config replica on every request, as Python rebuilt it from `config`. The
-//! page is the Python output with its settings left as placeholders
-//! (`obs/page.html`, produced by `tests/fixtures/regenerate_obs_golden.py`),
+//! The native lifecycle decides when it runs (port probes, enable/disable, host)
+//! and sends `start`/`stop`; this module owns the socket and builds the page from
+//! the config replica on every request. The page preserves the former backend's
+//! output with settings left as placeholders (`obs/page.html`, frozen at commit
+//! `16cb286c`),
 //! and `tests/fixtures/obs_golden.json` pins that the rendering is identical.
 //!
 //! The page embeds the WebSocket token, so this server refuses wildcard

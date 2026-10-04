@@ -1,5 +1,6 @@
 @import "./reset.css";
 @import "./variables.css";
+@import "./themes.css";
 
 :root {
     font-size: 62.5%;
