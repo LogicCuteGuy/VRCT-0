@@ -30,7 +30,7 @@ VRCT-0 是基于 [VRCT](https://github.com/misyaguziya/VRCT) 的 fork，保留�
 
 从此 fork 的 Releases 下载并解压整个软件包，再启动 `VRCT.exe`。安装时或在 **设置 → 外观 → 界面语言** 中选择所需语言，在同一页面选择主题。
 
-便携版仍保留 `VRCT.exe` 和 `VRCT.zip` 等兼容文件名，应用显示名称为 VRCT-0。开发环境及命令见 [构建说明](/docs/readme_build.md)。
+便携包名为 `VRCT-0.zip`，可执行文件仍使用 `VRCT.exe`，应用显示名称为 VRCT-0。开发环境及命令见 [构建说明](/docs/readme_build.md)。
 
 ## 致谢与许可
 

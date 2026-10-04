@@ -33,7 +33,7 @@ licenses/...
 `npm run dev` and `npm run build` enable the native CT2 feature. They never run
 Python, construct a Python environment, or kill unrelated applications. The
 legacy `dev-cuda`/`build-cuda` script names alias the CPU build; these aliases do
-not advertise CUDA support. `npm run release` creates `VRCT.zip` with the root
+not advertise CUDA support. `npm run release` creates `VRCT-0.zip` with the root
 `VRCT.exe` layout the custom NSIS installer expects.
 
 The packager revalidates resource pins offline before creating a ZIP, includes

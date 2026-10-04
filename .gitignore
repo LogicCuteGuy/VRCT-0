@@ -20,6 +20,9 @@ error.log
 *.exe
 *.ipynb
 VRCT.zip
+VRCT.zip.sha256
+VRCT-0.zip
+VRCT-0.zip.sha256
 VRCT_cuda.zip
 
 .qoder/

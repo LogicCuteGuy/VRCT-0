@@ -48,13 +48,13 @@ npm run native:verify
 
 - アプリ: `src-tauri/target/release/VRCT.exe`
 - NSIS: `src-tauri/target/release/bundle/nsis/VRCT-0_<version>_x64-setup.exe`
-- パッケージ: リポジトリ直下の `VRCT.zip` と `VRCT.zip.sha256`
+- パッケージ: リポジトリ直下の `VRCT-0.zip` と `VRCT-0.zip.sha256`
 
 既にビルド済みのアプリをパッケージする場合は次を使う。
 
 ```powershell
-cargo run --manifest-path src-tauri/Cargo.toml -p xtask -- package --profile release --output VRCT.zip
-cargo run --manifest-path src-tauri/Cargo.toml -p xtask -- verify --output VRCT.zip
+cargo run --manifest-path src-tauri/Cargo.toml -p xtask -- package --profile release --output VRCT-0.zip
+cargo run --manifest-path src-tauri/Cargo.toml -p xtask -- verify --output VRCT-0.zip
 ```
 
 ZIPは `VRCT.exe`、native DLL、`licenses/`、`resources/`、整合性manifestを含む。検査はファイル名だけでなく、各entryの長さ・hash、資源manifest、制限付き検出モデルの内容とEXE内への埋め込みも検査する。必要な資源やDLLが不足している場合、パッケージ作成は停止する。
@@ -86,9 +86,9 @@ ZIPにはcollector、sample player、capture probe、annotation、dataset、Whis
 
 ## GitHub Actionsとインストーラー
 
-実際の設定は [release.yml](../.github/workflows/release.yml)。`v*` タグでWindows jobを起動し、Node/Rust/C++環境、native資源準備、テスト、release作成、ZIP検査を実行する。配布assetはsetup.exe、`VRCT.zip`、それぞれの `.sha256`。このガイド自体はCI、配布先、実機、CUDAの検証完了を示す記録ではない。
+実際の設定は [release.yml](../.github/workflows/release.yml)。`v*` タグでWindows jobを起動し、Node/Rust/C++環境、native資源準備、テスト、release作成、ZIP検査を実行する。配布assetはsetup.exe、`VRCT-0.zip`、それぞれの `.sha256`。このガイド自体はCI、配布先、実機、CUDAの検証完了を示す記録ではない。
 
-NSISは同じリリースタグから `VRCT.zip` を取得するダウンローダー形式。特定の既存versionへのインストール・ロールバックは `/VERSION=` で指定できる。
+NSISは同じリリースタグから `VRCT-0.zip` を取得するダウンローダー形式。特定の既存versionへのインストール・ロールバックは `/VERSION=` で指定できる。
 
 ```powershell
 VRCT_setup.exe /VERSION=3.4.2

@@ -39,8 +39,8 @@ Theme changes affect the desktop UI. VR overlays, OBS output, model settings, an
 
 For the first installation of this fork, download the Windows setup executable
 from [VRCT-0 Releases](https://github.com/LogicCuteGuy/VRCT-0/releases).
-The installer downloads the matching `VRCT.zip`; keep an internet connection
-available during installation. For a portable installation, download `VRCT.zip`
+The installer downloads the matching `VRCT-0.zip`; keep an internet connection
+available during installation. For a portable installation, download `VRCT-0.zip`
 and extract the complete archive before running `VRCT.exe`.
 
 For later updates, open **Settings → Updater**, choose **Beta** for prereleases,
@@ -50,7 +50,7 @@ before launching it.
 
 ## Compatibility and credits
 
-The native executable (`VRCT.exe`), portable archive (`VRCT.zip`), crate names, application identifier, and protocol/settings keys keep their existing technical names for compatibility with the installer and releases. User-facing branding is VRCT-0. The AI-generated wordmark has the subtitle “VRChat Chatbox Translator & Transcription”, with black and white variants selected by the desktop theme. Markdown pages use the corresponding image for the reader’s color scheme. Attribution appears in credits sections rather than the logo or README introduction. Assets can be regenerated from `src-ui/views/assets/vrct-0-icon.svg` with:
+The portable archive is named `VRCT-0.zip`. The native executable (`VRCT.exe`), crate names, application identifier, and protocol/settings keys keep their existing technical names for compatibility. User-facing branding is VRCT-0. The AI-generated wordmark has the subtitle “VRChat Chatbox Translator & Transcription”, with black and white variants selected by the desktop theme. Markdown pages use the corresponding image for the reader’s color scheme. Attribution appears in credits sections rather than the logo or README introduction. Assets can be regenerated from `src-ui/views/assets/vrct-0-icon.svg` with:
 
 ```powershell
 npm run tauri -- icon src-ui/views/assets/vrct-0-icon.svg --output src-tauri/icons

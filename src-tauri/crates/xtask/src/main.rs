@@ -46,13 +46,13 @@ fn run() -> Result<(), String> {
             Ok(())
         }
         "package" => {
-            let output = output.unwrap_or_else(|| root.join("VRCT.zip"));
+            let output = output.unwrap_or_else(|| root.join("VRCT-0.zip"));
             let path = xtask::package(&root, &profile, &output)?;
             println!("Created and verified {}", path.display());
             Ok(())
         }
         "verify" => {
-            xtask::verify_zip(&output.unwrap_or_else(|| root.join("VRCT.zip")))?;
+            xtask::verify_zip(&output.unwrap_or_else(|| root.join("VRCT-0.zip")))?;
             println!("Native ZIP verified");
             Ok(())
         }

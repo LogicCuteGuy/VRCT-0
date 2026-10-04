@@ -37,7 +37,7 @@ VRCT-0 เป็น fork ของ [VRCT](https://github.com/misyaguziya/VRCT) �
 
 ## ดาวน์โหลดและสร้างแอป
 
-ดาวน์โหลดจาก [Releases ของ LogicCuteGuy](https://github.com/LogicCuteGuy/VRCT-0/releases) แตกไฟล์ทั้งหมดก่อนเปิดแอป ไฟล์ `VRCT.exe` และ `VRCT.zip` ยังคงชื่อเดิมเพื่อรองรับระบบแพ็กเกจ แต่ชื่อที่แสดงคือ VRCT-0
+ดาวน์โหลดจาก [Releases ของ LogicCuteGuy](https://github.com/LogicCuteGuy/VRCT-0/releases) แตกไฟล์ทั้งหมดก่อนเปิดแอป แพ็กเกจใช้ชื่อ `VRCT-0.zip` ส่วนไฟล์แอปยังใช้ชื่อ `VRCT.exe` เพื่อความเข้ากันได้ แต่ชื่อที่แสดงคือ VRCT-0
 
 ดู [วิธีบิลด์](readme_build.md) และ [ข้อกำหนดระบบเสียง Windows](windows_audio.md) สำหรับการพัฒนา ระบบ ASIO ต้องใช้ libclang
 

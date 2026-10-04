@@ -15,6 +15,7 @@ Unicode true
 !include "Win\Propkey.nsh"
 ${StrCase}
 ${StrLoc}
+!include "..\..\..\..\nsis\checksum.nsh"
 
 !define MANUFACTURER "{{manufacturer}}"
 !define PRODUCTNAME "{{product_name}}"
@@ -205,7 +206,7 @@ Function PageLeaveChooseLanguage
 FunctionEnd
 
 ; There is a single edition: the fork publishes only the CPU package
-; (VRCT.zip). A GPU package would exceed GitHub's 2 GiB release-asset limit,
+; (VRCT-0.zip). A GPU package would exceed GitHub's 2 GiB release-asset limit,
 ; so there is no edition page and /EDITION= is ignored.
 
 ; Specific-version pinning is controlled only via the /VERSION= CLI flag (set
@@ -680,12 +681,12 @@ Section Install
   ; 指定のURLからファイルをダウンロード
   ; The app package is a GitHub release asset of the tag "v<version>".
   !define SOFTWARE_RELEASE_REPO "LogicCuteGuy/VRCT-0"
-  !define SOFTWARE_DOWNLOAD_FILENAME "VRCT.zip"
+  !define SOFTWARE_DOWNLOAD_FILENAME "VRCT-0.zip"
 
   ; Free-space budget (MiB) per edition. The compressed archive is written to
   ; %TEMP%, the extracted tree to $INSTDIR, and both exist at once during
   ; extraction, so a same-drive install needs DOWNLOAD + EXTRACT together.
-  ; Measured 2026-08: VRCT.zip ~485MB / ~1.5GB unpacked. Values below add
+  ; Measured 2026-08: VRCT-0.zip ~485MB / ~1.5GB unpacked. Values below add
   ; headroom -- re-measure and bump them when the package grows.
   !define REQ_DOWNLOAD_MB 1024
   !define REQ_EXTRACT_MB 3072
@@ -755,6 +756,12 @@ Section Install
   ; published together with this installer.
   ${If} $TargetVersion != ""
     StrCpy $release_tag "v$TargetVersion"
+    ; Earlier releases used VRCT.zip. Keep explicit rollback working.
+    nsis_tauri_utils::SemverCompare "$TargetVersion" "3.5.1-beta.7"
+    Pop $0
+    ${If} $0 == -1
+      StrCpy $file_name "VRCT.zip"
+    ${EndIf}
   ${Else}
     StrCpy $release_tag "v${VERSION}"
   ${EndIf}
@@ -782,8 +789,10 @@ Section Install
     FileRead $0 $expected_package_hash
     IfErrors package_hash_read_invalid
     FileClose $0
-    StrLen $1 $expected_package_hash
-    ${If} $1 != 64
+    Push $expected_package_hash
+    Call ParsePackageChecksum
+    Pop $expected_package_hash
+    ${If} $expected_package_hash == ""
       Goto package_hash_invalid
     ${EndIf}
     StrCpy $package_hash_available "1"
@@ -794,6 +803,7 @@ Section Install
   NScurl::query /ID $package_hash_id "@ERRORTYPE@|@ERRORCODE@"
   Pop $1
   ${If} $1 == "HTTP|404"
+  ${AndIf} $file_name == "VRCT.zip"
     DetailPrint "Package checksum is unavailable; using legacy size-only validation"
     Delete "$package_hash_path"
     Goto package_hash_ready

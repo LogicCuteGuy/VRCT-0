@@ -109,6 +109,9 @@ jobs:
       - name: Build and package
         run: npm run release
 
+      - name: Test compiled installer checksum parsing
+        run: npm run test:installer
+
       - name: Check the package contains no non-redistributable model
         run: npm run native:verify
 
@@ -118,7 +121,7 @@ jobs:
           # GitHub rejects release assets of 2 GiB or more; fail here with a
           # clear message instead of after the whole build.
           $limit = 2GB - 1
-          foreach ($file in @("./VRCT.zip", "./src-tauri/target/release/bundle/nsis/VRCT-0_${{ env.VERSION }}_x64-setup.exe")) {
+          foreach ($file in @("./VRCT-0.zip", "./src-tauri/target/release/bundle/nsis/VRCT-0_${{ env.VERSION }}_x64-setup.exe")) {
             $size = (Get-Item $file).Length
             Write-Host "$file = $([math]::Round($size / 1MB)) MB"
             if ($size -ge $limit) {
@@ -134,7 +137,7 @@ jobs:
           # "<asset>.sha256" next to each asset and refuse a mismatch.
           $assets = @(
             "./src-tauri/target/release/bundle/nsis/VRCT-0_${{ env.VERSION }}_x64-setup.exe",
-            "./VRCT.zip"
+            "./VRCT-0.zip"
           )
           foreach ($asset in $assets) {
             $hash = (Get-FileHash -Path $asset -Algorithm SHA256).Hash.ToLower()
@@ -155,7 +158,7 @@ jobs:
             "--generate-notes",
             "--verify-tag",
             $setup, "$setup.sha256",
-            "./VRCT.zip", "./VRCT.zip.sha256"
+            "./VRCT-0.zip", "./VRCT-0.zip.sha256"
           )
           if ("${{ steps.channel.outputs.is_beta }}" -eq "true") { $args += "--prerelease" }
           gh @args
