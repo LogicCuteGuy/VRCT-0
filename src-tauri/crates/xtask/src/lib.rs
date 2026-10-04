@@ -236,6 +236,44 @@ fn publish_file(source: &Path, destination: &Path) -> Result<()> {
     Ok(())
 }
 
+#[cfg(test)]
+mod download_tests {
+    use super::*;
+    use std::net::TcpListener;
+
+    #[test]
+    fn resource_download_identifies_client_and_verifies_payload() {
+        let listener = TcpListener::bind("127.0.0.1:0").unwrap();
+        let url = format!("http://{}/model", listener.local_addr().unwrap());
+        let payload = b"verified OCR fixture";
+        let server = std::thread::spawn(move || {
+            let (mut stream, _) = listener.accept().unwrap();
+            stream.set_read_timeout(Some(Duration::from_secs(5))).unwrap();
+            let mut request = Vec::new();
+            let mut byte = [0];
+            while !request.ends_with(b"\r\n\r\n") {
+                stream.read_exact(&mut byte).unwrap();
+                request.push(byte[0]);
+            }
+            let identified = String::from_utf8(request).unwrap().to_ascii_lowercase()
+                .contains("user-agent: vrct-0-native-resources/");
+            if identified {
+                write!(stream, "HTTP/1.1 200 OK\r\nContent-Length: {}\r\nConnection: close\r\n\r\n", payload.len()).unwrap();
+                stream.write_all(payload).unwrap();
+            } else {
+                stream.write_all(b"HTTP/1.1 403 Forbidden\r\nContent-Length: 0\r\nConnection: close\r\n\r\n").unwrap();
+            }
+        });
+        let path = std::env::temp_dir().join(format!("vrct-resource-{}.bin", random().unwrap()));
+        let hash = hex::encode(Sha256::digest(payload));
+        let result = download(&url, &path, &hash, Some(payload.len() as u64), false);
+        server.join().unwrap();
+        assert!(result.is_ok(), "{result:?}");
+        assert_eq!(fs::read(&path).unwrap(), payload);
+        fs::remove_file(path).unwrap();
+    }
+}
+
 fn download(
     url: &str,
     destination: &Path,
@@ -256,6 +294,7 @@ fn download(
         fs::create_dir_all(parent).map_err(|e| e.to_string())?;
     }
     let client = reqwest::blocking::Client::builder()
+        .user_agent(concat!("VRCT-0-native-resources/", env!("CARGO_PKG_VERSION")))
         .connect_timeout(Duration::from_secs(10))
         .timeout(Duration::from_secs(1800))
         .build()
